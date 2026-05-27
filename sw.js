@@ -1,5 +1,5 @@
-const CACHE = 'dnd-am-v3';
-const ASSETS = ['./preview.html', './manifest.json'];
+const CACHE = 'dnd-am-v4';
+const ASSETS = ['./preview.html', './manifest.json', './icon.png', './logo.png'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)));

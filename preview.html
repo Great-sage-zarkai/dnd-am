@@ -994,7 +994,7 @@ let BUILDS=[
 ];
 
 // ─── App State ────────────────────────────────────────────────────────────────
-let lv=7,sesMode=false,curHp=-1,usedSl={},usedSP=0;
+let lv=7,sesMode=false,curHp=-1,usedSl={},usedSP=0,usedMetaSP=0;
 let charImg='';
 let innActive=false,innLeft=3,concSp='',concRnd=0,showConv=false,spTab=0;
 let selC=new Set(['Fire Bolt','Minor Illusion']);
@@ -1008,7 +1008,7 @@ let accSt={basic:true,stats:true,lore:false,meta:true,classf:false,sub:true,feat
 function save(){
   try{
     const d={
-      lv,sesMode,curHp,usedSl,usedSP,innActive,innLeft,concSp,concRnd,spTab,charImg,lang,
+      lv,sesMode,curHp,usedSl,usedSP,usedMetaSP,innActive,innLeft,concSp,concRnd,spTab,charImg,lang,
       c_name:g('c-name')?.value,c_level:lv,
       species:g('c-species')?.value,bg:g('c-bg')?.value,
       age:g('c-age')?.value,align:g('c-align')?.value,
@@ -1027,7 +1027,7 @@ function loadStorage(){
     if(!raw)return;
     const d=JSON.parse(raw);
     lv=d.lv||7;sesMode=d.sesMode||false;curHp=d.curHp??-1;
-    usedSl=d.usedSl||{};usedSP=d.usedSP||0;
+    usedSl=d.usedSl||{};usedSP=d.usedSP||0;usedMetaSP=d.usedMetaSP||0;
     innActive=d.innActive||false;innLeft=d.innLeft??profB(lv);
     concSp=d.concSp||'';concRnd=d.concRnd||0;spTab=d.spTab||0;
     charImg=d.charImg||'';applyImg(charImg);
@@ -1188,7 +1188,7 @@ function toggleSes(){
 }
 function longRest(){
   const mhp=getMaxHp();
-  curHp=mhp;usedSl={};usedSP=0;concSp='';concRnd=0;
+  curHp=mhp;usedSl={};usedSP=0;usedMetaSP=0;concSp='';concRnd=0;
   innActive=false;innLeft=profB(lv);
   renderTracker();renderMySpells();save();
 }
@@ -1219,6 +1219,8 @@ function restSlot(l){
 // ─── SP ──────────────────────────────────────────────────────────────────────
 function useSP(){if(usedSP<lv){usedSP++;renderTracker();save();}}
 function restSP(){if(usedSP>0){usedSP--;renderTracker();save();}}
+function useMetaSP(){if(usedMetaSP<2){usedMetaSP++;renderTracker();save();}}
+function restMetaSP(){if(usedMetaSP>0){usedMetaSP--;renderTracker();save();}}
 function toggleConv(){showConv=!showConv;renderTracker();}
 
 // ─── Innate ──────────────────────────────────────────────────────────────────
@@ -1319,6 +1321,24 @@ function renderTracker(){
     let c2=`<div class="conv-ct">${t('slotToSp')}</div>`;
     Object.keys(slots).forEach(sl=>c2+=`<div class="conv-r">${t('nv')}${sl}: <strong style="color:var(--td)">${sl} SP</strong></div>`);
     h+=`<div class="conv-box"><div class="conv-tl">${t('convTitle')}</div><div class="conv-cols"><div>${c1}</div><div>${c2}</div></div></div>`;
+  }
+  // Metamagic Adept bonus SP
+  if(selF.has('Metamagic Adept')){
+    const maRem=2-usedMetaSP;
+    const pips=[0,1].map(i=>`<span style="width:13px;height:13px;border-radius:50%;display:inline-block;border:1.5px solid ${i<maRem?'var(--p)':'rgba(0,0,0,.15)'};background:${i<maRem?'var(--p)':'rgba(0,0,0,.08)'};transition:background .25s"></span>`).join('');
+    h+=`<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--ol)">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px">
+        <span style="font-size:10px;font-weight:700;color:var(--pd);letter-spacing:.5px">🔮 METAMAGIC ADEPT</span>
+        <span style="font-size:9px;color:var(--os);background:var(--pl);border-radius:5px;padding:2px 6px">Metamagic only</span>
+      </div>
+      <div class="sp-row">
+        <div style="display:flex;gap:5px;align-items:center">${pips}</div>
+        <span style="font-size:14px;font-weight:700;color:var(--pd);margin-left:8px">${maRem}/2</span>
+        <span style="flex:1"></span>
+        <button class="ibt tc" onclick="restMetaSP()" ${sesMode&&usedMetaSP>0?'':' disabled'}>＋</button>
+        <button class="ibt rc" onclick="useMetaSP()" ${sesMode&&maRem>0?'':' disabled'}>－</button>
+      </div>
+    </div>`;
   }
   h+=`</div>`;
 
@@ -1542,7 +1562,7 @@ function renderBuilds(){
 }
 function loadBuild(idx){
   const b=BUILDS[idx];
-  lv=b.level;sesMode=false;curHp=-1;usedSl={};usedSP=0;concSp='';concRnd=0;
+  lv=b.level;sesMode=false;curHp=-1;usedSl={};usedSP=0;usedMetaSP=0;concSp='';concRnd=0;
   innActive=false;innLeft=profB(lv);
   charImg=b.img||'';applyImg(charImg);
   if(g('c-name'))g('c-name').value=b.name;
@@ -1561,7 +1581,7 @@ function loadBuild(idx){
   showScreen('character',0);
 }
 function newBuild(){
-  lv=1;sesMode=false;curHp=-1;usedSl={};usedSP=0;concSp='';concRnd=0;innActive=false;innLeft=2;
+  lv=1;sesMode=false;curHp=-1;usedSl={};usedSP=0;usedMetaSP=0;concSp='';concRnd=0;innActive=false;innLeft=2;
   charImg='';applyImg('');
   if(g('c-name'))g('c-name').value='';
   if(g('c-level'))g('c-level').value=1;

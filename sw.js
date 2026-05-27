@@ -1,4 +1,4 @@
-const CACHE = 'dnd-am-v5';
+const CACHE = 'dnd-am-v6';
 const ASSETS = ['./preview.html', './manifest.json', './icon.png', './logo.png'];
 
 self.addEventListener('install', e => {

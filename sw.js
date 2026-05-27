@@ -1,5 +1,12 @@
-const CACHE = 'dnd-am-v7';
-const ASSETS = ['./preview.html', './manifest.json', './icon.png', './logo.png'];
+const CACHE = 'dnd-am-v8';
+const ASSETS = [
+  './preview.html', './manifest.json', './icon.png', './logo.png',
+  './ra.css',
+  './fonts/rpgawesome-webfont.woff',
+  './fonts/rpgawesome-webfont.ttf',
+  './fonts/rpgawesome-webfont.eot',
+  './fonts/rpgawesome-webfont.svg'
+];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)));

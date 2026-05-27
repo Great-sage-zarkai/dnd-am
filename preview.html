@@ -9,7 +9,6 @@
 <meta name="apple-mobile-web-app-title" content="D&D Build">
 <link rel="apple-touch-icon" href="icon.png">
 <link rel="manifest" href="manifest.json">
-<link rel="stylesheet" href="ra.css">
 <title>D&D Build</title>
 <style>
 :root{
@@ -49,7 +48,8 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:#1a1
 /* ── BOTTOM TAB BAR ── */
 .tab-bar{height:var(--tabh);background:var(--sf);border-top:1px solid var(--ol);display:flex;align-items:stretch;flex-shrink:0;z-index:20;padding-bottom:env(safe-area-inset-bottom)}
 .tab-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;border:none;background:none;color:var(--os);font-size:10px;font-weight:500;padding:6px 0 4px;position:relative;transition:color .15s}
-.tab-item .ti{font-size:22px;line-height:1}
+.tab-item .ti{width:26px;height:26px;object-fit:contain;display:block;opacity:.45;transition:opacity .15s}
+.tab-item.active .ti{opacity:1}
 .tab-item.active{color:var(--p)}
 .tab-item.active::before{content:'';position:absolute;top:0;left:20%;right:20%;height:2.5px;background:var(--p);border-radius:0 0 3px 3px}
 
@@ -67,7 +67,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:#1a1
 .acc{border:.5px solid var(--ol);border-radius:var(--rr);margin-bottom:10px;overflow:hidden;background:var(--sf)}
 .acc-hd{display:flex;align-items:center;gap:10px;padding:13px 14px;cursor:pointer;user-select:none;transition:background .1s}
 .acc-hd:active{background:var(--sv)}
-.acc-ic{font-size:17px}
+.acc-ic{width:22px;height:22px;object-fit:contain;flex-shrink:0}
 .acc-tl{font-size:13px;font-weight:600;flex:1}
 .acc-ch{color:var(--os);transition:transform .2s;font-size:12px}
 .acc-ch.open{transform:rotate(180deg)}
@@ -214,7 +214,7 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
 .conc-btn{background:none;border:none;cursor:pointer;font-size:16px;padding:0 2px;flex-shrink:0;line-height:1}
 .sp-desc{font-size:12px;color:var(--os);line-height:1.55;margin-top:7px}
 .tip-note{background:var(--pl);border-radius:6px;padding:7px 9px;display:flex;gap:6px;margin-top:6px}
-.tip-ic{font-size:12px;color:var(--pd);flex-shrink:0;margin-top:1px}
+.tip-ic{width:15px;height:15px;object-fit:contain;flex-shrink:0;margin-top:1px}
 .tip-tx{font-size:11px;color:var(--pd);line-height:1.5}
 
 /* Cast panel */
@@ -315,7 +315,7 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
     <button class="lang-btn" id="lb-eng" onclick="setLang('eng')">ENG</button>
     <button class="lang-btn" id="lb-esp" onclick="setLang('esp')">ESP</button>
   </div>
-  <button class="btn-save-g" id="btn-save-g" onclick="saveCurrent()"><i class="ra ra-save" style="font-size:14px;vertical-align:middle;margin-right:4px"></i>Desa</button>
+  <button class="btn-save-g" id="btn-save-g" onclick="saveCurrent()"><img src="icons/saved.png" style="width:16px;height:16px;vertical-align:middle;margin-right:4px">Desa</button>
 </div>
 
 <!-- SCROLL AREA -->
@@ -348,7 +348,7 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
   <!-- Basic Info -->
   <div class="acc" id="acc-basic">
     <div class="acc-hd" onclick="toggleAcc('basic')">
-      <i class="acc-ic ra ra-player-dodge"></i><span class="acc-tl" data-i18n="basicInfo">Informació bàsica</span>
+      <img class="acc-ic" src="icons/basic.png"><span class="acc-tl" data-i18n="basicInfo">Informació bàsica</span>
       <span class="acc-ch open" id="ch-basic">▼</span>
     </div>
     <div class="acc-bd open" id="bd-basic">
@@ -388,7 +388,7 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
   <!-- Ability Scores -->
   <div class="acc" id="acc-stats">
     <div class="acc-hd" onclick="toggleAcc('stats')">
-      <i class="acc-ic ra ra-dice-six"></i><span class="acc-tl" data-i18n="statsTitle">Puntuacions &amp; Estadístiques</span>
+      <img class="acc-ic" src="icons/stats.png"><span class="acc-tl" data-i18n="statsTitle">Puntuacions &amp; Estadístiques</span>
       <span class="acc-ch open" id="ch-stats">▼</span>
     </div>
     <div class="acc-bd open" id="bd-stats">
@@ -423,7 +423,7 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
   <!-- Backstory -->
   <div class="acc" id="acc-lore">
     <div class="acc-hd" onclick="toggleAcc('lore')">
-      <i class="acc-ic ra ra-book"></i><span class="acc-tl" data-i18n="loreTitle">Història &amp; Origen Aberrant</span>
+      <img class="acc-ic" src="icons/lore.png"><span class="acc-tl" data-i18n="loreTitle">Història &amp; Origen Aberrant</span>
       <span class="acc-ch" id="ch-lore">▼</span>
     </div>
     <div class="acc-bd" id="bd-lore">
@@ -481,7 +481,7 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
   <!-- Metamagic -->
   <div class="acc" id="acc-meta">
     <div class="acc-hd" onclick="toggleAcc('meta')">
-      <i class="acc-ic ra ra-crystal-ball"></i><span class="acc-tl" data-i18n="metamagic">Metamàgia</span>
+      <img class="acc-ic" src="icons/build.png"><span class="acc-tl" data-i18n="metamagic">Metamàgia</span>
       <span class="acc-ch open" id="ch-meta">▼</span>
     </div>
     <div class="acc-bd open" id="bd-meta">
@@ -493,7 +493,7 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
   <!-- Class Features -->
   <div class="acc" id="acc-classf">
     <div class="acc-hd" onclick="toggleAcc('classf')">
-      <i class="acc-ic ra ra-crossed-swords"></i><span class="acc-tl" data-i18n="classFeatures">Característiques de classe</span>
+      <img class="acc-ic" src="icons/classf.png"><span class="acc-tl" data-i18n="classFeatures">Característiques de classe</span>
       <span class="acc-ch" id="ch-classf">▼</span>
     </div>
     <div class="acc-bd" id="bd-classf">
@@ -504,7 +504,7 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
   <!-- Subclass -->
   <div class="acc" id="acc-sub">
     <div class="acc-hd" onclick="toggleAcc('sub')">
-      <i class="acc-ic ra ra-tentacle"></i><span class="acc-tl" data-i18n="subclassTitle">Aberrant Mind — Subclasse</span>
+      <img class="acc-ic" src="icons/subclass.png"><span class="acc-tl" data-i18n="subclassTitle">Aberrant Mind — Subclasse</span>
       <span class="acc-ch open" id="ch-sub">▼</span>
     </div>
     <div class="acc-bd open" id="bd-sub">
@@ -515,7 +515,7 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
   <!-- Feats -->
   <div class="acc" id="acc-feats">
     <div class="acc-hd" onclick="toggleAcc('feats')">
-      <i class="acc-ic ra ra-trophy"></i><span class="acc-tl" data-i18n="feats">Proeses (Feats)</span>
+      <img class="acc-ic" src="icons/feats.png"><span class="acc-tl" data-i18n="feats">Proeses (Feats)</span>
       <span class="acc-ch" id="ch-feats">▼</span>
     </div>
     <div class="acc-bd" id="bd-feats">
@@ -529,7 +529,7 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
   <!-- Notes -->
   <div class="acc" id="acc-notes">
     <div class="acc-hd" onclick="toggleAcc('notes')">
-      <i class="acc-ic ra ra-quill-ink"></i><span class="acc-tl" data-i18n="sessionNotes">Notes de sessió</span>
+      <img class="acc-ic" src="icons/notes.png"><span class="acc-tl" data-i18n="sessionNotes">Notes de sessió</span>
       <span class="acc-ch" id="ch-notes">▼</span>
     </div>
     <div class="acc-bd" id="bd-notes">
@@ -555,19 +555,19 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
 <!-- BOTTOM TAB BAR -->
 <div class="tab-bar">
   <button class="tab-item active" id="tab-character" onclick="showScreen('character',0)">
-    <i class="ti ra ra-scroll-unfurled"></i><span data-i18n="tabChar">Personatge</span>
+    <img class="ti" src="icons/char.png"><span data-i18n="tabChar">Personatge</span>
   </button>
   <button class="tab-item" id="tab-spells" onclick="showScreen('spells',1)">
-    <i class="ti ra ra-crystal-wand"></i><span data-i18n="tabSpells">Encanteris</span>
+    <img class="ti" src="icons/spells.png"><span data-i18n="tabSpells">Encanteris</span>
   </button>
   <button class="tab-item" id="tab-tracker" onclick="showScreen('tracker',2)">
-    <i class="ti ra ra-lightning-bolt"></i><span data-i18n="tabTracker">Tracker</span>
+    <img class="ti" src="icons/tracker.png"><span data-i18n="tabTracker">Tracker</span>
   </button>
   <button class="tab-item" id="tab-build" onclick="showScreen('build',3)">
-    <i class="ti ra ra-crystals"></i><span data-i18n="tabBuild">Build</span>
+    <img class="ti" src="icons/build.png"><span data-i18n="tabBuild">Build</span>
   </button>
   <button class="tab-item" id="tab-saved" onclick="showScreen('saved',4)">
-    <i class="ti ra ra-save"></i><span data-i18n="tabSaved">Desats</span>
+    <img class="ti" src="icons/saved.png"><span data-i18n="tabSaved">Desats</span>
   </button>
 </div>
 
@@ -871,7 +871,7 @@ const GEN_FEATS=[
 let lang='cat';
 const LANGS={
   cat:{
-    save:'<i class="ra ra-save" style="font-size:14px;vertical-align:middle;margin-right:4px"></i>Desa',heroSubclass:'Aberrant Mind Sorcerer',levelLabel:'Nivell',
+    save:'<img src="icons/saved.png" style="width:16px;height:16px;vertical-align:middle;margin-right:4px">Desa',heroSubclass:'Aberrant Mind Sorcerer',levelLabel:'Nivell',
     basicInfo:'Informació bàsica',charName:'Nom del personatge',level:'Nivell',
     species:'Espècie',age:'Edat',alignment:'Alineament',
     statsTitle:'Puntuacions & Estadístiques',
@@ -888,15 +888,15 @@ const LANGS={
     spW:'encanteri',spsW:'encanteris',totalW:'totals',selW:'seleccionats',
     sessionActive:'⚡ Sessió activa',buildMode:'💤 Mode construcció',
     exit:'Sortir',startSes:'▶ Iniciar sessió',
-    hp:'<i class="ra ra-health" style="font-size:14px;vertical-align:middle;margin-right:4px"></i> Hit Points',slotsLbl:'<i class="ra ra-perspective-dice-six" style="font-size:14px;vertical-align:middle;margin-right:4px"></i> Slots d\'encanteri',sp:'<i class="ra ra-crystal-wand" style="font-size:14px;vertical-align:middle;margin-right:4px"></i> Sorcery Points',
+    hp:'<img src="icons/hp.png" style="width:16px;height:16px;vertical-align:middle;margin-right:4px"> Hit Points',slotsLbl:'<img src="icons/slots.png" style="width:16px;height:16px;vertical-align:middle;margin-right:4px"> Slots d\'encanteri',sp:'<img src="icons/spells.png" style="width:16px;height:16px;vertical-align:middle;margin-right:4px"> Sorcery Points',
     remaining:'Restants:',spToSlot:'SP → crear slot',slotToSp:'Slot → guanyar SP',
     convTitle:'Conversor SP ↔ Slot',
-    innate:'<i class="ra ra-aura" style="font-size:14px;vertical-align:middle;margin-right:4px"></i> Innate Sorcery',activate:'Activar',deactivate:'Finalitzar',
+    innate:'<img src="icons/subclass.png" style="width:16px;height:16px;vertical-align:middle;margin-right:4px"> Innate Sorcery',activate:'Activar',deactivate:'Finalitzar',
     noUses:'Sense usos',longRestNeed:'(Long Rest)',spendSP:'Gasta 2 SP',
     innateOn:'+1 DC · Adv. atacs · 1 min',
     usesL:(n)=>`${n} us${n!==1?'os':''} restant${n!==1?'s':''}`,
     concentrating:'Concentrant:',round:'Ronda',
-    shortRest:'<i class="ra ra-campfire" style="font-size:14px;vertical-align:middle;margin-right:3px"></i> Short Rest',longRest:'<i class="ra ra-moon-sun" style="font-size:14px;vertical-align:middle;margin-right:3px"></i> Long Rest',spGain:'+4 SP',fullReset:'Full reset',
+    shortRest:'<img src="icons/shortrest.png" style="width:16px;height:16px;vertical-align:middle;margin-right:3px"> Short Rest',longRest:'<img src="icons/longrest.png" style="width:16px;height:16px;vertical-align:middle;margin-right:3px"> Long Rest',spGain:'+4 SP',fullReset:'Full reset',
     metamagic:'Metamàgia',classFeatures:'Característiques de classe',
     subclassTitle:'Aberrant Mind — Subclasse',feats:'Proeses (Feats)',
     searchFeats:'Busca proeses...',originFeats:"Proeses d'origen",generalFeats:'Proeses generals',
@@ -911,7 +911,7 @@ const LANGS={
     castBtn:'Lançar',noSP:'— sense SP',lvl:'Nivell',nv:'Nv',
   },
   eng:{
-    save:'<i class="ra ra-save" style="font-size:14px;vertical-align:middle;margin-right:4px"></i>Save',heroSubclass:'Aberrant Mind Sorcerer',levelLabel:'Level',
+    save:'<img src="icons/saved.png" style="width:16px;height:16px;vertical-align:middle;margin-right:4px">Save',heroSubclass:'Aberrant Mind Sorcerer',levelLabel:'Level',
     basicInfo:'Basic Information',charName:'Character Name',level:'Level',
     species:'Species',age:'Age',alignment:'Alignment',
     statsTitle:'Scores & Statistics',
@@ -928,15 +928,15 @@ const LANGS={
     spW:'spell',spsW:'spells',totalW:'total',selW:'selected',
     sessionActive:'⚡ Active Session',buildMode:'💤 Build Mode',
     exit:'Exit',startSes:'▶ Start Session',
-    hp:'<i class="ra ra-health" style="font-size:14px;vertical-align:middle;margin-right:4px"></i> Hit Points',slotsLbl:'<i class="ra ra-perspective-dice-six" style="font-size:14px;vertical-align:middle;margin-right:4px"></i> Spell Slots',sp:'<i class="ra ra-crystal-wand" style="font-size:14px;vertical-align:middle;margin-right:4px"></i> Sorcery Points',
+    hp:'<img src="icons/hp.png" style="width:16px;height:16px;vertical-align:middle;margin-right:4px"> Hit Points',slotsLbl:'<img src="icons/slots.png" style="width:16px;height:16px;vertical-align:middle;margin-right:4px"> Spell Slots',sp:'<img src="icons/spells.png" style="width:16px;height:16px;vertical-align:middle;margin-right:4px"> Sorcery Points',
     remaining:'Remaining:',spToSlot:'SP → create slot',slotToSp:'Slot → gain SP',
     convTitle:'SP ↔ Slot Converter',
-    innate:'<i class="ra ra-aura" style="font-size:14px;vertical-align:middle;margin-right:4px"></i> Innate Sorcery',activate:'Activate',deactivate:'End',
+    innate:'<img src="icons/subclass.png" style="width:16px;height:16px;vertical-align:middle;margin-right:4px"> Innate Sorcery',activate:'Activate',deactivate:'End',
     noUses:'No uses',longRestNeed:'(Long Rest)',spendSP:'Spend 2 SP',
     innateOn:'+1 DC · Adv. attacks · 1 min',
     usesL:(n)=>`${n} use${n!==1?'s':''} left`,
     concentrating:'Concentrating:',round:'Round',
-    shortRest:'<i class="ra ra-campfire" style="font-size:14px;vertical-align:middle;margin-right:3px"></i> Short Rest',longRest:'<i class="ra ra-moon-sun" style="font-size:14px;vertical-align:middle;margin-right:3px"></i> Long Rest',spGain:'+4 SP',fullReset:'Full reset',
+    shortRest:'<img src="icons/shortrest.png" style="width:16px;height:16px;vertical-align:middle;margin-right:3px"> Short Rest',longRest:'<img src="icons/longrest.png" style="width:16px;height:16px;vertical-align:middle;margin-right:3px"> Long Rest',spGain:'+4 SP',fullReset:'Full reset',
     metamagic:'Metamagic',classFeatures:'Class Features',
     subclassTitle:'Aberrant Mind — Subclass',feats:'Feats',
     searchFeats:'Search feats...',originFeats:'Origin Feats',generalFeats:'General Feats',
@@ -951,7 +951,7 @@ const LANGS={
     castBtn:'Cast',noSP:'— no SP',lvl:'Level',nv:'Lv',
   },
   esp:{
-    save:'<i class="ra ra-save" style="font-size:14px;vertical-align:middle;margin-right:4px"></i>Guardar',heroSubclass:'Hechicero Mente Aberrante',levelLabel:'Nivel',
+    save:'<img src="icons/saved.png" style="width:16px;height:16px;vertical-align:middle;margin-right:4px">Guardar',heroSubclass:'Hechicero Mente Aberrante',levelLabel:'Nivel',
     basicInfo:'Información básica',charName:'Nombre del personaje',level:'Nivel',
     species:'Especie',age:'Edad',alignment:'Alineamiento',
     statsTitle:'Puntuaciones & Estadísticas',
@@ -968,15 +968,15 @@ const LANGS={
     spW:'hechizo',spsW:'hechizos',totalW:'totales',selW:'seleccionados',
     sessionActive:'⚡ Sesión activa',buildMode:'💤 Modo construcción',
     exit:'Salir',startSes:'▶ Iniciar sesión',
-    hp:'<i class="ra ra-health" style="font-size:14px;vertical-align:middle;margin-right:4px"></i> Puntos de vida',slotsLbl:'<i class="ra ra-perspective-dice-six" style="font-size:14px;vertical-align:middle;margin-right:4px"></i> Espacios de hechizo',sp:'<i class="ra ra-crystal-wand" style="font-size:14px;vertical-align:middle;margin-right:4px"></i> Puntos de hechicería',
+    hp:'<img src="icons/hp.png" style="width:16px;height:16px;vertical-align:middle;margin-right:4px"> Puntos de vida',slotsLbl:'<img src="icons/slots.png" style="width:16px;height:16px;vertical-align:middle;margin-right:4px"> Espacios de hechizo',sp:'<img src="icons/spells.png" style="width:16px;height:16px;vertical-align:middle;margin-right:4px"> Puntos de hechicería',
     remaining:'Restantes:',spToSlot:'PS → crear espacio',slotToSp:'Espacio → ganar PS',
     convTitle:'Conversor PS ↔ Espacio',
-    innate:'<i class="ra ra-aura" style="font-size:14px;vertical-align:middle;margin-right:4px"></i> Hechicería innata',activate:'Activar',deactivate:'Finalizar',
+    innate:'<img src="icons/subclass.png" style="width:16px;height:16px;vertical-align:middle;margin-right:4px"> Hechicería innata',activate:'Activar',deactivate:'Finalizar',
     noUses:'Sin usos',longRestNeed:'(Desc. largo)',spendSP:'Gasta 2 PS',
     innateOn:'+1 CD · Adv. ataques · 1 min',
     usesL:(n)=>`${n} uso${n!==1?'s':''} restante${n!==1?'s':''}`,
     concentrating:'Concentrando:',round:'Ronda',
-    shortRest:'<i class="ra ra-campfire" style="font-size:14px;vertical-align:middle;margin-right:3px"></i> Desc. corto',longRest:'<i class="ra ra-moon-sun" style="font-size:14px;vertical-align:middle;margin-right:3px"></i> Desc. largo',spGain:'+4 PS',fullReset:'Reset completo',
+    shortRest:'<img src="icons/shortrest.png" style="width:16px;height:16px;vertical-align:middle;margin-right:3px"> Desc. corto',longRest:'<img src="icons/longrest.png" style="width:16px;height:16px;vertical-align:middle;margin-right:3px"> Desc. largo',spGain:'+4 PS',fullReset:'Reset completo',
     metamagic:'Metamagia',classFeatures:'Características de clase',
     subclassTitle:'Mente Aberrante — Subclase',feats:'Proezas',
     searchFeats:'Busca proezas...',originFeats:'Proezas de origen',generalFeats:'Proezas generales',
@@ -1348,7 +1348,7 @@ function renderTracker(){
     const pips=[0,1].map(i=>`<span style="width:13px;height:13px;border-radius:50%;display:inline-block;border:1.5px solid ${i<maRem?'var(--p)':'rgba(0,0,0,.15)'};background:${i<maRem?'var(--p)':'rgba(0,0,0,.08)'};transition:background .25s"></span>`).join('');
     h+=`<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--ol)">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px">
-        <span style="font-size:10px;font-weight:700;color:var(--pd);letter-spacing:.5px"><i class="ra ra-crystal-ball" style="font-size:14px;vertical-align:middle;margin-right:4px"></i>METAMAGIC ADEPT</span>
+        <span style="font-size:10px;font-weight:700;color:var(--pd);letter-spacing:.5px"><img src="icons/build.png" style="width:16px;height:16px;vertical-align:middle;margin-right:4px">METAMAGIC ADEPT</span>
         <span style="font-size:9px;color:var(--os);background:var(--pl);border-radius:5px;padding:2px 6px">Metamagic only</span>
       </div>
       <div class="sp-row">
@@ -1423,7 +1423,7 @@ function renderMetaStrip(){
   </div>`).join('');
   el.innerHTML=`<div class="mstrip">
     <div class="mstrip-hd" onclick="toggleMetaStrip()">
-      <span class="mstrip-lbl"><i class="ra ra-crystal-ball" style="font-size:14px;vertical-align:middle;margin-right:4px"></i>Metamàgia</span>
+      <span class="mstrip-lbl"><img src="icons/build.png" style="width:16px;height:16px;vertical-align:middle;margin-right:4px">Metamàgia</span>
       <div class="mstrip-chips">${chips}</div>
       <span class="mstrip-arr ${metaStripOpen?'open':''}">▼</span>
     </div>
@@ -1460,7 +1460,7 @@ function renderMySpells(){
   });
   renderMetaStrip();
   const el=g('my-spells-list');
-  if(el)el.innerHTML=h||`<div class="empty-st"><div class="ei"><i class="ra ra-crystal-wand"></i></div><div>${t('noSpellsSel')}</div><div style="font-size:12px;margin-top:4px">${t('goExplore')}</div></div>`;
+  if(el)el.innerHTML=h||`<div class="empty-st"><div class="ei"><img src="icons/spells.png" style="width:40px;height:40px;object-fit:contain;opacity:.5"></div><div>${t('noSpellsSel')}</div><div style="font-size:12px;margin-top:4px">${t('goExplore')}</div></div>`;
 }
 
 function mySpellH(spell,slots){
@@ -1484,7 +1484,7 @@ function mySpellH(spell,slots){
   return`<div class="card ${cls}"><div class="sp-row-c"><div class="sp-inf">
     <div class="sp-nr"><span class="sp-nm">${spell.name}</span>${spell.psi?`<span class="badge bt">${t('psionic')}</span>`:''}${spell.conc?'<span class="badge br">Conc.</span>':''}</div>
     <div class="sp-mt">${spell.school} · ${spell.range} · ${spell.duration}${spell.save&&spell.save!=='None'?' · Save: '+spell.save:''}</div>
-    ${exp?`<div class="sp-desc">${spell.desc}</div>${spell.tip?`<div class="tip-note"><i class="tip-ic ra ra-light-bulb"></i><span class="tip-tx">${spell.tip}</span></div>`:''}${castH}`:''}
+    ${exp?`<div class="sp-desc">${spell.desc}</div>${spell.tip?`<div class="tip-note"><img class="tip-ic" src="icons/tip.png"><span class="tip-tx">${spell.tip}</span></div>`:''}${castH}`:''}
   </div>${concBtn}<button class="exp-btn" onclick="toggleExp('${spell.name}')">${exp?'▲':'▼'}</button></div></div>`;
 }
 function toggleExp(n){expSp.has(n)?expSp.delete(n):expSp.add(n);renderMySpells();}
@@ -1526,7 +1526,7 @@ function renderSpells(filter=''){
     h+=spells.length?spells.map(s=>browseCardH(s,selS.has(s.name))).join(''):`<div style="padding:6px 0 2px;font-size:12px;color:var(--os)">${t('noSpellsList')}</div>`;
     h+='<div style="height:6px"></div>';
   }
-  if(g('lvl-container'))g('lvl-container').innerHTML=h||`<div class="empty-st"><div class="ei"><i class="ra ra-crystal-wand"></i></div><div>${t('noSpellsFound')}</div></div>`;
+  if(g('lvl-container'))g('lvl-container').innerHTML=h||`<div class="empty-st"><div class="ei"><img src="icons/nospells.png" style="width:40px;height:40px;object-fit:contain;opacity:.5"></div><div>${t('noSpellsFound')}</div></div>`;
 }
 function toggleSpell(name,isPsi){
   if(isPsi)return;
@@ -1548,7 +1548,7 @@ function renderBuild(){
       <div class="meta-hd"><span style="font-size:13px;font-weight:500">${m.name}</span><span class="badge ${sel?'bp':'bg'}">${m.cost}</span></div>
       <div class="stars">${'★'.repeat(m.stars)}${'☆'.repeat(5-m.stars)}</div>
       <div class="meta-ds">${m.desc}</div>
-      <div class="tip-note" style="margin-top:6px"><i class="tip-ic ra ra-light-bulb"></i><span class="tip-tx">${m.tip}</span></div>
+      <div class="tip-note" style="margin-top:6px"><img class="tip-ic" src="icons/tip.png"><span class="tip-tx">${m.tip}</span></div>
     </div>`;
   }).join('');
   // Class Features
@@ -1558,7 +1558,7 @@ function renderBuild(){
       <div class="sc-hd"><div><div style="font-size:14px;font-weight:500">${f.name}</div>${locked?`<div style="font-size:11px;color:var(--os)">${t('unlocksAt')} ${f.level}</div>`:''}</div>
       <div class="sc-bd"><span class="badge ${tc}">${f.type}</span><span class="badge ba">Nv ${f.level}</span></div></div>
       <div class="sc-ds">${f.desc}</div>
-      ${f.tip?`<div class="tip-note" style="margin-top:7px"><i class="tip-ic ra ra-light-bulb"></i><span class="tip-tx">${f.tip}</span></div>`:''}
+      ${f.tip?`<div class="tip-note" style="margin-top:7px"><img class="tip-ic" src="icons/tip.png"><span class="tip-tx">${f.tip}</span></div>`:''}
     </div>`;
   };
   if(g('classf-list'))g('classf-list').innerHTML=CLASS_FEATURES.map(f=>fcH(f,f.level>lv)).join('');
@@ -1579,7 +1579,7 @@ function renderFeats(filter=''){
     return`<div class="card ${sel?(isOr?'sel-a':'sel-p'):''}" onclick="toggleFeat('${feat.name}')">
       <div class="feat-hd"><span class="feat-nm">${feat.name}</span><span class="badge ${isOr?'ba':'bt'}">${feat.type}</span></div>
       <div class="feat-ds">${feat.desc}</div>
-      ${feat.tip?`<div class="tip-note" style="margin-top:6px"><i class="tip-ic ra ra-light-bulb"></i><span class="tip-tx">${feat.tip}</span></div>`:''}
+      ${feat.tip?`<div class="tip-note" style="margin-top:6px"><img class="tip-ic" src="icons/tip.png"><span class="tip-tx">${feat.tip}</span></div>`:''}
     </div>`;
   };
   if(g('orig-feats'))g('orig-feats').innerHTML=ORIG_FEATS.filter(fn).map(fH).join('');
@@ -1592,7 +1592,7 @@ function filterFeats(v){renderFeats(v);}
 function renderBuilds(){
   const el=g('builds-list');
   if(!el)return;
-  if(!BUILDS.length){el.innerHTML=`<div class="empty-st"><div class="ei"><i class="ra ra-save"></i></div><div>${t('noSaved')}</div></div>`;return;}
+  if(!BUILDS.length){el.innerHTML=`<div class="empty-st"><div class="ei"><img src="icons/saved.png" style="width:40px;height:40px;object-fit:contain;opacity:.5"></div><div>${t('noSaved')}</div></div>`;return;}
   el.innerHTML=BUILDS.map((b,i)=>{
     const slots=getSlots(b.level);
     const maxSl=Math.max(...Object.keys(slots).map(Number));

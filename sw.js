@@ -1,11 +1,11 @@
-const CACHE = 'dnd-am-v8';
+const CACHE = 'dnd-am-v9';
 const ASSETS = [
   './preview.html', './manifest.json', './icon.png', './logo.png',
-  './ra.css',
-  './fonts/rpgawesome-webfont.woff',
-  './fonts/rpgawesome-webfont.ttf',
-  './fonts/rpgawesome-webfont.eot',
-  './fonts/rpgawesome-webfont.svg'
+  './icons/char.png', './icons/spells.png', './icons/tracker.png', './icons/build.png',
+  './icons/saved.png', './icons/basic.png', './icons/stats.png', './icons/lore.png',
+  './icons/classf.png', './icons/subclass.png', './icons/feats.png', './icons/notes.png',
+  './icons/hp.png', './icons/slots.png', './icons/shortrest.png', './icons/longrest.png',
+  './icons/tip.png', './icons/buildmode.png', './icons/nospells.png'
 ];
 
 self.addEventListener('install', e => {

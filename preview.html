@@ -33,6 +33,10 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:#1a1
 .btn-save-g:active{background:var(--pd)}
 .save-flash{font-size:12px;color:var(--t);font-weight:600;flex-shrink:0;animation:fadein .2s}
 @keyframes fadein{from{opacity:0}to{opacity:1}}
+/* ── LANG TOGGLE ── */
+.lang-tog{display:flex;gap:1px;background:var(--sv);border:1px solid var(--ol);border-radius:7px;padding:2px;flex-shrink:0}
+.lang-btn{background:none;border:none;border-radius:5px;padding:3px 7px;font-size:10px;font-weight:700;cursor:pointer;color:var(--os);letter-spacing:.3px;transition:all .15s;line-height:1.4}
+.lang-btn.active{background:var(--p);color:#fff}
 
 /* ── SCROLL AREA ── */
 .scroll-area{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
@@ -286,8 +290,13 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
     <div class="tb-name" id="tb-name">Zariel</div>
     <div class="tb-sub" id="tb-sub">Aberrant Mind · Lv 7</div>
   </div>
-  <span class="save-flash" id="save-ok" style="display:none">✓ Desat!</span>
-  <button class="btn-save-g" onclick="saveCurrent()">💾 Desa</button>
+  <span class="save-flash" id="save-ok" style="display:none">✓</span>
+  <div class="lang-tog" role="group">
+    <button class="lang-btn active" id="lb-cat" onclick="setLang('cat')">CAT</button>
+    <button class="lang-btn" id="lb-eng" onclick="setLang('eng')">ENG</button>
+    <button class="lang-btn" id="lb-esp" onclick="setLang('esp')">ESP</button>
+  </div>
+  <button class="btn-save-g" id="btn-save-g" onclick="saveCurrent()">💾 Desa</button>
 </div>
 
 <!-- SCROLL AREA -->
@@ -308,30 +317,30 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
     <input type="file" id="c-img" accept="image/*" style="display:none" onchange="handleImg(this)">
     <div>
       <div class="hero-name" id="h-name">Zariel</div>
-      <div class="hero-s1">Aberrant Mind Sorcerer</div>
+      <div class="hero-s1" data-i18n="heroSubclass">Aberrant Mind Sorcerer</div>
       <div class="hero-s2" id="h-sub">Human · Sage · Chaotic Good</div>
     </div>
     <div class="hero-r">
       <div class="hero-lv" id="h-lv">7</div>
-      <div class="hero-ls">Nivell</div>
+      <div class="hero-ls" data-i18n="levelLabel">Nivell</div>
     </div>
   </div>
 
   <!-- Basic Info -->
   <div class="acc" id="acc-basic">
     <div class="acc-hd" onclick="toggleAcc('basic')">
-      <span class="acc-ic">🧝</span><span class="acc-tl">Informació bàsica</span>
+      <span class="acc-ic">🧝</span><span class="acc-tl" data-i18n="basicInfo">Informació bàsica</span>
       <span class="acc-ch open" id="ch-basic">▼</span>
     </div>
     <div class="acc-bd open" id="bd-basic">
       <div class="fg">
-        <div class="fi"><label>Nom del personatge</label>
+        <div class="fi"><label data-i18n="charName">Nom del personatge</label>
           <input type="text" id="c-name" value="Zariel" oninput="updateHero()"></div>
-        <div class="fi" style="max-width:90px"><label>Nivell</label>
+        <div class="fi" style="max-width:90px"><label data-i18n="level">Nivell</label>
           <input type="number" id="c-level" min="1" max="20" value="7" oninput="updateLevel(this.value)"></div>
       </div>
       <div class="fg">
-        <div class="fi"><label>Espècie</label>
+        <div class="fi"><label data-i18n="species">Espècie</label>
           <select id="c-species" onchange="updateHero()">
             <option selected>Human</option><option>Aasimar</option><option>Dragonborn</option>
             <option>Elf</option><option>Gnome</option><option>Goliath</option><option>Half-Elf</option>
@@ -346,8 +355,8 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
           </select></div>
       </div>
       <div class="fg">
-        <div class="fi"><label>Edat</label><input type="text" id="c-age" value="28"></div>
-        <div class="fi"><label>Alineament</label>
+        <div class="fi"><label data-i18n="age">Edat</label><input type="text" id="c-age" value="28"></div>
+        <div class="fi"><label data-i18n="alignment">Alineament</label>
           <select id="c-align" onchange="updateHero()">
             <option>Lawful Good</option><option>Neutral Good</option><option selected>Chaotic Good</option>
             <option>Lawful Neutral</option><option>True Neutral</option><option>Chaotic Neutral</option>
@@ -360,11 +369,11 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
   <!-- Ability Scores -->
   <div class="acc" id="acc-stats">
     <div class="acc-hd" onclick="toggleAcc('stats')">
-      <span class="acc-ic">📊</span><span class="acc-tl">Puntuacions &amp; Estadístiques</span>
+      <span class="acc-ic">📊</span><span class="acc-tl" data-i18n="statsTitle">Puntuacions &amp; Estadístiques</span>
       <span class="acc-ch open" id="ch-stats">▼</span>
     </div>
     <div class="acc-bd open" id="bd-stats">
-      <div style="font-size:12px;color:var(--os);margin-bottom:10px">Recomanat: CHA 17, DEX 15, CON 14, WIS 10, INT 8, STR 8</div>
+      <div style="font-size:12px;color:var(--os);margin-bottom:10px" data-i18n="statsRec">Recomanat: CHA 17, DEX 15, CON 14, WIS 10, INT 8, STR 8</div>
       <div class="stat-grid">
         <div class="sbox"><div class="slbl">STR</div><input type="number" id="s-str" value="8" oninput="recalc()"><div class="smod" id="m-str">−1</div></div>
         <div class="sbox"><div class="slbl">DEX</div><input type="number" id="s-dex" value="15" oninput="recalc()"><div class="smod" id="m-dex">+2</div></div>
@@ -382,9 +391,9 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
         <div class="dbox"><div class="dlbl">SPELL ATTACK</div><div class="dval" id="d-atk">+6</div><div class="dsub">Prof + CHA</div></div>
         <div class="dbox"><div class="dlbl">SORCERY PTS</div><div class="dval" id="d-sp">7</div><div class="dsub">= Nivell Sorcerer</div></div>
       </div>
-      <div class="sec-lbl">Slots d'encanteri</div>
+      <div class="sec-lbl" data-i18n="spellSlots">Slots d'encanteri</div>
       <div class="slots-row" id="slots-row"></div>
-      <div class="sec-lbl" style="margin-top:8px">Encanteris coneguts</div>
+      <div class="sec-lbl" style="margin-top:8px" data-i18n="knownSpells">Encanteris coneguts</div>
       <div class="drv-grid" style="grid-template-columns:1fr 1fr;gap:8px">
         <div class="dbox"><div class="dlbl">CANTRIPS</div><div class="dval" id="d-cant">5</div><div class="dsub" id="d-csub">al nivell 7</div></div>
         <div class="dbox"><div class="dlbl">SPELLS</div><div class="dval" id="d-spkn">8</div><div class="dsub" id="d-ssub">al nivell 7</div></div>
@@ -395,11 +404,11 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
   <!-- Backstory -->
   <div class="acc" id="acc-lore">
     <div class="acc-hd" onclick="toggleAcc('lore')">
-      <span class="acc-ic">📖</span><span class="acc-tl">Història &amp; Origen Aberrant</span>
+      <span class="acc-ic">📖</span><span class="acc-tl" data-i18n="loreTitle">Història &amp; Origen Aberrant</span>
       <span class="acc-ch" id="ch-lore">▼</span>
     </div>
     <div class="acc-bd" id="bd-lore">
-      <div class="fi"><label>La teva història</label>
+      <div class="fi"><label data-i18n="loreLabel">La teva història</label>
         <textarea id="c-backstory" style="min-height:130px">A psionic rift opened in my mind during a dream, leaving me with voices I can't silence — and power I can't fully control.</textarea>
       </div>
     </div>
@@ -411,8 +420,8 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
 ═══════════════════════════════════ -->
 <div class="screen" id="sc-spells">
   <div class="stab-bar">
-    <button class="stab-btn active" id="stb-0" onclick="switchSpellTab(0)">⚡ Els meus</button>
-    <button class="stab-btn" id="stb-1" onclick="switchSpellTab(1)">🔍 Explorar &amp; Afegir</button>
+    <button class="stab-btn active" id="stb-0" onclick="switchSpellTab(0)" data-i18n="mySpells">⚡ Els meus</button>
+    <button class="stab-btn" id="stb-1" onclick="switchSpellTab(1)" data-i18n="browseSpells">🔍 Explorar &amp; Afegir</button>
   </div>
 
   <!-- My Spells -->
@@ -420,7 +429,7 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
     <div class="chips">
       <div class="chip" style="background:var(--tl)"><div style="font-size:10px;font-weight:700;color:var(--td)">Cantrips</div><div style="font-size:13px;font-weight:700;color:var(--td)" id="chip-c">0/5</div></div>
       <div class="chip" style="background:var(--pl)"><div style="font-size:10px;font-weight:700;color:var(--pd)">Spells</div><div style="font-size:13px;font-weight:700;color:var(--pd)" id="chip-s">0/8</div></div>
-      <div class="chip" style="background:#E1F5EE"><div style="font-size:10px;font-weight:700;color:#085041">Psiònic</div><div style="font-size:13px;font-weight:700;color:#085041">11 lliures</div></div>
+      <div class="chip" style="background:#E1F5EE"><div style="font-size:10px;font-weight:700;color:#085041" data-i18n="psionic">Psiònic</div><div style="font-size:13px;font-weight:700;color:#085041" data-i18n="freePsionic">11 lliures</div></div>
     </div>
     <div id="my-spells-list"></div>
   </div>
@@ -428,8 +437,8 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
   <!-- Browse -->
   <div id="spt-1" style="display:none">
     <div class="srch-box"><span class="srch-ic">🔍</span>
-      <input type="text" placeholder="Busca encanteris..." oninput="filterSpells(this.value)" id="spell-search"></div>
-    <div class="gh"><span class="badge bt">Psiònic</span><span class="gh-sub">Sempre preparats — gratuïts</span></div><hr class="hr">
+      <input type="text" placeholder="Busca encanteris..." oninput="filterSpells(this.value)" id="spell-search" data-i18n-ph="searchSpells"></div>
+    <div class="gh"><span class="badge bt" data-i18n="psionic">Psiònic</span><span class="gh-sub" data-i18n="alwaysPrepared">Sempre preparats — gratuïts</span></div><hr class="hr">
     <div id="psi-list"></div>
     <div class="gh"><span class="badge bg">Cantrip</span><span class="gh-sub" id="cant-hdr">Selecciona 5</span></div><hr class="hr">
     <div id="cant-list"></div>
@@ -452,7 +461,7 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
   <!-- Metamagic -->
   <div class="acc" id="acc-meta">
     <div class="acc-hd" onclick="toggleAcc('meta')">
-      <span class="acc-ic">🔮</span><span class="acc-tl">Metamàgia</span>
+      <span class="acc-ic">🔮</span><span class="acc-tl" data-i18n="metamagic">Metamàgia</span>
       <span class="acc-ch open" id="ch-meta">▼</span>
     </div>
     <div class="acc-bd open" id="bd-meta">
@@ -464,7 +473,7 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
   <!-- Class Features -->
   <div class="acc" id="acc-classf">
     <div class="acc-hd" onclick="toggleAcc('classf')">
-      <span class="acc-ic">⚔️</span><span class="acc-tl">Característiques de classe</span>
+      <span class="acc-ic">⚔️</span><span class="acc-tl" data-i18n="classFeatures">Característiques de classe</span>
       <span class="acc-ch" id="ch-classf">▼</span>
     </div>
     <div class="acc-bd" id="bd-classf">
@@ -475,7 +484,7 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
   <!-- Subclass -->
   <div class="acc" id="acc-sub">
     <div class="acc-hd" onclick="toggleAcc('sub')">
-      <span class="acc-ic">🧠</span><span class="acc-tl">Aberrant Mind — Subclasse</span>
+      <span class="acc-ic">🧠</span><span class="acc-tl" data-i18n="subclassTitle">Aberrant Mind — Subclasse</span>
       <span class="acc-ch open" id="ch-sub">▼</span>
     </div>
     <div class="acc-bd open" id="bd-sub">
@@ -486,25 +495,25 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
   <!-- Feats -->
   <div class="acc" id="acc-feats">
     <div class="acc-hd" onclick="toggleAcc('feats')">
-      <span class="acc-ic">⭐</span><span class="acc-tl">Proeses (Feats)</span>
+      <span class="acc-ic">⭐</span><span class="acc-tl" data-i18n="feats">Proeses (Feats)</span>
       <span class="acc-ch" id="ch-feats">▼</span>
     </div>
     <div class="acc-bd" id="bd-feats">
       <div class="srch-box"><span class="srch-ic">🔍</span>
-        <input type="text" placeholder="Busca proeses..." oninput="filterFeats(this.value)"></div>
-      <div class="sec-lbl">Proeses d'origen</div><div id="orig-feats"></div>
-      <div class="sec-lbl">Proeses generals</div><div id="gen-feats"></div>
+        <input type="text" placeholder="Busca proeses..." oninput="filterFeats(this.value)" data-i18n-ph="searchFeats"></div>
+      <div class="sec-lbl" data-i18n="originFeats">Proeses d'origen</div><div id="orig-feats"></div>
+      <div class="sec-lbl" data-i18n="generalFeats">Proeses generals</div><div id="gen-feats"></div>
     </div>
   </div>
 
   <!-- Notes -->
   <div class="acc" id="acc-notes">
     <div class="acc-hd" onclick="toggleAcc('notes')">
-      <span class="acc-ic">📝</span><span class="acc-tl">Notes de sessió</span>
+      <span class="acc-ic">📝</span><span class="acc-tl" data-i18n="sessionNotes">Notes de sessió</span>
       <span class="acc-ch" id="ch-notes">▼</span>
     </div>
     <div class="acc-bd" id="bd-notes">
-      <textarea id="c-notes" style="min-height:200px" placeholder="Combos, tàctiques, notes de sessió..."></textarea>
+      <textarea id="c-notes" style="min-height:200px" placeholder="Combos, tàctiques, notes de sessió..." data-i18n-ph="notesPlaceholder"></textarea>
     </div>
   </div>
 </div>
@@ -515,9 +524,9 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
 <div class="screen" id="sc-saved">
   <button class="new-bc-btn" onclick="newBuild()">
     <span style="font-size:26px">＋</span>
-    <span>Nou personatge — des de zero</span>
+    <span data-i18n="newChar">Nou personatge — des de zero</span>
   </button>
-  <div class="sec-lbl">Personatges desats</div>
+  <div class="sec-lbl" data-i18n="savedChars">Personatges desats</div>
   <div id="builds-list"></div>
 </div>
 
@@ -526,19 +535,19 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
 <!-- BOTTOM TAB BAR -->
 <div class="tab-bar">
   <button class="tab-item active" id="tab-character" onclick="showScreen('character',0)">
-    <span class="ti">📋</span><span>Personatge</span>
+    <span class="ti">📋</span><span data-i18n="tabChar">Personatge</span>
   </button>
   <button class="tab-item" id="tab-spells" onclick="showScreen('spells',1)">
-    <span class="ti">✨</span><span>Encanteris</span>
+    <span class="ti">✨</span><span data-i18n="tabSpells">Encanteris</span>
   </button>
   <button class="tab-item" id="tab-tracker" onclick="showScreen('tracker',2)">
-    <span class="ti">⚡</span><span>Tracker</span>
+    <span class="ti">⚡</span><span data-i18n="tabTracker">Tracker</span>
   </button>
   <button class="tab-item" id="tab-build" onclick="showScreen('build',3)">
-    <span class="ti">🔮</span><span>Build</span>
+    <span class="ti">🔮</span><span data-i18n="tabBuild">Build</span>
   </button>
   <button class="tab-item" id="tab-saved" onclick="showScreen('saved',4)">
-    <span class="ti">💾</span><span>Desats</span>
+    <span class="ti">💾</span><span data-i18n="tabSaved">Desats</span>
   </button>
 </div>
 
@@ -838,6 +847,143 @@ const GEN_FEATS=[
   {name:"Telepathic",type:"General",desc:"Telepathic speech 60 ft. Free Detect Thoughts/long rest. +1 CHA.",tip:"Thematically perfect for Aberrant Mind."},
 ];
 
+// ─── i18n ─────────────────────────────────────────────────────────────────────
+let lang='cat';
+const LANGS={
+  cat:{
+    save:'💾 Desa',heroSubclass:'Aberrant Mind Sorcerer',levelLabel:'Nivell',
+    basicInfo:'Informació bàsica',charName:'Nom del personatge',level:'Nivell',
+    species:'Espècie',age:'Edat',alignment:'Alineament',
+    statsTitle:'Puntuacions & Estadístiques',
+    statsRec:'Recomanat: CHA 17, DEX 15, CON 14, WIS 10, INT 8, STR 8',
+    derivedStats:'Estadístiques derivades — Nivell',
+    spellSlots:"Slots d'encanteri",knownSpells:'Encanteris coneguts',atLevel:'al nivell',
+    loreTitle:'Història & Origen Aberrant',loreLabel:"La teva història",
+    mySpells:'⚡ Els meus',browseSpells:'🔍 Explorar & Afegir',
+    psionic:'Psiònic',freePsionic:'11 lliures',
+    searchSpells:'Busca encanteris...',alwaysPrepared:'Sempre preparats — gratuïts',
+    selectC:'Selecciona',selCount:'Seleccionats:',
+    noSpellsSel:'Cap encanteri seleccionat.',goExplore:'Ves a Explorar & Afegir per escollir.',
+    noSpellsFound:'Cap encanteri trobat.',noSpellsList:'Sense spells a la llista.',
+    spW:'encanteri',spsW:'encanteris',totalW:'totals',selW:'seleccionats',
+    sessionActive:'⚡ Sessió activa',buildMode:'💤 Mode construcció',
+    exit:'Sortir',startSes:'▶ Iniciar sessió',
+    hp:'❤️ Hit Points',slotsLbl:"🎲 Slots d'encanteri",sp:'✨ Sorcery Points',
+    remaining:'Restants:',spToSlot:'SP → crear slot',slotToSp:'Slot → guanyar SP',
+    convTitle:'Conversor SP ↔ Slot',
+    innate:'🧠 Innate Sorcery',activate:'Activar',deactivate:'Finalitzar',
+    noUses:'Sense usos',longRestNeed:'(Long Rest)',spendSP:'Gasta 2 SP',
+    innateOn:'+1 DC · Adv. atacs · 1 min',
+    usesL:(n)=>`${n} us${n!==1?'os':''} restant${n!==1?'s':''}`,
+    concentrating:'Concentrant:',round:'Ronda',
+    shortRest:'☕ Short Rest',longRest:'🌙 Long Rest',spGain:'+4 SP',fullReset:'Full reset',
+    metamagic:'Metamàgia',classFeatures:'Característiques de classe',
+    subclassTitle:'Aberrant Mind — Subclasse',feats:'Proeses (Feats)',
+    searchFeats:'Busca proeses...',originFeats:"Proeses d'origen",generalFeats:'Proeses generals',
+    sessionNotes:'Notes de sessió',notesPlaceholder:'Combos, tàctiques, notes de sessió...',
+    unlocksAt:"S'activa al nivell",
+    metaInfo:(n,lv)=>`Pots seleccionar fins a <strong>${n}</strong> opcions de Metamàgia al nivell ${lv}.`,
+    newChar:'Nou personatge — des de zero',savedChars:'Personatges desats',
+    load:'Carregar',del:'Eliminar',noSaved:'Cap personatge desat.',
+    maxSlot:'Slot màx',confirmDel:(n)=>`Eliminar "${n}"?`,
+    tabChar:'Personatge',tabSpells:'Encanteris',tabTracker:'Tracker',tabBuild:'Build',tabSaved:'Desats',
+    unnamed:'Sense nom',castSlot:'Lançar amb slot:',psiCast:'🔇 Psiònic:',
+    castBtn:'Lançar',noSP:'— sense SP',lvl:'Nivell',nv:'Nv',
+  },
+  eng:{
+    save:'💾 Save',heroSubclass:'Aberrant Mind Sorcerer',levelLabel:'Level',
+    basicInfo:'Basic Information',charName:'Character Name',level:'Level',
+    species:'Species',age:'Age',alignment:'Alignment',
+    statsTitle:'Scores & Statistics',
+    statsRec:'Recommended: CHA 17, DEX 15, CON 14, WIS 10, INT 8, STR 8',
+    derivedStats:'Derived Stats — Level',
+    spellSlots:'Spell Slots',knownSpells:'Known Spells',atLevel:'at level',
+    loreTitle:'Backstory & Aberrant Origin',loreLabel:'Your backstory',
+    mySpells:'⚡ My Spells',browseSpells:'🔍 Browse & Add',
+    psionic:'Psionic',freePsionic:'11 free',
+    searchSpells:'Search spells...',alwaysPrepared:'Always prepared — free',
+    selectC:'Select',selCount:'Selected:',
+    noSpellsSel:'No spells selected.',goExplore:'Go to Browse & Add to choose.',
+    noSpellsFound:'No spells found.',noSpellsList:'No spells in list.',
+    spW:'spell',spsW:'spells',totalW:'total',selW:'selected',
+    sessionActive:'⚡ Active Session',buildMode:'💤 Build Mode',
+    exit:'Exit',startSes:'▶ Start Session',
+    hp:'❤️ Hit Points',slotsLbl:'🎲 Spell Slots',sp:'✨ Sorcery Points',
+    remaining:'Remaining:',spToSlot:'SP → create slot',slotToSp:'Slot → gain SP',
+    convTitle:'SP ↔ Slot Converter',
+    innate:'🧠 Innate Sorcery',activate:'Activate',deactivate:'End',
+    noUses:'No uses',longRestNeed:'(Long Rest)',spendSP:'Spend 2 SP',
+    innateOn:'+1 DC · Adv. attacks · 1 min',
+    usesL:(n)=>`${n} use${n!==1?'s':''} left`,
+    concentrating:'Concentrating:',round:'Round',
+    shortRest:'☕ Short Rest',longRest:'🌙 Long Rest',spGain:'+4 SP',fullReset:'Full reset',
+    metamagic:'Metamagic',classFeatures:'Class Features',
+    subclassTitle:'Aberrant Mind — Subclass',feats:'Feats',
+    searchFeats:'Search feats...',originFeats:'Origin Feats',generalFeats:'General Feats',
+    sessionNotes:'Session Notes',notesPlaceholder:'Combos, tactics, session notes...',
+    unlocksAt:'Unlocks at level',
+    metaInfo:(n,lv)=>`You can select up to <strong>${n}</strong> Metamagic options at level ${lv}.`,
+    newChar:'New Character — from scratch',savedChars:'Saved Characters',
+    load:'Load',del:'Delete',noSaved:'No saved characters.',
+    maxSlot:'Max Slot',confirmDel:(n)=>`Delete "${n}"?`,
+    tabChar:'Character',tabSpells:'Spells',tabTracker:'Tracker',tabBuild:'Build',tabSaved:'Saved',
+    unnamed:'Unnamed',castSlot:'Cast with slot:',psiCast:'🔇 Psionic:',
+    castBtn:'Cast',noSP:'— no SP',lvl:'Level',nv:'Lv',
+  },
+  esp:{
+    save:'💾 Guardar',heroSubclass:'Hechicero Mente Aberrante',levelLabel:'Nivel',
+    basicInfo:'Información básica',charName:'Nombre del personaje',level:'Nivel',
+    species:'Especie',age:'Edad',alignment:'Alineamiento',
+    statsTitle:'Puntuaciones & Estadísticas',
+    statsRec:'Recomendado: CHA 17, DEX 15, CON 14, WIS 10, INT 8, STR 8',
+    derivedStats:'Estadísticas derivadas — Nivel',
+    spellSlots:'Espacios de hechizo',knownSpells:'Hechizos conocidos',atLevel:'en el nivel',
+    loreTitle:'Historia & Origen Aberrante',loreLabel:'Tu historia',
+    mySpells:'⚡ Mis hechizos',browseSpells:'🔍 Explorar & Añadir',
+    psionic:'Psiónico',freePsionic:'11 libres',
+    searchSpells:'Busca hechizos...',alwaysPrepared:'Siempre preparados — gratuitos',
+    selectC:'Selecciona',selCount:'Seleccionados:',
+    noSpellsSel:'Ningún hechizo seleccionado.',goExplore:'Ve a Explorar & Añadir para elegir.',
+    noSpellsFound:'Ningún hechizo encontrado.',noSpellsList:'Sin hechizos en la lista.',
+    spW:'hechizo',spsW:'hechizos',totalW:'totales',selW:'seleccionados',
+    sessionActive:'⚡ Sesión activa',buildMode:'💤 Modo construcción',
+    exit:'Salir',startSes:'▶ Iniciar sesión',
+    hp:'❤️ Puntos de vida',slotsLbl:'🎲 Espacios de hechizo',sp:'✨ Puntos de hechicería',
+    remaining:'Restantes:',spToSlot:'PS → crear espacio',slotToSp:'Espacio → ganar PS',
+    convTitle:'Conversor PS ↔ Espacio',
+    innate:'🧠 Hechicería innata',activate:'Activar',deactivate:'Finalizar',
+    noUses:'Sin usos',longRestNeed:'(Desc. largo)',spendSP:'Gasta 2 PS',
+    innateOn:'+1 CD · Adv. ataques · 1 min',
+    usesL:(n)=>`${n} uso${n!==1?'s':''} restante${n!==1?'s':''}`,
+    concentrating:'Concentrando:',round:'Ronda',
+    shortRest:'☕ Desc. corto',longRest:'🌙 Desc. largo',spGain:'+4 PS',fullReset:'Reset completo',
+    metamagic:'Metamagia',classFeatures:'Características de clase',
+    subclassTitle:'Mente Aberrante — Subclase',feats:'Proezas',
+    searchFeats:'Busca proezas...',originFeats:'Proezas de origen',generalFeats:'Proezas generales',
+    sessionNotes:'Notas de sesión',notesPlaceholder:'Combos, tácticas, notas de sesión...',
+    unlocksAt:'Se activa en el nivel',
+    metaInfo:(n,lv)=>`Puedes seleccionar hasta <strong>${n}</strong> opciones de Metamagia en el nivel ${lv}.`,
+    newChar:'Nuevo personaje — desde cero',savedChars:'Personajes guardados',
+    load:'Cargar',del:'Eliminar',noSaved:'Ningún personaje guardado.',
+    maxSlot:'Esp. máx.',confirmDel:(n)=>`¿Eliminar "${n}"?`,
+    tabChar:'Personaje',tabSpells:'Hechizos',tabTracker:'Tracker',tabBuild:'Build',tabSaved:'Guardados',
+    unnamed:'Sin nombre',castSlot:'Lanzar con espacio:',psiCast:'🔇 Psiónico:',
+    castBtn:'Lanzar',noSP:'— sin PS',lvl:'Nivel',nv:'Nv',
+  },
+};
+function t(k,...a){const v=LANGS[lang]?.[k]??LANGS.cat[k]??k;return typeof v==='function'?v(...a):v;}
+function setLang(l){
+  lang=l;
+  ['cat','eng','esp'].forEach(c=>{const el=g('lb-'+c);if(el)el.classList.toggle('active',c===l);});
+  applyLang();save();
+}
+function applyLang(){
+  document.querySelectorAll('[data-i18n]').forEach(el=>el.textContent=t(el.getAttribute('data-i18n')));
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>el.placeholder=t(el.getAttribute('data-i18n-ph')));
+  const sb=g('btn-save-g');if(sb)sb.textContent=t('save');
+  recalc();renderTracker();renderMySpells();renderSpells();renderBuild();renderFeats();renderBuilds();
+}
+
 // ─── Saved Builds ─────────────────────────────────────────────────────────────
 let BUILDS=[
   {name:"Zariel",level:7,species:"Human",bg:"Sage",age:"28",align:"Chaotic Good",
@@ -862,7 +1008,7 @@ let accSt={basic:true,stats:true,lore:false,meta:true,classf:false,sub:true,feat
 function save(){
   try{
     const d={
-      lv,sesMode,curHp,usedSl,usedSP,innActive,innLeft,concSp,concRnd,spTab,charImg,
+      lv,sesMode,curHp,usedSl,usedSP,innActive,innLeft,concSp,concRnd,spTab,charImg,lang,
       c_name:g('c-name')?.value,c_level:lv,
       species:g('c-species')?.value,bg:g('c-bg')?.value,
       age:g('c-age')?.value,align:g('c-align')?.value,
@@ -885,6 +1031,8 @@ function loadStorage(){
     innActive=d.innActive||false;innLeft=d.innLeft??profB(lv);
     concSp=d.concSp||'';concRnd=d.concRnd||0;spTab=d.spTab||0;
     charImg=d.charImg||'';applyImg(charImg);
+    lang=d.lang||'cat';
+    ['cat','eng','esp'].forEach(c=>{const el=g('lb-'+c);if(el)el.classList.toggle('active',c===lang);});
     if(d.selC)selC=new Set(d.selC);
     if(d.selS)selS=new Set(d.selS);
     if(d.selM)selM=new Set(d.selM);
@@ -1006,14 +1154,14 @@ function recalc(){
   sv('d-dc',8+prof+cham);
   sv('d-atk',(prof+cham>=0?'+':'')+(prof+cham));
   sv('d-sp',lv);
-  sv('drv-lbl','Estadístiques derivades — Nivell '+lv);
+  sv('drv-lbl',t('derivedStats')+' '+lv);
   sv('d-cant',CK[lv-1]);sv('d-spkn',SK[lv-1]);
-  sv('d-csub','al nivell '+lv);sv('d-ssub','al nivell '+lv);
+  sv('d-csub',t('atLevel')+' '+lv);sv('d-ssub',t('atLevel')+' '+lv);
   const slots=getSlots(lv);
   const sr=g('slots-row');
-  if(sr)sr.innerHTML=Object.entries(slots).map(([l,n])=>`<span class="slot-chip">Nv${l}: ${n}</span>`).join('');
+  if(sr)sr.innerHTML=Object.entries(slots).map(([l,n])=>`<span class="slot-chip">${t('nv')}${l}: ${n}</span>`).join('');
   const ch=g('cant-hdr');
-  if(ch)ch.textContent=`Selecciona ${CK[lv-1]} · Seleccionats: ${selC.size}`;
+  if(ch)ch.textContent=`${t('selectC')} ${CK[lv-1]} · ${t('selCount')} ${selC.size}`;
   updateChips();
 }
 function updateChips(){
@@ -1119,14 +1267,14 @@ function renderTracker(){
 
   // Mode toggle row
   h+=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-    <span style="font-size:15px;font-weight:700;color:${sesMode?'var(--pd)':'#1a1a1a'}">${sesMode?'⚡ Sessió activa':'💤 Mode construcció'}</span>
-    <span class="mode-chip ${sesMode?'mode-on':'mode-off'}" onclick="toggleSes()">${sesMode?'Sortir':'▶ Iniciar sessió'}</span>
+    <span style="font-size:15px;font-weight:700;color:${sesMode?'var(--pd)':'#1a1a1a'}">${sesMode?t('sessionActive'):t('buildMode')}</span>
+    <span class="mode-chip ${sesMode?'mode-on':'mode-off'}" onclick="toggleSes()">${sesMode?t('exit'):t('startSes')}</span>
   </div>`;
 
   // HP
   h+=`<div class="tr-sec">
     <div class="tr-lbl">
-      <span>❤️ Hit Points</span>
+      <span>${t('hp')}</span>
       ${sesMode?`<span style="font-size:11px;color:var(--os)">${hp} / ${maxHp}</span>`:''}
     </div>
     <div class="hp-wrap"><div class="hp-fill" style="width:${hpPct*100}%;background:${hpCol}"></div></div>
@@ -1144,7 +1292,7 @@ function renderTracker(){
   </div>`;
 
   // Spell slots
-  h+=`<div class="tr-sec"><div class="tr-lbl"><span>🎲 Slots d'encanteri</span></div><div class="spip-row">`;
+  h+=`<div class="tr-sec"><div class="tr-lbl"><span>${t('slotsLbl')}</span></div><div class="spip-row">`;
   Object.entries(slots).forEach(([l,max])=>{
     const used=usedSl[l]||0,rem=max-used,has=rem>0;
     let pips='';
@@ -1155,9 +1303,9 @@ function renderTracker(){
   h+=`</div></div>`;
 
   // Sorcery Points
-  h+=`<div class="tr-sec"><div class="tr-lbl"><span>✨ Sorcery Points</span></div>
+  h+=`<div class="tr-sec"><div class="tr-lbl"><span>${t('sp')}</span></div>
     <div class="sp-row">
-      <span style="font-size:13px;font-weight:500">Restants:</span>
+      <span style="font-size:13px;font-weight:500">${t('remaining')}</span>
       <span class="sp-val">${spRem} / ${spMax}</span>
       <span style="flex:1"></span>
       <button class="ibt tc" onclick="restSP()" ${sesMode?'':' disabled'}>＋</button>
@@ -1166,18 +1314,18 @@ function renderTracker(){
     </div>`;
   if(showConv){
     const maxSl=Math.max(...Object.keys(slots).map(Number));
-    let c1=`<div class="conv-ct">SP → crear slot</div>`;
-    Object.entries(S2SL).forEach(([sl,cost])=>{if(parseInt(sl)<=maxSl)c1+=`<div class="conv-r">Nv${sl}: <strong style="color:var(--pd)">${cost} SP</strong></div>`;});
-    let c2=`<div class="conv-ct">Slot → guanyar SP</div>`;
-    Object.keys(slots).forEach(sl=>c2+=`<div class="conv-r">Nv${sl}: <strong style="color:var(--td)">${sl} SP</strong></div>`);
-    h+=`<div class="conv-box"><div class="conv-tl">Conversor SP ↔ Slot</div><div class="conv-cols"><div>${c1}</div><div>${c2}</div></div></div>`;
+    let c1=`<div class="conv-ct">${t('spToSlot')}</div>`;
+    Object.entries(S2SL).forEach(([sl,cost])=>{if(parseInt(sl)<=maxSl)c1+=`<div class="conv-r">${t('nv')}${sl}: <strong style="color:var(--pd)">${cost} SP</strong></div>`;});
+    let c2=`<div class="conv-ct">${t('slotToSp')}</div>`;
+    Object.keys(slots).forEach(sl=>c2+=`<div class="conv-r">${t('nv')}${sl}: <strong style="color:var(--td)">${sl} SP</strong></div>`);
+    h+=`<div class="conv-box"><div class="conv-tl">${t('convTitle')}</div><div class="conv-cols"><div>${c1}</div><div>${c2}</div></div></div>`;
   }
   h+=`</div>`;
 
   // Innate Sorcery
   const canViaSP=lv>=7&&spRem>=2;
-  const isSubt=innActive?'+1 DC · Adv. atacs · 1 min':innLeft===0&&canViaSP?'Sense usos — gasta 2 SP':innLeft===0?'Sense usos (Long Rest)':innLeft+' us'+(innLeft!==1?'os':'') +' restants';
-  h+=`<div class="tr-sec"><div class="tr-lbl">🧠 Innate Sorcery</div>
+  const isSubt=innActive?t('innateOn'):innLeft===0&&canViaSP?t('noUses')+' — '+t('spendSP'):innLeft===0?t('noUses')+' '+t('longRestNeed'):t('usesL',innLeft);
+  h+=`<div class="tr-sec"><div class="tr-lbl">${t('innate')}</div>
     <div class="is-row ${innActive?'is-on':'is-off'}">
       <div class="is-pips">${Array.from({length:prof},(_,i)=>`<span class="is-pip ${i<innLeft?'f':'e'}"></span>`).join('')}</div>
       <div class="is-info">
@@ -1186,7 +1334,7 @@ function renderTracker(){
       </div>
       <button class="btn-is" style="background:${innActive?'var(--r)':'var(--p)'}"
         onclick="toggleInnate()" ${(!innActive&&innLeft===0&&!canViaSP)||!sesMode?'disabled':''}>
-        ${innActive?'Finalitzar':'Activar'}
+        ${innActive?t('deactivate'):t('activate')}
       </button>
     </div>
   </div>`;
@@ -1197,8 +1345,8 @@ function renderTracker(){
       <div class="conc-bar" style="background:transparent;padding:0">
         <div class="conc-dot"></div>
         <div class="conc-inf">
-          <div class="conc-sp">Concentrant: ${concSp}</div>
-          <div class="conc-rn">Ronda ${concRnd}</div>
+          <div class="conc-sp">${t('concentrating')} ${concSp}</div>
+          <div class="conc-rn">${t('round')} ${concRnd}</div>
         </div>
         <button class="ibt tc" onclick="advRound()">＋</button>
         <button class="ibt rc" onclick="clearConc()">✕</button>
@@ -1209,8 +1357,8 @@ function renderTracker(){
   // Rest buttons
   if(sesMode){
     h+=`<div class="rest-row">
-      <button class="btn-rest btn-sr" onclick="shortRest()">☕ Short Rest<br><span style="font-size:10px;font-weight:400">+4 SP</span></button>
-      <button class="btn-rest btn-lr" onclick="longRest()">🌙 Long Rest<br><span style="font-size:10px;font-weight:400">Full reset</span></button>
+      <button class="btn-rest btn-sr" onclick="shortRest()">${t('shortRest')}<br><span style="font-size:10px;font-weight:400">${t('spGain')}</span></button>
+      <button class="btn-rest btn-lr" onclick="longRest()">${t('longRest')}<br><span style="font-size:10px;font-weight:400">${t('fullReset')}</span></button>
     </div>`;
   }
 
@@ -1231,14 +1379,14 @@ function renderMySpells(){
   Object.keys(byLv).sort((a,b)=>a-b).forEach(l=>{
     const ln=parseInt(l),sp=byLv[l];
     const slMax=slots[ln],slUsed=usedSl[ln]||0,slRem=slMax?slMax-slUsed:null;
-    const lbl=ln===0?'Cantrip':'Nivell '+ln;
+    const lbl=ln===0?'Cantrip':t('lvl')+' '+ln;
     const slTxt=slRem!==null?` · <span style="color:${slRem===0?'var(--r)':'var(--os)'}">${slRem}/${slMax} slots</span>`:'';
-    h+=`<div class="gh"><span class="badge ${lvBCls(ln)}">${lbl}</span><span class="gh-sub">${sp.length} encanteri${sp.length!==1?'s':''}${slTxt}</span></div><hr class="hr">`;
+    h+=`<div class="gh"><span class="badge ${lvBCls(ln)}">${lbl}</span><span class="gh-sub">${sp.length} ${sp.length!==1?t('spsW'):t('spW')}${slTxt}</span></div><hr class="hr">`;
     sp.forEach(s=>h+=mySpellH(s,slots));
     h+='<div style="height:6px"></div>';
   });
   const el=g('my-spells-list');
-  if(el)el.innerHTML=h||`<div class="empty-st"><div class="ei">✨</div><div>Cap encanteri seleccionat.</div><div style="font-size:12px;margin-top:4px">Ves a Explorar &amp; Afegir per escollir.</div></div>`;
+  if(el)el.innerHTML=h||`<div class="empty-st"><div class="ei">✨</div><div>${t('noSpellsSel')}</div><div style="font-size:12px;margin-top:4px">${t('goExplore')}</div></div>`;
 }
 
 function mySpellH(spell,slots){
@@ -1251,16 +1399,16 @@ function mySpellH(spell,slots){
       const max=slots[sl]||0,used=usedSl[sl]||0,rem=max-used,can=rem>0,up=sl>spell.level;
       return`<button class="cbt${up?' up':''}" onclick="castSlot('${spell.name}',${sl},${spell.conc})" ${can?'':'disabled'}>Slot ${sl} (${rem}✓)${up?' ↑':''}</button>`;
     }).join('');
-    castH=`<div class="cast-pan"><div class="cast-lbl">Lançar amb slot:</div><div class="cast-btns">${btns}</div>`;
+    castH=`<div class="cast-pan"><div class="cast-lbl">${t('castSlot')}</div><div class="cast-btns">${btns}</div>`;
     if(spell.psi&&lv>=6){
       const cost=spell.level,can=spLeft()>=cost;
-      castH+=`<hr class="cast-div"><div class="cast-sp-row"><span class="cast-sp-lbl">🔇 Psiònic:</span><button class="cast-spb" onclick="castPsi('${spell.name}',${spell.level},${spell.conc})" ${can?'':'disabled'}>Lançar (${cost} SP)${!can?' — sense SP':''}</button>${can?'<span class="cast-hint">Sense slot</span>':''}</div>`;
+      castH+=`<hr class="cast-div"><div class="cast-sp-row"><span class="cast-sp-lbl">${t('psiCast')}</span><button class="cast-spb" onclick="castPsi('${spell.name}',${spell.level},${spell.conc})" ${can?'':'disabled'}>${t('castBtn')} (${cost} SP)${!can?' '+t('noSP'):''}</button>${can?`<span class="cast-hint">${t('noSlotFree')}</span>`:''}</div>`;
     }
     castH+='</div>';
   }
   const concBtn=sesMode&&spell.conc&&spell.level>0?`<button class="conc-btn" style="color:${isConc?'var(--r)':'var(--os)'}" onclick="setConc('${spell.name}')" title="Concentració">${isConc?'⬤':'○'}</button>`:'';
   return`<div class="card ${cls}"><div class="sp-row-c"><div class="sp-inf">
-    <div class="sp-nr"><span class="sp-nm">${spell.name}</span>${spell.psi?'<span class="badge bt">Psiònic</span>':''}${spell.conc?'<span class="badge br">Conc.</span>':''}</div>
+    <div class="sp-nr"><span class="sp-nm">${spell.name}</span>${spell.psi?`<span class="badge bt">${t('psionic')}</span>`:''}${spell.conc?'<span class="badge br">Conc.</span>':''}</div>
     <div class="sp-mt">${spell.school} · ${spell.range} · ${spell.duration}${spell.save&&spell.save!=='None'?' · Save: '+spell.save:''}</div>
     ${exp?`<div class="sp-desc">${spell.desc}</div>${spell.tip?`<div class="tip-note"><span class="tip-ic">💡</span><span class="tip-tx">${spell.tip}</span></div>`:''}${castH}`:''}
   </div>${concBtn}<button class="exp-btn" onclick="toggleExp('${spell.name}')">${exp?'▲':'▼'}</button></div></div>`;
@@ -1269,10 +1417,10 @@ function toggleExp(n){expSp.has(n)?expSp.delete(n):expSp.add(n);renderMySpells()
 
 // ─── RENDER BROWSE SPELLS ─────────────────────────────────────────────────────
 function lvBH(l,psi){
-  if(psi)return'<span class="badge bt">Psiònic</span>';
+  if(psi)return`<span class="badge bt">${t('psionic')}</span>`;
   if(l===0)return'<span class="badge bg">Cantrip</span>';
   const cls=['','bt','bb','bp','ba','br','bpk','bpk','bpk','bpk'];
-  return`<span class="badge ${cls[l]||'bpk'}">Nivell ${l}</span>`;
+  return`<span class="badge ${cls[l]||'bpk'}">${t('lvl')} ${l}</span>`;
 }
 function browseCardH(spell,sel){
   const cc=spell.psi?'ckt':sel?'ckp':'';
@@ -1299,12 +1447,12 @@ function renderSpells(filter=''){
     const spells=ALL_SP.filter(s=>s.level===l&&!psiNames.has(s.name)&&fn(s));
     if(f&&spells.length===0)continue;
     const selCnt=[...selS].filter(n=>ALL_SP.find(s=>s.name===n&&s.level===l)).length;
-    const sub=l===1?`${selS.size} / ${SK[lv-1]} totals`:`${selCnt} seleccionats`;
-    h+=`<div class="gh"><span class="badge ${lvCls[l]||'bpk'}">Nivell ${l}</span><span class="gh-sub">${sub}</span></div><hr class="hr">`;
-    h+=spells.length?spells.map(s=>browseCardH(s,selS.has(s.name))).join(''):`<div style="padding:6px 0 2px;font-size:12px;color:var(--os)">Sense spells a la llista.</div>`;
+    const sub=l===1?`${selS.size} / ${SK[lv-1]} ${t('totalW')}`:`${selCnt} ${t('selW')}`;
+    h+=`<div class="gh"><span class="badge ${lvCls[l]||'bpk'}">${t('lvl')} ${l}</span><span class="gh-sub">${sub}</span></div><hr class="hr">`;
+    h+=spells.length?spells.map(s=>browseCardH(s,selS.has(s.name))).join(''):`<div style="padding:6px 0 2px;font-size:12px;color:var(--os)">${t('noSpellsList')}</div>`;
     h+='<div style="height:6px"></div>';
   }
-  if(g('lvl-container'))g('lvl-container').innerHTML=h||'<div class="empty-st"><div class="ei">🔍</div><div>Cap encanteri trobat.</div></div>';
+  if(g('lvl-container'))g('lvl-container').innerHTML=h||`<div class="empty-st"><div class="ei">🔍</div><div>${t('noSpellsFound')}</div></div>`;
 }
 function toggleSpell(name,isPsi){
   if(isPsi)return;
@@ -1319,7 +1467,7 @@ function metaMax(){return lv>=17?4:lv>=10?3:2;}
 function renderBuild(){
   // Metamagic
   const mm=metaMax();
-  if(g('meta-bn'))g('meta-bn').innerHTML=`Pots seleccionar fins a <strong>${mm}</strong> opcions de Metamàgia al nivell ${lv}.`;
+  if(g('meta-bn'))g('meta-bn').innerHTML=t('metaInfo',mm,lv);
   if(g('meta-list'))g('meta-list').innerHTML=METAMAGICS.map(m=>{
     const sel=selM.has(m.name);
     return`<div class="card ${sel?'sel-p':''}" onclick="toggleMeta('${m.name}')">
@@ -1333,7 +1481,7 @@ function renderBuild(){
   const fcH=(f,locked)=>{
     const tc={'Feature':'bp','Passive':'bb','Spell List':'bt'}[f.type]||'bp';
     return`<div class="card ${locked?'locked':''}">
-      <div class="sc-hd"><div><div style="font-size:14px;font-weight:500">${f.name}</div>${locked?`<div style="font-size:11px;color:var(--os)">S'activa al nivell ${f.level}</div>`:''}</div>
+      <div class="sc-hd"><div><div style="font-size:14px;font-weight:500">${f.name}</div>${locked?`<div style="font-size:11px;color:var(--os)">${t('unlocksAt')} ${f.level}</div>`:''}</div>
       <div class="sc-bd"><span class="badge ${tc}">${f.type}</span><span class="badge ba">Nv ${f.level}</span></div></div>
       <div class="sc-ds">${f.desc}</div>
       ${f.tip?`<div class="tip-note" style="margin-top:7px"><span class="tip-ic">💡</span><span class="tip-tx">${f.tip}</span></div>`:''}
@@ -1370,7 +1518,7 @@ function filterFeats(v){renderFeats(v);}
 function renderBuilds(){
   const el=g('builds-list');
   if(!el)return;
-  if(!BUILDS.length){el.innerHTML='<div class="empty-st"><div class="ei">💾</div><div>Cap personatge desat.</div></div>';return;}
+  if(!BUILDS.length){el.innerHTML=`<div class="empty-st"><div class="ei">💾</div><div>${t('noSaved')}</div></div>`;return;}
   el.innerHTML=BUILDS.map((b,i)=>{
     const slots=getSlots(b.level);
     const maxSl=Math.max(...Object.keys(slots).map(Number));
@@ -1382,12 +1530,12 @@ function renderBuilds(){
         <div class="bc-inf">
           <div class="bc-nm">${b.name} <span class="badge bp">Nv ${b.level}</span></div>
           <div class="bc-mt">${[b.species,b.bg,b.align].filter(Boolean).join(' · ')}</div>
-          <div class="bc-mt" style="margin-top:2px">Slot màx L${maxSl} · SP: ${b.level} · DC: ${8+profB(b.level)+Math.floor((b.cha-10)/2)}</div>
+          <div class="bc-mt" style="margin-top:2px">${t('maxSlot')} L${maxSl} · SP: ${b.level} · DC: ${8+profB(b.level)+Math.floor((b.cha-10)/2)}</div>
         </div>
       </div>
       <div class="bc-act">
-        <button class="btn-sm btn-pr" onclick="loadBuild(${i})">Carregar</button>
-        <button class="btn-sm btn-ou" onclick="deleteBuild(${i})">Eliminar</button>
+        <button class="btn-sm btn-pr" onclick="loadBuild(${i})">${t('load')}</button>
+        <button class="btn-sm btn-ou" onclick="deleteBuild(${i})">${t('del')}</button>
       </div>
     </div>`;
   }).join('');
@@ -1428,7 +1576,7 @@ function newBuild(){
 }
 function saveCurrent(){
   const build={
-    name:g('c-name')?.value||'Sense nom',level:lv,
+    name:g('c-name')?.value||t('unnamed'),level:lv,
     species:g('c-species')?.value,bg:g('c-bg')?.value,
     age:g('c-age')?.value,align:g('c-align')?.value,
     backstory:g('c-backstory')?.value,notes:g('c-notes')?.value,
@@ -1445,20 +1593,15 @@ function saveCurrent(){
   if(ok){ok.style.display='inline';setTimeout(()=>ok.style.display='none',2000);}
 }
 function deleteBuild(idx){
-  if(!confirm(`Eliminar "${BUILDS[idx].name}"?`))return;
+  if(!confirm(t('confirmDel',BUILDS[idx].name)))return;
   BUILDS.splice(idx,1);save();renderBuilds();
 }
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 loadStorage();
 initAcc();
-recalc();updateHero();
-renderTracker();
-renderMySpells();
-renderSpells();
-renderBuild();
-renderFeats();
-renderBuilds();
+applyLang();
+updateHero();
 if(spTab===1)switchSpellTab(1);
 
 // PWA Service Worker

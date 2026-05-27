@@ -50,7 +50,6 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:#1a1
 /* ── HERO CARD ── */
 .hero-card{background:linear-gradient(135deg,var(--pd) 0%,var(--p) 100%);border-radius:var(--rr);padding:16px;margin-bottom:12px;color:#fff;display:flex;align-items:center;gap:12px}
 .hero-av{width:54px;height:54px;border-radius:10px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;border:1.5px solid rgba(255,255,255,.3)}
-.hero-av:hover #hero-av-ov,.hero-av:active #hero-av-ov{display:flex!important}
 .hero-name{font-size:18px;font-weight:700;letter-spacing:.1px}
 .hero-s1{font-size:12px;opacity:.85;margin-top:2px}
 .hero-s2{font-size:11px;opacity:.6;margin-top:1px}
@@ -297,10 +296,12 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
 ═══════════════════════════════════ -->
 <div class="screen active" id="sc-character">
   <div class="hero-card">
-    <div class="hero-av" id="hero-av" onclick="g('c-img').click()" title="Canviar imatge" style="cursor:pointer;overflow:hidden;position:relative">
-      <span id="hero-av-ic">👤</span>
-      <img id="hero-av-img" style="display:none;width:100%;height:100%;object-fit:cover;border-radius:8px" alt="avatar">
-      <div id="hero-av-ov" style="display:none;position:absolute;inset:0;background:rgba(0,0,0,.35);border-radius:8px;align-items:center;justify-content:center;font-size:18px">📷</div>
+    <div style="position:relative;flex-shrink:0;cursor:pointer" onclick="g('c-img').click()">
+      <div class="hero-av" id="hero-av" style="overflow:hidden">
+        <span id="hero-av-ic">👤</span>
+        <img id="hero-av-img" style="display:none;width:100%;height:100%;object-fit:cover;border-radius:8px" alt="avatar">
+      </div>
+      <div style="position:absolute;bottom:-4px;right:-4px;background:#fff;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:12px;box-shadow:0 1px 4px rgba(0,0,0,.3)">📷</div>
     </div>
     <input type="file" id="c-img" accept="image/*" style="display:none" onchange="handleImg(this)">
     <div>
@@ -747,9 +748,9 @@ function handleImg(input){
   input.value='';
 }
 function applyImg(src){
-  const ic=g('hero-av-ic'),im=g('hero-av-img'),ov=g('hero-av-ov');
+  const ic=g('hero-av-ic'),im=g('hero-av-img');
   if(!ic||!im)return;
-  if(src){ic.style.display='none';im.src=src;im.style.display='block';if(ov)ov.style.display='none';}
+  if(src){ic.style.display='none';im.src=src;im.style.display='block';}
   else{ic.style.display='';im.style.display='none';}
 }
 

@@ -50,6 +50,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:#1a1
 /* ── HERO CARD ── */
 .hero-card{background:linear-gradient(135deg,var(--pd) 0%,var(--p) 100%);border-radius:var(--rr);padding:16px;margin-bottom:12px;color:#fff;display:flex;align-items:center;gap:12px}
 .hero-av{width:54px;height:54px;border-radius:10px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;border:1.5px solid rgba(255,255,255,.3)}
+.hero-av:hover #hero-av-ov,.hero-av:active #hero-av-ov{display:flex!important}
 .hero-name{font-size:18px;font-weight:700;letter-spacing:.1px}
 .hero-s1{font-size:12px;opacity:.85;margin-top:2px}
 .hero-s2{font-size:11px;opacity:.6;margin-top:1px}
@@ -296,7 +297,12 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
 ═══════════════════════════════════ -->
 <div class="screen active" id="sc-character">
   <div class="hero-card">
-    <div class="hero-av">👤</div>
+    <div class="hero-av" id="hero-av" onclick="g('c-img').click()" title="Canviar imatge" style="cursor:pointer;overflow:hidden;position:relative">
+      <span id="hero-av-ic">👤</span>
+      <img id="hero-av-img" style="display:none;width:100%;height:100%;object-fit:cover;border-radius:8px" alt="avatar">
+      <div id="hero-av-ov" style="display:none;position:absolute;inset:0;background:rgba(0,0,0,.35);border-radius:8px;align-items:center;justify-content:center;font-size:18px">📷</div>
+    </div>
+    <input type="file" id="c-img" accept="image/*" style="display:none" onchange="handleImg(this)">
     <div>
       <div class="hero-name" id="h-name">Zariel</div>
       <div class="hero-s1">Aberrant Mind Sorcerer</div>
@@ -665,6 +671,7 @@ let BUILDS=[
 
 // ─── App State ────────────────────────────────────────────────────────────────
 let lv=7,sesMode=false,curHp=-1,usedSl={},usedSP=0;
+let charImg='';
 let innActive=false,innLeft=3,concSp='',concRnd=0,showConv=false,spTab=0;
 let selC=new Set(['Fire Bolt','Minor Illusion']);
 let selS=new Set(['Shield','Chaos Bolt','Absorb Elements']);
@@ -677,7 +684,7 @@ let accSt={basic:true,stats:true,lore:false,meta:true,classf:false,sub:true,feat
 function save(){
   try{
     const d={
-      lv,sesMode,curHp,usedSl,usedSP,innActive,innLeft,concSp,concRnd,spTab,
+      lv,sesMode,curHp,usedSl,usedSP,innActive,innLeft,concSp,concRnd,spTab,charImg,
       c_name:g('c-name')?.value,c_level:lv,
       species:g('c-species')?.value,bg:g('c-bg')?.value,
       age:g('c-age')?.value,align:g('c-align')?.value,
@@ -699,6 +706,7 @@ function loadStorage(){
     usedSl=d.usedSl||{};usedSP=d.usedSP||0;
     innActive=d.innActive||false;innLeft=d.innLeft??profB(lv);
     concSp=d.concSp||'';concRnd=d.concRnd||0;spTab=d.spTab||0;
+    charImg=d.charImg||'';applyImg(charImg);
     if(d.selC)selC=new Set(d.selC);
     if(d.selS)selS=new Set(d.selS);
     if(d.selM)selM=new Set(d.selM);
@@ -713,6 +721,36 @@ function loadStorage(){
     const setSel=(id,val)=>{const el=g(id);if(!el||!val)return;[...el.options].forEach(o=>o.selected=o.value===val);};
     setSel('c-species',d.species);setSel('c-bg',d.bg);setSel('c-align',d.align);
   }catch(e){}
+}
+
+// ─── Image ───────────────────────────────────────────────────────────────────
+function handleImg(input){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    // Resize to 200×200 via canvas to keep localStorage small
+    const img=new Image();
+    img.onload=()=>{
+      const SIZE=200;
+      const canvas=document.createElement('canvas');
+      canvas.width=SIZE;canvas.height=SIZE;
+      const ctx=canvas.getContext('2d');
+      const ratio=Math.max(SIZE/img.width,SIZE/img.height);
+      const w=img.width*ratio,h=img.height*ratio;
+      ctx.drawImage(img,(SIZE-w)/2,(SIZE-h)/2,w,h);
+      charImg=canvas.toDataURL('image/jpeg',0.75);
+      applyImg(charImg);save();
+    };
+    img.src=e.target.result;
+  };
+  reader.readAsDataURL(file);
+  input.value='';
+}
+function applyImg(src){
+  const ic=g('hero-av-ic'),im=g('hero-av-img'),ov=g('hero-av-ov');
+  if(!ic||!im)return;
+  if(src){ic.style.display='none';im.src=src;im.style.display='block';if(ov)ov.style.display='none';}
+  else{ic.style.display='';im.style.display='none';}
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -1160,7 +1198,9 @@ function renderBuilds(){
     const maxSl=Math.max(...Object.keys(slots).map(Number));
     return`<div class="bc">
       <div class="bc-top">
-        <div class="bc-av">👤</div>
+        <div class="bc-av" style="${b.img?'padding:0;overflow:hidden':''}">
+          ${b.img?`<img src="${b.img}" style="width:100%;height:100%;object-fit:cover;border-radius:9px" alt="">`:'👤'}
+        </div>
         <div class="bc-inf">
           <div class="bc-nm">${b.name} <span class="badge bp">Nv ${b.level}</span></div>
           <div class="bc-mt">${[b.species,b.bg,b.align].filter(Boolean).join(' · ')}</div>
@@ -1178,6 +1218,7 @@ function loadBuild(idx){
   const b=BUILDS[idx];
   lv=b.level;sesMode=false;curHp=-1;usedSl={};usedSP=0;concSp='';concRnd=0;
   innActive=false;innLeft=profB(lv);
+  charImg=b.img||'';applyImg(charImg);
   if(g('c-name'))g('c-name').value=b.name;
   if(g('c-level'))g('c-level').value=lv;
   if(g('c-age'))g('c-age').value=b.age||'';
@@ -1195,6 +1236,7 @@ function loadBuild(idx){
 }
 function newBuild(){
   lv=1;sesMode=false;curHp=-1;usedSl={};usedSP=0;concSp='';concRnd=0;innActive=false;innLeft=2;
+  charImg='';applyImg('');
   if(g('c-name'))g('c-name').value='';
   if(g('c-level'))g('c-level').value=1;
   if(g('c-age'))g('c-age').value='';
@@ -1216,6 +1258,7 @@ function saveCurrent(){
     con:parseInt(g('s-con')?.value)||14,int_:parseInt(g('s-int')?.value)||8,
     wis:parseInt(g('s-wis')?.value)||10,cha:parseInt(g('s-cha')?.value)||17,
     cantrips:[...selC],spells:[...selS],meta:[...selM],feats:[...selF],
+    img:charImg,
   };
   const ex=BUILDS.findIndex(b=>b.name===build.name);
   if(ex>=0)BUILDS[ex]=build;else BUILDS.push(build);

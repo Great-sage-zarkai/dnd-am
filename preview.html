@@ -232,6 +232,24 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
 .cast-spb:disabled{background:var(--sv);color:#aaa;cursor:not-allowed}
 .cast-hint{font-size:10px;color:var(--td);opacity:.75}
 
+/* ── META STRIP ── */
+.mstrip{background:var(--pl);border:.5px solid var(--p);border-radius:var(--rr);margin-bottom:10px;overflow:hidden}
+.mstrip-hd{display:flex;align-items:center;gap:8px;padding:9px 12px;cursor:pointer;user-select:none}
+.mstrip-hd:active{opacity:.8}
+.mstrip-lbl{font-size:11px;font-weight:700;color:var(--pd);flex-shrink:0}
+.mstrip-chips{display:flex;flex-wrap:wrap;gap:4px;flex:1;min-width:0}
+.mstrip-ch{background:var(--p);color:#fff;border-radius:5px;padding:2px 7px;font-size:10px;font-weight:700;white-space:nowrap}
+.mstrip-arr{font-size:11px;color:var(--pd);transition:transform .2s;flex-shrink:0}
+.mstrip-arr.open{transform:rotate(180deg)}
+.mstrip-bd{border-top:1px solid rgba(127,119,221,.2);padding:8px 10px;display:none;gap:6px;flex-direction:column}
+.mstrip-bd.open{display:flex}
+.mcard{background:#fff;border-radius:8px;padding:8px 10px;display:flex;flex-direction:column;gap:3px}
+.mcard-top{display:flex;align-items:center;gap:7px}
+.mcard-nm{font-size:12px;font-weight:700;color:var(--pd);flex:1}
+.mcard-cost{background:var(--pl);color:var(--pd);border-radius:5px;padding:2px 7px;font-size:10px;font-weight:700}
+.mcard-stars{font-size:10px;color:var(--p);letter-spacing:1px}
+.mcard-desc{font-size:11px;color:#444;line-height:1.45}
+
 /* ── BADGES ── */
 .badge{display:inline-block;padding:2px 7px;border-radius:10px;font-size:10px;font-weight:600;line-height:1.4}
 .bp{background:var(--pl);color:var(--pd)}
@@ -426,6 +444,7 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
 
   <!-- My Spells -->
   <div id="spt-0">
+    <div id="meta-strip"></div>
     <div class="chips">
       <div class="chip" style="background:var(--tl)"><div style="font-size:10px;font-weight:700;color:var(--td)">Cantrips</div><div style="font-size:13px;font-weight:700;color:var(--td)" id="chip-c">0/5</div></div>
       <div class="chip" style="background:var(--pl)"><div style="font-size:10px;font-weight:700;color:var(--pd)">Spells</div><div style="font-size:13px;font-weight:700;color:var(--pd)" id="chip-s">0/8</div></div>
@@ -996,7 +1015,7 @@ let BUILDS=[
 // ─── App State ────────────────────────────────────────────────────────────────
 let lv=7,sesMode=false,curHp=-1,usedSl={},usedSP=0,usedMetaSP=0;
 let charImg='';
-let innActive=false,innLeft=3,concSp='',concRnd=0,showConv=false,spTab=0;
+let innActive=false,innLeft=3,concSp='',concRnd=0,showConv=false,spTab=0,metaStripOpen=false;
 let selC=new Set(['Fire Bolt','Minor Illusion']);
 let selS=new Set(['Shield','Chaos Bolt','Absorb Elements']);
 let selM=new Set(['Quickened Spell','Heightened Spell']);
@@ -1385,6 +1404,39 @@ function renderTracker(){
   g('tracker-content').innerHTML=h;
 }
 
+// ─── RENDER META STRIP ───────────────────────────────────────────────────────
+function renderMetaStrip(){
+  const el=g('meta-strip');
+  if(!el)return;
+  const active=METAMAGICS.filter(m=>selM.has(m.name));
+  if(!active.length){el.innerHTML='';return;}
+  const chips=active.map(m=>`<span class="mstrip-ch">${m.name} <span style="opacity:.8">·${m.cost}</span></span>`).join('');
+  const cards=active.map(m=>`<div class="mcard">
+    <div class="mcard-top">
+      <span class="mcard-nm">${m.name}</span>
+      <span class="mcard-cost">${m.cost}</span>
+      <span class="mcard-stars">${'★'.repeat(m.stars)}${'☆'.repeat(5-m.stars)}</span>
+    </div>
+    <div class="mcard-desc">${m.desc}</div>
+    ${m.tip?`<div class="mcard-desc" style="color:var(--pd);background:var(--pl);border-radius:5px;padding:4px 6px;margin-top:2px">💡 ${m.tip}</div>`:''}
+  </div>`).join('');
+  el.innerHTML=`<div class="mstrip">
+    <div class="mstrip-hd" onclick="toggleMetaStrip()">
+      <span class="mstrip-lbl">🔮 Metamàgia</span>
+      <div class="mstrip-chips">${chips}</div>
+      <span class="mstrip-arr ${metaStripOpen?'open':''}">▼</span>
+    </div>
+    <div class="mstrip-bd ${metaStripOpen?'open':''}">${cards}</div>
+  </div>`;
+}
+function toggleMetaStrip(){
+  metaStripOpen=!metaStripOpen;
+  const arr=document.querySelector('.mstrip-arr');
+  const bd=document.querySelector('.mstrip-bd');
+  if(arr)arr.classList.toggle('open',metaStripOpen);
+  if(bd)bd.classList.toggle('open',metaStripOpen);
+}
+
 // ─── RENDER MY SPELLS ────────────────────────────────────────────────────────
 function lvBCls(l){return['bg','bt','bb','bp','ba','br','bpk','bpk','bpk','bpk'][l]||'bpk';}
 
@@ -1405,6 +1457,7 @@ function renderMySpells(){
     sp.forEach(s=>h+=mySpellH(s,slots));
     h+='<div style="height:6px"></div>';
   });
+  renderMetaStrip();
   const el=g('my-spells-list');
   if(el)el.innerHTML=h||`<div class="empty-st"><div class="ei">✨</div><div>${t('noSpellsSel')}</div><div style="font-size:12px;margin-top:4px">${t('goExplore')}</div></div>`;
 }
@@ -1513,7 +1566,7 @@ function renderBuild(){
 function toggleMeta(name){
   if(selM.has(name))selM.delete(name);
   else if(selM.size<metaMax())selM.add(name);
-  renderBuild();save();
+  renderBuild();renderMetaStrip();save();
 }
 
 // ─── RENDER FEATS ─────────────────────────────────────────────────────────────

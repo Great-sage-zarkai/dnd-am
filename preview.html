@@ -63,6 +63,11 @@ body.dark .sbox{background:var(--sv)}
 body.dark .dbox{background:var(--sv)}
 body.dark .spip-grp.ns{background:var(--ol)}
 body.dark select option{background:var(--sf);color:var(--tx)}
+body.dark .hbtn{background:var(--sv)}
+body.dark .btn-rest{background:var(--sv)}
+body.dark .mcard-cost{background:var(--ol)}
+body.dark .cast-spb:disabled{background:var(--ol)}
+body.dark .cbt:disabled{border-color:var(--ol);color:var(--os)}
 
 /* ── SCROLL AREA ── */
 .scroll-area{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
@@ -136,27 +141,27 @@ textarea{resize:vertical;min-height:90px}
 .hbtn:active{background:var(--sv)}
 .hbtn.m{border-color:var(--r);color:var(--r)}
 .hbtn.p{border-color:var(--t);color:var(--t)}
-.hp-disp{font-size:26px;font-weight:800;text-align:center;color:#1a1a1a;min-width:90px}
+.hp-disp{font-size:26px;font-weight:800;text-align:center;color:var(--tx);min-width:90px}
 .hp-disp .hpmax{font-size:14px;color:var(--os);font-weight:400}
 
 /* Slot pips */
 .spip-row{display:flex;flex-wrap:wrap;gap:6px}
 .spip-grp{display:flex;align-items:center;gap:4px;border-radius:7px;padding:5px 9px;transition:background .2s}
 .spip-grp.hs{background:var(--tl)}
-.spip-grp.ns{background:#ebebeb}
+.spip-grp.ns{background:var(--sv)}
 .spip-lv{font-size:11px;font-weight:700}
 .spip-grp.hs .spip-lv{color:var(--td)}
-.spip-grp.ns .spip-lv{color:#aaa}
+.spip-grp.ns .spip-lv{color:var(--os)}
 .pip{width:9px;height:9px;border-radius:50%;display:inline-block;transition:background .2s}
 .pip.f{background:var(--t)}
-.pip.e{background:rgba(0,0,0,.15)}
+.pip.e{background:var(--ol)}
 .pbtn{background:none;border:none;cursor:pointer;font-size:15px;padding:0 2px;line-height:1;color:var(--os)}
 
 /* SP */
 .sp-row{display:flex;align-items:center;gap:8px}
 .sp-val{font-size:16px;font-weight:700;color:var(--pd)}
 .ibt{background:none;border:none;cursor:pointer;width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:50%;font-size:17px;transition:background .1s}
-.ibt:active{background:rgba(0,0,0,.07)}
+.ibt:active{background:rgba(127,119,221,.18)}
 .ibt.tc{color:var(--t)}
 .ibt.rc{color:var(--r)}
 
@@ -174,7 +179,7 @@ textarea{resize:vertical;min-height:90px}
 .is-pips{display:flex;gap:4px;flex-shrink:0}
 .is-pip{width:9px;height:9px;border-radius:50%}
 .is-pip.f{background:var(--p)}
-.is-pip.e{background:rgba(0,0,0,.15)}
+.is-pip.e{background:var(--ol)}
 .is-info{flex:1}
 .is-tl{font-size:12px;font-weight:600}
 .is-tl.on{color:var(--pd)}
@@ -188,6 +193,8 @@ textarea{resize:vertical;min-height:90px}
 .conc-inf{flex:1}
 .conc-sp{font-size:12px;font-weight:600;color:#4A1B0C}
 .conc-rn{font-size:10px;color:rgba(74,27,12,.7)}
+body.dark .conc-sp{color:var(--ad)}
+body.dark .conc-rn{color:var(--os)}
 
 /* Rest buttons */
 .rest-row{display:flex;gap:8px;margin-top:10px}
@@ -209,7 +216,7 @@ textarea{resize:vertical;min-height:90px}
 /* Spell search */
 .srch-box{position:relative;margin-bottom:12px}
 .srch-box input{padding-left:36px}
-.srch-ic{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--os);font-size:15px;pointer-events:none}
+.srch-ic{position:absolute;left:10px;top:50%;transform:translateY(-50%);width:16px;height:16px;object-fit:contain;opacity:.5;pointer-events:none}
 
 /* Group headers */
 .gh{display:flex;align-items:center;gap:8px;padding:12px 0 5px}
@@ -244,14 +251,14 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
 .tip-tx{font-size:11px;color:var(--pd);line-height:1.5}
 
 /* Cast panel */
-.cast-pan{background:rgba(0,0,0,.04);border-radius:9px;padding:9px;margin-top:9px}
-.cast-lbl{font-size:11px;font-weight:700;color:#333;margin-bottom:6px}
+.cast-pan{background:var(--sv);border-radius:9px;padding:9px;margin-top:9px}
+.cast-lbl{font-size:11px;font-weight:700;color:var(--tx);margin-bottom:6px}
 .cast-btns{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:2px}
 .cbt{padding:5px 11px;height:30px;border-radius:7px;border:1.5px solid var(--t);background:transparent;color:var(--td);font-size:11px;cursor:pointer;transition:background .1s;white-space:nowrap}
 .cbt:active:not(:disabled){background:var(--tl)}
 .cbt.up{border-color:var(--a);color:var(--ad)}
 .cbt:disabled{border-color:var(--ol);color:#ccc;cursor:not-allowed}
-.cast-div{border:none;border-top:1px solid rgba(0,0,0,.1);margin:7px 0}
+.cast-div{border:none;border-top:1px solid var(--ol);margin:7px 0}
 .cast-sp-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .cast-sp-lbl{font-size:11px;font-weight:700;color:var(--td)}
 .cast-spb{padding:5px 12px;height:30px;border-radius:7px;border:none;background:var(--t);color:#fff;font-size:11px;cursor:pointer;transition:background .1s}
@@ -311,7 +318,7 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
 .btn-sm{padding:7px 13px;border-radius:7px;border:none;cursor:pointer;font-size:12px;font-weight:600;transition:all .1s}
 .btn-sm:active{transform:scale(.96)}
 .btn-pr{background:var(--p);color:#fff}
-.btn-ou{border:1px solid var(--ol);background:transparent;color:#333}
+.btn-ou{border:1px solid var(--ol);background:transparent;color:var(--tx)}
 .btn-dn{background:var(--rl);color:var(--r)}
 .new-bc-btn{display:flex;align-items:center;gap:12px;background:var(--sf);border:1.5px dashed var(--ol);border-radius:var(--rr);padding:15px;cursor:pointer;margin-bottom:10px;width:100%;transition:all .15s}
 .new-bc-btn:active{border-color:var(--p);background:var(--pl)}
@@ -468,8 +475,8 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
 ═══════════════════════════════════ -->
 <div class="screen" id="sc-spells">
   <div class="stab-bar">
-    <button class="stab-btn active" id="stb-0" onclick="switchSpellTab(0)" data-i18n="mySpells">⚡ Els meus</button>
-    <button class="stab-btn" id="stb-1" onclick="switchSpellTab(1)" data-i18n="browseSpells">🔍 Explorar &amp; Afegir</button>
+    <button class="stab-btn active" id="stb-0" onclick="switchSpellTab(0)"><img src="icons/spells.png" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;opacity:.8"><span data-i18n="mySpells">Els meus</span></button>
+    <button class="stab-btn" id="stb-1" onclick="switchSpellTab(1)"><img src="icons/feats.png" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;opacity:.8"><span data-i18n="browseSpells">Explorar &amp; Afegir</span></button>
   </div>
 
   <!-- My Spells -->
@@ -485,7 +492,7 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
 
   <!-- Browse -->
   <div id="spt-1" style="display:none">
-    <div class="srch-box"><span class="srch-ic">🔍</span>
+    <div class="srch-box"><img class="srch-ic" src="icons/feats.png" alt="">
       <input type="text" placeholder="Busca encanteris..." oninput="filterSpells(this.value)" id="spell-search" data-i18n-ph="searchSpells"></div>
     <div class="gh"><span class="badge bt" data-i18n="psionic">Psiònic</span><span class="gh-sub" data-i18n="alwaysPrepared">Sempre preparats — gratuïts</span></div><hr class="hr">
     <div id="psi-list"></div>
@@ -548,7 +555,7 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
       <span class="acc-ch" id="ch-feats">▼</span>
     </div>
     <div class="acc-bd" id="bd-feats">
-      <div class="srch-box"><span class="srch-ic">🔍</span>
+      <div class="srch-box"><img class="srch-ic" src="icons/feats.png" alt="">
         <input type="text" placeholder="Busca proeses..." oninput="filterFeats(this.value)" data-i18n-ph="searchFeats"></div>
       <div class="sec-lbl" data-i18n="originFeats">Proeses d'origen</div><div id="orig-feats"></div>
       <div class="sec-lbl" data-i18n="generalFeats">Proeses generals</div><div id="gen-feats"></div>
@@ -908,7 +915,7 @@ const LANGS={
     derivedStats:'Estadístiques derivades — Nivell',
     spellSlots:"Slots d'encanteri",knownSpells:'Encanteris coneguts',atLevel:'al nivell',
     loreTitle:'Història & Origen Aberrant',loreLabel:"La teva història",
-    mySpells:'⚡ Els meus',browseSpells:'🔍 Explorar & Afegir',
+    mySpells:'Els meus',browseSpells:'Explorar & Afegir',
     psionic:'Psiònic',freePsionic:'11 lliures',
     searchSpells:'Busca encanteris...',alwaysPrepared:'Sempre preparats — gratuïts',
     selectC:'Selecciona',selCount:'Seleccionats:',
@@ -948,7 +955,7 @@ const LANGS={
     derivedStats:'Derived Stats — Level',
     spellSlots:'Spell Slots',knownSpells:'Known Spells',atLevel:'at level',
     loreTitle:'Backstory & Aberrant Origin',loreLabel:'Your backstory',
-    mySpells:'⚡ My Spells',browseSpells:'🔍 Browse & Add',
+    mySpells:'My Spells',browseSpells:'Browse & Add',
     psionic:'Psionic',freePsionic:'11 free',
     searchSpells:'Search spells...',alwaysPrepared:'Always prepared — free',
     selectC:'Select',selCount:'Selected:',
@@ -988,7 +995,7 @@ const LANGS={
     derivedStats:'Estadísticas derivadas — Nivel',
     spellSlots:'Espacios de hechizo',knownSpells:'Hechizos conocidos',atLevel:'en el nivel',
     loreTitle:'Historia & Origen Aberrante',loreLabel:'Tu historia',
-    mySpells:'⚡ Mis hechizos',browseSpells:'🔍 Explorar & Añadir',
+    mySpells:'Mis hechizos',browseSpells:'Explorar & Añadir',
     psionic:'Psiónico',freePsionic:'11 libres',
     searchSpells:'Busca hechizos...',alwaysPrepared:'Siempre preparados — gratuitos',
     selectC:'Selecciona',selCount:'Seleccionados:',
@@ -1512,21 +1519,25 @@ function mySpellH(spell,slots){
     const slLvs=Object.keys(slots).map(Number).filter(sl=>sl>=spell.level);
     let btns=slLvs.map(sl=>{
       const max=slots[sl]||0,used=usedSl[sl]||0,rem=max-used,can=rem>0,up=sl>spell.level;
-      return`<button class="cbt${up?' up':''}" onclick="castSlot('${spell.name}',${sl},${spell.conc})" ${can?'':'disabled'}>Slot ${sl} (${rem}✓)${up?' ↑':''}</button>`;
+      return`<button class="cbt${up?' up':''}" data-sn="${spell.name.replace(/"/g,'&quot;')}" data-sl="${sl}" data-co="${spell.conc}" onclick="castSlot(this.dataset.sn,+this.dataset.sl,this.dataset.co==='true')" ${can?'':'disabled'}>Slot ${sl} (${rem}✓)${up?' ↑':''}</button>`;
     }).join('');
     castH=`<div class="cast-pan"><div class="cast-lbl">${t('castSlot')}</div><div class="cast-btns">${btns}</div>`;
     if(spell.psi&&lv>=6){
       const cost=spell.level,can=spLeft()>=cost;
-      castH+=`<hr class="cast-div"><div class="cast-sp-row"><span class="cast-sp-lbl">${t('psiCast')}</span><button class="cast-spb" onclick="castPsi('${spell.name}',${spell.level},${spell.conc})" ${can?'':'disabled'}>${t('castBtn')} (${cost} SP)${!can?' '+t('noSP'):''}</button>${can?`<span class="cast-hint">${t('noSlotFree')}</span>`:''}</div>`;
+      castH+=`<hr class="cast-div"><div class="cast-sp-row"><span class="cast-sp-lbl">${t('psiCast')}</span><button class="cast-spb" data-sn="${spell.name.replace(/"/g,'&quot;')}" data-lv="${spell.level}" data-co="${spell.conc}" onclick="castPsi(this.dataset.sn,+this.dataset.lv,this.dataset.co==='true')" ${can?'':'disabled'}>${t('castBtn')} (${cost} SP)${!can?' '+t('noSP'):''}</button>${can?`<span class="cast-hint">${t('noSlotFree')}</span>`:''}</div>`;
     }
     castH+='</div>';
   }
-  const concBtn=sesMode&&spell.conc&&spell.level>0?`<button class="conc-btn" style="color:${isConc?'var(--r)':'var(--os)'}" onclick="setConc('${spell.name}')" title="Concentració">${isConc?'⬤':'○'}</button>`:'';
+  const concBtn=sesMode&&spell.conc&&spell.level>0?`<button class="conc-btn" style="color:${isConc?'var(--r)':'var(--os)'}" data-sn="${spell.name.replace(/"/g,'&quot;')}" onclick="setConc(this.dataset.sn)" title="Concentració">${isConc?'⬤':'○'}</button>`:'';
+  const isTeleMH=spell.name==='Mage Hand'&&selF.has('Telekinetic');
+  const teleBadge=isTeleMH?'<span class="badge ba" title="Telekinetic feat">✦ Telekinetic</span>':'';
+  const teleDC=parseInt(g('d-dc')?.textContent)||10;
+  const teleTip=isTeleMH?`<div class="tip-note" style="margin-top:6px"><img class="tip-ic" src="icons/tip.png"><span class="tip-tx">Telekinetic: Mage Hand becomes invisible. Bonus action to control it or telekinetically shove a creature 5 ft (STR/CON save DC ${teleDC}).</span></div>`:'';
   return`<div class="card ${cls}"><div class="sp-row-c"><div class="sp-inf">
-    <div class="sp-nr"><span class="sp-nm">${spell.name}</span>${spell.psi?`<span class="badge bt">${t('psionic')}</span>`:''}${spell.conc?'<span class="badge br">Conc.</span>':''}</div>
+    <div class="sp-nr"><span class="sp-nm">${spell.name}</span>${spell.psi?`<span class="badge bt">${t('psionic')}</span>`:''}${spell.conc?'<span class="badge br">Conc.</span>':''}${teleBadge}</div>
     <div class="sp-mt">${spell.school} · ${spell.range} · ${spell.duration}${spell.save&&spell.save!=='None'?' · Save: '+spell.save:''}</div>
-    ${exp?`<div class="sp-desc">${spell.desc}</div>${spell.tip?`<div class="tip-note"><img class="tip-ic" src="icons/tip.png"><span class="tip-tx">${spell.tip}</span></div>`:''}${castH}`:''}
-  </div>${concBtn}<button class="exp-btn" onclick="toggleExp('${spell.name}')">${exp?'▲':'▼'}</button></div></div>`;
+    ${exp?`<div class="sp-desc">${spell.desc}</div>${spell.tip?`<div class="tip-note"><img class="tip-ic" src="icons/tip.png"><span class="tip-tx">${spell.tip}</span></div>`:''}${teleTip}${castH}`:''}
+  </div>${concBtn}<button class="exp-btn" data-sn="${spell.name.replace(/"/g,'&quot;')}" onclick="toggleExp(this.dataset.sn)">${exp?'▲':'▼'}</button></div></div>`;
 }
 function toggleExp(n){expSp.has(n)?expSp.delete(n):expSp.add(n);renderMySpells();}
 
@@ -1541,7 +1552,7 @@ function browseCardH(spell,sel){
   const cc=spell.psi?'ckt':sel?'ckp':'';
   const cd=spell.psi?'psi':sel?'sel-p':'';
   return`<div class="card ${cd}"><div class="sp-row-c">
-    <div class="sp-cb ${cc}" onclick="toggleSpell('${spell.name}',${!!spell.psi})">${(sel||spell.psi)?'<span class="ck">✓</span>':''}</div>
+    <div class="sp-cb ${cc}" data-sn="${spell.name.replace(/"/g,'&quot;')}" data-psi="${!!spell.psi}" onclick="toggleSpell(this.dataset.sn,this.dataset.psi==='true')">${(sel||spell.psi)?'<span class="ck">✓</span>':''}</div>
     <div class="sp-inf">
       <div class="sp-nr"><span class="sp-nm">${spell.name}</span>${lvBH(spell.level,spell.psi)}<span class="badge bg">${spell.school}</span></div>
       <div class="sp-mt">${spell.range} · ${spell.duration}${spell.save&&spell.save!=='None'?' · Save: '+spell.save:''}</div>
@@ -1578,7 +1589,7 @@ function toggleSpell(name,isPsi){
 function filterSpells(v){renderSpells(v);}
 
 // ─── RENDER BUILD ─────────────────────────────────────────────────────────────
-function metaMax(){return lv>=17?4:lv>=10?3:2;}
+function metaMax(){const base=lv>=17?4:lv>=10?3:2;return base+(selF.has('Metamagic Adept')?2:0);}
 function renderBuild(){
   // Metamagic
   const mm=metaMax();

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>D&D · Druida — Vista DM</title>
+<meta name="theme-color" content="#5A7C2E">
+<style>
+:root{--p:#5A7C2E;--pl:#EBF2E0;--pd:#2E4A10;--m:#3A5C7A;--ml:#E0EBF4;--md:#1A3A54;--r:#C44830;--bg:#F2F4F0;--sf:#FFF;--sv:#EEF2EA;--ol:#C8D4BE;--os:#5A6A4A;--tx:#1A201A;--rr:10px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--tx);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:15px;padding:16px;max-width:500px;margin:0 auto}
+.hero{background:linear-gradient(135deg,var(--pd),var(--m));border-radius:16px;padding:20px;color:#fff;margin-bottom:16px;display:flex;align-items:center;gap:16px}
+.hero-avatar{width:70px;height:70px;border-radius:50%;border:3px solid rgba(255,255,255,.4);background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;overflow:hidden}
+.hero-avatar img{width:100%;height:100%;object-fit:cover}
+.hero-name{font-size:22px;font-weight:700;margin-bottom:3px}
+.hero-sub{font-size:13px;opacity:.85}
+.hero-hp{margin-top:8px;font-size:13px;opacity:.9}
+.hp-bar{height:6px;border-radius:3px;background:rgba(255,255,255,.25);margin-top:4px;overflow:hidden}
+.hp-fill{height:100%;border-radius:3px;background:#fff;transition:width .3s}
+
+.section{background:var(--sf);border-radius:var(--rr);border:1px solid var(--ol);padding:14px;margin-bottom:12px}
+.sec-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--os);margin-bottom:10px}
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
+.stat-box{background:var(--sv);border-radius:8px;padding:8px;text-align:center}
+.stat-abbr{font-size:10px;font-weight:700;text-transform:uppercase;color:var(--os)}
+.stat-val{font-size:22px;font-weight:700;color:var(--tx)}
+.stat-mod{font-size:11px;color:var(--pd);font-weight:700}
+.der-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px}
+.der-box{background:var(--sv);border-radius:8px;padding:6px;text-align:center}
+.der-lbl{font-size:9px;font-weight:700;text-transform:uppercase;color:var(--os);margin-bottom:2px}
+.der-val{font-size:15px;font-weight:700;color:var(--tx)}
+.skill-row{display:flex;align-items:center;gap:6px;padding:4px 0;border-bottom:1px solid var(--sv)}
+.sk-dot{width:14px;height:14px;border-radius:50%;border:2px solid var(--ol);flex-shrink:0}
+.sk-dot.prof{background:var(--p);border-color:var(--p)}
+.sk-dot.exp{background:var(--pd);border-color:var(--pd)}
+.sk-name{flex:1;font-size:13px}
+.sk-val{font-size:13px;font-weight:700;color:var(--p)}
+.save-row{display:flex;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid var(--sv)}
+.sv-dot{width:14px;height:14px;border-radius:50%;border:2px solid var(--ol);flex-shrink:0}
+.sv-dot.on{background:var(--p);border-color:var(--p)}
+.chip-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.chip{display:inline-flex;align-items:center;gap:4px;background:var(--pl);color:var(--pd);border:1px solid var(--p);border-radius:20px;padding:4px 10px;font-size:12px;font-weight:600}
+.chip.moon{background:var(--ml);color:var(--md);border-color:var(--m)}
+.chip.used{opacity:.35}
+.slot-row{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--sv)}
+.slot-lv{font-size:11px;font-weight:700;padding:1px 7px;border-radius:10px;background:var(--pl);color:var(--pd);flex-shrink:0}
+.pip-row{display:flex;gap:4px;flex:1}
+.pip{width:18px;height:18px;border-radius:50%;border:2px solid var(--p);background:var(--p)}
+.pip.empty{background:transparent}
+.pip.moon{border-color:var(--m);background:var(--m)}
+.pip.moon.empty{background:transparent}
+.ws-box{background:var(--ml);border:1px solid var(--m);border-radius:var(--rr);padding:10px;margin-bottom:8px}
+.ws-name{font-size:14px;font-weight:700;color:var(--md)}
+.ws-sub{font-size:11px;color:var(--os);margin-top:2px}
+.prep-item{padding:4px 0;border-bottom:1px solid var(--sv);font-size:13px;display:flex;justify-content:space-between}
+.prep-lv{font-size:10px;color:var(--os)}
+.timestamp{text-align:center;font-size:11px;color:var(--os);margin-top:16px;padding-top:10px;border-top:1px solid var(--ol)}
+.err{text-align:center;padding:40px 20px;color:var(--os)}
+</style>
+</head>
+<body>
+<div id="root"><div class="err">Carregant...</div></div>
+<script>
+const mod=v=>Math.floor((v-10)/2);
+const fmtMod=v=>(v>=0?'+':'')+v;
+const STAT_KEYS=['str','dex','con','int','wis','cha'];
+const STAT_NAMES={str:'STR',dex:'DEX',con:'CON',int:'INT',wis:'WIS',cha:'CHA'};
+const SKILLS=[
+  {k:'acr',n:'Acrobatics',st:'dex'},{k:'ani',n:'Animal Handling',st:'wis'},
+  {k:'arc',n:'Arcana',st:'int'},{k:'ath',n:'Athletics',st:'str'},
+  {k:'dec',n:'Deception',st:'cha'},{k:'his',n:'History',st:'int'},
+  {k:'ins',n:'Insight',st:'wis'},{k:'int_sk',n:'Intimidation',st:'cha'},
+  {k:'inv',n:'Investigation',st:'int'},{k:'med',n:'Medicine',st:'wis'},
+  {k:'nat',n:'Nature',st:'int'},{k:'prc',n:'Perception',st:'wis'},
+  {k:'prf',n:'Performance',st:'cha'},{k:'per',n:'Persuasion',st:'cha'},
+  {k:'rel',n:'Religion',st:'int'},{k:'slh',n:'Sleight of Hand',st:'dex'},
+  {k:'ste',n:'Stealth',st:'dex'},{k:'sur',n:'Survival',st:'wis'},
+];
+const SLOT_TABLE=[[0,0,0,0,0,0,0,0,0],[2,0,0,0,0,0,0,0,0],[3,0,0,0,0,0,0,0,0],[4,2,0,0,0,0,0,0,0],[4,3,0,0,0,0,0,0,0],[4,3,2,0,0,0,0,0,0],[4,3,3,0,0,0,0,0,0],[4,3,3,1,0,0,0,0,0],[4,3,3,2,0,0,0,0,0],[4,3,3,3,1,0,0,0,0],[4,3,3,3,2,0,0,0,0],[4,3,3,3,2,1,0,0,0],[4,3,3,3,2,1,0,0,0],[4,3,3,3,2,1,1,0,0],[4,3,3,3,2,1,1,0,0],[4,3,3,3,2,1,1,1,0],[4,3,3,3,2,1,1,1,0],[4,3,3,3,2,1,1,1,1],[4,3,3,3,3,1,1,1,1],[4,3,3,3,3,2,1,1,1],[4,3,3,3,3,2,2,1,1]];
+const profBonus=lv=>{if(lv<=4)return 2;if(lv<=8)return 3;if(lv<=12)return 4;if(lv<=16)return 5;return 6;};
+const wsUsesForLevel=lv=>{if(lv>=14)return 5;if(lv>=10)return 4;if(lv>=6)return 3;return 2;};
+
+try{
+  const params=new URLSearchParams(location.search);
+  const enc=params.get('d');
+  if(!enc)throw new Error('no data');
+  const d=JSON.parse(decodeURIComponent(escape(atob(decodeURIComponent(enc)))));
+  const lv=d.lv||1;
+  const st=d.st||[10,10,10,10,10,10];
+  const [sv,dx,cn,it,ws,ch]=st;
+  const statVals={str:sv,dex:dx,con:cn,int:it,wis:ws,cha:ch};
+  const pb=profBonus(lv);
+  const hp=d.hp||d.mhp||1,mhp=d.mhp||1;
+  const pct=Math.max(0,Math.min(100,hp/mhp*100));
+  const skillProf=new Set(d.sp||[]);
+  const skillExp=new Set(d.se||[]);
+  const selSaves=new Set(d.sv||['int','wis']);
+  const po=d.po||'magician';
+  const slots=SLOT_TABLE[Math.min(lv,20)];
+  const usedSlots=d.us||[0,0,0,0,0,0,0,0,0];
+  const wsUsed=d.wu||0;
+  const wsTotal=wsUsesForLevel(lv);
+  const af=d.af||null;
+  const cs=d.cs||'';
+  const pp=d.pp||[];
+  const pc=d.pc||[];
+  const spellDC=8+pb+mod(statVals.wis);
+  const spellAtk=pb+mod(statVals.wis);
+
+  // Skills with Magician bonus
+  const skillsHTML=SKILLS.map(sk=>{
+    const base=mod(statVals[sk.st]);
+    const ep=skillExp.has(sk.k),pr=skillProf.has(sk.k);
+    const magicBonus=(po==='magician'&&(sk.k==='arc'||sk.k==='nat'))?mod(statVals.wis):0;
+    const bonus=base+(ep?pb*2:pr?pb:0)+magicBonus;
+    return`<div class="skill-row">
+      <div class="sk-dot${ep?' exp':pr?' prof':''}"></div>
+      <span class="sk-name">${sk.n}</span>
+      <span class="sk-val">${fmtMod(bonus)}</span>
+    </div>`;
+  }).join('');
+
+  const savesHTML=STAT_KEYS.map(k=>{
+    const on=selSaves.has(k);
+    const val=mod(statVals[k])+(on?pb:0);
+    return`<div class="save-row"><div class="sv-dot${on?' on':''}"></div><span style="flex:1;font-size:13px">${STAT_NAMES[k]}</span><span style="font-weight:700;color:var(--p)">${fmtMod(val)}</span></div>`;
+  }).join('');
+
+  const slotsHTML=slots.map((max,i)=>{
+    if(max===0)return'';
+    const used=usedSlots[i]||0;
+    const pips=Array.from({length:max},(_,j)=>`<div class="pip${j<used?' empty':''}"></div>`).join('');
+    return`<div class="slot-row"><span class="slot-lv">Nv ${i+1}</span><div class="pip-row">${pips}</div><span style="font-size:11px;color:var(--os)">${max-used}/${max}</span></div>`;
+  }).join('');
+
+  // WS pips
+  const wsPips=Array.from({length:wsTotal},(_,i)=>`<div class="pip moon${i<wsUsed?' empty':''}"></div>`).join('');
+
+  // Prepared
+  const prepHTML=pc.map(n=>`<div class="prep-item"><span>${n}</span><span class="prep-lv">Cantrip</span></div>`).join('')+
+    pp.map(k=>{const[l,...ns]=k.split(':');return`<div class="prep-item"><span>${ns.join(':')}</span><span class="prep-lv">Nv ${l}</span></div>`;}).join('');
+
+  document.getElementById('root').innerHTML=`
+  <div class="hero">
+    <div class="hero-avatar"><span>🌿</span></div>
+    <div>
+      <div class="hero-name">${d.n||'Druida'}</div>
+      <div class="hero-sub">Circle of the Moon Druid · Lv ${lv}${d.race?' · '+d.race:''}</div>
+      <div class="hero-hp">HP: ${hp} / ${mhp}</div>
+      <div class="hp-bar"><div class="hp-fill" style="width:${pct}%"></div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="sec-title">Estadístiques</div>
+    <div class="stat-grid">${STAT_KEYS.map(k=>`<div class="stat-box"><div class="stat-abbr">${STAT_NAMES[k]}</div><div class="stat-val">${statVals[k]}</div><div class="stat-mod">${fmtMod(mod(statVals[k]))}</div></div>`).join('')}</div>
+    <div class="der-grid">
+      <div class="der-box"><div class="der-lbl">AC</div><div class="der-val">${10+mod(statVals.dex)}</div></div>
+      <div class="der-box"><div class="der-lbl">Init</div><div class="der-val">${fmtMod(mod(statVals.dex))}</div></div>
+      <div class="der-box"><div class="der-lbl">Prof</div><div class="der-val">${fmtMod(pb)}</div></div>
+      <div class="der-box"><div class="der-lbl">Spell DC</div><div class="der-val">${spellDC}</div></div>
+      <div class="der-box"><div class="der-lbl">Spell Atk</div><div class="der-val">${fmtMod(spellAtk)}</div></div>
+      <div class="der-box"><div class="der-lbl">WIS mod</div><div class="der-val">${fmtMod(mod(statVals.wis))}</div></div>
+      <div class="der-box"><div class="der-lbl">Primal</div><div class="der-val" style="font-size:11px">${po==='magician'?'Magician':'Warden'}</div></div>
+      <div class="der-box"><div class="der-lbl">WS CR</div><div class="der-val">${Math.max(1,Math.floor(lv/3))}</div></div>
+    </div>
+  </div>
+
+  ${af?`<div class="section"><div class="sec-title">Wild Shape Activa</div>
+    <div class="ws-box"><div class="ws-name">🐾 ${af}</div><div class="ws-sub">THP: ${lv*3} · AC mín: ${13+mod(statVals.wis)}</div></div>
+  </div>`:''}
+
+  ${cs?`<div class="section" style="border-color:var(--m)"><div class="sec-title" style="color:var(--md)">Concentració Activa</div><div style="font-weight:700">${cs}</div></div>`:''}
+
+  <div class="section">
+    <div class="sec-title">Wild Shape · Usos (${wsTotal-wsUsed}/${wsTotal} disponibles)</div>
+    <div style="display:flex;gap:6px;margin-top:4px">${wsPips}</div>
+  </div>
+
+  <div class="section">
+    <div class="sec-title">Espais d'Espell</div>
+    ${slotsHTML||'<span style="color:var(--os);font-size:13px">Cap espai disponible</span>'}
+  </div>
+
+  ${prepHTML?`<div class="section"><div class="sec-title">Espells Preparats</div>${prepHTML}</div>`:''}
+
+  <div class="section">
+    <div class="sec-title">Tirades de Salvació</div>
+    ${savesHTML}
+  </div>
+
+  <div class="section">
+    <div class="sec-title">Habilitats</div>
+    ${skillsHTML}
+  </div>
+
+  <div class="timestamp">Generat: ${d.ts?new Date(d.ts*1000).toLocaleString('ca-ES'):'—'} · Vista DM (lectura)</div>
+  `;
+}catch(e){
+  document.getElementById('root').innerHTML='<div class="err"><p style="font-size:28px;margin-bottom:12px">🌿</p><p>No s\'ha pogut llegir les dades del QR.</p><p style="margin-top:8px;font-size:12px">'+e.message+'</p></div>';
+}
+</script>
+</body>
+</html>

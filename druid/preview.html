@@ -1,0 +1,1570 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>D&D · Circle of the Moon Druid</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#5A7C2E">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<style>
+:root{
+  --p:#5A7C2E;--pl:#EBF2E0;--pd:#2E4A10;
+  --m:#3A5C7A;--ml:#E0EBF4;--md:#1A3A54;
+  --a:#8B6B30;--al:#F4EDD8;--ad:#5C4018;
+  --r:#C44830;--rl:#FAE8E4;
+  --bg:#F2F4F0;--sf:#FFF;--sv:#EEF2EA;
+  --ol:#C8D4BE;--os:#5A6A4A;--rr:10px;
+  --tx:#1A201A;--tabh:62px;--toph:52px;
+}
+body.dark{
+  --pl:#182A10;--pd:#88C458;
+  --ml:#0E1E2A;--md:#70A8D0;
+  --al:#221800;--ad:#C8A050;
+  --rl:#280C08;
+  --bg:#0C1208;--sf:#141A10;--sv:#1A2214;
+  --ol:#2A3A1A;--os:#7A9060;--tx:#DCE8CC;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:var(--bg);color:var(--tx);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:15px;overflow:hidden}
+
+.topbar{position:fixed;top:0;left:0;right:0;height:var(--toph);background:var(--sf);border-bottom:1px solid var(--ol);display:flex;align-items:center;padding:0 10px;gap:8px;z-index:100}
+.topbar img.logo{height:26px;object-fit:contain}
+.tb-title{flex:1;min-width:0}
+.tb-name{font-size:15px;font-weight:700;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tb-sub{font-size:10px;color:var(--os)}
+.lang-btns{display:flex;gap:3px;flex-shrink:0}
+.lang-btn{padding:3px 7px;border-radius:6px;border:1px solid var(--ol);background:var(--sv);color:var(--os);font-size:10px;font-weight:700;cursor:pointer}
+.lang-btn.active{background:var(--p);color:#fff;border-color:var(--p)}
+.tb-icon{width:32px;height:32px;border-radius:50%;border:1px solid var(--ol);background:var(--sv);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+.tb-icon img{width:17px;height:17px;object-fit:contain;opacity:.65}
+
+.scroll{position:fixed;top:var(--toph);bottom:var(--tabh);left:0;right:0;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.tab-panel{display:none;padding:12px 12px 24px}
+.tab-panel.active{display:block}
+
+.tabbar{position:fixed;bottom:0;left:0;right:0;height:var(--tabh);background:var(--sf);border-top:1px solid var(--ol);display:flex;z-index:100}
+.tab-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;color:var(--os);font-size:10px;font-weight:500;border:none;background:none;padding:0}
+.tab-btn img{width:24px;height:24px;object-fit:contain;opacity:.4;transition:opacity .15s}
+.tab-btn.active{color:var(--p)}
+.tab-btn.active img{opacity:1;filter:drop-shadow(0 0 3px var(--p))}
+
+/* SUBTABS */
+.subtab-bar{display:flex;gap:0;margin-bottom:14px;border-radius:var(--rr);overflow:hidden;border:1px solid var(--ol)}
+.subtab-btn{flex:1;padding:9px 0;background:var(--sv);color:var(--os);font-size:13px;font-weight:600;border:none;cursor:pointer;transition:all .15s}
+.subtab-btn.active{background:var(--p);color:#fff}
+.subtab-panel{display:none}
+.subtab-panel.active{display:block}
+
+/* SECTION */
+.sec-hd{display:flex;align-items:center;gap:8px;padding:10px 0 5px;cursor:pointer;user-select:none}
+.sec-hd img{width:20px;height:20px;object-fit:contain;opacity:.6}
+.sec-hd .sec-lbl{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--os);flex:1}
+.chev{font-size:12px;color:var(--os);transition:transform .2s}
+.sec-hd.open .chev{transform:rotate(180deg)}
+.sec-body{display:none}
+.sec-body.open{display:block}
+.sec-sep{height:1px;background:var(--ol);margin:2px 0 10px}
+
+/* CHAR HEADER */
+.char-hdr{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px}
+.char-avatar{width:72px;height:72px;border-radius:50%;overflow:hidden;border:2px solid var(--p);flex-shrink:0;cursor:pointer;background:var(--sv);display:flex;align-items:center;justify-content:center;font-size:28px}
+.char-avatar img{width:100%;height:100%;object-fit:cover}
+.char-fields{flex:1;min-width:0}
+.char-inp{width:100%;border:none;background:none;color:var(--tx);border-bottom:1px solid var(--ol);padding:3px 0;margin-bottom:5px;font-size:14px;font-weight:600;outline:none;font-family:inherit}
+.char-inp:focus{border-color:var(--p)}
+.char-inp.sm{font-size:12px;font-weight:400;color:var(--os)}
+.lv-stepper{display:flex;align-items:center;gap:5px;flex-shrink:0}
+.lv-btn{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--ol);background:var(--sv);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--tx);line-height:1}
+.lv-btn:active{background:var(--ol)}
+.lv-val{font-size:13px;font-weight:700;color:var(--p);min-width:32px;text-align:center}
+
+/* STATS */
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:10px}
+.stat-box{background:var(--sv);border-radius:var(--rr);border:1px solid var(--ol);padding:7px 4px;text-align:center}
+.stat-abbr{font-size:10px;font-weight:700;text-transform:uppercase;color:var(--os);margin-bottom:3px}
+.stat-inp{width:100%;border:none;background:none;text-align:center;font-size:22px;font-weight:700;color:var(--tx);outline:none;-moz-appearance:textfield}
+.stat-inp::-webkit-outer-spin-button,.stat-inp::-webkit-inner-spin-button{-webkit-appearance:none}
+.stat-mod{font-size:11px;color:var(--pd);font-weight:700;margin-top:2px}
+.der-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:6px}
+.der-box{background:var(--sv);border-radius:8px;border:1px solid var(--ol);padding:6px 3px;text-align:center}
+.der-lbl{font-size:9px;font-weight:700;text-transform:uppercase;color:var(--os);margin-bottom:2px}
+.der-val{font-size:16px;font-weight:700;color:var(--tx)}
+
+/* SKILLS / SAVES */
+.skill-item{display:flex;align-items:center;gap:6px;padding:4px 0;border-bottom:1px solid var(--sv)}
+.sk-dots{display:flex;gap:3px;flex-shrink:0}
+.sk-dot{width:17px;height:17px;border-radius:50%;border:2px solid var(--ol);cursor:pointer;transition:all .15s;font-size:8px;font-weight:700;display:flex;align-items:center;justify-content:center;color:transparent;flex-shrink:0}
+.sk-dot.prof{border-color:var(--p);background:var(--p);color:#fff}
+.sk-dot.exp{border-color:var(--pd);background:var(--pd);color:#fff}
+.sk-name{flex:1;font-size:13px}
+.sk-stat{font-size:10px;color:var(--os);width:26px;text-align:center;flex-shrink:0}
+.sk-val{font-size:14px;font-weight:700;color:var(--p);width:28px;text-align:right;flex-shrink:0}
+.save-item{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--sv)}
+.save-dot{width:17px;height:17px;border-radius:50%;border:2px solid var(--ol);cursor:pointer;flex-shrink:0;transition:all .15s}
+.save-dot.on{background:var(--p);border-color:var(--p)}
+.save-name{flex:1;font-size:13px}
+.save-val{font-size:14px;font-weight:700;color:var(--p)}
+
+/* TRACKER */
+.tracker-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.tbox{background:var(--sf);border-radius:var(--rr);border:1px solid var(--ol);padding:12px;text-align:center}
+.tbox.full{grid-column:1/-1}
+.tbox-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--os);margin-bottom:6px}
+.hp-row{display:flex;align-items:baseline;justify-content:center;gap:4px;margin-bottom:5px}
+.hp-cur{font-size:38px;font-weight:700;line-height:1;-moz-appearance:textfield;width:70px;border:none;background:none;text-align:center;color:var(--tx);outline:none}
+.hp-cur::-webkit-outer-spin-button,.hp-cur::-webkit-inner-spin-button{-webkit-appearance:none}
+.hp-sep{font-size:20px;color:var(--os)}
+.hp-max-inp{font-size:20px;font-weight:600;color:var(--os);width:50px;border:none;background:none;text-align:center;-moz-appearance:textfield;outline:none}
+.hp-max-inp::-webkit-outer-spin-button,.hp-max-inp::-webkit-inner-spin-button{-webkit-appearance:none}
+.hp-bar{height:6px;border-radius:3px;background:var(--ol);margin:4px 0 8px;overflow:hidden}
+.hp-fill{height:100%;border-radius:3px;background:var(--p);transition:width .3s}
+.hp-fill.lo{background:var(--r)}
+.hp-fill.md{background:#E8A020}
+.hp-btns{display:flex;gap:6px;justify-content:center}
+.hp-btn{padding:6px 14px;border-radius:20px;border:1.5px solid var(--ol);background:var(--sv);cursor:pointer;font-size:13px;font-weight:700;color:var(--tx)}
+.hp-btn.dmg{border-color:var(--r);color:var(--r)}
+.hp-btn.heal{border-color:var(--p);color:var(--pd)}
+
+/* PIPS */
+.pips-wrap{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:6px 0}
+.pip{width:24px;height:24px;border-radius:50%;border:2px solid var(--p);background:var(--p);cursor:pointer;transition:all .15s}
+.pip.empty{background:transparent}
+.pip.moon{border-color:var(--m);background:var(--m)}
+.pip.moon.empty{background:transparent;border-color:var(--m)}
+.pips-sub{font-size:11px;color:var(--os);margin-top:2px}
+
+/* WILD SHAPE */
+.ws-box{background:var(--sf);border-radius:var(--rr);border:2px solid var(--m);padding:12px;margin-bottom:10px}
+.ws-hd{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.ws-title{font-size:14px;font-weight:700;flex:1;color:var(--md)}
+.ws-cr-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;background:var(--ml);color:var(--md);flex-shrink:0}
+.ws-stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:8px}
+.ws-stat{background:var(--sv);border-radius:6px;padding:5px;text-align:center}
+.ws-stat-lbl{font-size:9px;font-weight:700;text-transform:uppercase;color:var(--os)}
+.ws-stat-val{font-size:16px;font-weight:700;color:var(--tx)}
+.ws-attacks{font-size:12px;color:var(--os);line-height:1.5;margin-bottom:6px}
+.ws-thp-row{display:flex;align-items:center;gap:8px;justify-content:center;margin-bottom:6px}
+.ws-thp-lbl{font-size:11px;color:var(--os)}
+.ws-thp-val{font-size:20px;font-weight:700;color:var(--m)}
+.ws-exit-btn{width:100%;padding:8px;border-radius:8px;border:1.5px solid var(--r);background:none;color:var(--r);font-size:13px;font-weight:700;cursor:pointer}
+.ws-exit-btn:active{background:var(--rl)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.form-card{background:var(--sv);border-radius:var(--rr);border:2px solid var(--ol);padding:8px;cursor:pointer;transition:all .15s}
+.form-card:active{border-color:var(--m);background:var(--ml)}
+.form-name{font-size:13px;font-weight:700;color:var(--tx)}
+.form-cr{font-size:10px;font-weight:700;color:var(--os)}
+.form-mini{font-size:11px;color:var(--os);margin-top:2px}
+
+/* CONCENTRATION */
+.conc-box{background:var(--sf);border-radius:var(--rr);border:1px solid var(--ol);padding:10px 12px;margin-bottom:10px;display:flex;align-items:center;gap:10px}
+.conc-dot{width:12px;height:12px;border-radius:50%;background:var(--ol);flex-shrink:0;transition:background .2s}
+.conc-dot.on{background:var(--m)}
+.conc-label{font-size:12px;font-weight:700;color:var(--os);flex-shrink:0}
+.conc-inp{flex:1;border:none;background:none;color:var(--tx);font-size:13px;outline:none;font-family:inherit}
+
+/* SLOT LEVELS */
+.slot-level{background:var(--sf);border-radius:var(--rr);border:1px solid var(--ol);padding:10px 12px;margin-bottom:8px}
+.slot-level-hd{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.slot-lv-badge{font-size:11px;font-weight:700;padding:2px 9px;border-radius:20px;background:var(--pl);color:var(--pd)}
+.slot-lv-name{font-size:13px;color:var(--os);flex:1}
+.slot-count{font-size:11px;color:var(--os)}
+
+/* SPELL CARDS */
+.spell-card{background:var(--sv);border-radius:var(--rr);border:2px solid var(--ol);padding:9px 12px;margin-bottom:6px;cursor:pointer;transition:border-color .15s}
+.spell-card.prep{border-color:var(--p);background:var(--pl)}
+.spell-card.always{border-color:var(--m);background:var(--ml);cursor:default}
+.spell-hd{display:flex;align-items:center;gap:6px}
+.spell-name{font-size:13px;font-weight:700;flex:1}
+.spell-school{font-size:10px;color:var(--os);flex-shrink:0}
+.spell-chk{width:18px;height:18px;border-radius:50%;border:2px solid var(--ol);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;color:transparent}
+.spell-card.prep .spell-chk{background:var(--p);border-color:var(--p);color:#fff}
+.spell-card.always .spell-chk{background:var(--m);border-color:var(--m);color:#fff}
+.spell-sub{font-size:11px;color:var(--os);margin-top:3px}
+.spell-count{font-size:11px;color:var(--pd);margin-bottom:8px;font-weight:600}
+
+/* BROWSE */
+.browse-filter{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
+.browse-filter select,.browse-search{border:1px solid var(--ol);border-radius:8px;padding:7px 10px;background:var(--sv);color:var(--tx);font-size:13px;font-family:inherit;outline:none}
+.browse-search{flex:1;min-width:0}
+.browse-search:focus,.browse-filter select:focus{border-color:var(--p)}
+.browse-item{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:8px;background:var(--sf);border:1px solid var(--ol);margin-bottom:5px;text-decoration:none;color:var(--tx)}
+.browse-item:active{background:var(--pl)}
+.bi-name{flex:1;font-size:13px;font-weight:600}
+.bi-school{font-size:10px;color:var(--os);flex-shrink:0}
+.bi-rng{font-size:10px;color:var(--os);flex-shrink:0;min-width:60px;text-align:right}
+.bi-lv{font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px;background:var(--pl);color:var(--pd);flex-shrink:0}
+.bi-lv.c0{background:var(--sv);color:var(--os)}
+.bi-src{font-size:9px;color:var(--os);flex-shrink:0}
+
+/* BUILD / FEATS */
+.feat-card{background:var(--sv);border-radius:var(--rr);border:1px solid var(--ol);padding:10px 12px;margin-bottom:7px}
+.feat-hd{display:flex;align-items:center;gap:7px;cursor:pointer}
+.feat-lv{font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;background:var(--pl);color:var(--pd);flex-shrink:0}
+.feat-lv.sub{background:var(--ml);color:var(--md)}
+.feat-lv.na{background:var(--sv);color:var(--os);border:1px solid var(--ol)}
+.feat-name{font-size:14px;font-weight:600;flex:1}
+.feat-chev{font-size:11px;color:var(--os);transition:transform .2s;flex-shrink:0}
+.feat-hd.open .feat-chev{transform:rotate(180deg)}
+.feat-body{font-size:13px;color:var(--os);line-height:1.55;margin-top:8px;display:none}
+.feat-body.open{display:block}
+.feat-na{opacity:.5}
+
+/* PRIMAL ORDER / CHOICE */
+.choice-row{display:flex;gap:8px;margin-bottom:10px}
+.choice-btn{flex:1;padding:10px;border-radius:var(--rr);border:2px solid var(--ol);background:var(--sv);color:var(--os);font-size:13px;font-weight:600;cursor:pointer;text-align:center;transition:all .15s}
+.choice-btn.sel{border-color:var(--p);background:var(--pl);color:var(--pd)}
+
+/* REST */
+.rest-row{display:flex;gap:10px;margin-top:10px}
+.rest-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:11px;border-radius:var(--rr);border:1.5px solid var(--ol);background:var(--sf);cursor:pointer;font-size:13px;font-weight:600;color:var(--os)}
+.rest-btn img{width:20px;height:20px;opacity:.55}
+.rest-btn:active{background:var(--sv)}
+
+/* SAVED */
+.save-now-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;padding:14px;border-radius:var(--rr);border:2px solid var(--p);background:var(--pl);color:var(--pd);font-size:15px;font-weight:700;cursor:pointer;margin-bottom:16px}
+.save-now-btn img{width:22px;height:22px;object-fit:contain}
+.save-now-btn:active{background:var(--p);color:#fff}
+.saved-card{background:var(--sf);border-radius:var(--rr);border:1px solid var(--ol);padding:12px;margin-bottom:10px;display:flex;align-items:center;gap:10px}
+.saved-info{flex:1;min-width:0}
+.saved-name{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.saved-sub{font-size:11px;color:var(--os);margin-top:2px}
+.saved-date{font-size:10px;color:var(--os);margin-top:2px}
+.saved-btns{display:flex;flex-direction:column;gap:5px;flex-shrink:0}
+.saved-load{padding:5px 12px;border-radius:6px;border:1.5px solid var(--p);background:none;color:var(--pd);font-size:12px;font-weight:700;cursor:pointer}
+.saved-load:active{background:var(--pl)}
+.saved-del{padding:5px 12px;border-radius:6px;border:1.5px solid var(--ol);background:none;color:var(--os);font-size:12px;cursor:pointer}
+.saved-del:active{background:var(--rl);color:var(--r);border-color:var(--r)}
+.saved-empty{text-align:center;padding:40px 20px;color:var(--os)}
+
+/* NOTES */
+.notes-ta{width:100%;min-height:110px;border:1px solid var(--ol);border-radius:var(--rr);padding:10px;background:var(--sv);color:var(--tx);font-size:14px;resize:vertical;font-family:inherit}
+.notes-ta:focus{outline:none;border-color:var(--p)}
+.sec-note{font-size:12px;color:var(--os);padding:3px 0 8px;line-height:1.4}
+.lbl{font-size:11px;font-weight:700;color:var(--os);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mt10{margin-top:10px}
+.mb10{margin-bottom:10px}
+.chip-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.chip{display:inline-flex;align-items:center;gap:4px;background:var(--pl);color:var(--pd);border:1px solid var(--p);border-radius:20px;padding:5px 11px;font-size:12px;font-weight:600}
+.chip.moon{background:var(--ml);color:var(--md);border-color:var(--m)}
+
+/* QR FAB */
+.qr-fab{position:fixed;right:16px;bottom:calc(var(--tabh) + 14px);width:48px;height:48px;border-radius:50%;background:var(--p);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 14px rgba(0,0,0,.35);z-index:200;transition:transform .15s}
+.qr-fab:active{transform:scale(.9)}
+.qr-fab svg{width:22px;height:22px;fill:#fff}
+.qr-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:400;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s}
+.qr-overlay.open{opacity:1;pointer-events:all}
+.qr-sheet{background:var(--sf);border-radius:20px 20px 0 0;padding:20px 20px 36px;width:100%;max-width:440px;transform:translateY(100%);transition:transform .28s cubic-bezier(.32,1,.23,1)}
+.qr-overlay.open .qr-sheet{transform:translateY(0)}
+.qr-drag{width:40px;height:4px;border-radius:2px;background:var(--ol);margin:0 auto 16px}
+.qr-title{font-size:16px;font-weight:700;text-align:center;margin-bottom:3px}
+.qr-sub{font-size:12px;color:var(--os);text-align:center;margin-bottom:16px}
+.qr-canvas-wrap{display:flex;justify-content:center;margin-bottom:14px;padding:14px;background:#fff;border-radius:12px;min-height:80px;align-items:center}
+.qr-url{width:100%;border:1px solid var(--ol);border-radius:8px;padding:8px 10px;font-size:10px;color:var(--os);background:var(--sv);margin-bottom:10px;word-break:break-all}
+.qr-copy-btn{width:100%;padding:13px;border-radius:10px;border:none;background:var(--p);color:#fff;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:8px}
+.qr-copy-btn:active{opacity:.85}
+.qr-close-btn{width:100%;padding:10px;border-radius:10px;border:1.5px solid var(--ol);background:none;color:var(--os);font-size:13px;cursor:pointer}
+
+/* TOGGLE */
+.toggle-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.toggle-lbl{font-size:13px;flex:1}
+.toggle{width:40px;height:22px;border-radius:11px;background:var(--ol);border:none;cursor:pointer;position:relative;transition:background .2s;flex-shrink:0}
+.toggle::after{content:'';position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;transition:transform .2s;box-shadow:0 1px 2px rgba(0,0,0,.2)}
+.toggle.on{background:var(--p)}
+.toggle.on::after{transform:translateX(18px)}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <img class="logo" src="../logo.png" alt="">
+  <div class="tb-title">
+    <div class="tb-name" id="tb-name">Druida</div>
+    <div class="tb-sub" id="tb-sub">Circle of the Moon · Lv <span id="tb-lv">3</span></div>
+  </div>
+  <div class="lang-btns">
+    <button class="lang-btn active" id="lb-cat" onclick="setLang('cat')">CA</button>
+    <button class="lang-btn" id="lb-esp" onclick="setLang('esp')">ES</button>
+    <button class="lang-btn" id="lb-eng" onclick="setLang('eng')">EN</button>
+  </div>
+  <div class="tb-icon" onclick="toggleDark()"><img src="../icons/sun.png" id="dark-icon" alt="dark"></div>
+</div>
+
+<!-- SCROLL -->
+<div class="scroll">
+
+<!-- ========== PERSONATGE ========== -->
+<div class="tab-panel active" id="tab-character">
+
+  <div class="sec-hd open" onclick="toggleSec('basic',this)">
+    <img src="../icons/basic.png" alt="">
+    <span class="sec-lbl" id="lbl-basic">Informació bàsica</span>
+    <span class="chev">▼</span>
+  </div>
+  <div class="sec-sep"></div>
+  <div class="sec-body open" id="sec-basic">
+    <div class="char-hdr">
+      <div class="char-avatar" id="char-avatar" onclick="pickImg()">
+        <span id="avatar-placeholder">🌿</span>
+        <img id="avatar-img" src="" alt="" style="display:none">
+      </div>
+      <div class="char-fields">
+        <input class="char-inp" id="c-name" placeholder="Nom del personatge" value="" oninput="onNameChange()">
+        <div style="display:flex;gap:6px;align-items:center;margin-bottom:5px">
+          <input class="char-inp sm" id="c-race" placeholder="Raça / Espècie" value="" oninput="save()" style="flex:1;margin:0">
+          <input class="char-inp sm" id="c-age" placeholder="Edat" value="" oninput="save()" style="width:56px;margin:0;text-align:center">
+        </div>
+        <div style="display:flex;gap:6px;align-items:center">
+          <input class="char-inp sm" id="c-bg" placeholder="Background" value="" oninput="save()" style="flex:1;margin:0">
+          <div class="lv-stepper">
+            <button class="lv-btn" onclick="adjLv(-1)">−</button>
+            <span class="lv-val">Lv<span id="lv-disp">3</span></span>
+            <button class="lv-btn" onclick="adjLv(+1)">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <input type="file" id="img-input" accept="image/*" style="display:none" onchange="loadImg(event)">
+    <!-- Primal Order -->
+    <div class="lbl mt10" id="lbl-order">PRIMAL ORDER</div>
+    <div class="choice-row">
+      <button class="choice-btn sel" id="po-mag" onclick="setPrimalOrder('magician')">
+        🔮 Magician<br><span style="font-size:10px;font-weight:400">Cantrip extra · WIS a Arcana/Nature</span>
+      </button>
+      <button class="choice-btn" id="po-war" onclick="setPrimalOrder('warden')">
+        ⚔️ Warden<br><span style="font-size:10px;font-weight:400">Martial weapons · Medium armor</span>
+      </button>
+    </div>
+    <!-- Elemental Fury (lv7+) -->
+    <div id="fury-wrap" style="display:none">
+      <div class="lbl mt10" id="lbl-fury">ELEMENTAL FURY (Lv 7)</div>
+      <div class="choice-row">
+        <button class="choice-btn sel" id="ef-pot" onclick="setFury('potent')">
+          ✨ Potent Spellcasting<br><span style="font-size:10px;font-weight:400">+WIS als cantrips</span>
+        </button>
+        <button class="choice-btn" id="ef-pri" onclick="setFury('primal')">
+          🐾 Primal Strike<br><span style="font-size:10px;font-weight:400">+1d8 elemental en atac</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-hd open" onclick="toggleSec('stats',this)">
+    <img src="../icons/stats.png" alt="">
+    <span class="sec-lbl" id="lbl-stats">Estadístiques</span>
+    <span class="chev">▼</span>
+  </div>
+  <div class="sec-sep"></div>
+  <div class="sec-body open" id="sec-stats">
+    <div class="stat-grid" id="stat-grid"></div>
+    <div class="lbl" style="margin:8px 0 5px" id="lbl-derived">VALORS DERIVATS</div>
+    <div class="der-grid" id="der-grid"></div>
+    <div class="der-grid" style="margin-top:6px" id="der-grid2"></div>
+  </div>
+
+  <div class="sec-hd" onclick="toggleSec('saves',this)">
+    <img src="../icons/stats.png" alt="">
+    <span class="sec-lbl" id="lbl-saves">Tirades de Salvació</span>
+    <span class="chev">▼</span>
+  </div>
+  <div class="sec-sep"></div>
+  <div class="sec-body" id="sec-saves">
+    <p class="sec-note" id="note-saves">INT i WIS per defecte (Druid).</p>
+    <div id="saves-list"></div>
+  </div>
+
+  <div class="sec-hd" onclick="toggleSec('skills',this)">
+    <img src="../icons/hacker.png" alt="">
+    <span class="sec-lbl" id="lbl-skills">Habilitats</span>
+    <span class="chev">▼</span>
+  </div>
+  <div class="sec-sep"></div>
+  <div class="sec-body" id="sec-skills">
+    <p class="sec-note">⬤ = Competència · <b>E</b> = Expertise (×2 prof)</p>
+    <div id="skills-list"></div>
+  </div>
+
+  <div class="sec-hd" onclick="toggleSec('notes',this)">
+    <img src="../icons/notes.png" alt="">
+    <span class="sec-lbl" id="lbl-notes">Notes</span>
+    <span class="chev">▼</span>
+  </div>
+  <div class="sec-sep"></div>
+  <div class="sec-body" id="sec-notes">
+    <textarea class="notes-ta" id="notes-ta" placeholder="Notes de campanya, equipament, aliances..." oninput="save()"></textarea>
+  </div>
+</div>
+
+<!-- ========== TRACKER ========== -->
+<div class="tab-panel" id="tab-tracker">
+
+  <!-- HP -->
+  <div class="tracker-grid">
+    <div class="tbox full">
+      <div class="tbox-lbl" id="lbl-hp">Punts de Vida</div>
+      <div class="hp-row">
+        <input class="hp-cur" type="number" id="hp-cur" value="20" oninput="updateHPBar();save()">
+        <span class="hp-sep">/</span>
+        <input class="hp-max-inp" type="number" id="hp-max" value="20" oninput="updateHPBar();save()">
+      </div>
+      <div class="hp-bar"><div class="hp-fill" id="hp-fill" style="width:100%"></div></div>
+      <div class="hp-btns">
+        <button class="hp-btn dmg" onclick="adjHP(-1)" id="btn-dmg">− Dany</button>
+        <button class="hp-btn" onclick="adjHP(0)" id="btn-full">Full</button>
+        <button class="hp-btn heal" onclick="adjHP(1)" id="btn-heal">+ Cura</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- WILD SHAPE -->
+  <div class="tbox-lbl" style="margin-bottom:6px" id="lbl-ws-uses">WILD SHAPE · Usos</div>
+  <div class="pips-wrap" id="ws-pips"></div>
+  <p class="pips-sub" id="ws-pips-sub" style="text-align:center;margin-bottom:12px"></p>
+
+  <!-- WILD SHAPE ACTIVE / PICKER -->
+  <div id="ws-active-wrap" style="display:none">
+    <div class="ws-box" id="ws-active-box">
+      <div class="ws-hd">
+        <img src="../icons/bear.png" style="width:22px;height:22px;object-fit:contain;opacity:.8" alt="">
+        <span class="ws-title" id="ws-form-name">Forma Salvatge</span>
+        <span class="ws-cr-badge" id="ws-form-cr">CR 1</span>
+      </div>
+      <div class="ws-stats-row">
+        <div class="ws-stat"><div class="ws-stat-lbl">HP</div><div class="ws-stat-val" id="ws-hp">—</div></div>
+        <div class="ws-stat"><div class="ws-stat-lbl">AC</div><div class="ws-stat-val" id="ws-ac">—</div></div>
+        <div class="ws-stat"><div class="ws-stat-lbl">SPD</div><div class="ws-stat-val" id="ws-spd">—</div></div>
+      </div>
+      <div class="ws-thp-row">
+        <span class="ws-thp-lbl" id="lbl-thp">THP Circle of Moon:</span>
+        <span class="ws-thp-val" id="ws-thp">—</span>
+      </div>
+      <div class="ws-attacks" id="ws-attacks"></div>
+      <button class="ws-exit-btn" onclick="exitWildShape()" id="btn-exit-ws">↩ Sortir de la Forma</button>
+    </div>
+  </div>
+
+  <div id="ws-picker-wrap">
+    <div class="lbl mb10" id="lbl-pick-form">ESCULL UNA FORMA</div>
+    <div class="form-grid" id="form-grid"></div>
+  </div>
+
+  <!-- CONCENTRATION -->
+  <div class="lbl mt10 mb10" id="lbl-conc">CONCENTRACIÓ</div>
+  <div class="conc-box">
+    <div class="conc-dot" id="conc-dot"></div>
+    <span class="conc-label" id="lbl-conc2">Concentrant-se en:</span>
+    <input class="conc-inp" id="conc-inp" placeholder="(cap)" oninput="updateConc();save()">
+    <button onclick="clearConc()" style="border:none;background:none;color:var(--os);font-size:18px;cursor:pointer;padding:0 4px">×</button>
+  </div>
+
+  <!-- REST -->
+  <div class="rest-row">
+    <button class="rest-btn" onclick="shortRest()" id="btn-sr">
+      <img src="../icons/zzz.png" alt="">
+      <span id="lbl-sr">Descans Curt</span>
+    </button>
+    <button class="rest-btn" onclick="longRest()" id="btn-lr">
+      <img src="../icons/moon.png" alt="">
+      <span id="lbl-lr">Descans Llarg</span>
+    </button>
+  </div>
+</div>
+
+<!-- ========== ESPELLS ========== -->
+<div class="tab-panel" id="tab-spells">
+  <div class="subtab-bar">
+    <button class="subtab-btn active" id="stb-slots" onclick="showSubtab('slots')">Ranures</button>
+    <button class="subtab-btn" id="stb-prep" onclick="showSubtab('prep')">Preparats</button>
+    <button class="subtab-btn" id="stb-browse" onclick="showSubtab('browse')">Explorar</button>
+  </div>
+
+  <!-- RANURES -->
+  <div class="subtab-panel active" id="sub-slots">
+    <div id="slot-levels"></div>
+  </div>
+
+  <!-- PREPARATS -->
+  <div class="subtab-panel" id="sub-prep">
+    <div class="spell-count" id="prep-count"></div>
+    <!-- Cantrips -->
+    <div class="lbl mb10" id="lbl-cantrips">CANTRIPS</div>
+    <div id="cantrip-list"></div>
+    <!-- Level spells by level -->
+    <div id="prep-by-level"></div>
+  </div>
+
+  <!-- EXPLORAR -->
+  <div class="subtab-panel" id="sub-browse">
+    <div class="browse-filter">
+      <input class="browse-search" id="browse-search" placeholder="Cerca..." oninput="filterBrowse()">
+      <select id="browse-lv" onchange="filterBrowse()">
+        <option value="">Tots els nivells</option>
+        <option value="0">Cantrips</option>
+        <option value="1">Nv 1</option>
+        <option value="2">Nv 2</option>
+        <option value="3">Nv 3</option>
+        <option value="4">Nv 4</option>
+        <option value="5">Nv 5</option>
+        <option value="6">Nv 6</option>
+        <option value="7">Nv 7</option>
+        <option value="8">Nv 8</option>
+        <option value="9">Nv 9</option>
+      </select>
+    </div>
+    <div id="browse-list"></div>
+  </div>
+</div>
+
+<!-- ========== BUILD ========== -->
+<div class="tab-panel" id="tab-build">
+  <div id="build-features"></div>
+</div>
+
+<!-- ========== DESATS ========== -->
+<div class="tab-panel" id="tab-saved">
+  <button class="save-now-btn" onclick="saveSnapshot()">
+    <img src="../icons/saved.png" alt="">
+    <span id="lbl-save-now">Desa Estat Actual</span>
+  </button>
+  <div id="saved-list"></div>
+</div>
+
+</div><!-- /scroll -->
+
+<!-- TAB BAR -->
+<div class="tabbar">
+  <button class="tab-btn active" id="tbtn-character" onclick="showTab('character')">
+    <img src="../icons/druid.png" alt=""><span id="tl-char">Personatge</span>
+  </button>
+  <button class="tab-btn" id="tbtn-tracker" onclick="showTab('tracker')">
+    <img src="../icons/bear.png" alt=""><span id="tl-track">Tracker</span>
+  </button>
+  <button class="tab-btn" id="tbtn-spells" onclick="showTab('spells')">
+    <img src="../icons/storm.png" alt=""><span id="tl-spells">Espells</span>
+  </button>
+  <button class="tab-btn" id="tbtn-build" onclick="showTab('build')">
+    <img src="../icons/classf.png" alt=""><span id="tl-build">Build</span>
+  </button>
+  <button class="tab-btn" id="tbtn-saved" onclick="showTab('saved')">
+    <img src="../icons/saved.png" alt=""><span id="tl-saved">Desats</span>
+  </button>
+</div>
+
+<!-- QR FAB -->
+<button class="qr-fab" onclick="openQRModal()" title="Compartir via QR">
+  <svg viewBox="0 0 24 24"><path d="M3 3h7v7H3zm1 1v5h5V4zm1 1h3v3H5zm9-2h7v7h-7zm1 1v5h5V4zm1 1h3v3h-3zM3 14h7v7H3zm1 1v5h5v-5zm1 1h3v3H5zm9 0h2v2h-2zm2 0h2v2h2v2h-2v2h2v2h-2v-2h-2v2h-2v-2h2v-2h-2v-2h2zm-2 4h2v2h-2zm4 0h2v2h-2z"/></svg>
+</button>
+<div class="qr-overlay" id="qr-overlay" onclick="if(event.target===this)closeQRModal()">
+  <div class="qr-sheet">
+    <div class="qr-drag"></div>
+    <div class="qr-title" id="qr-title">Compartir personatge</div>
+    <div class="qr-sub">QR per al DM · Vista de lectura</div>
+    <div class="qr-canvas-wrap" id="qr-canvas-wrap"></div>
+    <div class="qr-url" id="qr-url-text"></div>
+    <button class="qr-copy-btn" onclick="copyQRUrl()" id="btn-copy-url">📋 Copia l'URL</button>
+    <button class="qr-close-btn" onclick="closeQRModal()" id="btn-close-qr">Tanca</button>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+// ============================================================
+// DATA
+// ============================================================
+const SLOT_TABLE=[
+  [0,0,0,0,0,0,0,0,0],
+  [2,0,0,0,0,0,0,0,0],
+  [3,0,0,0,0,0,0,0,0],
+  [4,2,0,0,0,0,0,0,0],
+  [4,3,0,0,0,0,0,0,0],
+  [4,3,2,0,0,0,0,0,0],
+  [4,3,3,0,0,0,0,0,0],
+  [4,3,3,1,0,0,0,0,0],
+  [4,3,3,2,0,0,0,0,0],
+  [4,3,3,3,1,0,0,0,0],
+  [4,3,3,3,2,0,0,0,0],
+  [4,3,3,3,2,1,0,0,0],
+  [4,3,3,3,2,1,0,0,0],
+  [4,3,3,3,2,1,1,0,0],
+  [4,3,3,3,2,1,1,0,0],
+  [4,3,3,3,2,1,1,1,0],
+  [4,3,3,3,2,1,1,1,0],
+  [4,3,3,3,2,1,1,1,1],
+  [4,3,3,3,3,1,1,1,1],
+  [4,3,3,3,3,2,1,1,1],
+  [4,3,3,3,3,2,2,1,1],
+];
+
+function wsUsesForLevel(lv){
+  if(lv>=14)return 5;
+  if(lv>=10)return 4;
+  if(lv>=6)return 3;
+  return 2;
+}
+
+const BEAST_FORMS=[
+  {n:'Rat',cr:'0',hp:2,ac:10,spd:'20 ft',atk:'Bite: +0, 1 Piercing'},
+  {n:'Spider',cr:'0',hp:2,ac:12,spd:'20 ft / climb 20',atk:'Bite: +2, 1 Piercing + poison'},
+  {n:'Cat',cr:'0',hp:2,ac:12,spd:'40 ft',atk:'Claws: +0, 1 Slashing'},
+  {n:'Wolf',cr:'1/4',hp:11,ac:13,spd:'40 ft',atk:'Bite: +4, 2d4+2 Piercing, Knock prone STR DC13'},
+  {n:'Panther',cr:'1/4',hp:13,ac:12,spd:'50 ft',atk:'Bite: +4, 1d6+2 / Claw: +4, 1d4+2'},
+  {n:'Black Bear',cr:'1/2',hp:19,ac:11,spd:'40 ft',atk:'Multiattack: Bite+Claws · Bite +3 2d6+1 · Claws +3 2d4+1'},
+  {n:'Crocodile',cr:'1/2',hp:19,ac:12,spd:'20 ft / swim 30',atk:'Bite: +4, 1d10+2 Piercing, grapple DC12'},
+  {n:'Brown Bear',cr:'1',hp:34,ac:11,spd:'40 ft / climb 30',atk:'Multiattack · Bite +5 2d6+4 · Claws +5 2d6+4'},
+  {n:'Dire Wolf',cr:'1',hp:37,ac:14,spd:'50 ft',atk:'Bite: +5, 2d6+3 Piercing, Knock prone STR DC13'},
+  {n:'Tiger',cr:'1',hp:37,ac:12,spd:'40 ft',atk:'Bite +5 1d10+3 · Claw +5 1d6+3, pounce DC13'},
+  {n:'Giant Eagle',cr:'1',hp:26,ac:13,spd:'10 ft / fly 80',atk:'Talons +5 2d6+3 · Beak +5 1d6+3'},
+  {n:'Polar Bear',cr:'2',hp:42,ac:12,spd:'40 ft / swim 30',atk:'Multiattack · Bite +7 1d8+5 · Claws +7 2d6+5'},
+  {n:'Rhinoceros',cr:'2',hp:45,ac:11,spd:'40 ft',atk:'Gore +7 2d8+5, Charge if 20ft: +9 4d8+5 STR DC15'},
+  {n:'Saber-Toothed Tiger',cr:'2',hp:52,ac:12,spd:'40 ft',atk:'Bite +6 1d10+4 · Claw +6 2d6+4'},
+  {n:'Giant Scorpion',cr:'3',hp:52,ac:15,spd:'40 ft',atk:'Claw×2 +4 1d8+2 Grapple · Sting +4 1d10+2 + 4d10 poison'},
+  {n:'Elephant',cr:'4',hp:76,ac:12,spd:'40 ft',atk:'Gore +8 3d6+6 · Stomp +8 3d6+6 (prone target only)'},
+];
+
+// Always-prepared spells (Circle of Moon) by min druid level
+const ALWAYS_PREP=[
+  {n:'Cure Wounds',lv:1,minLv:3},
+  {n:'Moonbeam',lv:2,minLv:3},
+  {n:'Starry Wisp',lv:0,minLv:3},
+  {n:'Conjure Animals',lv:3,minLv:5},
+  {n:'Fount of Moonlight',lv:4,minLv:7},
+  {n:'Mass Cure Wounds',lv:5,minLv:9},
+];
+
+const CANTRIPS=[
+  {n:"Can't Trip",sc:'Abj',rng:'30 ft',src:'HGtMH'},
+  {n:'Concussion',sc:'Evoc',rng:'60 ft',src:'HGtMH'},
+  {n:'Control Flames',sc:'Trans',rng:'60 ft',src:'XGE'},
+  {n:'Create Bonfire',sc:'Conj',rng:'60 ft',src:'XGE'},
+  {n:'Druidcraft',sc:'Trans',rng:'30 ft',src:'PHB\'24'},
+  {n:'Elementalism',sc:'Trans',rng:'30 ft',src:'PHB\'24'},
+  {n:'Frostbite',sc:'Evoc',rng:'60 ft',src:'XGE'},
+  {n:'Guidance',sc:'Divin',rng:'Touch',src:'PHB\'24'},
+  {n:'Gust',sc:'Trans',rng:'30 ft',src:'XGE'},
+  {n:'Infestation',sc:'Conj',rng:'30 ft',src:'XGE'},
+  {n:'Magic Stone',sc:'Trans',rng:'Touch',src:'XGE'},
+  {n:'Mending',sc:'Trans',rng:'Touch',src:'PHB\'24'},
+  {n:'Mold Earth',sc:'Trans',rng:'30 ft',src:'XGE'},
+  {n:'Poison Spray',sc:'Necro',rng:'30 ft',src:'PHB\'24'},
+  {n:'Primal Savagery',sc:'Trans',rng:'Self',src:'XGE'},
+  {n:'Produce Flame',sc:'Conj',rng:'Self',src:'PHB\'24'},
+  {n:'Resistance',sc:'Abj',rng:'Touch',src:'PHB\'24'},
+  {n:'Shape Water',sc:'Trans',rng:'30 ft',src:'XGE'},
+  {n:'Shillelagh',sc:'Trans',rng:'Self',src:'PHB\'24'},
+  {n:'Spare the Dying',sc:'Necro',rng:'15 ft',src:'PHB\'24'},
+  {n:'Starry Wisp',sc:'Evoc',rng:'60 ft',src:'PHB\'24'},
+  {n:'Thorn Whip',sc:'Trans',rng:'30 ft',src:'PHB\'24'},
+  {n:'Thunderclap',sc:'Evoc',rng:'Self',src:'PHB\'24'},
+];
+
+const SPELLS_LV1=[
+  {n:'Absorb Elements',sc:'Abj',rng:'Self',src:'XGE'},
+  {n:'Animal Friendship',sc:'Ench',rng:'30 ft',src:'PHB\'24'},
+  {n:'Charm Person',sc:'Ench',rng:'30 ft',src:'PHB\'24'},
+  {n:'Create or Destroy Water',sc:'Trans',rng:'30 ft',src:'PHB\'24'},
+  {n:'Cure Wounds',sc:'Abj',rng:'Touch',src:'PHB\'24'},
+  {n:'Detect Magic',sc:'Divin',rng:'Self',src:'PHB\'24'},
+  {n:'Detect Poison and Disease',sc:'Divin',rng:'Self',src:'PHB\'24'},
+  {n:'Earth Tremor',sc:'Evoc',rng:'10 ft',src:'XGE'},
+  {n:'Entangle',sc:'Conj',rng:'90 ft',src:'PHB\'24'},
+  {n:'Faerie Fire',sc:'Evoc',rng:'60 ft',src:'PHB\'24'},
+  {n:'Fog Cloud',sc:'Conj',rng:'120 ft',src:'PHB\'24'},
+  {n:'Goodberry',sc:'Conj',rng:'Touch',src:'PHB\'24'},
+  {n:'Healing Word',sc:'Abj',rng:'60 ft',src:'PHB\'24'},
+  {n:'Ice Knife',sc:'Conj',rng:'60 ft',src:'PHB\'24'},
+  {n:'Jump',sc:'Trans',rng:'Touch',src:'PHB\'24'},
+  {n:'Longstrider',sc:'Trans',rng:'Touch',src:'PHB\'24'},
+  {n:'Protection from Evil and Good',sc:'Abj',rng:'Touch',src:'PHB\'24'},
+  {n:'Purify Food and Drink',sc:'Trans',rng:'10 ft',src:'PHB\'24'},
+  {n:'Snare',sc:'Abj',rng:'Touch',src:'XGE'},
+  {n:'Speak with Animals',sc:'Divin',rng:'Self',src:'PHB\'24'},
+  {n:'Thunderwave',sc:'Evoc',rng:'Self',src:'PHB\'24'},
+];
+
+const SPELLS_LV2=[
+  {n:'Aid',sc:'Abj',rng:'30 ft',src:'PHB\'24'},
+  {n:'Animal Messenger',sc:'Ench',rng:'30 ft',src:'PHB\'24'},
+  {n:'Augury',sc:'Divin',rng:'Self',src:'PHB\'24'},
+  {n:'Barkskin',sc:'Trans',rng:'Touch',src:'PHB\'24'},
+  {n:'Beast Sense',sc:'Divin',rng:'Touch',src:'PHB\'24'},
+  {n:'Darkvision',sc:'Trans',rng:'Touch',src:'PHB\'24'},
+  {n:'Dust Devil',sc:'Conj',rng:'60 ft',src:'XGE'},
+  {n:'Earthbind',sc:'Trans',rng:'300 ft',src:'XGE'},
+  {n:'Enhance Ability',sc:'Trans',rng:'Touch',src:'PHB\'24'},
+  {n:'Enlarge/Reduce',sc:'Trans',rng:'30 ft',src:'PHB\'24'},
+  {n:'Find Traps',sc:'Divin',rng:'120 ft',src:'PHB\'24'},
+  {n:'Flame Blade',sc:'Evoc',rng:'Self',src:'PHB\'24'},
+  {n:'Flaming Sphere',sc:'Conj',rng:'60 ft',src:'PHB\'24'},
+  {n:'Gust of Wind',sc:'Evoc',rng:'Self',src:'PHB\'24'},
+  {n:'Healing Spirit',sc:'Conj',rng:'60 ft',src:'XGE'},
+  {n:'Heat Metal',sc:'Trans',rng:'60 ft',src:'PHB\'24'},
+  {n:'Hold Person',sc:'Ench',rng:'60 ft',src:'PHB\'24'},
+  {n:'Lesser Restoration',sc:'Abj',rng:'Touch',src:'PHB\'24'},
+  {n:'Locate Animals or Plants',sc:'Divin',rng:'Self',src:'PHB\'24'},
+  {n:'Locate Object',sc:'Divin',rng:'Self',src:'PHB\'24'},
+  {n:'Moonbeam',sc:'Evoc',rng:'120 ft',src:'PHB\'24'},
+  {n:'Pass without Trace',sc:'Abj',rng:'Self',src:'PHB\'24'},
+  {n:'Protection from Poison',sc:'Abj',rng:'Touch',src:'PHB\'24'},
+  {n:'Skywrite',sc:'Trans',rng:'Sight',src:'XGE'},
+  {n:'Spike Growth',sc:'Trans',rng:'150 ft',src:'PHB\'24'},
+  {n:'Summon Beast',sc:'Conj',rng:'90 ft',src:'PHB\'24'},
+  {n:'Warding Wind',sc:'Evoc',rng:'Self',src:'XGE'},
+  {n:'Wither and Bloom',sc:'Necro',rng:'60 ft',src:'SCC'},
+];
+
+const SPELLS_LV3=[
+  {n:'Aura of Vitality',sc:'Abj',rng:'Self',src:'PHB\'24'},
+  {n:'Call Lightning',sc:'Conj',rng:'120 ft',src:'PHB\'24'},
+  {n:'Conjure Animals',sc:'Conj',rng:'60 ft',src:'PHB\'24'},
+  {n:'Daylight',sc:'Evoc',rng:'60 ft',src:'PHB\'24'},
+  {n:'Dispel Magic',sc:'Abj',rng:'120 ft',src:'PHB\'24'},
+  {n:'Elemental Weapon',sc:'Trans',rng:'Touch',src:'PHB\'24'},
+  {n:'Erupting Earth',sc:'Trans',rng:'120 ft',src:'XGE'},
+  {n:'Feign Death',sc:'Necro',rng:'Touch',src:'PHB\'24'},
+  {n:'Flame Arrows',sc:'Trans',rng:'Touch',src:'XGE'},
+  {n:'Meld into Stone',sc:'Trans',rng:'Touch',src:'PHB\'24'},
+  {n:'Plant Growth',sc:'Trans',rng:'150 ft',src:'PHB\'24'},
+  {n:'Protection from Energy',sc:'Abj',rng:'Touch',src:'PHB\'24'},
+  {n:'Revivify',sc:'Necro',rng:'Touch',src:'PHB\'24'},
+  {n:'Sleet Storm',sc:'Conj',rng:'150 ft',src:'PHB\'24'},
+  {n:'Speak with Plants',sc:'Trans',rng:'Self',src:'PHB\'24'},
+  {n:'Summon Fey',sc:'Conj',rng:'90 ft',src:'PHB\'24'},
+  {n:'Tidal Wave',sc:'Conj',rng:'120 ft',src:'XGE'},
+  {n:'Wall of Water',sc:'Evoc',rng:'60 ft',src:'XGE'},
+  {n:'Water Breathing',sc:'Trans',rng:'30 ft',src:'PHB\'24'},
+  {n:'Water Walk',sc:'Trans',rng:'30 ft',src:'PHB\'24'},
+  {n:'Wind Wall',sc:'Evoc',rng:'120 ft',src:'PHB\'24'},
+];
+
+const SPELLS_LV4=[
+  {n:'Blight',sc:'Necro',rng:'30 ft',src:'PHB\'24'},
+  {n:'Charm Monster',sc:'Ench',rng:'30 ft',src:'PHB\'24'},
+  {n:'Confusion',sc:'Ench',rng:'90 ft',src:'PHB\'24'},
+  {n:'Conjure Minor Elementals',sc:'Conj',rng:'Self',src:'PHB\'24'},
+  {n:'Conjure Woodland Beings',sc:'Conj',rng:'Self',src:'PHB\'24'},
+  {n:'Control Water',sc:'Trans',rng:'300 ft',src:'PHB\'24'},
+  {n:'Divination',sc:'Divin',rng:'Self',src:'PHB\'24'},
+  {n:'Dominate Beast',sc:'Ench',rng:'60 ft',src:'PHB\'24'},
+  {n:'Elemental Bane',sc:'Trans',rng:'90 ft',src:'XGE'},
+  {n:'Fire Shield',sc:'Evoc',rng:'Self',src:'PHB\'24'},
+  {n:'Fount of Moonlight',sc:'Evoc',rng:'Self',src:'PHB\'24'},
+  {n:'Freedom of Movement',sc:'Abj',rng:'Touch',src:'PHB\'24'},
+  {n:'Giant Insect',sc:'Conj',rng:'60 ft',src:'PHB\'24'},
+  {n:'Grasping Vine',sc:'Conj',rng:'60 ft',src:'PHB\'24'},
+  {n:'Guardian of Nature',sc:'Trans',rng:'Self',src:'XGE'},
+  {n:'Hallucinatory Terrain',sc:'Illu',rng:'300 ft',src:'PHB\'24'},
+  {n:'Ice Storm',sc:'Evoc',rng:'300 ft',src:'PHB\'24'},
+  {n:'Locate Creature',sc:'Divin',rng:'Self',src:'PHB\'24'},
+  {n:'Polymorph',sc:'Trans',rng:'60 ft',src:'PHB\'24'},
+  {n:'Stone Shape',sc:'Trans',rng:'Touch',src:'PHB\'24'},
+  {n:'Stoneskin',sc:'Trans',rng:'Touch',src:'PHB\'24'},
+  {n:'Summon Elemental',sc:'Conj',rng:'90 ft',src:'PHB\'24'},
+  {n:'Wall of Fire',sc:'Evoc',rng:'120 ft',src:'PHB\'24'},
+  {n:'Watery Sphere',sc:'Conj',rng:'90 ft',src:'XGE'},
+];
+
+const SPELLS_LV5=[
+  {n:'Antilife Shell',sc:'Abj',rng:'Self',src:'PHB\'24'},
+  {n:'Awaken',sc:'Trans',rng:'Touch',src:'PHB\'24'},
+  {n:'Commune with Nature',sc:'Divin',rng:'Self',src:'PHB\'24'},
+  {n:'Cone of Cold',sc:'Evoc',rng:'Self',src:'PHB\'24'},
+  {n:'Conjure Elemental',sc:'Conj',rng:'60 ft',src:'PHB\'24'},
+  {n:'Contagion',sc:'Necro',rng:'Touch',src:'PHB\'24'},
+  {n:'Control Winds',sc:'Trans',rng:'300 ft',src:'XGE'},
+  {n:'Geas',sc:'Ench',rng:'60 ft',src:'PHB\'24'},
+  {n:'Greater Restoration',sc:'Abj',rng:'Touch',src:'PHB\'24'},
+  {n:'Insect Plague',sc:'Conj',rng:'300 ft',src:'PHB\'24'},
+  {n:'Maelstrom',sc:'Evoc',rng:'120 ft',src:'XGE'},
+  {n:'Mass Cure Wounds',sc:'Abj',rng:'60 ft',src:'PHB\'24'},
+  {n:'Planar Binding',sc:'Abj',rng:'60 ft',src:'PHB\'24'},
+  {n:'Reincarnate',sc:'Necro',rng:'Touch',src:'PHB\'24'},
+  {n:'Scrying',sc:'Divin',rng:'Self',src:'PHB\'24'},
+  {n:'Transmute Rock',sc:'Trans',rng:'120 ft',src:'XGE'},
+  {n:'Tree Stride',sc:'Conj',rng:'Self',src:'PHB\'24'},
+  {n:'Wall of Stone',sc:'Evoc',rng:'120 ft',src:'PHB\'24'},
+  {n:'Wrath of Nature',sc:'Evoc',rng:'120 ft',src:'XGE'},
+];
+
+const SPELLS_LV6=[
+  {n:'Bones of the Earth',sc:'Trans',rng:'120 ft',src:'XGE'},
+  {n:'Conjure Fey',sc:'Conj',rng:'60 ft',src:'PHB\'24'},
+  {n:'Druid Grove',sc:'Abj',rng:'Touch',src:'XGE'},
+  {n:'Find the Path',sc:'Divin',rng:'Self',src:'PHB\'24'},
+  {n:'Flesh to Stone',sc:'Trans',rng:'60 ft',src:'PHB\'24'},
+  {n:'Heal',sc:'Abj',rng:'60 ft',src:'PHB\'24'},
+  {n:"Heroes' Feast",sc:'Conj',rng:'Self',src:'PHB\'24'},
+  {n:'Investiture of Flame',sc:'Trans',rng:'Self',src:'XGE'},
+  {n:'Investiture of Ice',sc:'Trans',rng:'Self',src:'XGE'},
+  {n:'Investiture of Stone',sc:'Trans',rng:'Self',src:'XGE'},
+  {n:'Investiture of Wind',sc:'Trans',rng:'Self',src:'XGE'},
+  {n:'Move Earth',sc:'Trans',rng:'120 ft',src:'PHB\'24'},
+  {n:'Primordial Ward',sc:'Abj',rng:'Self',src:'XGE'},
+  {n:'Sunbeam',sc:'Evoc',rng:'Self',src:'PHB\'24'},
+  {n:'Transport via Plants',sc:'Conj',rng:'10 ft',src:'PHB\'24'},
+  {n:'Wall of Thorns',sc:'Conj',rng:'120 ft',src:'PHB\'24'},
+  {n:'Wind Walk',sc:'Trans',rng:'30 ft',src:'PHB\'24'},
+];
+
+const SPELLS_LV7=[
+  {n:'Draconic Transformation',sc:'Trans',rng:'Self',src:'FTD'},
+  {n:'Fire Storm',sc:'Evoc',rng:'150 ft',src:'PHB\'24'},
+  {n:'Mirage Arcane',sc:'Illu',rng:'Sight',src:'PHB\'24'},
+  {n:'Plane Shift',sc:'Conj',rng:'Touch',src:'PHB\'24'},
+  {n:'Regenerate',sc:'Trans',rng:'Touch',src:'PHB\'24'},
+  {n:'Reverse Gravity',sc:'Trans',rng:'100 ft',src:'PHB\'24'},
+  {n:'Symbol',sc:'Abj',rng:'Touch',src:'PHB\'24'},
+  {n:'Whirlwind',sc:'Evoc',rng:'300 ft',src:'XGE'},
+];
+
+const SPELLS_LV8=[
+  {n:'Animal Shapes',sc:'Trans',rng:'30 ft',src:'PHB\'24'},
+  {n:'Antipathy/Sympathy',sc:'Ench',rng:'60 ft',src:'PHB\'24'},
+  {n:'Befuddlement',sc:'Ench',rng:'150 ft',src:'PHB\'24'},
+  {n:'Control Weather',sc:'Trans',rng:'Self',src:'PHB\'24'},
+  {n:'Earthquake',sc:'Trans',rng:'500 ft',src:'PHB\'24'},
+  {n:'Incendiary Cloud',sc:'Conj',rng:'150 ft',src:'PHB\'24'},
+  {n:'Sunburst',sc:'Evoc',rng:'150 ft',src:'PHB\'24'},
+  {n:'Tsunami',sc:'Conj',rng:'1 mile',src:'PHB\'24'},
+];
+
+const SPELLS_LV9=[
+  {n:'Foresight',sc:'Divin',rng:'Touch',src:'PHB\'24'},
+  {n:'Shapechange',sc:'Trans',rng:'Self',src:'PHB\'24'},
+  {n:'Storm of Vengeance',sc:'Conj',rng:'1 mile',src:'PHB\'24'},
+  {n:'True Resurrection',sc:'Necro',rng:'Touch',src:'PHB\'24'},
+];
+
+const ALL_SPELLS_BY_LV=[CANTRIPS,SPELLS_LV1,SPELLS_LV2,SPELLS_LV3,SPELLS_LV4,SPELLS_LV5,SPELLS_LV6,SPELLS_LV7,SPELLS_LV8,SPELLS_LV9];
+
+const CLASS_FEATURES=[
+  {lv:1,name:'Druidic',sub:false,desc:'Coneixes el llenguatge secret dels Druides. Sempre tens preparada Speak with Animals.'},
+  {lv:1,name:'Primal Order',sub:false,desc:'Magician: cantrip extra + WIS a Arcana/Nature. Warden: armes marcials + armadura mitjana.'},
+  {lv:1,name:'Spellcasting',sub:false,desc:'Saps 2 cantrips (4 a Lv4, 5 a Lv10). Prepares WIS mod + Druid level espells. DC = 8+prof+WIS. Atac = prof+WIS.'},
+  {lv:2,name:'Wild Shape',sub:false,desc:'Acció Bonus: transforma\'t en una bèstia. Durada = Druid lv ÷ 2 hores. 2 usos (Lv6→3, Lv10→4, Lv14→5). Recuperes 1 us per Descans Curt, tots per Descans Llarg.'},
+  {lv:2,name:'Wild Companion',sub:false,desc:'Pots gastar un espai d\'espell o un us de Wild Shape per llançar Find Familiar sense components. El familiar és Fey i desapareix al Descans Llarg.'},
+  {lv:3,name:'Circle of the Moon Spells',sub:true,desc:'Sempre preparades: Lv3 → Cure Wounds, Moonbeam, Starry Wisp | Lv5 → Conjure Animals | Lv7 → Fount of Moonlight | Lv9 → Mass Cure Wounds. Pots llançar-les en forma salvatge.'},
+  {lv:3,name:'Circle Forms',sub:true,desc:'CR màxim = Druida lv ÷ 3. AC = màx(bèstia AC, 13 + WIS mod). THP = Druida lv × 3.'},
+  {lv:4,name:'Ability Score Improvement',sub:false,desc:'Guanyes un feat o +2/+1/+1 a puntuacions d\'habilitat. (Repetit a Lv8, 12, 16)'},
+  {lv:5,name:'Wild Resurgence',sub:false,desc:'Un cop per torn: si no tens usos de Wild Shape, pots gastar un espai d\'espell per obtenir-ne 1. O: gasta 1 us de Wild Shape per obtenir un espai d\'espell de Lv1 (1 cop per Descans Llarg).'},
+  {lv:6,name:'Improved Circle Forms',sub:true,desc:'Lunar Radiance: els teus atacs en forma salvatge poden fer dany Radiant en lloc del seu tipus normal.\nIncreased Toughness: afegeix WIS mod a les tirades de salvació de CON.'},
+  {lv:7,name:'Elemental Fury',sub:false,desc:'Potent Spellcasting: +WIS als danys dels cantrips de Druida.\nPrimal Strike: un cop per torn, +1d8 Cold/Fire/Lightning/Thunder en un atac.'},
+  {lv:10,name:'Moonlight Step',sub:true,desc:'Acció Bonus: teleporta\'t fins a 30 peus a un espai visible + Avantatge al pròxim atac. Usos = WIS mod (mín 1). Recuperes tots al Descans Llarg. Pots recuperar usos gastant espais d\'espell de Lv2+.'},
+  {lv:14,name:'Lunar Form',sub:true,desc:'Improved Lunar Radiance: un cop per torn, +2d10 Radiant en un atac en forma salvatge.\nShared Moonlight: quan uses Moonlight Step, pots teleportar també una criatura voluntària dins de 10 ft.'},
+  {lv:15,name:'Improved Elemental Fury',sub:false,desc:'Potent Spellcasting: +300 ft de rang als cantrips amb rang ≥ 10 ft.\nPrimal Strike: el dany extra puja a 2d8.'},
+  {lv:18,name:'Beast Spells',sub:false,desc:'En forma salvatge pots llançar espells (excepte els que tenen component Material amb cost o que consumeixen el component).'},
+  {lv:19,name:'Epic Boon',sub:false,desc:'Feat épic. Recomanat: Boon of Dimensional Travel.'},
+  {lv:20,name:'Archdruid',sub:false,desc:'Evergreen Wild Shape: recuperes 1 us de Wild Shape en cada Initiative.\nNature Magician: converteix usos de Wild Shape en espais d\'espell (2 usos = 1 espai Lv2).\nLongevity: per cada 10 anys, el teu cos envelleix 1 any.'},
+];
+
+const LANGS={
+  cat:{
+    basic:'Informació bàsica',stats:'Estadístiques',saves:'Tirades de Salvació',
+    skills:'Habilitats',notes:'Notes',derived:'Valors Derivats',
+    hp:'Punts de Vida',ws:'Wild Shape · Usos',conc:'Concentració',
+    sr:'Descans Curt',lr:'Descans Llarg',pickForm:'Escull una Forma',
+    thp:'THP Circle of Moon:',exitWs:'↩ Sortir de la Forma',
+    slots:'Ranures',prep:'Preparats',browse:'Explorar',
+    saveNow:'Desa Estat Actual',order:'Primal Order',
+    fury:'Elemental Fury (Lv 7)',noSaved:'Cap desat encara.',
+    prepCount:(n,mx)=>`${n} / ${mx} espells preparats`,
+    cantrips:'Cantrips',conc2:'Concentrant-se en:',
+  },
+  esp:{
+    basic:'Información básica',stats:'Estadísticas',saves:'Tiradas de Salvación',
+    skills:'Habilidades',notes:'Notas',derived:'Valores Derivados',
+    hp:'Puntos de Vida',ws:'Wild Shape · Usos',conc:'Concentración',
+    sr:'Descanso Corto',lr:'Descanso Largo',pickForm:'Elige una Forma',
+    thp:'THP Circle of Moon:',exitWs:'↩ Salir de la Forma',
+    slots:'Ranuras',prep:'Preparados',browse:'Explorar',
+    saveNow:'Guardar Estado Actual',order:'Primal Order',
+    fury:'Elemental Fury (Nv 7)',noSaved:'Nada guardado aún.',
+    prepCount:(n,mx)=>`${n} / ${mx} hechizos preparados`,
+    cantrips:'Cantrips',conc2:'Concentrándose en:',
+  },
+  eng:{
+    basic:'Basic Info',stats:'Statistics',saves:'Saving Throws',
+    skills:'Skills',notes:'Notes',derived:'Derived Values',
+    hp:'Hit Points',ws:'Wild Shape · Uses',conc:'Concentration',
+    sr:'Short Rest',lr:'Long Rest',pickForm:'Choose a Form',
+    thp:'THP Circle of Moon:',exitWs:'↩ Exit Wild Shape',
+    slots:'Slots',prep:'Prepared',browse:'Browse',
+    saveNow:'Save Current State',order:'Primal Order',
+    fury:'Elemental Fury (Lv 7)',noSaved:'Nothing saved yet.',
+    prepCount:(n,mx)=>`${n} / ${mx} spells prepared`,
+    cantrips:'Cantrips',conc2:'Concentrating on:',
+  }
+};
+
+const SKILLS=[
+  {k:'acr',n:'Acrobatics',st:'dex'},{k:'ani',n:'Animal Handling',st:'wis'},
+  {k:'arc',n:'Arcana',st:'int'},{k:'ath',n:'Athletics',st:'str'},
+  {k:'dec',n:'Deception',st:'cha'},{k:'his',n:'History',st:'int'},
+  {k:'ins',n:'Insight',st:'wis'},{k:'int_sk',n:'Intimidation',st:'cha'},
+  {k:'inv',n:'Investigation',st:'int'},{k:'med',n:'Medicine',st:'wis'},
+  {k:'nat',n:'Nature',st:'int'},{k:'prc',n:'Perception',st:'wis'},
+  {k:'prf',n:'Performance',st:'cha'},{k:'per',n:'Persuasion',st:'cha'},
+  {k:'rel',n:'Religion',st:'int'},{k:'slh',n:'Sleight of Hand',st:'dex'},
+  {k:'ste',n:'Stealth',st:'dex'},{k:'sur',n:'Survival',st:'wis'},
+];
+const STAT_KEYS=['str','dex','con','int','wis','cha'];
+const STAT_NAMES={str:'STR',dex:'DEX',con:'CON',int:'INT',wis:'WIS',cha:'CHA'};
+
+// ============================================================
+// STATE
+// ============================================================
+let lang='cat';
+let dark=false;
+let lv=3;
+let statVals={str:10,dex:14,con:14,int:10,wis:18,cha:10};
+let curHp=-1;
+let manualMax=-1;
+let skillProf=new Set();
+let skillExp=new Set();
+let selSaves=new Set(['int','wis']);
+let primalOrder='magician';
+let furyChoice='potent';
+let prepSpells=new Set(); // keys: "lv:name"
+let prepCantrips=new Set(); // names
+let usedSlots=[0,0,0,0,0,0,0,0,0];
+let wsUsed=0;
+let activeForm=null; // beast form object or null
+let concSpell='';
+let notes='';
+let saves=[];
+
+// ============================================================
+// HELPERS
+// ============================================================
+const g=id=>document.getElementById(id);
+const mod=v=>Math.floor((v-10)/2);
+const profBonus=()=>{
+  if(lv<=4)return 2;if(lv<=8)return 3;if(lv<=12)return 4;if(lv<=16)return 5;return 6;
+};
+const fmtMod=v=>(v>=0?'+':'')+v;
+const spellDC=()=>8+profBonus()+mod(statVals.wis);
+const spellAtk=()=>profBonus()+mod(statVals.wis);
+const maxHP=()=>{
+  if(manualMax>0)return manualMax;
+  return Math.max(1,8+mod(statVals.con))*lv;
+};
+const wsMaxCR=()=>Math.floor(lv/3);
+const wsMaxCRstr=()=>{const c=wsMaxCR();if(c===0)return'1/4';if(c<1)return'1/4';return String(c);};
+const preparedLimit=()=>lv+mod(statVals.wis);
+const alwaysPreparedNames=()=>ALWAYS_PREP.filter(a=>lv>=a.minLv).map(a=>a.n);
+
+function crToNum(cr){
+  if(cr==='0')return 0;if(cr==='1/8')return.125;if(cr==='1/4')return.25;if(cr==='1/2')return.5;
+  return parseFloat(cr)||0;
+}
+function wsAC(form){
+  return Math.max(form.ac,13+mod(statVals.wis));
+}
+
+function spellKey(lv,name){return lv+':'+name;}
+
+// ============================================================
+// SAVE / LOAD
+// ============================================================
+function buildState(){
+  return{
+    lv,
+    st:[statVals.str,statVals.dex,statVals.con,statVals.int,statVals.wis,statVals.cha],
+    name:g('c-name')?.value||'',
+    race:g('c-race')?.value||'',
+    age:g('c-age')?.value||'',
+    bg:g('c-bg')?.value||'',
+    hp:curHp,mhp:manualMax,
+    sp:[...skillProf],se:[...skillExp],
+    sv:[...selSaves],
+    po:primalOrder,fu:furyChoice,
+    pp:[...prepSpells],pc:[...prepCantrips],
+    us:usedSlots,wu:wsUsed,
+    af:activeForm?activeForm.n:null,
+    cs:concSpell,
+    notes,
+    avatar:g('avatar-img')?.src||'',
+    dark,lang,
+  };
+}
+function applyState(d){
+  lv=d.lv||3;
+  if(d.st){const[s,dx,c,i,w,ch]=d.st;statVals={str:s,dex:dx,con:c,int:i,wis:w,cha:ch};}
+  if(d.name)g('c-name').value=d.name;
+  if(d.race)g('c-race').value=d.race;
+  if(d.age)g('c-age').value=d.age;
+  if(d.bg)g('c-bg').value=d.bg;
+  curHp=d.hp??-1;manualMax=d.mhp??-1;
+  skillProf=new Set(d.sp||[]);skillExp=new Set(d.se||[]);
+  selSaves=new Set(d.sv||['int','wis']);
+  primalOrder=d.po||'magician';furyChoice=d.fu||'potent';
+  prepSpells=new Set(d.pp||[]);prepCantrips=new Set(d.pc||[]);
+  usedSlots=d.us||[0,0,0,0,0,0,0,0,0];
+  wsUsed=d.wu||0;
+  activeForm=d.af?BEAST_FORMS.find(f=>f.n===d.af)||null:null;
+  concSpell=d.cs||'';
+  notes=d.notes||'';
+  if(d.avatar&&g('avatar-img')){g('avatar-img').src=d.avatar;g('avatar-img').style.display='block';g('avatar-placeholder').style.display='none';}
+  if(d.dark!==undefined)dark=d.dark;
+  if(d.lang)lang=d.lang;
+}
+function save(){
+  try{localStorage.setItem('dnd_dr',JSON.stringify(buildState()));}catch(e){}
+}
+function loadSaved(){
+  try{
+    const raw=localStorage.getItem('dnd_dr');
+    if(raw){applyState(JSON.parse(raw));return true;}
+  }catch(e){}
+  return false;
+}
+
+// ============================================================
+// RENDER
+// ============================================================
+function renderAll(){
+  applyDark();
+  applyLang();
+  renderStats();
+  renderSkills();
+  renderSaves();
+  renderLevel();
+  renderPrimalOrder();
+  renderFury();
+  renderSlots();
+  renderPrepared();
+  renderBrowse();
+  renderWSPips();
+  renderWSActive();
+  renderFormGrid();
+  renderConc();
+  renderBuild();
+  renderSavedList();
+  updateHPBar();
+  g('notes-ta').value=notes;
+  if(concSpell)g('conc-inp').value=concSpell;
+}
+
+function renderLevel(){
+  g('lv-disp').textContent=lv;
+  g('tb-lv').textContent=lv;
+  g('fury-wrap').style.display=lv>=7?'block':'none';
+}
+
+function renderStats(){
+  const sg=g('stat-grid');
+  sg.innerHTML=STAT_KEYS.map(k=>`
+    <div class="stat-box">
+      <div class="stat-abbr">${STAT_NAMES[k]}</div>
+      <input class="stat-inp" type="number" value="${statVals[k]}" oninput="statVals['${k}']=+this.value;renderDerived();renderSkills();renderSaves();save()">
+      <div class="stat-mod">${fmtMod(mod(statVals[k]))}</div>
+    </div>`).join('');
+  renderDerived();
+}
+
+function renderDerived(){
+  const pb=profBonus(),wm=mod(statVals.wis),dm=mod(statVals.dex),cm=mod(statVals.con);
+  const natAC=10+dm;
+  const data1=[
+    {l:'AC',v:natAC},{l:'Initiative',v:fmtMod(dm)},
+    {l:'Proficiency',v:fmtMod(pb)},{l:'Speed',v:'30 ft'},
+  ];
+  const data2=[
+    {l:'Spell DC',v:spellDC()},{l:'Spell Atk',v:fmtMod(spellAtk())},
+    {l:'Passive Perc',v:10+pb+wm},{l:'HP Max',v:maxHP()},
+  ];
+  g('der-grid').innerHTML=data1.map(d=>`<div class="der-box"><div class="der-lbl">${d.l}</div><div class="der-val">${d.v}</div></div>`).join('');
+  g('der-grid2').innerHTML=data2.map(d=>`<div class="der-box"><div class="der-lbl">${d.l}</div><div class="der-val">${d.v}</div></div>`).join('');
+}
+
+function renderSkills(){
+  const pb=profBonus();
+  g('skills-list').innerHTML=SKILLS.map(sk=>{
+    const base=mod(statVals[sk.st]);
+    const ep=skillExp.has(sk.k),pr=skillProf.has(sk.k);
+    const bonus=base+(ep?pb*2:pr?pb:0);
+    const magicBonus=(primalOrder==='magician'&&(sk.k==='arc'||sk.k==='nat'))?mod(statVals.wis):0;
+    const total=bonus+magicBonus;
+    return`<div class="skill-item">
+      <div class="sk-dots">
+        <div class="sk-dot${pr?' prof':''}" onclick="toggleSkProf('${sk.k}')" title="Proficiency"></div>
+        <div class="sk-dot${ep?' exp':''}" onclick="toggleSkExp('${sk.k}')" title="Expertise">E</div>
+      </div>
+      <span class="sk-name">${sk.n}${magicBonus?'<sup>✦</sup>':''}</span>
+      <span class="sk-stat">${STAT_NAMES[sk.st]}</span>
+      <span class="sk-val">${fmtMod(total)}</span>
+    </div>`;
+  }).join('');
+}
+
+function renderSaves(){
+  const pb=profBonus();
+  g('saves-list').innerHTML=STAT_KEYS.map(k=>{
+    const on=selSaves.has(k);
+    const val=mod(statVals[k])+(on?pb:0);
+    return`<div class="save-item">
+      <div class="save-dot${on?' on':''}" onclick="toggleSave('${k}')"></div>
+      <span class="save-name">${STAT_NAMES[k]}</span>
+      <span class="save-val">${fmtMod(val)}</span>
+    </div>`;
+  }).join('');
+}
+
+function renderPrimalOrder(){
+  g('po-mag').className='choice-btn'+(primalOrder==='magician'?' sel':'');
+  g('po-war').className='choice-btn'+(primalOrder==='warden'?' sel':'');
+}
+
+function renderFury(){
+  if(lv<7)return;
+  g('ef-pot').className='choice-btn'+(furyChoice==='potent'?' sel':'');
+  g('ef-pri').className='choice-btn'+(furyChoice==='primal'?' sel':'');
+}
+
+function renderWSPips(){
+  const total=wsUsesForLevel(lv);
+  let html='';
+  for(let i=0;i<total;i++){
+    html+=`<div class="pip moon${i<wsUsed?' empty':''}" onclick="toggleWSPip(${i})"></div>`;
+  }
+  g('ws-pips').innerHTML=html;
+  g('ws-pips-sub').textContent=`${wsUsed} / ${total} gastats · CR màx ${wsMaxCRstr()}`;
+}
+
+function renderWSActive(){
+  if(!activeForm){
+    g('ws-active-wrap').style.display='none';
+    g('ws-picker-wrap').style.display='block';
+  }else{
+    const f=activeForm;
+    const ac=wsAC(f);
+    const thp=lv*3;
+    g('ws-form-name').textContent=f.n;
+    g('ws-form-cr').textContent='CR '+f.cr;
+    g('ws-hp').textContent=f.hp;
+    g('ws-ac').textContent=ac;
+    g('ws-spd').textContent=f.spd.split('/')[0].trim();
+    g('ws-thp').textContent=thp;
+    g('ws-attacks').textContent=f.atk;
+    g('ws-active-wrap').style.display='block';
+    g('ws-picker-wrap').style.display='none';
+  }
+}
+
+function renderFormGrid(){
+  const maxCR=wsMaxCR();
+  const eligible=BEAST_FORMS.filter(f=>crToNum(f.cr)<=Math.max(maxCR,.25));
+  g('form-grid').innerHTML=eligible.map(f=>`
+    <div class="form-card" onclick="activateForm('${f.n}')">
+      <div class="form-name">${f.n}</div>
+      <div class="form-cr">CR ${f.cr}</div>
+      <div class="form-mini">HP ${f.hp} · AC ${f.ac} · ${f.spd}</div>
+    </div>`).join('');
+}
+
+function renderConc(){
+  const on=!!concSpell;
+  const dot=g('conc-dot');
+  if(dot)dot.className='conc-dot'+(on?' on':'');
+}
+
+function renderSlots(){
+  const slots=SLOT_TABLE[Math.min(lv,20)];
+  let html='';
+  const ord=['1st','2nd','3rd','4th','5th','6th','7th','8th','9th'];
+  for(let i=0;i<9;i++){
+    const max=slots[i];
+    if(max===0)continue;
+    const used=usedSlots[i]||0;
+    let pips='';
+    for(let j=0;j<max;j++){
+      pips+=`<div class="pip${j<used?' empty':''}" onclick="toggleSlot(${i},${j})"></div>`;
+    }
+    html+=`<div class="slot-level">
+      <div class="slot-level-hd">
+        <span class="slot-lv-badge">Lv ${i+1}</span>
+        <span class="slot-lv-name">${ord[i]}</span>
+        <span class="slot-count">${max-used} / ${max}</span>
+      </div>
+      <div class="pips-wrap">${pips}</div>
+    </div>`;
+  }
+  g('slot-levels').innerHTML=html;
+}
+
+function renderPrepared(){
+  const always=alwaysPreparedNames();
+  const limit=preparedLimit();
+  const userPrepped=[...prepSpells];
+  const total=userPrepped.length;
+  const L=LANGS[lang];
+  g('prep-count').textContent=L.prepCount(total,limit);
+
+  // Cantrips
+  g('cantrip-list').innerHTML=CANTRIPS.map(c=>{
+    const sel=prepCantrips.has(c.n);
+    return`<div class="spell-card${sel?' prep':''}" onclick="toggleCantrip('${c.n.replace(/'/g,"\\'")}')">
+      <div class="spell-hd">
+        <span class="spell-name">${c.n}</span>
+        <span class="spell-school">${c.sc}</span>
+        <div class="spell-chk">${sel?'✓':''}</div>
+      </div>
+      <div class="spell-sub">${c.rng} · ${c.src}</div>
+    </div>`;
+  }).join('');
+
+  // Level spells grouped by level
+  let html='';
+  for(let lv=1;lv<=9;lv++){
+    const spells=ALL_SPELLS_BY_LV[lv];
+    if(!spells||spells.length===0)continue;
+    const slots=SLOT_TABLE[Math.min(lv,20)];
+    if(lv>1&&slots[lv-1]===0)continue;
+    html+=`<div class="lbl mt10 mb10">NV ${lv}</div>`;
+    html+=spells.map(s=>{
+      const key=spellKey(lv,s.n);
+      const isAlways=always.includes(s.n);
+      const sel=isAlways||prepSpells.has(key);
+      const cls=isAlways?'always':sel?'prep':'';
+      return`<div class="spell-card${cls?' '+cls:''}" onclick="${isAlways?'':("togglePrep('"+lv+"','"+s.n.replace(/'/g,"\\'")+"')")}">
+        <div class="spell-hd">
+          <span class="spell-name">${s.n}${isAlways?' 🌕':''}</span>
+          <span class="spell-school">${s.sc}</span>
+          <div class="spell-chk">${sel?'✓':''}</div>
+        </div>
+        <div class="spell-sub">${s.rng} · ${s.src}${isAlways?' · Sempre preparada':''}</div>
+      </div>`;
+    }).join('');
+  }
+  g('prep-by-level').innerHTML=html;
+}
+
+function renderBrowse(){
+  const search=(g('browse-search')?.value||'').toLowerCase();
+  const lvFilter=g('browse-lv')?.value||'';
+  let html='';
+  ALL_SPELLS_BY_LV.forEach((spells,lv)=>{
+    if(lvFilter!==''&&String(lv)!==lvFilter)return;
+    spells.forEach(s=>{
+      if(search&&!s.n.toLowerCase().includes(search))return;
+      const urlName=encodeURIComponent(s.n.toLowerCase()+'_'+(s.src==="PHB'24"?'xphb':s.src.toLowerCase().replace(/[^a-z0-9]/g,'')));
+      const url=`https://5e.tools/spells.html#${urlName}`;
+      const lvBadge=lv===0?'C':''+lv;
+      html+=`<a class="browse-item" href="${url}" target="_blank" rel="noopener">
+        <span class="bi-lv${lv===0?' c0':''}">${lvBadge}</span>
+        <span class="bi-name">${s.n}</span>
+        <span class="bi-school">${s.sc}</span>
+        <span class="bi-rng">${s.rng}</span>
+        <span class="bi-src">${s.src}</span>
+      </a>`;
+    });
+  });
+  g('browse-list').innerHTML=html||'<p style="color:var(--os);text-align:center;padding:20px">Cap resultat</p>';
+}
+
+function renderBuild(){
+  g('build-features').innerHTML=CLASS_FEATURES.map(f=>{
+    const avail=lv>=f.lv;
+    const cls=f.sub?'sub':'';
+    return`<div class="feat-card${avail?'':' feat-na'}">
+      <div class="feat-hd" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
+        <span class="feat-lv ${cls||''}${avail?'':' na'}">Lv ${f.lv}</span>
+        <span class="feat-name">${f.name}</span>
+        <span class="feat-chev">▼</span>
+      </div>
+      <div class="feat-body">${f.desc.replace(/\n/g,'<br>')}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderSavedList(){
+  const L=LANGS[lang];
+  try{
+    const raw=localStorage.getItem('dnd_dr_builds');
+    const builds=raw?JSON.parse(raw):[];
+    if(builds.length===0){g('saved-list').innerHTML=`<div class="saved-empty"><p>${L.noSaved}</p></div>`;return;}
+    g('saved-list').innerHTML=builds.map((b,i)=>`
+      <div class="saved-card">
+        <div class="saved-info">
+          <div class="saved-name">${b.name||'Druida'}</div>
+          <div class="saved-sub">Lv ${b.lv||'?'} · ${b.race||'—'}</div>
+          <div class="saved-date">${b.ts?new Date(b.ts*1000).toLocaleDateString():'—'}</div>
+        </div>
+        <div class="saved-btns">
+          <button class="saved-load" onclick="loadBuild(${i})">Carrega</button>
+          <button class="saved-del" onclick="deleteBuild(${i})">Elimina</button>
+        </div>
+      </div>`).join('');
+  }catch(e){g('saved-list').innerHTML='';}
+}
+
+function applyDark(){
+  document.body.classList.toggle('dark',dark);
+  const ic=g('dark-icon');
+  if(ic)ic.src=dark?'../icons/moon.png':'../icons/sun.png';
+}
+
+function applyLang(){
+  const L=LANGS[lang];
+  const ids={
+    'lbl-basic':L.basic,'lbl-stats':L.stats,'lbl-saves':L.saves,
+    'lbl-skills':L.skills,'lbl-notes':L.notes,'lbl-derived':L.derived,
+    'lbl-hp':L.hp,'lbl-ws-uses':L.ws,'lbl-conc':L.conc,
+    'lbl-sr':L.sr,'lbl-lr':L.lr,'lbl-pick-form':L.pickForm,
+    'lbl-thp':L.thp,'btn-exit-ws':L.exitWs,'lbl-order':L.order,
+    'lbl-fury':L.fury,'lbl-save-now':L.saveNow,'lbl-cantrips':L.cantrips,
+    'lbl-conc2':L.conc2,
+  };
+  Object.entries(ids).forEach(([id,txt])=>{const el=g(id);if(el)el.textContent=txt;});
+  ['cat','esp','eng'].forEach(l=>{const b=g('lb-'+l);if(b)b.classList.toggle('active',l===lang);});
+}
+
+// ============================================================
+// INTERACTIONS
+// ============================================================
+function showTab(t){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  g('tab-'+t)?.classList.add('active');
+  g('tbtn-'+t)?.classList.add('active');
+}
+
+function showSubtab(t){
+  document.querySelectorAll('.subtab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.subtab-btn').forEach(b=>b.classList.remove('active'));
+  g('sub-'+t)?.classList.add('active');
+  g('stb-'+t)?.classList.add('active');
+  if(t==='browse')renderBrowse();
+  if(t==='prep')renderPrepared();
+}
+
+function toggleSec(id,hd){
+  hd.classList.toggle('open');
+  g('sec-'+id)?.classList.toggle('open');
+}
+
+function toggleDark(){dark=!dark;applyDark();save();}
+function setLang(l){lang=l;applyLang();renderSkills();renderPrepared();renderSavedList();save();}
+
+function adjLv(d){
+  lv=Math.max(1,Math.min(20,lv+d));
+  renderLevel();renderDerived();renderWSPips();renderFormGrid();renderSlots();renderPrepared();renderBuild();renderFury();save();
+}
+
+function onNameChange(){
+  const v=g('c-name').value;
+  g('tb-name').textContent=v||'Druida';
+  save();
+}
+
+function toggleSkProf(k){
+  if(skillProf.has(k))skillProf.delete(k);else skillProf.add(k);
+  if(!skillProf.has(k))skillExp.delete(k);
+  renderSkills();save();
+}
+function toggleSkExp(k){
+  if(!skillProf.has(k))skillProf.add(k);
+  if(skillExp.has(k))skillExp.delete(k);else skillExp.add(k);
+  renderSkills();save();
+}
+function toggleSave(k){
+  if(selSaves.has(k))selSaves.delete(k);else selSaves.add(k);
+  renderSaves();save();
+}
+
+function setPrimalOrder(v){primalOrder=v;renderPrimalOrder();renderSkills();save();}
+function setFury(v){furyChoice=v;renderFury();save();}
+
+function adjHP(dir){
+  const cur=parseInt(g('hp-cur').value)||0;
+  const mx=maxHP();
+  if(dir===0){g('hp-cur').value=mx;curHp=mx;}
+  else{
+    const delta=parseInt(prompt(dir<0?'Dany rebut:':'Curar:')||'0')||0;
+    const nv=dir<0?cur-delta:cur+delta;
+    g('hp-cur').value=Math.max(0,Math.min(mx,nv));
+    curHp=parseInt(g('hp-cur').value);
+  }
+  updateHPBar();save();
+}
+function updateHPBar(){
+  const cur=parseInt(g('hp-cur')?.value||0);
+  const mx=maxHP();
+  const pct=Math.max(0,Math.min(100,(cur/mx)*100));
+  const fill=g('hp-fill');
+  if(fill){fill.style.width=pct+'%';fill.className='hp-fill'+(pct<25?' lo':pct<60?' md':'');}
+  curHp=cur;
+}
+
+function toggleWSPip(i){
+  if(wsUsed>i)wsUsed=i;else wsUsed=i+1;
+  renderWSPips();save();
+}
+
+function activateForm(name){
+  const f=BEAST_FORMS.find(x=>x.n===name);
+  if(!f)return;
+  if(wsUsed>=wsUsesForLevel(lv)){alert('No queden usos de Wild Shape!');return;}
+  wsUsed++;
+  activeForm=f;
+  renderWSPips();renderWSActive();save();
+}
+
+function exitWildShape(){
+  activeForm=null;
+  renderWSActive();renderFormGrid();save();
+}
+
+function toggleSlot(lvIdx,j){
+  const used=usedSlots[lvIdx]||0;
+  if(j<used)usedSlots[lvIdx]=j;
+  else usedSlots[lvIdx]=j+1;
+  renderSlots();save();
+}
+
+function updateConc(){
+  concSpell=g('conc-inp').value;
+  renderConc();save();
+}
+function clearConc(){
+  concSpell='';g('conc-inp').value='';renderConc();save();
+}
+
+function toggleCantrip(name){
+  if(prepCantrips.has(name))prepCantrips.delete(name);else prepCantrips.add(name);
+  renderPrepared();save();
+}
+function togglePrep(spellLv,name){
+  const key=spellKey(spellLv,name);
+  if(prepSpells.has(key))prepSpells.delete(key);
+  else{
+    if(prepSpells.size>=preparedLimit()){alert('Has arribat al límit d\'espells preparats!');return;}
+    prepSpells.add(key);
+  }
+  renderPrepared();save();
+}
+
+function filterBrowse(){renderBrowse();}
+
+function shortRest(){
+  // Recover 1 WS use
+  const total=wsUsesForLevel(lv);
+  if(wsUsed>0){wsUsed=Math.max(0,wsUsed-1);renderWSPips();}
+  save();
+}
+function longRest(){
+  if(!confirm('Descans Llarg: recuperes tots els espells, usos de Wild Shape i HP?'))return;
+  usedSlots=[0,0,0,0,0,0,0,0,0];
+  wsUsed=0;activeForm=null;concSpell='';
+  const mx=maxHP();
+  g('hp-cur').value=mx;curHp=mx;
+  if(g('conc-inp'))g('conc-inp').value='';
+  renderSlots();renderWSPips();renderWSActive();renderConc();updateHPBar();save();
+}
+
+function pickImg(){g('img-input').click();}
+function loadImg(e){
+  const f=e.target.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=ev=>{g('avatar-img').src=ev.target.result;g('avatar-img').style.display='block';g('avatar-placeholder').style.display='none';save();};
+  r.readAsDataURL(f);
+}
+
+function saveSnapshot(){
+  try{
+    const raw=localStorage.getItem('dnd_dr_builds');
+    const builds=raw?JSON.parse(raw):[];
+    const state=buildState();
+    state.ts=Math.floor(Date.now()/1000);
+    builds.unshift(state);
+    if(builds.length>20)builds.pop();
+    localStorage.setItem('dnd_dr_builds',JSON.stringify(builds));
+    renderSavedList();
+    showTab('saved');
+  }catch(e){alert('Error desant!');}
+}
+function loadBuild(i){
+  try{
+    const raw=localStorage.getItem('dnd_dr_builds');
+    const builds=raw?JSON.parse(raw):[];
+    if(!builds[i])return;
+    applyState(builds[i]);
+    save();
+    renderAll();
+    showTab('character');
+  }catch(e){}
+}
+function deleteBuild(i){
+  try{
+    const raw=localStorage.getItem('dnd_dr_builds');
+    const builds=raw?JSON.parse(raw):[];
+    builds.splice(i,1);
+    localStorage.setItem('dnd_dr_builds',JSON.stringify(builds));
+    renderSavedList();
+  }catch(e){}
+}
+
+// ============================================================
+// QR
+// ============================================================
+let _qrUrl='';
+function buildShareURL(){
+  const payload={
+    n:g('c-name')?.value||'',
+    race:g('c-race')?.value||'',
+    bg:g('c-bg')?.value||'',
+    lv,
+    st:[statVals.str,statVals.dex,statVals.con,statVals.int,statVals.wis,statVals.cha],
+    hp:curHp<0?maxHP():curHp,
+    mhp:maxHP(),
+    sp:[...skillProf],se:[...skillExp],sv:[...selSaves],
+    po:primalOrder,fu:furyChoice,
+    pp:[...prepSpells],pc:[...prepCantrips],
+    us:usedSlots,wu:wsUsed,
+    af:activeForm?.n||null,
+    cs:concSpell,
+    ts:Math.floor(Date.now()/1000),
+  };
+  const enc=btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
+  const base=location.href.replace(/[^/]*$/,'');
+  return base+'view.html?d='+encodeURIComponent(enc);
+}
+function openQRModal(){
+  const url=buildShareURL();
+  _qrUrl=url;
+  g('qr-url-text').textContent=url;
+  const wrap=g('qr-canvas-wrap');
+  wrap.innerHTML='';
+  if(typeof QRCode!=='undefined'){
+    new QRCode(wrap,{text:url,width:200,height:200,colorDark:'#000',colorLight:'#fff'});
+  }else{wrap.textContent='QR no disponible sense connexió.';}
+  g('qr-overlay').classList.add('open');
+}
+function closeQRModal(){g('qr-overlay').classList.remove('open');}
+function copyQRUrl(){
+  navigator.clipboard?.writeText(_qrUrl).then(()=>{
+    const b=g('btn-copy-url');const t=b.textContent;b.textContent='✓ Copiat!';setTimeout(()=>b.textContent=t,2000);
+  }).catch(()=>{});
+}
+
+// ============================================================
+// SERVICE WORKER
+// ============================================================
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('./sw.js').then(reg=>{
+    navigator.serviceWorker.addEventListener('message',e=>{
+      if(e.data?.type==='SW_UPDATED')console.log('SW updated');
+    });
+  });
+}
+
+// ============================================================
+// INIT
+// ============================================================
+loadSaved();
+renderAll();
+g('c-name').addEventListener('input',()=>{g('tb-name').textContent=g('c-name').value||'Druida';save();});
+</script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "name": "Circle of the Moon — D&D",
+  "short_name": "Druid",
+  "description": "Circle of the Moon Druid character app for D&D 5e 2024",
+  "start_url": "./preview.html",
+  "display": "standalone",
+  "background_color": "#0C1208",
+  "theme_color": "#5A7C2E",
+  "orientation": "portrait",
+  "icons": [
+    { "src": "../icon.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "../icon.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

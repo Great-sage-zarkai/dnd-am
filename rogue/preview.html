@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>D&D · Phantom Rogue</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#4E8A70">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<style>
+:root{
+  --p:#4E8A70;--pl:#E8F4EF;--pd:#2A5C48;
+  --t:#7A5E8A;--tl:#EDE8F4;--td:#4A3060;
+  --a:#8B6B30;--al:#F4EDD8;--ad:#5C4018;
+  --r:#C44830;--rl:#FAE8E4;
+  --bg:#F2F4F2;--sf:#FFF;--sv:#EEF2EE;
+  --ol:#C8D4C8;--os:#5A6A5A;--rr:10px;
+  --tx:#1A201A;--tabh:62px;--toph:52px;
+}
+body.dark{
+  --pl:#182A22;--pd:#88C4A8;
+  --tl:#1E1828;--td:#B090D0;
+  --al:#221800;--ad:#C8A050;
+  --rl:#280C08;
+  --bg:#0E120E;--sf:#181E18;--sv:#202820;
+  --ol:#2A3A2A;--os:#809080;--tx:#DCE8DC;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:var(--bg);color:var(--tx);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:15px;overflow:hidden}
+
+.topbar{position:fixed;top:0;left:0;right:0;height:var(--toph);background:var(--sf);border-bottom:1px solid var(--ol);display:flex;align-items:center;padding:0 10px;gap:8px;z-index:100}
+.topbar img.logo{height:26px;object-fit:contain}
+.tb-title{flex:1;min-width:0}
+.tb-name{font-size:15px;font-weight:700;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tb-sub{font-size:10px;color:var(--os)}
+.lang-btns{display:flex;gap:3px;flex-shrink:0}
+.lang-btn{padding:3px 7px;border-radius:6px;border:1px solid var(--ol);background:var(--sv);color:var(--os);font-size:10px;font-weight:700;cursor:pointer}
+.lang-btn.active{background:var(--p);color:#fff;border-color:var(--p)}
+.tb-icon{width:32px;height:32px;border-radius:50%;border:1px solid var(--ol);background:var(--sv);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+.tb-icon img{width:17px;height:17px;object-fit:contain;opacity:.65}
+
+.scroll{position:fixed;top:var(--toph);bottom:var(--tabh);left:0;right:0;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.tab-panel{display:none;padding:12px 12px 24px}
+.tab-panel.active{display:block}
+
+.tabbar{position:fixed;bottom:0;left:0;right:0;height:var(--tabh);background:var(--sf);border-top:1px solid var(--ol);display:flex;z-index:100}
+.tab-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;color:var(--os);font-size:10px;font-weight:500;border:none;background:none;padding:0}
+.tab-btn img{width:24px;height:24px;object-fit:contain;opacity:.4;transition:opacity .15s}
+.tab-btn.active{color:var(--p)}
+.tab-btn.active img{opacity:1;filter:drop-shadow(0 0 3px var(--p))}
+
+/* IDENTITY */
+.id-switcher{display:flex;gap:8px;margin-bottom:14px}
+.id-card{flex:1;border-radius:var(--rr);border:2px solid var(--ol);background:var(--sv);padding:10px 6px 8px;text-align:center;cursor:pointer;transition:all .15s;position:relative;min-width:0}
+.id-card.active-id{border-color:var(--p);background:var(--pl)}
+.id-card-name{font-size:13px;font-weight:700;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.id-card.active-id .id-card-name{color:var(--pd)}
+.id-card-note{font-size:10px;color:var(--os);margin-top:3px;min-height:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.id-dot{width:7px;height:7px;border-radius:50%;background:var(--p);position:absolute;top:5px;right:5px;display:none}
+.id-card.active-id .id-dot{display:block}
+
+/* SECTION */
+.sec-hd{display:flex;align-items:center;gap:8px;padding:10px 0 5px;cursor:pointer;user-select:none}
+.sec-hd img{width:20px;height:20px;object-fit:contain;opacity:.6}
+.sec-hd .sec-lbl{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--os);flex:1}
+.chev{font-size:12px;color:var(--os);transition:transform .2s}
+.sec-hd.open .chev{transform:rotate(180deg)}
+.sec-body{display:none}
+.sec-body.open{display:block}
+.sec-sep{height:1px;background:var(--ol);margin:2px 0 10px}
+
+/* CHAR HEADER */
+.char-hdr{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px}
+.char-avatar{width:72px;height:72px;border-radius:50%;overflow:hidden;border:2px solid var(--p);flex-shrink:0;cursor:pointer;background:var(--sv);display:flex;align-items:center;justify-content:center;font-size:24px}
+.char-avatar img{width:100%;height:100%;object-fit:cover}
+.char-fields{flex:1;min-width:0}
+.char-inp{width:100%;border:none;background:none;color:var(--tx);border-bottom:1px solid var(--ol);padding:3px 0;margin-bottom:5px;font-size:14px;font-weight:600;outline:none;font-family:inherit}
+.char-inp:focus{border-color:var(--p)}
+.char-inp.sm{font-size:12px;font-weight:400;color:var(--os)}
+
+/* STATS */
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:10px}
+.stat-box{background:var(--sv);border-radius:var(--rr);border:1px solid var(--ol);padding:7px 4px;text-align:center}
+.stat-abbr{font-size:10px;font-weight:700;text-transform:uppercase;color:var(--os);margin-bottom:3px}
+.stat-inp{width:100%;border:none;background:none;text-align:center;font-size:22px;font-weight:700;color:var(--tx);outline:none;-moz-appearance:textfield}
+.stat-inp::-webkit-outer-spin-button,.stat-inp::-webkit-inner-spin-button{-webkit-appearance:none}
+.stat-mod{font-size:11px;color:var(--pd);font-weight:700;margin-top:2px}
+
+/* DERIVED */
+.der-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:12px}
+.der-box{background:var(--sv);border-radius:8px;border:1px solid var(--ol);padding:6px 3px;text-align:center}
+.der-lbl{font-size:9px;font-weight:700;text-transform:uppercase;color:var(--os);margin-bottom:2px}
+.der-val{font-size:16px;font-weight:700;color:var(--tx)}
+
+/* WEAPONS */
+.weap-card{background:var(--sv);border-radius:var(--rr);border:1px solid var(--ol);padding:10px 12px;margin-bottom:7px;display:flex;align-items:center;gap:10px}
+.weap-left{flex:1;min-width:0}
+.weap-name{font-size:14px;font-weight:700}
+.weap-props{font-size:11px;color:var(--os);margin-top:2px}
+.weap-right{text-align:right;flex-shrink:0}
+.weap-atk{font-size:17px;font-weight:700;color:var(--p)}
+.weap-dmg{font-size:11px;color:var(--os);margin-top:2px}
+
+/* SKILLS */
+.skill-item{display:flex;align-items:center;gap:6px;padding:4px 0;border-bottom:1px solid var(--sv)}
+.sk-dots{display:flex;gap:3px;flex-shrink:0}
+.sk-dot{width:17px;height:17px;border-radius:50%;border:2px solid var(--ol);cursor:pointer;transition:all .15s;font-size:8px;font-weight:700;display:flex;align-items:center;justify-content:center;color:transparent;flex-shrink:0}
+.sk-dot.prof{border-color:var(--p);background:var(--p);color:#fff}
+.sk-dot.exp{border-color:var(--pd);background:var(--pd);color:#fff}
+.sk-name{flex:1;font-size:13px}
+.sk-stat{font-size:10px;color:var(--os);width:26px;text-align:center;flex-shrink:0}
+.sk-val{font-size:14px;font-weight:700;color:var(--p);width:28px;text-align:right;flex-shrink:0}
+
+/* SAVES */
+.save-item{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--sv)}
+.save-dot{width:17px;height:17px;border-radius:50%;border:2px solid var(--ol);cursor:pointer;flex-shrink:0;transition:all .15s}
+.save-dot.on{background:var(--p);border-color:var(--p)}
+.save-name{flex:1;font-size:13px}
+.save-val{font-size:14px;font-weight:700;color:var(--p)}
+
+/* TRACKER */
+.tracker-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.tbox{background:var(--sf);border-radius:var(--rr);border:1px solid var(--ol);padding:12px;text-align:center}
+.tbox.full{grid-column:1/-1}
+.tbox-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--os);margin-bottom:6px}
+
+/* HP */
+.hp-row{display:flex;align-items:baseline;justify-content:center;gap:4px;margin-bottom:5px}
+.hp-cur{font-size:38px;font-weight:700;line-height:1;-moz-appearance:textfield;width:70px;border:none;background:none;text-align:center;color:var(--tx);outline:none}
+.hp-cur::-webkit-outer-spin-button,.hp-cur::-webkit-inner-spin-button{-webkit-appearance:none}
+.hp-sep{font-size:20px;color:var(--os)}
+.hp-max-inp{font-size:20px;font-weight:600;color:var(--os);width:50px;border:none;background:none;text-align:center;-moz-appearance:textfield;outline:none}
+.hp-max-inp::-webkit-outer-spin-button,.hp-max-inp::-webkit-inner-spin-button{-webkit-appearance:none}
+.hp-bar{height:6px;border-radius:3px;background:var(--ol);margin:4px 0 8px;overflow:hidden}
+.hp-fill{height:100%;border-radius:3px;background:var(--p);transition:width .3s}
+.hp-fill.lo{background:var(--r)}
+.hp-fill.md{background:#E8A020}
+.hp-btns{display:flex;gap:6px;justify-content:center}
+.hp-btn{padding:6px 14px;border-radius:20px;border:1.5px solid var(--ol);background:var(--sv);cursor:pointer;font-size:13px;font-weight:700;color:var(--tx)}
+.hp-btn.dmg{border-color:var(--r);color:var(--r)}
+.hp-btn.heal{border-color:var(--p);color:var(--pd)}
+.hp-auto{font-size:10px;color:var(--os);margin-top:4px}
+
+/* PIPS */
+.pips-wrap{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:6px 0}
+.pip{width:24px;height:24px;border-radius:50%;border:2px solid var(--p);background:var(--p);cursor:pointer;transition:all .15s}
+.pip.empty{background:transparent}
+.pips-sub{font-size:11px;color:var(--os);margin-top:2px}
+
+/* WHISPERS */
+.whispers-box{background:var(--sf);border-radius:var(--rr);border:1px solid var(--ol);padding:12px;margin-bottom:10px}
+.whisp-hd{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.whisp-title{font-size:13px;font-weight:700;flex:1}
+.whisp-badge{font-size:10px;padding:2px 8px;border-radius:20px;background:var(--tl);color:var(--td);font-weight:700}
+.whisp-toggle{width:40px;height:22px;border-radius:11px;background:var(--ol);border:none;cursor:pointer;position:relative;transition:background .2s;flex-shrink:0}
+.whisp-toggle::after{content:'';position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;transition:transform .2s;box-shadow:0 1px 2px rgba(0,0,0,.2)}
+.whisp-toggle.on{background:var(--p)}
+.whisp-toggle.on::after{transform:translateX(18px)}
+.whisp-inp{width:100%;border:1px solid var(--ol);border-radius:6px;padding:6px 10px;background:var(--sv);color:var(--tx);font-size:13px;font-family:inherit;outline:none}
+.whisp-inp:focus{border-color:var(--p)}
+.whisp-hint{font-size:11px;color:var(--os);margin-top:5px}
+
+/* REMINDER CHIPS */
+.chip-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.chip{display:inline-flex;align-items:center;gap:4px;background:var(--pl);color:var(--pd);border:1px solid var(--p);border-radius:20px;padding:5px 11px;font-size:12px;font-weight:600}
+.chip.amber{background:var(--al);color:var(--ad);border-color:var(--a)}
+.chip.purple{background:var(--tl);color:var(--td);border-color:var(--t)}
+
+/* REST */
+.rest-row{display:flex;gap:10px}
+.rest-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:11px;border-radius:var(--rr);border:1.5px solid var(--ol);background:var(--sf);cursor:pointer;font-size:13px;font-weight:600;color:var(--os)}
+.rest-btn img{width:20px;height:20px;opacity:.55}
+.rest-btn:active{background:var(--sv)}
+
+/* BUILD */
+.feat-card{background:var(--sv);border-radius:var(--rr);border:1px solid var(--ol);padding:10px 12px;margin-bottom:7px}
+.feat-hd{display:flex;align-items:center;gap:7px;cursor:pointer}
+.feat-lv{font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;background:var(--pl);color:var(--pd);flex-shrink:0}
+.feat-lv.sub{background:var(--tl);color:var(--td)}
+.feat-lv.na{background:var(--sv);color:var(--os);border:1px solid var(--ol)}
+.feat-name{font-size:14px;font-weight:600;flex:1}
+.feat-chev{font-size:11px;color:var(--os);transition:transform .2s;flex-shrink:0}
+.feat-hd.open .feat-chev{transform:rotate(180deg)}
+.feat-body{font-size:13px;color:var(--os);line-height:1.55;margin-top:8px;display:none}
+.feat-body.open{display:block}
+.feat-na{opacity:.5}
+
+/* SELECTABLE FEATS */
+.sfeat-card{background:var(--sv);border-radius:var(--rr);border:2px solid var(--ol);padding:10px 12px;margin-bottom:7px;cursor:pointer;transition:all .15s}
+.sfeat-card.sel{border-color:var(--p);background:var(--pl)}
+.sfeat-hd{display:flex;align-items:center;gap:8px}
+.sfeat-name{font-size:14px;font-weight:600;flex:1}
+.sfeat-chk{width:20px;height:20px;border-radius:50%;border:2px solid var(--ol);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;color:transparent}
+.sfeat-card.sel .sfeat-chk{background:var(--p);border-color:var(--p);color:#fff}
+.sfeat-desc{font-size:12px;color:var(--os);margin-top:6px;line-height:1.5;display:none}
+.sfeat-card.sel .sfeat-desc{display:block}
+
+/* NOTES */
+.notes-ta{width:100%;min-height:110px;border:1px solid var(--ol);border-radius:var(--rr);padding:10px;background:var(--sv);color:var(--tx);font-size:14px;resize:vertical;font-family:inherit}
+.notes-ta:focus{outline:none;border-color:var(--p)}
+
+/* ID NOTES (small) */
+.id-notes-ta{width:100%;height:48px;border:1px solid var(--ol);border-radius:6px;padding:5px 8px;background:var(--sv);color:var(--tx);font-size:12px;resize:none;font-family:inherit;margin-top:5px}
+.id-notes-ta:focus{outline:none;border-color:var(--p)}
+
+.sec-note{font-size:12px;color:var(--os);padding:3px 0 8px;line-height:1.4}
+.lbl{font-size:11px;font-weight:700;color:var(--os);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mt10{margin-top:10px}
+.mb10{margin-bottom:10px}
+.sneak-display{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:8px}
+.sneak-val{font-size:28px;font-weight:700;color:var(--a)}
+.sneak-lbl{font-size:11px;color:var(--os);text-align:center}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <img class="logo" src="../logo.png" alt="">
+  <div class="tb-title">
+    <div class="tb-name" id="tb-name">Rohk</div>
+    <div class="tb-sub">Phantom Rogue Lv <span id="tb-lv">3</span> · Changeling</div>
+  </div>
+  <div class="lang-btns">
+    <button class="lang-btn active" id="lb-cat" onclick="setLang('cat')">CA</button>
+    <button class="lang-btn" id="lb-esp" onclick="setLang('esp')">ES</button>
+    <button class="lang-btn" id="lb-eng" onclick="setLang('eng')">EN</button>
+  </div>
+  <div class="tb-icon" onclick="toggleDark()"><img src="../icons/sun.png" id="dark-icon" alt="dark"></div>
+</div>
+
+<!-- SCROLL -->
+<div class="scroll">
+
+  <!-- ========== CHARACTER TAB ========== -->
+  <div class="tab-panel active" id="tab-character">
+
+    <!-- IDENTITY SWITCHER -->
+    <div class="lbl" style="margin-bottom:6px" id="lbl-identitats">IDENTITATS · CHANGELING</div>
+    <div class="id-switcher" id="id-switcher"></div>
+    <div id="id-notes-wrap" style="margin-bottom:14px"></div>
+
+    <!-- BASIC INFO -->
+    <div class="sec-hd open" onclick="toggleSec('basic',this)">
+      <img src="../icons/basic.png" alt="">
+      <span class="sec-lbl" id="lbl-basic">Informació bàsica</span>
+      <span class="chev">▼</span>
+    </div>
+    <div class="sec-sep"></div>
+    <div class="sec-body open" id="sec-basic">
+      <div class="char-hdr">
+        <div class="char-avatar" id="char-avatar" onclick="pickImg()">
+          <span id="avatar-placeholder">🎭</span>
+          <img id="avatar-img" src="" alt="" style="display:none">
+        </div>
+        <div class="char-fields">
+          <input class="char-inp" id="c-name" placeholder="Nom del personatge" value="" oninput="onNameChange()">
+          <input class="char-inp sm" id="c-bg" placeholder="Orígen / Background" value="Criminal">
+          <input class="char-inp sm" id="c-align" placeholder="Alineació" value="Caòtic Neutral">
+        </div>
+      </div>
+      <input type="file" id="img-input" accept="image/*" style="display:none" onchange="loadImg(event)">
+    </div>
+
+    <!-- STATS -->
+    <div class="sec-hd open" onclick="toggleSec('stats',this)">
+      <img src="../icons/stats.png" alt="">
+      <span class="sec-lbl" id="lbl-stats">Estadístiques</span>
+      <span class="chev">▼</span>
+    </div>
+    <div class="sec-sep"></div>
+    <div class="sec-body open" id="sec-stats">
+      <div class="stat-grid" id="stat-grid"></div>
+      <div class="der-grid" id="der-grid"></div>
+    </div>
+
+    <!-- SAVING THROWS -->
+    <div class="sec-hd" onclick="toggleSec('saves',this)">
+      <img src="../icons/stats.png" alt="">
+      <span class="sec-lbl" id="lbl-saves">Tirades de Salvació</span>
+      <span class="chev">▼</span>
+    </div>
+    <div class="sec-sep"></div>
+    <div class="sec-body" id="sec-saves">
+      <p class="sec-note" id="note-saves">DEX i INT per defecte (Rogue). A Lv15 afegeixes WIS i CHA (Slippery Mind).</p>
+      <div id="saves-list"></div>
+    </div>
+
+    <!-- SKILLS -->
+    <div class="sec-hd" onclick="toggleSec('skills',this)">
+      <img src="../icons/hacker.png" alt="">
+      <span class="sec-lbl" id="lbl-skills">Habilitats</span>
+      <span class="chev">▼</span>
+    </div>
+    <div class="sec-sep"></div>
+    <div class="sec-body" id="sec-skills">
+      <p class="sec-note">⬤ = Competència · <b>E</b> = Expertise (×2 prof)</p>
+      <div id="skills-list"></div>
+    </div>
+
+    <!-- WEAPONS -->
+    <div class="sec-hd open" onclick="toggleSec('weaps',this)">
+      <img src="../icons/dagger.png" alt="">
+      <span class="sec-lbl" id="lbl-weaps">Armes</span>
+      <span class="chev">▼</span>
+    </div>
+    <div class="sec-sep"></div>
+    <div class="sec-body open" id="sec-weaps">
+      <div id="weap-cards"></div>
+    </div>
+
+    <!-- NOTES -->
+    <div class="sec-hd" onclick="toggleSec('notes',this)">
+      <img src="../icons/notes.png" alt="">
+      <span class="sec-lbl" id="lbl-notes">Notes</span>
+      <span class="chev">▼</span>
+    </div>
+    <div class="sec-sep"></div>
+    <div class="sec-body" id="sec-notes">
+      <textarea class="notes-ta" id="char-notes" placeholder="Notes del personatge..." oninput="save()"></textarea>
+    </div>
+  </div>
+
+  <!-- ========== TRACKER TAB ========== -->
+  <div class="tab-panel" id="tab-tracker">
+
+    <!-- HP -->
+    <div class="tracker-grid">
+      <div class="tbox full">
+        <div class="tbox-lbl" id="lbl-hp">HIT POINTS</div>
+        <div class="hp-row">
+          <input type="number" class="hp-cur" id="hp-cur" min="0" max="999" oninput="curHp=+this.value;renderHpBar();save()">
+          <span class="hp-sep">/</span>
+          <input type="number" class="hp-max-inp" id="hp-max" min="1" max="999" oninput="maxHpMan=+this.value;renderHpBar();save()">
+        </div>
+        <div class="hp-bar"><div class="hp-fill" id="hp-fill"></div></div>
+        <div class="hp-btns">
+          <button class="hp-btn dmg" onclick="adjHp(-5)">-5</button>
+          <button class="hp-btn dmg" onclick="adjHp(-1)">-1</button>
+          <button class="hp-btn heal" onclick="adjHp(+1)">+1</button>
+          <button class="hp-btn heal" onclick="adjHp(+5)">+5</button>
+        </div>
+        <div class="hp-auto" id="hp-auto"></div>
+      </div>
+
+      <!-- SNEAK ATTACK -->
+      <div class="tbox">
+        <div class="tbox-lbl" id="lbl-sneak">SNEAK ATTACK</div>
+        <div class="sneak-val" id="sneak-val">2d6</div>
+        <div class="pips-sub" id="sneak-sub">1/torn · Finesse o Ranged</div>
+      </div>
+
+      <!-- CUNNING ACTION reminder -->
+      <div class="tbox">
+        <div class="tbox-lbl" id="lbl-ca">CUNNING ACTION</div>
+        <div style="font-size:13px;color:var(--os);line-height:1.5;margin-top:4px" id="ca-desc">Bonus Action:<br>Dash · Disengage · Hide</div>
+      </div>
+    </div>
+
+    <!-- WAILS FROM THE GRAVE -->
+    <div class="whispers-box">
+      <div class="whisp-hd">
+        <img src="../icons/skeleton.png" alt="" style="width:28px;height:28px;object-fit:contain;opacity:.8;flex-shrink:0">
+        <div>
+          <div class="whisp-title" id="lbl-wails">Wails from the Grave</div>
+          <div style="font-size:11px;color:var(--os)" id="wails-sub">Phantasm Lv3 · <span id="wails-max-txt"></span> usos / Long Rest</div>
+        </div>
+      </div>
+      <div class="pips-wrap" id="wails-pips"></div>
+      <div class="pips-sub" id="wails-dmg-txt"></div>
+    </div>
+
+    <!-- WHISPERS OF THE DEAD -->
+    <div class="whispers-box">
+      <div class="whisp-hd">
+        <img src="../icons/shadow.png" alt="" style="width:28px;height:28px;object-fit:contain;opacity:.8;flex-shrink:0">
+        <div class="whisp-title" id="lbl-whispers">Whispers of the Dead</div>
+        <button class="whisp-toggle" id="whisp-toggle" onclick="toggleWhisper()"></button>
+      </div>
+      <div class="whisp-badge" id="whisp-src">Phantom Lv3 · Recarrega: Short/Long Rest</div>
+      <div style="margin-top:8px">
+        <input class="whisp-inp" id="whisp-inp" placeholder="Competència fantasma actual (ex: Thieves' Tools)..." oninput="whisperProf=this.value;save()">
+      </div>
+      <div class="whisp-hint" id="whisp-hint">Activa el toggle quan l'habilitat/eina és activa. Es perd en triar una altra.</div>
+    </div>
+
+    <!-- STEADY AIM reminder -->
+    <div class="chip-row">
+      <div class="chip amber">⚡ Steady Aim: Bonus Action → Advantage next atac (no et moguis)</div>
+    </div>
+
+    <!-- REST -->
+    <div class="rest-row">
+      <button class="rest-btn" onclick="shortRest()">
+        <img src="../icons/bonfire.png" alt="">
+        <span id="lbl-sr">Descans Curt</span>
+      </button>
+      <button class="rest-btn" onclick="longRest()">
+        <img src="../icons/moon.png" alt="">
+        <span id="lbl-lr">Descans Llarg</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ========== BUILD TAB ========== -->
+  <div class="tab-panel" id="tab-build">
+
+    <!-- CLASS FEATURES -->
+    <div class="sec-hd open" onclick="toggleSec('classf',this)">
+      <img src="../icons/classf.png" alt="">
+      <span class="sec-lbl" id="lbl-classf">Features de Classe</span>
+      <span class="chev">▼</span>
+    </div>
+    <div class="sec-sep"></div>
+    <div class="sec-body open" id="sec-classf">
+      <div id="classf-list"></div>
+    </div>
+
+    <!-- SUBCLASS FEATURES -->
+    <div class="sec-hd open" onclick="toggleSec('subclass',this)">
+      <img src="../icons/necromancer.png" alt="">
+      <span class="sec-lbl" id="lbl-subclass">Phantom — Subclasse</span>
+      <span class="chev">▼</span>
+    </div>
+    <div class="sec-sep"></div>
+    <div class="sec-body open" id="sec-subclass">
+      <div id="subclass-list"></div>
+    </div>
+
+    <!-- CUNNING STRIKE (lv5) -->
+    <div class="sec-hd" onclick="toggleSec('cunning',this)">
+      <img src="../icons/speed.png" alt="">
+      <span class="sec-lbl" id="lbl-cunning">Cunning Strike (Lv5)</span>
+      <span class="chev">▼</span>
+    </div>
+    <div class="sec-sep"></div>
+    <div class="sec-body" id="sec-cunning">
+      <p class="sec-note" id="cunning-note">Disponible a Lv5. DC = 8 + DEX mod + Prof. Sacrifiques daus de Sneak Attack per activar l'efecte.</p>
+      <div id="cunning-list"></div>
+    </div>
+
+    <!-- FEATS -->
+    <div class="sec-hd" onclick="toggleSec('feats',this)">
+      <img src="../icons/feats.png" alt="">
+      <span class="sec-lbl" id="lbl-feats">Feats</span>
+      <span class="chev">▼</span>
+    </div>
+    <div class="sec-sep"></div>
+    <div class="sec-body" id="sec-feats">
+      <div id="feats-list"></div>
+    </div>
+  </div>
+
+</div><!-- /scroll -->
+
+<!-- TAB BAR -->
+<div class="tabbar">
+  <button class="tab-btn active" id="tbtn-character" onclick="showTab('character')">
+    <img src="../icons/rogue.png" alt="">
+    <span id="lbl-tab-char">Personatge</span>
+  </button>
+  <button class="tab-btn" id="tbtn-tracker" onclick="showTab('tracker')">
+    <img src="../icons/d20.png" alt="">
+    <span id="lbl-tab-track">Tracker</span>
+  </button>
+  <button class="tab-btn" id="tbtn-build" onclick="showTab('build')">
+    <img src="../icons/slash.png" alt="">
+    <span id="lbl-tab-build">Build</span>
+  </button>
+</div>
+
+<script>
+// ── CONSTANTS ──────────────────────────────────────────────
+const CLASS_FEATURES_RG = [
+  {level:1,name:"Expertise",desc:"Tria 2 habilitats en les quals tens competència: el teu Prof Bonus s'aplica el doble. Recomanat: Sleight of Hand i Stealth. A Lv6 tries 2 més."},
+  {level:1,name:"Sneak Attack",desc:"Un cop per torn, afegeix daus de dany extra si tens Advantage o un aliat adjacent (sense Incapacitated) a l'objectiu i sense Disadvantage teu. Cal arma Finesse o a distància."},
+  {level:1,name:"Thieves' Cant",desc:"Coneixes Thieves' Cant i un altre idioma de la teva elecció."},
+  {level:1,name:"Weapon Mastery",desc:"Pots usar la propietat Mastery de 2 armes de la teva elecció. Pots canviar-les en finalitzar un Long Rest. (Recomanat: Dagger + Shortbow)"},
+  {level:2,name:"Cunning Action",desc:"Bonus Action: Dash, Disengage, o Hide."},
+  {level:3,name:"Steady Aim",desc:"Bonus Action: t'otorga Advantage en el teu proper atac d'aquest torn. Només disponible si no t'has mogut aquest torn; la teva Speed es queda a 0 fins el final del torn."},
+  {level:5,name:"Cunning Strike",desc:"Quan fas Sneak Attack, pots afegir un efecte de Cunning Strike sacrificant daus. DC = 8 + DEX mod + Prof."},
+  {level:5,name:"Uncanny Dodge",desc:"Reacció: quan un atacant que veus et colpeja, redueix el dany a la meitat (arrodonit avall)."},
+  {level:6,name:"Expertise ×2 (Lv6)",desc:"Guanyes Expertise en 2 habilitats de competència més."},
+  {level:7,name:"Evasion (Lv7)",desc:"Èxit en DEX save = cap dany. Falla = meitat de dany. Requereix no estar Incapacitated."},
+  {level:7,name:"Reliable Talent (Lv7)",desc:"En tirades d'habilitat amb competència, tractes qualsevol d20 de 1-9 com un 10."},
+];
+
+const SUBCLASS_RG = [
+  {level:3,name:"Whispers of the Dead",desc:"Cada Short o Long Rest, pots guanyar competència en una habilitat o eina que no tinguis. La perds quan tries una altra amb aquesta feature."},
+  {level:3,name:"Wails from the Grave",desc:"Immediatament després del teu Sneak Attack, tria una 2a criatura a 30 peus de la 1a. Fa dany necròtic = meitat de daus de Sneak Attack (arrodonit amunt). Usos = Prof Bonus, es recuperen en Long Rest."},
+  {level:9,name:"Tokens of the Departed (Lv9)",desc:"Reacció: quan una criatura mor a 30 peus teus, apareix un Soul Trinket a la teva mà. Màx = Prof bonus. Avantatges: Advantage en tirades de mort i CON saves. Pots destruir un per usar Wails sense gastar ús. Pots destruir un com acció per fer una pregunta a l'esperit."},
+  {level:13,name:"Ghost Walk (Lv13)",desc:"Bonus Action: forma espectral 10 min. Flying 10 ft, pots hover, atacs contra tu tenen Disadvantage. Pots travessar criatures/objectes (1d10 force si acabes el torn dins). Recupera: Long Rest o destruir Soul Trinket."},
+  {level:17,name:"Death's Friend (Lv17)",desc:"Wails from the Grave fa dany necròtic ara a les dues criatures. Al final de cada Long Rest, si no tens Soul Trinkets, apareix un automàticament."},
+];
+
+const CUNNING_STRIKES = [
+  {name:"Poison",cost:"1d6",level:5,desc:"CON save o queda Poisoned 1 min (repeteix save/torn). Cal Poisoner's Kit."},
+  {name:"Trip",cost:"1d6",level:5,desc:"Si és Large o menys: DEX save o Prone."},
+  {name:"Withdraw",cost:"1d6",level:5,desc:"Et mous fins la meitat del Speed sense Opportunity Attacks."},
+  {name:"Daze",cost:"2d6",level:14,desc:"CON save o al proper torn: només moure O acció O Bonus Action (no les tres)."},
+  {name:"Knock Out",cost:"6d6",level:14,desc:"CON save o Unconscious 1 min (o fins rebre dany). Repeteix save/torn."},
+  {name:"Obscure",cost:"3d6",level:14,desc:"DEX save o Blinded fins el final del seu proper torn."},
+];
+
+const FEATS_RG = [
+  {name:"Alert",desc:"+2 Initiative. No pots ser sorprès mentre estàs conscient."},
+  {name:"Skulker",desc:"Pots amagar-te amb llum tènue. Fallar un atac des d'amagat no et revela."},
+  {name:"Mobile",desc:"+10 ft Speed. Dash no provoca Opp. Attacks de criatures als qui hagis atacat."},
+  {name:"Lucky",desc:"3 punts de sort/LR. Gasta un per tirar un d20 extra i triar el resultat."},
+  {name:"Poisoner",desc:"Aplica verí com Bonus Action. Prof en Poisoner's Kit. Ignores resistència a verí."},
+  {name:"Dual Wielder",desc:"Two-Weapon Fighting amb armes One-Handed no Light. +1 AC amb dues armes."},
+  {name:"Sharpshooter",desc:"-5 al d20, +10 dany. Ignores cobertura parcial i ¾. Rang llarg sense Disadvantage."},
+  {name:"Crossbow Expert",desc:"Ignores Loading. Adjacent no imposa Disadvantage. Bonus Action: atac extra ballesta."},
+  {name:"Observant",desc:"+5 Passive Perception i Insight. Pots llegir llavis en idiomes que coneixes."},
+  {name:"Resilient (CON)",desc:"Prof en CON saves. +1 CON."},
+  {name:"Ability Score Improvement",desc:"+2 a una stat o +1/+1 a dues stats."},
+  {name:"Tough",desc:"+2 max HP per nivell."},
+  {name:"Charger",desc:"Si uses Dash, Bonus Action: atac +1d8 (si t'has mogut 10+ ft en línia recta)."},
+];
+
+const SKILLS_LIST = [
+  {name:"Acrobatics",stat:"dex"},{name:"Animal Handling",stat:"wis"},{name:"Arcana",stat:"int_"},
+  {name:"Athletics",stat:"str"},{name:"Deception",stat:"cha"},{name:"History",stat:"int_"},
+  {name:"Insight",stat:"wis"},{name:"Intimidation",stat:"cha"},{name:"Investigation",stat:"int_"},
+  {name:"Medicine",stat:"wis"},{name:"Nature",stat:"int_"},{name:"Perception",stat:"wis"},
+  {name:"Performance",stat:"cha"},{name:"Persuasion",stat:"cha"},{name:"Religion",stat:"int_"},
+  {name:"Sleight of Hand",stat:"dex"},{name:"Stealth",stat:"dex"},{name:"Survival",stat:"wis"},
+];
+
+const SAVES_LIST = [
+  {id:"str",abbr:"STR",name:"Strength"},{id:"dex",abbr:"DEX",name:"Dexterity"},
+  {id:"con",abbr:"CON",name:"Constitution"},{id:"int_",abbr:"INT",name:"Intelligence"},
+  {id:"wis",abbr:"WIS",name:"Wisdom"},{id:"cha",abbr:"CHA",name:"Charisma"},
+];
+
+const LANGS = {
+  cat:{
+    'lbl-identitats':'IDENTITATS · CHANGELING','lbl-basic':'Informació bàsica','lbl-stats':'Estadístiques',
+    'lbl-saves':'Tirades de Salvació','note-saves':'DEX i INT per defecte (Rogue). A Lv15 afegeixes WIS i CHA.',
+    'lbl-skills':'Habilitats','lbl-weaps':'Armes','lbl-notes':'Notes',
+    'lbl-hp':'HIT POINTS','lbl-sneak':'SNEAK ATTACK','sneak-sub':'1/torn · Finesse o Ranged',
+    'lbl-ca':'CUNNING ACTION','ca-desc':'Bonus Action:<br>Dash · Disengage · Hide',
+    'lbl-wails':'Wails from the Grave','lbl-whispers':'Whispers of the Dead',
+    'whisp-hint':"Activa quan l'habilitat/eina és activa. Es perd en triar-ne una altra.",
+    'lbl-sr':'Descans Curt','lbl-lr':'Descans Llarg',
+    'lbl-classf':'Features de Classe','lbl-subclass':'Phantom — Subclasse',
+    'lbl-cunning':'Cunning Strike (Lv5)','cunning-note':'Disponible a Lv5. DC = 8 + DEX mod + Prof.',
+    'lbl-feats':'Feats','lbl-tab-char':'Personatge','lbl-tab-track':'Tracker','lbl-tab-build':'Build',
+  },
+  esp:{
+    'lbl-identitats':'IDENTIDADES · CHANGELING','lbl-basic':'Información básica','lbl-stats':'Estadísticas',
+    'lbl-saves':'Tiradas de Salvación','note-saves':'DEX e INT por defecto (Rogue). A Lv15 añades WIS y CHA.',
+    'lbl-skills':'Habilidades','lbl-weaps':'Armas','lbl-notes':'Notas',
+    'lbl-hp':'HIT POINTS','lbl-sneak':'SNEAK ATTACK','sneak-sub':'1/turno · Finesse o Ranged',
+    'lbl-ca':'CUNNING ACTION','ca-desc':'Acción Bonificación:<br>Dash · Disengage · Hide',
+    'lbl-wails':'Wails from the Grave','lbl-whispers':'Whispers of the Dead',
+    'whisp-hint':'Activa cuando la habilidad/herramienta está activa. Se pierde al elegir otra.',
+    'lbl-sr':'Descanso Corto','lbl-lr':'Descanso Largo',
+    'lbl-classf':'Rasgos de Clase','lbl-subclass':'Phantom — Subclase',
+    'lbl-cunning':'Cunning Strike (Nv5)','cunning-note':'Disponible en Nv5. CD = 8 + mod DEX + Prof.',
+    'lbl-feats':'Dotes','lbl-tab-char':'Personaje','lbl-tab-track':'Tracker','lbl-tab-build':'Build',
+  },
+  eng:{
+    'lbl-identitats':'IDENTITIES · CHANGELING','lbl-basic':'Basic Info','lbl-stats':'Stats',
+    'lbl-saves':'Saving Throws','note-saves':'DEX & INT by default (Rogue). At Lv15 add WIS & CHA.',
+    'lbl-skills':'Skills','lbl-weaps':'Weapons','lbl-notes':'Notes',
+    'lbl-hp':'HIT POINTS','lbl-sneak':'SNEAK ATTACK','sneak-sub':'1/turn · Finesse or Ranged',
+    'lbl-ca':'CUNNING ACTION','ca-desc':'Bonus Action:<br>Dash · Disengage · Hide',
+    'lbl-wails':'Wails from the Grave','lbl-whispers':'Whispers of the Dead',
+    'whisp-hint':'Toggle on when the proficiency is active. Lost when you pick another.',
+    'lbl-sr':'Short Rest','lbl-lr':'Long Rest',
+    'lbl-classf':'Class Features','lbl-subclass':'Phantom — Subclass',
+    'lbl-cunning':'Cunning Strike (Lv5)','cunning-note':'Available at Lv5. DC = 8 + DEX mod + Prof.',
+    'lbl-feats':'Feats','lbl-tab-char':'Character','lbl-tab-track':'Tracker','lbl-tab-build':'Build',
+  }
+};
+
+// ── STATE ──────────────────────────────────────────────────
+let lv = 3;
+let darkMode = false;
+let lang = 'cat';
+let curHp = -1;
+let maxHpMan = -1;
+let usedWails = 0;
+let whisperProf = '';
+let whisperActive = false;
+let activeIdIdx = 0;
+let identities = [{name:'Rohk',notes:''},{name:'Kesh',notes:''},{name:'???',notes:''}];
+let statVals = {str:10,dex:10,con:10,int_:10,wis:10,cha:10};
+let skillProf = new Set(['Stealth','Sleight of Hand','Deception','Perception']);
+let skillExp  = new Set(['Stealth','Sleight of Hand']);
+let selSaves  = new Set(['dex','int_']);
+let selF      = new Set();
+let expFeats  = new Set();
+let charImg   = '';
+let charNotes = '';
+let accSt = {basic:true,stats:true,saves:false,skills:false,weaps:true,notes:false,classf:true,subclass:true,cunning:false,feats:false};
+
+// ── HELPERS ───────────────────────────────────────────────
+const g = id => document.getElementById(id);
+function getMod(st){ return Math.floor((statVals[st]-10)/2); }
+function profBonus(){ return lv>=17?6:lv>=13?5:lv>=9?4:lv>=5?3:2; }
+function sneakDice(){ return Math.ceil(lv/2); }
+function wailsDice(){ return Math.ceil(sneakDice()/2); }
+function getMaxHp(){
+  if(maxHpMan!==-1) return maxHpMan;
+  return 8+(lv-1)*5+getMod('con')*lv;
+}
+function fmtMod(v){ return v>=0?'+'+v:''+v; }
+function t(k){ return (LANGS[lang]||LANGS.cat)[k]||k; }
+
+// ── RENDER ────────────────────────────────────────────────
+function renderAll(){
+  applyLang();
+  renderIdSwitcher();
+  renderStats();
+  renderSaves();
+  renderSkills();
+  renderWeapons();
+  renderTracker();
+  renderBuild();
+}
+
+function applyLang(){
+  Object.keys(LANGS.cat).forEach(k=>{
+    const el=g(k);
+    if(!el) return;
+    if(el.tagName==='INPUT'||el.tagName==='TEXTAREA') return;
+    el.innerHTML=t(k);
+  });
+  ['lb-cat','lb-esp','lb-eng'].forEach(id=>{
+    const b=g(id); if(b) b.classList.toggle('active',id==='lb-'+lang);
+  });
+}
+
+function setLang(l){ lang=l; renderAll(); save(); }
+
+function renderIdSwitcher(){
+  const sw=g('id-switcher');
+  const idIcons=['../icons/id1.png','../icons/id2.png','../icons/id3.png'];
+  sw.innerHTML=identities.map((id,i)=>`
+    <div class="id-card${i===activeIdIdx?' active-id':''}" onclick="setIdentity(${i})">
+      <div class="id-dot"></div>
+      <img src="${idIcons[i]||idIcons[2]}" alt="" style="width:28px;height:28px;object-fit:contain;opacity:${i===activeIdIdx?'1':'.5'};margin-bottom:4px">
+      <div class="id-card-name">${id.name}</div>
+      <div class="id-card-note">${id.notes||'&nbsp;'}</div>
+    </div>`).join('');
+  g('tb-name').textContent=identities[activeIdIdx].name;
+  // identity notes below
+  const nw=g('id-notes-wrap');
+  nw.innerHTML=`<div class="lbl" style="margin-bottom:4px">Notes: ${identities[activeIdIdx].name}</div>
+    <textarea class="id-notes-ta" placeholder="Notes d'aquesta identitat..." oninput="identities[${activeIdIdx}].notes=this.value;renderIdSwitcher();save()">${identities[activeIdIdx].notes}</textarea>`;
+}
+
+function setIdentity(i){
+  activeIdIdx=i;
+  renderIdSwitcher();
+  save();
+}
+
+function renderStats(){
+  const ABBRS=['STR','DEX','CON','INT','WIS','CHA'];
+  const KEYS=['str','dex','con','int_','wis','cha'];
+  g('stat-grid').innerHTML=KEYS.map((k,i)=>`
+    <div class="stat-box">
+      <div class="stat-abbr">${ABBRS[i]}</div>
+      <div><input type="number" class="stat-inp" id="si-${k}" value="${statVals[k]}" min="1" max="30"
+        oninput="statVals['${k}']=+this.value;renderDerived();renderSkills();renderSaves();renderWeapons();renderTracker();save()"></div>
+      <div class="stat-mod">${fmtMod(getMod(k))}</div>
+    </div>`).join('');
+  renderDerived();
+}
+
+function renderDerived(){
+  const dex=getMod('dex'), con=getMod('con'), wis=getMod('wis'), prof=profBonus();
+  const ac=10+dex; // leather armor default
+  const init=dex;
+  const dc=8+dex+prof; // Cunning Strike DC (DEX based)
+  const passive=10+wis+(skillProf.has('Perception')?prof*(skillExp.has('Perception')?2:1):0);
+  g('der-grid').innerHTML=`
+    <div class="der-box"><div class="der-lbl">Prof</div><div class="der-val">${fmtMod(prof)}</div></div>
+    <div class="der-box"><div class="der-lbl">AC</div><div class="der-val">${ac}</div></div>
+    <div class="der-box"><div class="der-lbl">Init</div><div class="der-val">${fmtMod(init)}</div></div>
+    <div class="der-box"><div class="der-lbl">Passive Perc</div><div class="der-val">${passive}</div></div>`;
+}
+
+function renderSaves(){
+  g('saves-list').innerHTML=SAVES_LIST.map(s=>{
+    const on=selSaves.has(s.id);
+    const mod=getMod(s.id)+(on?profBonus():0);
+    return `<div class="save-item">
+      <div class="save-dot${on?' on':''}" onclick="toggleSave('${s.id}')"></div>
+      <div class="save-name">${s.name}</div>
+      <div class="save-val">${fmtMod(mod)}</div>
+    </div>`;
+  }).join('');
+}
+
+function toggleSave(id){
+  selSaves.has(id)?selSaves.delete(id):selSaves.add(id);
+  renderSaves(); save();
+}
+
+function renderSkills(){
+  const prof=profBonus();
+  g('skills-list').innerHTML=SKILLS_LIST.map(sk=>{
+    const haP=skillProf.has(sk.name), haE=skillExp.has(sk.name);
+    const bonus=getMod(sk.stat)+(haP?prof*(haE?2:1):0);
+    const statDisp=sk.stat.replace('_','').toUpperCase().slice(0,3);
+    return `<div class="skill-item">
+      <div class="sk-dots">
+        <div class="sk-dot${haP?' prof':''}" title="Competència" onclick="toggleSkillProf('${sk.name}')">P</div>
+        <div class="sk-dot${haE?' exp':''}" title="Expertise" onclick="toggleSkillExp('${sk.name}')">E</div>
+      </div>
+      <div class="sk-name">${sk.name}</div>
+      <div class="sk-stat">${statDisp}</div>
+      <div class="sk-val">${fmtMod(bonus)}</div>
+    </div>`;
+  }).join('');
+}
+
+function toggleSkillProf(name){
+  skillProf.has(name)?skillProf.delete(name):skillProf.add(name);
+  if(!skillProf.has(name)) skillExp.delete(name);
+  renderSkills(); renderDerived(); save();
+}
+
+function toggleSkillExp(name){
+  if(!skillProf.has(name)) return;
+  skillExp.has(name)?skillExp.delete(name):skillExp.add(name);
+  renderSkills(); save();
+}
+
+function renderWeapons(){
+  const dex=getMod('dex'), prof=profBonus();
+  const atk=dex+prof;
+  const sneak=sneakDice();
+  g('weap-cards').innerHTML=`
+    <div class="weap-card">
+      <div class="weap-left">
+        <div class="weap-name">🗡️ Dagger</div>
+        <div class="weap-props">Finesse · Light · Thrown (20/60 ft)</div>
+      </div>
+      <div class="weap-right">
+        <div class="weap-atk">${fmtMod(atk)}</div>
+        <div class="weap-dmg">1d4${fmtMod(dex)} + ${sneak}d6 SA</div>
+      </div>
+    </div>
+    <div class="weap-card">
+      <div class="weap-left">
+        <div class="weap-name">🏹 Shortbow</div>
+        <div class="weap-props">Ammunition · Two-Handed · Range (80/320 ft)</div>
+      </div>
+      <div class="weap-right">
+        <div class="weap-atk">${fmtMod(atk)}</div>
+        <div class="weap-dmg">1d6${fmtMod(dex)} + ${sneak}d6 SA</div>
+      </div>
+    </div>`;
+}
+
+function renderTracker(){
+  const maxHp=getMaxHp();
+  const cur=curHp===-1?maxHp:curHp;
+  g('hp-cur').value=cur;
+  g('hp-max').value=maxHp;
+  g('hp-auto').textContent=maxHpMan===-1?`auto: ${maxHp} HP`:`manual (${maxHp} HP)`;
+  renderHpBar();
+  // Sneak
+  g('sneak-val').textContent=sneakDice()+'d6';
+  // Wails pips
+  const wMax=profBonus();
+  g('wails-max-txt').textContent=wMax;
+  g('wails-dmg-txt').textContent=`Dany: ${wailsDice()}d6 necròtic a 2a criatura`;
+  let pipsHtml='';
+  for(let i=0;i<wMax;i++){
+    const spent=i<usedWails;
+    pipsHtml+=`<div class="pip${spent?' empty':''}" onclick="toggleWail(${i})"></div>`;
+  }
+  g('wails-pips').innerHTML=pipsHtml;
+  // Whisper toggle
+  const wt=g('whisp-toggle');
+  wt.classList.toggle('on',whisperActive);
+  g('whisp-inp').value=whisperProf;
+}
+
+function renderHpBar(){
+  const max=getMaxHp(), cur=curHp===-1?max:curHp;
+  const pct=Math.max(0,Math.min(100,cur/max*100));
+  const fill=g('hp-fill');
+  fill.style.width=pct+'%';
+  fill.className='hp-fill'+(pct<=25?' lo':pct<=50?' md':'');
+}
+
+function adjHp(delta){
+  const max=getMaxHp();
+  if(curHp===-1) curHp=max;
+  curHp=Math.max(0,Math.min(max,curHp+delta));
+  g('hp-cur').value=curHp;
+  renderHpBar();
+  save();
+}
+
+function toggleWail(i){
+  // clicking used pip frees it, clicking free pip uses it
+  if(i<usedWails) usedWails=i;
+  else usedWails=i+1;
+  renderTracker(); save();
+}
+
+function toggleWhisper(){
+  whisperActive=!whisperActive;
+  renderTracker(); save();
+}
+
+function shortRest(){
+  // Whispers of the Dead recharges
+  whisperActive=false;
+  whisperProf='';
+  renderTracker(); save();
+  showToast('Descans Curt: Whispers of the Dead recuperat.');
+}
+
+function longRest(){
+  usedWails=0;
+  whisperActive=false;
+  whisperProf='';
+  if(curHp!==-1) curHp=getMaxHp();
+  renderTracker(); save();
+  showToast('Descans Llarg: HP i Wails recuperats!');
+}
+
+function showToast(msg){
+  let t=document.getElementById('toast');
+  if(!t){
+    t=document.createElement('div');
+    t.id='toast';
+    t.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:8px 16px;border-radius:20px;font-size:13px;z-index:999;opacity:0;transition:opacity .3s';
+    document.body.appendChild(t);
+  }
+  t.textContent=msg;
+  t.style.opacity='1';
+  setTimeout(()=>t.style.opacity='0',2200);
+}
+
+function renderBuild(){
+  // Class features
+  g('classf-list').innerHTML=CLASS_FEATURES_RG.map((f,i)=>{
+    const avail=f.level<=lv;
+    return `<div class="feat-card${avail?'':' feat-na'}">
+      <div class="feat-hd${expFeats.has('cf'+i)?' open':''}" onclick="toggleFeatExp('cf${i}',this)">
+        <span class="feat-lv">Lv${f.level}</span>
+        <span class="feat-name">${f.name}</span>
+        <span class="feat-chev">▼</span>
+      </div>
+      <div class="feat-body${expFeats.has('cf'+i)?' open':''}"><p>${f.desc}</p></div>
+    </div>`;
+  }).join('');
+
+  // Subclass features
+  g('subclass-list').innerHTML=SUBCLASS_RG.map((f,i)=>{
+    const avail=f.level<=lv;
+    return `<div class="feat-card${avail?'':' feat-na'}">
+      <div class="feat-hd${expFeats.has('sc'+i)?' open':''}" onclick="toggleFeatExp('sc${i}',this)">
+        <span class="feat-lv sub${avail?'':' na'}">Lv${f.level}</span>
+        <span class="feat-name">${f.name}</span>
+        <span class="feat-chev">▼</span>
+      </div>
+      <div class="feat-body${expFeats.has('sc'+i)?' open':''}"><p>${f.desc}</p></div>
+    </div>`;
+  }).join('');
+
+  // Cunning strikes
+  const cDC=8+getMod('dex')+profBonus();
+  g('cunning-list').innerHTML=CUNNING_STRIKES.map(cs=>{
+    const avail=cs.level<=lv;
+    return `<div class="feat-card${avail?'':' feat-na'}">
+      <div style="display:flex;align-items:center;gap:8px">
+        <span class="feat-lv${avail?'':' na'}" style="background:var(--rl);color:var(--r)">${cs.cost}</span>
+        <span class="feat-name">${cs.name}</span>
+        ${!avail?'<span style="font-size:10px;color:var(--os)">Lv'+cs.level+'</span>':''}
+      </div>
+      <div class="feat-body open"><p>${cs.desc}</p>${avail?`<p style="margin-top:4px;font-size:11px;color:var(--os)">DC ${cDC}</p>`:''}</div>
+    </div>`;
+  }).join('');
+
+  // Feats
+  g('feats-list').innerHTML=FEATS_RG.map(f=>{
+    const sel=selF.has(f.name);
+    return `<div class="sfeat-card${sel?' sel':''}" onclick="toggleFeat('${f.name}')">
+      <div class="sfeat-hd">
+        <span class="sfeat-name">${f.name}</span>
+        <div class="sfeat-chk">✓</div>
+      </div>
+      <div class="sfeat-desc">${f.desc}</div>
+    </div>`;
+  }).join('');
+}
+
+function toggleFeatExp(key,hd){
+  expFeats.has(key)?expFeats.delete(key):expFeats.add(key);
+  hd.classList.toggle('open');
+  hd.nextElementSibling.classList.toggle('open');
+}
+
+function toggleFeat(name){
+  selF.has(name)?selF.delete(name):selF.add(name);
+  renderBuild(); save();
+}
+
+// ── ACCORDION ────────────────────────────────────────────
+function toggleSec(key,hd){
+  accSt[key]=!accSt[key];
+  hd.classList.toggle('open',accSt[key]);
+  g('sec-'+key).classList.toggle('open',accSt[key]);
+}
+
+function initAccordions(){
+  Object.entries(accSt).forEach(([k,v])=>{
+    const body=g('sec-'+k); if(!body) return;
+    body.classList.toggle('open',v);
+    const hd=body.previousElementSibling?.previousElementSibling;
+    if(hd) hd.classList.toggle('open',v);
+  });
+}
+
+// ── TAB ──────────────────────────────────────────────────
+function showTab(name){
+  ['character','tracker','build'].forEach(t=>{
+    g('tab-'+t)?.classList.toggle('active',t===name);
+    g('tbtn-'+t)?.classList.toggle('active',t===name);
+  });
+}
+
+// ── DARK MODE ────────────────────────────────────────────
+function toggleDark(){
+  darkMode=!darkMode;
+  document.body.classList.toggle('dark',darkMode);
+  save();
+}
+
+// ── IMAGE ────────────────────────────────────────────────
+function pickImg(){ g('img-input').click(); }
+function loadImg(e){
+  const file=e.target.files[0]; if(!file) return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    charImg=ev.target.result;
+    const img=g('avatar-img');
+    img.src=charImg; img.style.display='block';
+    g('avatar-placeholder').style.display='none';
+    save();
+  };
+  reader.readAsDataURL(file);
+}
+
+function onNameChange(){
+  identities[activeIdIdx].name=g('c-name').value||'Rohk';
+  renderIdSwitcher(); save();
+}
+
+// ── SAVE / LOAD ──────────────────────────────────────────
+function save(){
+  const data={
+    lv,darkMode,lang,curHp,maxHpMan,usedWails,whisperProf,whisperActive,
+    activeIdIdx,identities,statVals,
+    skillProf:[...skillProf],skillExp:[...skillExp],
+    selSaves:[...selSaves],selF:[...selF],expFeats:[...expFeats],
+    charImg,charNotes:g('char-notes')?.value||'',
+    bg:g('c-bg')?.value||'',align:g('c-align')?.value||'',
+  };
+  localStorage.setItem('dnd_rg',JSON.stringify(data));
+}
+
+function load(){
+  try{
+    const raw=localStorage.getItem('dnd_rg');
+    if(!raw) return;
+    const d=JSON.parse(raw);
+    lv=d.lv||3; darkMode=!!d.darkMode; lang=d.lang||'cat';
+    curHp=d.curHp??-1; maxHpMan=d.maxHpMan??-1;
+    usedWails=d.usedWails||0;
+    whisperProf=d.whisperProf||''; whisperActive=!!d.whisperActive;
+    activeIdIdx=d.activeIdIdx||0;
+    identities=d.identities||identities;
+    statVals=d.statVals||statVals;
+    skillProf=new Set(d.skillProf||[]);
+    skillExp=new Set(d.skillExp||[]);
+    selSaves=new Set(d.selSaves||['dex','int_']);
+    selF=new Set(d.selF||[]);
+    expFeats=new Set(d.expFeats||[]);
+    charImg=d.charImg||'';
+    charNotes=d.charNotes||'';
+    document.body.classList.toggle('dark',darkMode);
+    // Restore text fields
+    setTimeout(()=>{
+      if(g('c-bg')) g('c-bg').value=d.bg||'Criminal';
+      if(g('c-align')) g('c-align').value=d.align||'Caòtic Neutral';
+      if(g('char-notes')) g('char-notes').value=charNotes;
+      if(charImg){
+        const img=g('avatar-img');
+        img.src=charImg; img.style.display='block';
+        g('avatar-placeholder').style.display='none';
+      }
+    },0);
+  }catch(e){ console.warn('Load error',e); }
+}
+
+// ── INIT ─────────────────────────────────────────────────
+load();
+renderAll();
+initAccordions();
+
+// SW
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
+  navigator.serviceWorker.addEventListener('message',e=>{
+    if(e.data?.type==='SW_UPDATED') window.location.reload();
+  });
+}
+</script>
+</body>
+</html>

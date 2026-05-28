@@ -1,12 +1,16 @@
-const CACHE = 'dnd-am-v15';
+const CACHE = 'dnd-am-v16';
 const ASSETS = [
   './preview.html', './view.html', './manifest.json', './icon.png', './logo.png',
   './icons/char.png', './icons/spells.png', './icons/tracker.png', './icons/build.png',
   './icons/saved.png', './icons/basic.png', './icons/stats.png', './icons/lore.png',
   './icons/classf.png', './icons/subclass.png', './icons/feats.png', './icons/notes.png',
   './icons/hp.png', './icons/slots.png', './icons/shortrest.png', './icons/longrest.png',
-  './icons/tip.png', './icons/buildmode.png', './icons/nospells.png',
-  './icons/sun.png'
+  './icons/tip.png', './icons/buildmode.png', './icons/nospells.png', './icons/sun.png',
+  './icons/rogue.png', './icons/d20.png', './icons/slash.png', './icons/dagger.png',
+  './icons/bow-and-arrow.png', './icons/shadow.png', './icons/necromancer.png',
+  './icons/skeleton.png', './icons/hacker.png', './icons/moon.png', './icons/bonfire.png',
+  './icons/speed.png', './icons/crystal-ball.png',
+  './icons/id1.png', './icons/id2.png', './icons/id3.png',
 ];
 
 self.addEventListener('install', e => {

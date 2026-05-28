@@ -73,6 +73,52 @@ html,body{height:100%;background:var(--bg);color:var(--tx);font-family:-apple-sy
 .id-name-inp{flex:1;min-width:0;border:none;background:none;color:var(--tx);font-size:15px;font-weight:700;border-bottom:1px solid var(--ol);padding:3px 0;outline:none;font-family:inherit}
 .id-name-inp:focus{border-color:var(--p)}
 .id-del-btn{background:none;border:1.5px solid var(--r);border-radius:6px;color:var(--r);padding:4px 8px;cursor:pointer;font-size:13px;flex-shrink:0}
+/* SUB-TABS */
+.subtab-bar{display:flex;gap:0;margin-bottom:14px;border-radius:var(--rr);overflow:hidden;border:1px solid var(--ol)}
+.subtab-btn{flex:1;padding:9px 0;background:var(--sv);color:var(--os);font-size:13px;font-weight:600;border:none;cursor:pointer;transition:all .15s}
+.subtab-btn.active{background:var(--p);color:#fff}
+.subtab-panel{display:none}
+.subtab-panel.active{display:block}
+
+/* SESSIÓ */
+.sess-id-card{display:flex;align-items:center;gap:12px;background:var(--sf);border:1px solid var(--ol);border-radius:var(--rr);padding:12px;margin-bottom:14px}
+.sess-id-photo{width:54px;height:54px;border-radius:50%;border:2px solid var(--p);overflow:hidden;flex-shrink:0;background:var(--sv);display:flex;align-items:center;justify-content:center}
+.sess-id-photo img{width:100%;height:100%;object-fit:cover}
+.sess-id-photo img.icon{width:28px;height:28px;object-fit:contain;opacity:.7}
+.sess-id-info{flex:1;min-width:0}
+.sess-id-name{font-size:18px;font-weight:700;color:var(--tx)}
+.sess-id-sub{font-size:12px;color:var(--os);margin-top:2px}
+.sess-id-notes{font-size:12px;color:var(--os);margin-top:4px;font-style:italic;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sess-block{background:var(--sf);border:1px solid var(--ol);border-radius:var(--rr);padding:10px 12px;margin:6px 0 14px;display:flex;align-items:center;gap:12px}
+.sess-sneak-dice{font-size:28px;font-weight:700;color:var(--a)}
+.sess-sneak-info{font-size:12px;color:var(--os);line-height:1.5;flex:1}
+.sess-res-row{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.sess-res-box{flex:1;min-width:120px;background:var(--sf);border:1px solid var(--ol);border-radius:var(--rr);padding:10px;text-align:center}
+.sess-res-lbl{font-size:10px;font-weight:700;text-transform:uppercase;color:var(--os);margin-bottom:4px}
+.sess-rem-chip{display:flex;align-items:flex-start;gap:8px;background:var(--sv);border:1px solid var(--ol);border-radius:8px;padding:8px 10px;margin-bottom:6px}
+.sess-rem-ic{width:20px;height:20px;object-fit:contain;opacity:.7;flex-shrink:0;margin-top:1px}
+.sess-rem-text{flex:1}
+.sess-rem-title{font-size:13px;font-weight:700;color:var(--tx)}
+.sess-rem-desc{font-size:12px;color:var(--os);margin-top:2px;line-height:1.4}
+.sess-feats-wrap{margin:14px 0}
+.sess-feat-chip{display:inline-flex;align-items:center;gap:5px;background:var(--pl);color:var(--pd);border:1px solid var(--p);border-radius:20px;padding:5px 11px;font-size:12px;font-weight:600;margin:3px}
+.sess-skill-row{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--sv)}
+.sess-sk-badge{font-size:9px;font-weight:700;padding:1px 5px;border-radius:10px;background:var(--pl);color:var(--pd);flex-shrink:0}
+.sess-sk-badge.exp{background:var(--tl);color:var(--td)}
+.sess-sk-name{flex:1;font-size:13px}
+.sess-sk-stat{font-size:10px;color:var(--os);flex-shrink:0}
+.sess-sk-val{font-size:15px;font-weight:700;color:var(--p);width:30px;text-align:right}
+.sess-ab-card{background:var(--sv);border-radius:var(--rr);border:1px solid var(--ol);padding:10px 12px;margin-bottom:7px}
+.sess-ab-hd{display:flex;align-items:center;gap:7px;cursor:pointer}
+.sess-ab-lv{font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;background:var(--pl);color:var(--pd);flex-shrink:0}
+.sess-ab-lv.sub{background:var(--tl);color:var(--td)}
+.sess-ab-lv.na{background:var(--sv);color:var(--os);border:1px solid var(--ol)}
+.sess-ab-name{font-size:14px;font-weight:600;flex:1}
+.sess-ab-chev{font-size:11px;color:var(--os);transition:transform .2s;flex-shrink:0}
+.sess-ab-hd.open .sess-ab-chev{transform:rotate(180deg)}
+.sess-ab-body{font-size:13px;color:var(--os);line-height:1.55;margin-top:8px;display:none}
+.sess-ab-body.open{display:block}
+.mb4{margin-bottom:4px}
 /* LEVEL STEPPER */
 .lv-stepper{display:flex;align-items:center;gap:5px;flex-shrink:0}
 .lv-btn{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--ol);background:var(--sv);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--tx);line-height:1}
@@ -503,6 +549,54 @@ html,body{height:100%;background:var(--bg);color:var(--tx);font-family:-apple-sy
     </div>
   </div>
 
+  <!-- ========== SESSIÓ TAB ========== -->
+  <div class="tab-panel" id="tab-session">
+    <!-- Sub-tabs -->
+    <div class="subtab-bar">
+      <button class="subtab-btn active" id="sbtн-active" onclick="showSubtab('active')">
+        <span id="lbl-sub-active">Actiu</span>
+      </button>
+      <button class="subtab-btn" id="sbtn-abilities" onclick="showSubtab('abilities')">
+        <span id="lbl-sub-abilities">Habilitats</span>
+      </button>
+    </div>
+
+    <!-- ACTIU panel -->
+    <div class="subtab-panel active" id="sp-active">
+
+      <!-- Active identity -->
+      <div class="sess-id-card" id="sess-id-card"></div>
+
+      <!-- Combat stats -->
+      <div class="lbl mb4" id="lbl-sess-combat">COMBAT</div>
+      <div class="der-grid" id="sess-combat-grid"></div>
+
+      <!-- Sneak Attack -->
+      <div class="sess-block" id="sess-sneak-block"></div>
+
+      <!-- Resources mini -->
+      <div class="lbl mb4" id="lbl-sess-res">RECURSOS</div>
+      <div class="sess-res-row" id="sess-res-row"></div>
+
+      <!-- Reminders -->
+      <div class="lbl mb4" id="lbl-sess-rem">ACCIONS RÀPIDES</div>
+      <div id="sess-reminders"></div>
+
+      <!-- Active feats -->
+      <div id="sess-feats-wrap"></div>
+
+      <!-- Top skills -->
+      <div class="lbl mb4" id="lbl-sess-skills">HABILITATS DESTACADES</div>
+      <div id="sess-skills"></div>
+    </div>
+
+    <!-- HABILITATS panel -->
+    <div class="subtab-panel" id="sp-abilities">
+      <p class="sec-note" style="margin-bottom:10px" id="sess-ab-note">Totes les abilities disponibles. Les grises no estan desblocades encara.</p>
+      <div id="sess-ab-list"></div>
+    </div>
+  </div>
+
 </div><!-- /scroll -->
 
 <!-- TAB BAR -->
@@ -514,6 +608,10 @@ html,body{height:100%;background:var(--bg);color:var(--tx);font-family:-apple-sy
   <button class="tab-btn" id="tbtn-tracker" onclick="showTab('tracker')">
     <img src="../icons/d20.png" alt="">
     <span id="lbl-tab-track">Tracker</span>
+  </button>
+  <button class="tab-btn" id="tbtn-session" onclick="showTab('session')">
+    <img src="../icons/crystal-ball.png" alt="">
+    <span id="lbl-tab-session">Sessió</span>
   </button>
   <button class="tab-btn" id="tbtn-build" onclick="showTab('build')">
     <img src="../icons/slash.png" alt="">
@@ -672,6 +770,7 @@ function renderAll(){
   renderTraits();
   renderTracker();
   renderBuild();
+  renderSession();
 }
 
 function applyLang(){
@@ -958,19 +1057,19 @@ function adjHp(delta){
   curHp=Math.max(0,Math.min(max,curHp+delta));
   g('hp-cur').value=curHp;
   renderHpBar();
+  renderSessionActive();
   save();
 }
 
 function toggleWail(i){
-  // clicking used pip frees it, clicking free pip uses it
   if(i<usedWails) usedWails=i;
   else usedWails=i+1;
-  renderTracker(); save();
+  renderTracker(); renderSessionActive(); save();
 }
 
 function toggleWhisper(){
   whisperActive=!whisperActive;
-  renderTracker(); save();
+  renderTracker(); renderSessionActive(); save();
 }
 
 function shortRest(){
@@ -1086,10 +1185,164 @@ function initAccordions(){
 
 // ── TAB ──────────────────────────────────────────────────
 function showTab(name){
-  ['character','tracker','build'].forEach(t=>{
+  ['character','tracker','session','build'].forEach(t=>{
     g('tab-'+t)?.classList.toggle('active',t===name);
     g('tbtn-'+t)?.classList.toggle('active',t===name);
   });
+  if(name==='session') renderSession();
+}
+
+function showSubtab(name){
+  ['active','abilities'].forEach(s=>{
+    g('sp-'+s)?.classList.toggle('active',s===name);
+    const btn=document.querySelector(`[onclick="showSubtab('${s}')"]`);
+    if(btn) btn.classList.toggle('active',s===name);
+  });
+  if(name==='abilities') renderSessionAbilities();
+}
+
+function renderSession(){
+  renderSessionActive();
+  renderSessionAbilities();
+}
+
+function renderSessionActive(){
+  const active=identities[activeIdIdx]||identities[0];
+  const icon=ID_DEFAULT_ICONS[activeIdIdx]||'../icons/shadow.png';
+  const dex=getMod('dex'), prof=profBonus(), wis=getMod('wis');
+  const atk=dex+prof, ac=10+dex, sneak=sneakDice();
+
+  // Identity card
+  const photoHtml=active.img
+    ?`<img src="${active.img}" alt="" style="width:100%;height:100%;object-fit:cover">`
+    :`<img class="icon" src="${icon}" alt="">`;
+  const idNames=identities.map((id,i)=>i===activeIdIdx?`<b>${id.name||'???'}</b>`:(id.name||'???')).join(' · ');
+  g('sess-id-card').innerHTML=`
+    <div class="sess-id-photo">${photoHtml}</div>
+    <div class="sess-id-info">
+      <div class="sess-id-name">${active.name||'???'}</div>
+      <div class="sess-id-sub">Phantom Rogue Lv${lv} · Changeling</div>
+      <div class="sess-id-sub" style="margin-top:2px">${idNames}</div>
+      ${active.notes?`<div class="sess-id-notes">${active.notes}</div>`:''}
+    </div>`;
+
+  // Combat grid
+  const passive=10+wis+(skillProf.has('Perception')?prof*(skillExp.has('Perception')?2:1):0);
+  g('sess-combat-grid').innerHTML=`
+    <div class="der-box"><div class="der-lbl">🗡️ ATK</div><div class="der-val">${fmtMod(atk)}</div></div>
+    <div class="der-box"><div class="der-lbl">🏹 ATK</div><div class="der-val">${fmtMod(atk)}</div></div>
+    <div class="der-box"><div class="der-lbl">AC</div><div class="der-val">${ac}</div></div>
+    <div class="der-box"><div class="der-lbl">Init</div><div class="der-val">${fmtMod(dex)}</div></div>`;
+
+  // Sneak Attack block
+  g('sess-sneak-block').innerHTML=`
+    <div class="sess-sneak-dice">${sneak}d6</div>
+    <div class="sess-sneak-info">
+      <b>Sneak Attack</b> · 1/torn<br>
+      Cal Finesse o Ranged + (Advantage <i>o</i> aliat adjacent sense Disadv.)
+    </div>`;
+
+  // Resources
+  const maxHp=getMaxHp(), curHpVal=curHp===-1?maxHp:curHp;
+  const hpPct=Math.max(0,Math.min(100,curHpVal/maxHp*100));
+  const hpColor=hpPct<=25?'var(--r)':hpPct<=50?'#E8A020':'var(--p)';
+  const wMax=profBonus(), wLeft=wMax-usedWails;
+  const wPips=Array.from({length:wMax},(_,i)=>
+    `<div class="pip${i<usedWails?' empty':''}" style="width:18px;height:18px" onclick="toggleWail(${i})"></div>`
+  ).join('');
+  g('sess-res-row').innerHTML=`
+    <div class="sess-res-box">
+      <div class="sess-res-lbl">HP</div>
+      <div style="font-size:22px;font-weight:700;color:${hpColor}">${curHpVal}<span style="font-size:14px;color:var(--os)">/${maxHp}</span></div>
+      <div style="height:4px;border-radius:2px;background:var(--ol);margin-top:5px;overflow:hidden">
+        <div style="width:${hpPct}%;height:100%;background:${hpColor};border-radius:2px"></div>
+      </div>
+    </div>
+    <div class="sess-res-box">
+      <div class="sess-res-lbl">Wails · ${wLeft}/${wMax}</div>
+      <div class="pips-wrap" style="margin:4px 0 2px">${wPips}</div>
+      <div style="font-size:10px;color:var(--os)">${wailsDice()}d6 🩸 necrotic</div>
+    </div>
+    <div class="sess-res-box" style="${whisperActive?'border-color:var(--p);background:var(--pl)':''}">
+      <div class="sess-res-lbl">Whispers</div>
+      <div style="font-size:12px;font-weight:600;color:${whisperActive?'var(--pd)':'var(--os)'};margin-top:4px">
+        ${whisperActive?(whisperProf||'Actiu'):'Inactiu'}
+      </div>
+      <div style="font-size:10px;color:var(--os);margin-top:2px">SR/LR reset</div>
+    </div>`;
+
+  // Reminders
+  const reminders=[
+    {icon:'../icons/hacker.png',title:'Cunning Action',desc:'Bonus Action: Dash · Disengage · Hide'},
+    {icon:'../icons/speed.png',title:'Steady Aim',desc:'Bonus Action: Advantage next atac. No et moguis. Speed → 0.'},
+    ...(lv>=5?[{icon:'../icons/speed.png',title:'Uncanny Dodge',desc:'Reacció: redueix a la meitat el dany d\'un atacant visible.'}]:[]),
+    ...(lv>=7?[{icon:'../icons/hacker.png',title:'Evasion',desc:'DEX save: èxit = cap dany, falla = meitat.'}]:[]),
+    ...(lv>=7?[{icon:'../icons/d20.png',title:'Reliable Talent',desc:'Tirades amb competència: d20 de 1-9 compta com a 10.'}]:[]),
+  ];
+  g('sess-reminders').innerHTML=reminders.map(r=>`
+    <div class="sess-rem-chip">
+      <img class="sess-rem-ic" src="${r.icon}" alt="">
+      <div class="sess-rem-text">
+        <div class="sess-rem-title">${r.title}</div>
+        <div class="sess-rem-desc">${r.desc}</div>
+      </div>
+    </div>`).join('')+'<div style="margin-bottom:14px"></div>';
+
+  // Active feats
+  const activeFeats=[...selF];
+  const featsHtml=activeFeats.length
+    ?`<div class="lbl mb4" id="lbl-sess-feats">FEATS ACTIUS</div><div class="sess-feats-wrap">${
+      activeFeats.map(f=>`<span class="sess-feat-chip">✦ ${f}</span>`).join('')
+    }</div><div style="margin-bottom:14px"></div>`
+    :'';
+  g('sess-feats-wrap').innerHTML=featsHtml;
+
+  // Top skills (proficient, sorted by value desc)
+  const profSkills=SKILLS_LIST
+    .filter(sk=>skillProf.has(sk.name))
+    .map(sk=>{
+      const haE=skillExp.has(sk.name);
+      const val=getMod(sk.stat)+prof*(haE?2:1);
+      return {...sk,val,haE};
+    })
+    .sort((a,b)=>b.val-a.val);
+  g('sess-skills').innerHTML=profSkills.length
+    ?profSkills.map(sk=>`
+      <div class="sess-skill-row">
+        <span class="sess-sk-badge${sk.haE?' exp':''}">${sk.haE?'E':'P'}</span>
+        <span class="sess-sk-name">${sk.name}</span>
+        <span class="sess-sk-stat">${sk.stat.replace('_','').toUpperCase().slice(0,3)}</span>
+        <span class="sess-sk-val">${fmtMod(sk.val)}</span>
+      </div>`).join('')
+    :'<p class="sec-note">Cap habilitat amb competència seleccionada.</p>';
+}
+
+function renderSessionAbilities(){
+  // Fusió de class features + subclass + cunning strikes en un sol scroll
+  const csDC=8+getMod('dex')+profBonus();
+  const allAbilities=[
+    ...CLASS_FEATURES_RG.map(f=>({...f,type:'class',key:'cf'})),
+    ...SUBCLASS_RG.map(f=>({...f,type:'sub',key:'sub'})),
+    ...CUNNING_STRIKES.map((cs,i)=>({
+      level:cs.level,name:`${cs.name} (${cs.cost})`,
+      desc:`${cs.desc}${cs.level<=lv?' DC '+csDC:''}`,
+      type:'cs',key:'cs'
+    })),
+  ].sort((a,b)=>a.level-b.level);
+
+  g('sess-ab-list').innerHTML=allAbilities.map((f,i)=>{
+    const avail=f.level<=lv;
+    const lvClass=f.type==='sub'?'sub':avail?'':'na';
+    const bodyKey='ab'+i;
+    return `<div class="sess-ab-card${avail?'':''}" style="${avail?'':'opacity:.5'}">
+      <div class="sess-ab-hd${expFeats.has(bodyKey)?' open':''}" onclick="toggleFeatExp('${bodyKey}',this)">
+        <span class="sess-ab-lv ${lvClass}">Lv${f.level}</span>
+        <span class="sess-ab-name">${f.name}</span>
+        <span class="sess-ab-chev">▼</span>
+      </div>
+      <div class="sess-ab-body${expFeats.has(bodyKey)?' open':''}">${f.desc}</div>
+    </div>`;
+  }).join('');
 }
 
 // ── DARK MODE ────────────────────────────────────────────

@@ -8,175 +8,256 @@
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
   --p:#7F77DD;--pl:#EEEEFE;--pd:#3C3489;
-  --t:#1D9E75;--tl:#E1F5EE;
+  --t:#1D9E75;--tl:#E1F5EE;--td:#085041;
+  --a:#BA7517;--al:#FAEEDB;--ad:#633806;
   --r:#D85A30;--rl:#FAECE7;
   --bg:#F4F4F8;--sf:#FFF;--sv:#F0F0F4;
-  --ol:#D4D4DC;--os:#666;--tx:#1a1a1a;
-  --rr:12px;
+  --ol:#D4D4DC;--os:#666;--tx:#1a1a1a;--rr:12px;
 }
 @media(prefers-color-scheme:dark){
-  :root{--bg:#0F0F1A;--sf:#1A1A2A;--sv:#22223A;--ol:#333350;--os:#9090B8;--tx:#E0E0F0;--pl:#21204A;--pd:#B0AAEE;}
+  :root{--bg:#0F0F1A;--sf:#1A1A2A;--sv:#22223A;--ol:#333350;--os:#9090B8;--tx:#E0E0F0;--pl:#21204A;--pd:#B0AAEE;--tl:#0A2820;--td:#6DCFB0;--al:#2A1A00;--ad:#E8B96A;}
 }
-body{background:var(--bg);color:var(--tx);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;padding:20px 16px 40px}
-.header{text-align:center;padding:20px 0 16px}
-.char-name{font-size:26px;font-weight:800;color:var(--tx)}
-.char-sub{font-size:14px;color:var(--os);margin-top:4px}
-.badge{display:inline-block;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.3px}
-.bp{background:var(--pl);color:var(--pd)}
-.bt{background:#E3F4EE;color:#085041}
-.br{background:var(--rl);color:var(--r)}
-.card{background:var(--sf);border-radius:var(--rr);padding:16px;margin-bottom:12px;box-shadow:0 1px 4px rgba(0,0,0,.07)}
-.card-lbl{font-size:11px;font-weight:700;letter-spacing:.8px;color:var(--os);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+body{background:var(--bg);color:var(--tx);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;padding:16px 14px 40px}
+/* Header */
+.dm-pill{display:inline-block;font-size:10px;font-weight:700;letter-spacing:1.2px;background:var(--p);color:#fff;padding:3px 10px;border-radius:20px;margin-bottom:10px}
+.char-name{font-size:28px;font-weight:800;color:var(--tx);line-height:1.1}
+.char-sub{font-size:13px;color:var(--os);margin-top:5px}
+.header{text-align:center;padding:16px 0 14px;border-bottom:1px solid var(--ol);margin-bottom:14px}
+/* Cards */
+.card{background:var(--sf);border-radius:var(--rr);padding:14px;margin-bottom:10px;box-shadow:0 1px 4px rgba(0,0,0,.07)}
+.card-lbl{font-size:10px;font-weight:700;letter-spacing:.9px;color:var(--os);margin-bottom:10px;text-transform:uppercase}
+/* Stats */
+.stat-row{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+.sbox{background:var(--sv);border-radius:8px;padding:7px 4px;text-align:center}
+.slbl{font-size:9px;font-weight:700;color:var(--os);letter-spacing:.5px}
+.sval{font-size:16px;font-weight:800;color:var(--tx)}
+.smod{font-size:11px;color:var(--pd);font-weight:600}
 /* HP */
-.hp-row{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:10px}
-.hp-val{font-size:40px;font-weight:800}
-.hp-max{font-size:18px;color:var(--os);font-weight:400}
-.hp-bar-wrap{height:12px;background:var(--sv);border-radius:6px;overflow:hidden}
-.hp-bar-fill{height:100%;border-radius:6px;transition:width .3s}
-.hp-pct{text-align:center;font-size:12px;color:var(--os);margin-top:6px}
-/* Spell slots */
-.slots-grid{display:flex;flex-wrap:wrap;gap:8px}
-.slot-lv{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 12px;background:var(--sv);border-radius:10px;min-width:56px}
-.slot-lv-num{font-size:11px;font-weight:700;color:var(--os)}
-.slot-pips{display:flex;gap:4px;flex-wrap:wrap;justify-content:center}
-.pip{width:10px;height:10px;border-radius:50%;border:1.5px solid var(--ol)}
-.pip.f{background:var(--p);border-color:var(--p)}
-.pip.e{background:transparent}
-.slot-rem{font-size:12px;font-weight:700;color:var(--tx)}
-/* Sorcery */
-.sp-row{display:flex;align-items:center;justify-content:space-between}
-.sp-big{font-size:28px;font-weight:800;color:var(--pd)}
-.sp-bar-wrap{height:8px;background:var(--sv);border-radius:4px;overflow:hidden;margin-top:8px}
-.sp-bar-fill{height:100%;border-radius:4px;background:var(--p)}
+.hp-num{display:flex;align-items:baseline;justify-content:center;gap:4px;margin-bottom:8px}
+.hp-val{font-size:42px;font-weight:800}
+.hp-sep{font-size:20px;color:var(--os)}
+.hp-max{font-size:20px;color:var(--os)}
+.bar-wrap{height:12px;background:var(--sv);border-radius:6px;overflow:hidden}
+.bar-fill{height:100%;border-radius:6px}
+.bar-note{font-size:11px;color:var(--os);text-align:center;margin-top:5px}
 /* Concentration */
-.conc-bar{display:flex;align-items:center;gap:10px}
-.conc-dot{width:12px;height:12px;border-radius:50%;background:var(--r);flex-shrink:0;animation:pulse 1.4s infinite}
+.conc-row{display:flex;align-items:center;gap:10px}
+.conc-dot{width:11px;height:11px;border-radius:50%;background:var(--r);flex-shrink:0;animation:pulse 1.4s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-.conc-name{font-size:15px;font-weight:600;color:var(--r)}
-.conc-rnd{font-size:12px;color:var(--os)}
+.conc-name{font-size:16px;font-weight:600;color:var(--r)}
+.conc-rnd{font-size:11px;color:var(--os)}
+/* Slots */
+.slots-wrap{display:flex;flex-wrap:wrap;gap:8px}
+.slot-grp{display:flex;flex-direction:column;align-items:center;gap:5px;background:var(--sv);border-radius:9px;padding:9px 11px;min-width:54px}
+.slot-lbl{font-size:10px;font-weight:700;color:var(--os)}
+.pips{display:flex;gap:4px;flex-wrap:wrap;justify-content:center}
+.pip{width:10px;height:10px;border-radius:50%}
+.pip.f{background:var(--p)}
+.pip.e{background:transparent;border:1.5px solid var(--ol)}
+.slot-rem{font-size:13px;font-weight:700}
+/* SP */
+.sp-big{font-size:30px;font-weight:800;color:var(--pd)}
+.sp-row-v{display:flex;align-items:baseline;gap:6px;margin-bottom:8px}
+/* Spells */
+.spell-list{display:flex;flex-direction:column;gap:4px}
+.spell-item{display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--sv);border-radius:8px;font-size:13px}
+.spell-item .lv-badge{font-size:10px;font-weight:700;padding:2px 6px;border-radius:10px;flex-shrink:0}
+.lv0{background:#E8E8F4;color:#555}
+.lv1{background:#E3F4EE;color:#085041}
+.lv2{background:#E3EEF4;color:#05304A}
+.lv3{background:#F4EEE3;color:#4A3005}
+.lv4{background:#F4E3E3;color:#4A0505}
+.lv5{background:var(--pl);color:var(--pd)}
+.lv6,.lv7,.lv8,.lv9{background:#2E2E2E;color:#fff}
+.spell-psi{background:var(--pl);color:var(--pd)}
+.conc-tag{font-size:9px;background:var(--rl);color:var(--r);padding:1px 5px;border-radius:6px;font-weight:700;margin-left:auto;flex-shrink:0}
+/* Meta & feats */
+.tag-wrap{display:flex;flex-wrap:wrap;gap:6px}
+.tag{padding:5px 10px;border-radius:20px;font-size:12px;font-weight:600}
+.tag-meta{background:var(--pl);color:var(--pd)}
+.tag-feat{background:var(--al);color:var(--ad)}
+/* Derived */
+.drv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.dbox{background:var(--sv);border-radius:9px;padding:9px 6px;text-align:center}
+.dlbl{font-size:9px;font-weight:700;color:var(--os);letter-spacing:.5px;margin-bottom:4px}
+.dval{font-size:18px;font-weight:800;color:var(--tx)}
 /* Timestamp */
-.ts-bar{text-align:center;font-size:11px;color:var(--os);margin-top:20px;padding:12px;background:var(--sf);border-radius:var(--rr)}
-.ts-bar strong{color:var(--tx)}
+.ts-bar{text-align:center;font-size:11px;color:var(--os);margin-top:16px;padding:10px;background:var(--sf);border-radius:var(--rr)}
 /* Error */
 .err{text-align:center;padding:60px 20px;color:var(--os)}
 .err h2{color:var(--tx);margin-bottom:8px}
-/* Logo */
-.logo-bar{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:4px}
-.dm-badge{font-size:10px;font-weight:700;letter-spacing:1px;background:var(--p);color:#fff;padding:3px 8px;border-radius:20px}
 </style>
 </head>
 <body>
 <div id="root"></div>
 <script>
-function el(tag,attrs,children){
-  const e=document.createElement(tag);
-  if(attrs)Object.entries(attrs).forEach(([k,v])=>{if(k==='class')e.className=v;else if(k==='style')e.style.cssText=v;else e[k]=v;});
-  if(children){if(typeof children==='string')e.innerHTML=children;else children.forEach(c=>c&&e.appendChild(typeof c==='string'?document.createTextNode(c):c));}
-  return e;
-}
+// ── Helpers ──────────────────────────────────────────────────────────────────
+function m(v){const r=Math.floor(((v||10)-10)/2);return(r>=0?'+':'')+r;}
+function profB(l){return Math.floor((l-1)/4)+2;}
 function hpColor(pct){return pct>0.5?'#2E9E60':pct>0.25?'#C68A00':'#D85A30';}
-function fmt(ts){
-  const d=new Date(ts*1000);
-  return d.toLocaleDateString()+'  '+d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
-}
+function fmt(ts){const d=new Date(ts*1000);return d.toLocaleDateString()+'  '+d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});}
+function ce(tag,cls,html){const e=document.createElement(tag);if(cls)e.className=cls;if(html!==undefined)e.innerHTML=html;return e;}
+function sec(label){const d=ce('div','card');d.appendChild(ce('div','card-lbl',label));return d;}
 
+// ── Spell level badge class ───────────────────────────────────────────────────
+function lvCls(l){return'lv'+l;}
+
+// ── Render ────────────────────────────────────────────────────────────────────
 function render(d){
   const root=document.getElementById('root');
-  const maxHp=d.mh||1,hp=d.h||0;
+  const st=d.st||[8,14,12,8,10,16];
+  const [str,dex,con,int_,wis,cha]=st;
+  const prof=profB(d.lv||1);
+  const spMax=d.sp2?d.sp2[1]:d.lv||3;
+  const spRem=d.sp2?d.sp2[0]:spMax;
+  const spPct=spMax>0?Math.max(0,Math.min(1,spRem/spMax)):1;
+  const maxHp=d.mh||1, hp=d.h||0;
   const hpPct=Math.max(0,Math.min(1,hp/maxHp));
-  const spMax=d.sp2?d.sp2[1]:d.lv||7;
-  const spRem=d.sp2?d.sp2[0]:(d.lv||7);
-  const spPct=spMax>0?spRem/spMax:1;
+  const dc=8+prof+Math.floor((cha-10)/2);
+  const atk=prof+Math.floor((cha-10)/2);
 
   // Header
-  root.appendChild(el('div',{class:'header'},[
-    el('div',{class:'logo-bar'},[
-      el('span',{class:'dm-badge'},'DM VIEW')
-    ]),
-    el('div',{class:'char-name'},d.n||'Personatge'),
-    el('div',{class:'char-sub'},(d.cl||'Sorcerer')+' · Lv '+(d.lv||'?')+' · '+(d.sp||'Human')),
-  ]));
+  const hdr=ce('div','header');
+  hdr.appendChild(ce('div','',`<span class="dm-pill">DM VIEW</span>`));
+  hdr.appendChild(ce('div','char-name',d.n||'Personatge'));
+  hdr.appendChild(ce('div','char-sub',`${d.cl||'Sorcerer'} · Lv ${d.lv||'?'} · ${d.sp||'Human'} · ${d.bg||''} · ${d.al||''}`));
+  root.appendChild(hdr);
 
-  // HP Card
-  const hpCard=el('div',{class:'card'});
-  hpCard.appendChild(el('div',{class:'card-lbl'},'❤️  HIT POINTS'));
-  const hpNum=el('div',{class:'hp-row'});
-  hpNum.appendChild(el('span',{class:'hp-val',style:`color:${hpColor(hpPct)}`},String(hp)));
-  hpNum.appendChild(el('span',{class:'hp-max'},` / ${maxHp}`));
-  hpCard.appendChild(hpNum);
-  const hpBarW=el('div',{class:'hp-bar-wrap'});
-  hpBarW.appendChild(el('div',{class:'hp-bar-fill',style:`width:${hpPct*100}%;background:${hpColor(hpPct)}`},''));
-  hpCard.appendChild(hpBarW);
-  hpCard.appendChild(el('div',{class:'hp-pct'},`${Math.round(hpPct*100)}% HP · ${maxHp-hp} dany absorbit`));
+  // ── Stats ──
+  const statCard=sec('Ability Scores');
+  const sg=ce('div','stat-row');
+  [['STR',str],['DEX',dex],['CON',con],['INT',int_],['WIS',wis],['CHA',cha]].forEach(([lbl,v])=>{
+    const b=ce('div','sbox');
+    b.innerHTML=`<div class="slbl">${lbl}</div><div class="sval">${v}</div><div class="smod">${m(v)}</div>`;
+    sg.appendChild(b);
+  });
+  statCard.appendChild(sg);
+  root.appendChild(statCard);
+
+  // ── Derived ──
+  const drvCard=sec('Derived');
+  const dg=ce('div','drv-grid');
+  [['PROF',`+${prof}`],['SPELL DC',dc],['SPELL ATK',(atk>=0?'+':'')+atk]].forEach(([lbl,v])=>{
+    dg.innerHTML+=`<div class="dbox"><div class="dlbl">${lbl}</div><div class="dval">${v}</div></div>`;
+  });
+  drvCard.appendChild(dg);
+  root.appendChild(drvCard);
+
+  // ── HP ──
+  const hpCard=sec('Hit Points');
+  const hn=ce('div','hp-num');
+  hn.innerHTML=`<span class="hp-val" style="color:${hpColor(hpPct)}">${hp}</span><span class="hp-sep">/</span><span class="hp-max">${maxHp}</span>`;
+  hpCard.appendChild(hn);
+  const bw=ce('div','bar-wrap');bw.innerHTML=`<div class="bar-fill" style="width:${hpPct*100}%;background:${hpColor(hpPct)}"></div>`;
+  hpCard.appendChild(bw);
+  hpCard.appendChild(ce('div','bar-note',`${Math.round(hpPct*100)}% · ${maxHp-hp} dany absorbit`));
   root.appendChild(hpCard);
 
-  // Concentration
+  // ── Concentration ──
   if(d.c){
-    const cCard=el('div',{class:'card',style:'border-left:3px solid var(--r)'});
-    cCard.appendChild(el('div',{class:'card-lbl'},'🔴  CONCENTRACIÓ'));
-    const cb=el('div',{class:'conc-bar'});
-    cb.appendChild(el('div',{class:'conc-dot'},''));
-    const ci=el('div',{},[
-      el('div',{class:'conc-name'},d.c),
-      el('div',{class:'conc-rnd'},'Round '+( d.cr||0)),
-    ]);
-    cb.appendChild(ci);
-    cCard.appendChild(cb);
-    root.appendChild(cCard);
+    const cc=sec('Concentració');
+    cc.style.borderLeft='3px solid var(--r)';
+    cc.innerHTML+=`<div class="conc-row"><div class="conc-dot"></div><div><div class="conc-name">${d.c}</div><div class="conc-rnd">Round ${d.cr||0}</div></div></div>`;
+    root.appendChild(cc);
   }
 
-  // Spell Slots
-  if(d.sl && Object.keys(d.sl).length){
-    const sCard=el('div',{class:'card'});
-    sCard.appendChild(el('div',{class:'card-lbl'},'✨  SPELL SLOTS'));
-    const grid=el('div',{class:'slots-grid'});
+  // ── Spell Slots ──
+  if(d.sl&&Object.keys(d.sl).length){
+    const sc=sec('Spell Slots');
+    const sw=ce('div','slots-wrap');
     Object.entries(d.sl).forEach(([lv,[used,max]])=>{
       const rem=max-used;
-      const grp=el('div',{class:'slot-lv'+(rem===0?' '+'':'')});
-      grp.appendChild(el('div',{class:'slot-lv-num'},'Lv '+lv));
-      const pipsDiv=el('div',{class:'slot-pips'});
-      for(let i=0;i<max;i++){
-        pipsDiv.appendChild(el('span',{class:'pip '+(i<rem?'f':'e')},''));
-      }
-      grp.appendChild(pipsDiv);
-      grp.appendChild(el('div',{class:'slot-rem',style:rem===0?'color:var(--os)':''}, rem+'/'+max));
-      grid.appendChild(grp);
+      const g=ce('div','slot-grp');
+      let pips='';
+      for(let i=0;i<max;i++)pips+=`<span class="pip ${i<rem?'f':'e'}"></span>`;
+      g.innerHTML=`<div class="slot-lbl">Lv ${lv}</div><div class="pips">${pips}</div><div class="slot-rem" style="color:${rem===0?'var(--os)':'var(--tx)'}">${rem}/${max}</div>`;
+      sw.appendChild(g);
     });
-    sCard.appendChild(grid);
-    root.appendChild(sCard);
+    sc.appendChild(sw);
+    root.appendChild(sc);
   }
 
-  // Sorcery Points
-  const spCard=el('div',{class:'card'});
-  spCard.appendChild(el('div',{class:'card-lbl'},'💜  SORCERY POINTS'));
-  const spRow=el('div',{class:'sp-row'});
-  spRow.appendChild(el('span',{class:'sp-big',style:spRem===0?'color:var(--os)':''},String(spRem)));
-  spRow.appendChild(el('span',{style:'font-size:14px;color:var(--os)'},' / '+spMax));
-  spRow.appendChild(el('span',{style:'font-size:13px;color:var(--os);margin-left:auto'},spRem+' restants'));
-  spCard.appendChild(spRow);
-  const spBarW=el('div',{class:'sp-bar-wrap'});
-  spBarW.appendChild(el('div',{class:'sp-bar-fill',style:`width:${spPct*100}%`},''));
-  spCard.appendChild(spBarW);
+  // ── Sorcery Points ──
+  const spCard=sec('Sorcery Points');
+  spCard.innerHTML+=`<div class="sp-row-v"><span class="sp-big" style="${spRem===0?'color:var(--os)':''}">${spRem}</span><span style="color:var(--os);font-size:16px">/ ${spMax}</span></div>`;
+  const sb=ce('div','bar-wrap');sb.innerHTML=`<div class="bar-fill" style="width:${spPct*100}%;background:var(--p)"></div>`;
+  spCard.appendChild(sb);
   root.appendChild(spCard);
 
-  // Timestamp
-  root.appendChild(el('div',{class:'ts-bar'},
-    'Snapshot generat: <strong>'+fmt(d.ts)+'</strong><br><span style="font-size:10px">Escaneja de nou per actualitzar</span>'
-  ));
+  // ── Spells known ──
+  const hasCantrips=d.ca&&d.ca.length>0;
+  const hasSpells=d.ksp&&d.ksp.length>0;
+  if(hasCantrips||hasSpells){
+    const spellCard=sec('Spells Known');
+    const sl=ce('div','spell-list');
+
+    // Helper to find spell data from name (simplified — just level tag)
+    const CONC_SPELLS=['Hex','Shield of Faith','Bless','Faerie Fire','Hypnotic Pattern','Web','Slow','Banishment','Concentration'];
+
+    if(hasCantrips){
+      spellCard.appendChild(ce('div','',`<div style="font-size:10px;font-weight:700;color:var(--os);margin-bottom:5px;margin-top:2px">CANTRIPS</div>`));
+      d.ca.forEach(name=>{
+        const it=ce('div','spell-item');
+        it.innerHTML=`<span class="lv-badge lv0">Cantrip</span><span>${name}</span>`;
+        sl.appendChild(it);
+      });
+    }
+    if(hasSpells){
+      spellCard.appendChild(ce('div','',`<div style="font-size:10px;font-weight:700;color:var(--os);margin:8px 0 5px">HECHIZOS</div>`));
+      d.ksp.forEach(name=>{
+        const isConc=CONC_SPELLS.some(c=>name.toLowerCase().includes(c.toLowerCase())||c.toLowerCase().includes(name.toLowerCase()));
+        const it=ce('div','spell-item');
+        it.innerHTML=`<span class="lv-badge spell-psi">✦</span><span style="flex:1">${name}</span>${isConc?'<span class="conc-tag">CONC</span>':''}`;
+        sl.appendChild(it);
+      });
+    }
+    spellCard.appendChild(sl);
+    root.appendChild(spellCard);
+  }
+
+  // ── Metamagics ──
+  if(d.meta&&d.meta.length>0){
+    const mc=sec('Metamàgia');
+    const tw=ce('div','tag-wrap');
+    d.meta.forEach(name=>{
+      tw.innerHTML+=`<span class="tag tag-meta">${name}</span>`;
+    });
+    mc.appendChild(tw);
+    root.appendChild(mc);
+  }
+
+  // ── Feats ──
+  if(d.feats&&d.feats.length>0){
+    const fc=sec('Feats');
+    const tw=ce('div','tag-wrap');
+    d.feats.forEach(name=>{
+      tw.innerHTML+=`<span class="tag tag-feat">${name}</span>`;
+    });
+    fc.appendChild(tw);
+    root.appendChild(fc);
+  }
+
+  // ── Timestamp ──
+  root.appendChild(ce('div','ts-bar',`Snapshot: <strong>${fmt(d.ts)}</strong><br><span style="font-size:10px">Escaneja de nou per actualitzar</span>`));
 }
 
 function showError(msg){
   document.getElementById('root').innerHTML=`<div class="err"><h2>Error</h2><p>${msg}</p></div>`;
 }
 
+// ── Decode & render ───────────────────────────────────────────────────────────
 try{
   const params=new URLSearchParams(location.search);
   const raw=params.get('d');
-  if(!raw)throw new Error('No hi ha dades al QR.');
-  const data=JSON.parse(atob(decodeURIComponent(raw)));
+  if(!raw)throw new Error('No data');
+  // Support both old (btoa) and new (btoa+encodeURIComponent) encoding
+  let json;
+  try{ json=decodeURIComponent(escape(atob(decodeURIComponent(raw)))); }
+  catch(e){ json=atob(decodeURIComponent(raw)); }
+  const data=JSON.parse(json);
   render(data);
 }catch(e){
-  showError('No s\'han pogut llegir les dades del QR. Escaneja de nou.');
+  showError('No s\'han pogut llegir les dades. Genera un QR nou des de l\'app.');
 }
 </script>
 </body>

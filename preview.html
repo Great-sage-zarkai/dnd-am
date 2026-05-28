@@ -1989,14 +1989,27 @@ function buildShareURL(){
   const hp=curHp===-1?maxHp:curHp;
   const slData={};
   Object.entries(slots).forEach(([l,max])=>{slData[l]=[usedSl[l]||0,max];});
+  const st=getStats();
   const payload={
-    n:name,cl:'Aberrant Mind',sp:species,lv,h:hp,mh:maxHp,
-    sl:slData,sp2:[lv-usedSP,lv],
+    // Identity
+    n:name,cl:'Aberrant Mind',sp:species,lv,
+    bg:g('c-bg')?.value||'',al:g('c-align')?.value||'',
+    // Stats (compact array: str,dex,con,int,wis,cha)
+    st:[st.str,st.dex,st.con,st.int_,st.wis,st.cha],
+    // Combat state
+    h:hp,mh:maxHp,sl:slData,
+    sp2:[lv-usedSP,lv],
     c:concSp||'',cr:concRnd,
+    // Build
+    ca:[...selC],       // cantrips
+    ksp:[...selS],      // known spells
+    meta:[...selM],     // metamagics
+    feats:[...selF],    // feats
+    // Timestamp
     ts:Math.floor(Date.now()/1000)
   };
   const base=location.origin+location.pathname.replace(/[^/]*$/,'');
-  return base+'view.html?d='+encodeURIComponent(btoa(JSON.stringify(payload)));
+  return base+'view.html?d='+encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify(payload)))));
 }
 
 let _qrURL='';

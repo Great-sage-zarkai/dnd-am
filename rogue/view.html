@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>D&D · Phantom Rogue — Vista DM</title>
+<meta name="theme-color" content="#4E8A70">
+<style>
+:root{
+  --p:#4E8A70;--pl:#E8F4EF;--pd:#2A5C48;
+  --t:#7A5E8A;--tl:#EDE8F4;--td:#4A3060;
+  --a:#8B6B30;--al:#F4EDD8;--ad:#5C4018;
+  --r:#C44830;--rl:#FAE8E4;
+  --bg:#F2F4F2;--sf:#FFF;--sv:#EEF2EE;
+  --ol:#C8D4C8;--os:#5A6A5A;--rr:10px;
+  --tx:#1A201A;
+}
+body.dark{
+  --pl:#182A22;--pd:#88C4A8;
+  --tl:#1E1828;--td:#B090D0;
+  --al:#221800;--ad:#C8A050;
+  --rl:#280C08;
+  --bg:#0E120E;--sf:#181E18;--sv:#202820;
+  --ol:#2A3A2A;--os:#809080;--tx:#DCE8DC;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{min-height:100%;background:var(--bg);color:var(--tx);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:15px}
+
+.topbar{background:var(--sf);border-bottom:1px solid var(--ol);display:flex;align-items:center;padding:10px 14px;gap:10px}
+.topbar img.logo{height:24px;object-fit:contain}
+.tb-info{flex:1;min-width:0}
+.tb-name{font-size:15px;font-weight:700;color:var(--tx)}
+.tb-sub{font-size:11px;color:var(--os)}
+.tb-dark{width:32px;height:32px;border-radius:50%;border:1px solid var(--ol);background:var(--sv);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;flex-shrink:0}
+
+.wrap{max-width:520px;margin:0 auto;padding:14px 12px 40px}
+
+.hero-card{background:var(--sf);border:2px solid var(--p);border-radius:14px;padding:16px;margin-bottom:14px;display:flex;align-items:center;gap:14px}
+.hero-badge{background:var(--p);color:#fff;font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;display:inline-block;margin-bottom:4px}
+.hero-name{font-size:22px;font-weight:800;line-height:1.1}
+.hero-sub{font-size:12px;color:var(--os);margin-top:3px}
+.hero-id-pill{display:inline-block;background:var(--pl);color:var(--pd);border:1px solid var(--p);border-radius:20px;padding:3px 10px;font-size:12px;font-weight:700;margin-top:6px}
+
+.sec{background:var(--sf);border:1px solid var(--ol);border-radius:var(--rr);padding:12px 14px;margin-bottom:10px}
+.sec-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--os);margin-bottom:8px}
+
+/* STATS GRID */
+.stat-row{display:grid;grid-template-columns:repeat(6,1fr);gap:5px;margin-bottom:5px}
+.st-box{background:var(--sv);border-radius:8px;border:1px solid var(--ol);padding:5px 2px;text-align:center}
+.st-abbr{font-size:9px;font-weight:700;text-transform:uppercase;color:var(--os)}
+.st-val{font-size:18px;font-weight:700;line-height:1.1}
+.st-mod{font-size:10px;color:var(--pd);font-weight:700}
+
+/* DERIVED ROW */
+.der-row{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:8px}
+.db{background:var(--sv);border-radius:8px;border:1px solid var(--ol);padding:6px 3px;text-align:center}
+.db-lbl{font-size:8px;font-weight:700;text-transform:uppercase;color:var(--os);margin-bottom:2px}
+.db-val{font-size:15px;font-weight:700}
+
+/* HP BAR */
+.hp-area{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.hp-nums{font-size:28px;font-weight:700;line-height:1;flex-shrink:0}
+.hp-bar-wrap{flex:1}
+.hp-bar{height:10px;border-radius:5px;background:var(--ol);overflow:hidden;margin-bottom:3px}
+.hp-fill{height:100%;border-radius:5px;background:var(--p);transition:width .3s}
+.hp-fill.lo{background:var(--r)}
+.hp-fill.md{background:#E8A020}
+.hp-lbl{font-size:10px;color:var(--os)}
+
+/* WAILS PIPS */
+.pips-row{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
+.pip{width:22px;height:22px;border-radius:50%;border:2px solid var(--p);background:var(--p)}
+.pip.empty{background:transparent}
+
+/* SKILLS */
+.sk-item{display:flex;align-items:center;gap:6px;padding:4px 0;border-bottom:1px solid var(--sv)}
+.sk-badge{font-size:9px;font-weight:700;padding:1px 5px;border-radius:10px;background:var(--pl);color:var(--pd);flex-shrink:0}
+.sk-badge.exp{background:var(--tl);color:var(--td)}
+.sk-name{flex:1;font-size:13px}
+.sk-stat{font-size:10px;color:var(--os);width:26px;text-align:center;flex-shrink:0}
+.sk-val{font-size:14px;font-weight:700;color:var(--p);width:30px;text-align:right;flex-shrink:0}
+
+/* SAVES */
+.sv-item{display:flex;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid var(--sv)}
+.sv-dot{width:14px;height:14px;border-radius:50%;border:2px solid var(--ol);flex-shrink:0}
+.sv-dot.on{background:var(--p);border-color:var(--p)}
+.sv-name{flex:1;font-size:13px}
+.sv-val{font-size:14px;font-weight:700;color:var(--p)}
+
+/* FEATS */
+.feat-chip{display:inline-flex;align-items:center;gap:4px;background:var(--pl);color:var(--pd);border:1px solid var(--p);border-radius:20px;padding:5px 11px;font-size:12px;font-weight:600;margin:3px}
+
+/* WHISPERS */
+.whisp-box{border-radius:8px;padding:8px 10px;border:1px solid var(--ol);background:var(--sv);margin-top:6px}
+.whisp-box.active{border-color:var(--p);background:var(--pl)}
+.whisp-status{font-size:12px;font-weight:600;color:var(--os)}
+.whisp-status.active{color:var(--pd)}
+
+.ts{font-size:11px;color:var(--os);text-align:center;margin-top:16px}
+.error-state{text-align:center;padding:60px 20px;color:var(--os)}
+.error-state h2{font-size:18px;margin-bottom:8px;color:var(--tx)}
+.back-btn{display:inline-block;margin-top:16px;padding:10px 24px;border-radius:10px;background:var(--p);color:#fff;font-weight:700;text-decoration:none;font-size:14px}
+
+.ver-badge{display:flex;align-items:center;justify-content:center;gap:6px;background:var(--sv);border:1px solid var(--ol);border-radius:8px;padding:6px 10px;font-size:11px;color:var(--os);margin-bottom:14px}
+.ver-badge img{width:16px;height:16px;object-fit:contain;opacity:.6}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <img class="logo" src="../logo.png" alt="">
+  <div class="tb-info">
+    <div class="tb-name" id="tb-name">Phantom Rogue</div>
+    <div class="tb-sub">Vista de lectura · D&D 5e 2024</div>
+  </div>
+  <div class="tb-dark" onclick="toggleDark()" title="Dark mode">🌙</div>
+</div>
+
+<div class="wrap" id="main-wrap">
+  <div class="error-state" id="error-state" style="display:none">
+    <h2>No s'ha pogut carregar el personatge</h2>
+    <p>Assegura't d'escanejar el QR correctament.</p>
+    <a class="back-btn" href="preview.html">Obre l'app</a>
+  </div>
+  <div id="content" style="display:none">
+    <!-- Hero -->
+    <div class="hero-card" id="hero-card"></div>
+
+    <!-- Verified badge -->
+    <div class="ver-badge">
+      <img src="../icons/d20.png" alt="">
+      <span>Phantom Rogue · Changeling · D&D 5e 2024</span>
+    </div>
+
+    <!-- HP + Wails -->
+    <div class="sec" id="sec-hp"></div>
+
+    <!-- Stats -->
+    <div class="sec" id="sec-stats"></div>
+
+    <!-- Skills (proficient) -->
+    <div class="sec" id="sec-skills"></div>
+
+    <!-- Saving Throws -->
+    <div class="sec" id="sec-saves"></div>
+
+    <!-- Feats & Whispers -->
+    <div class="sec" id="sec-misc"></div>
+
+    <div class="ts" id="ts-lbl"></div>
+  </div>
+</div>
+
+<script>
+const SKILLS_LIST=[
+  {name:"Acrobatics",stat:"dex"},{name:"Animal Handling",stat:"wis"},{name:"Arcana",stat:"int_"},
+  {name:"Athletics",stat:"str"},{name:"Deception",stat:"cha"},{name:"History",stat:"int_"},
+  {name:"Insight",stat:"wis"},{name:"Intimidation",stat:"cha"},{name:"Investigation",stat:"int_"},
+  {name:"Medicine",stat:"wis"},{name:"Nature",stat:"int_"},{name:"Perception",stat:"wis"},
+  {name:"Performance",stat:"cha"},{name:"Persuasion",stat:"cha"},{name:"Religion",stat:"int_"},
+  {name:"Sleight of Hand",stat:"dex"},{name:"Stealth",stat:"dex"},{name:"Survival",stat:"wis"},
+];
+const SAVES_LIST=[
+  {id:"str",name:"Strength"},{id:"dex",name:"Dexterity"},
+  {id:"con",name:"Constitution"},{id:"int_",name:"Intelligence"},
+  {id:"wis",name:"Wisdom"},{id:"cha",name:"Charisma"},
+];
+const STAT_KEYS=['str','dex','con','int_','wis','cha'];
+const STAT_ABBR=['STR','DEX','CON','INT','WIS','CHA'];
+
+function getMod(val){ return Math.floor((val-10)/2); }
+function fmtMod(v){ return v>=0?'+'+v:''+v; }
+function g(id){ return document.getElementById(id); }
+
+let darkMode=window.matchMedia('(prefers-color-scheme:dark)').matches;
+function applyDark(){ document.body.classList.toggle('dark',darkMode); }
+function toggleDark(){ darkMode=!darkMode; applyDark(); }
+applyDark();
+
+function decode(raw){
+  try{ return JSON.parse(decodeURIComponent(escape(atob(decodeURIComponent(raw))))); }
+  catch(e){ return null; }
+}
+
+function render(d){
+  // Profbonus from level
+  const lv=d.lv||1;
+  const prof=lv>=17?6:lv>=13?5:lv>=9?4:lv>=5?3:2;
+  const stats=d.st||[10,10,10,10,10,10];
+  const mods=stats.map(getMod);
+  const skillP=new Set(d.skillP||[]);
+  const skillE=new Set(d.skillE||[]);
+  const saves=new Set(d.saves||[]);
+
+  // Topbar
+  g('tb-name').textContent=(d.n||d.id||'Rogue')+' · '+d.id;
+
+  // Hero
+  const dex=mods[1], wis=mods[4];
+  const ac=10+dex;
+  const init=dex;
+  const passive=10+wis+(skillP.has('Perception')?prof*(skillE.has('Perception')?2:1):0);
+  const sneakDice=Math.ceil(lv/2);
+  g('hero-card').innerHTML=`
+    <div style="flex:1;min-width:0">
+      <div class="hero-badge">Phantom Rogue Lv${lv}</div>
+      <div class="hero-name">${d.n||d.id||'Personatge'}</div>
+      <div class="hero-sub">${[d.bg,d.al,d.age?d.age+' anys':''].filter(Boolean).join(' · ')||'Changeling'}</div>
+      <span class="hero-id-pill">🎭 ${d.id||'???'}</span>
+    </div>
+    <div style="text-align:right;flex-shrink:0">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--os)">AC / Init</div>
+      <div style="font-size:26px;font-weight:800;color:var(--p)">${ac}</div>
+      <div style="font-size:13px;color:var(--os)">${fmtMod(init)} Init</div>
+    </div>`;
+
+  // HP + Wails
+  const curHp=d.h??d.mh??'?';
+  const maxHp=d.mh||1;
+  const pct=Math.max(0,Math.min(100,(curHp/maxHp)*100));
+  const hpColor=pct<=25?'lo':pct<=50?'md':'';
+  const wUsed=d.wails?.[0]||0;
+  const wMax=d.wails?.[1]||prof;
+  const wLeft=wMax-wUsed;
+  const wDice=Math.ceil(sneakDice/2);
+  const wPips=Array.from({length:wMax},(_,i)=>
+    `<div class="pip${i<wUsed?' empty':''}"></div>`
+  ).join('');
+  g('sec-hp').innerHTML=`
+    <div class="sec-lbl">RECURSOS DE COMBAT</div>
+    <div class="hp-area">
+      <div class="hp-nums" style="color:${pct<=25?'var(--r)':pct<=50?'#E8A020':'var(--tx)'}">${curHp}<span style="font-size:14px;color:var(--os)">/${maxHp}</span></div>
+      <div class="hp-bar-wrap">
+        <div class="hp-bar"><div class="hp-fill ${hpColor}" style="width:${pct}%"></div></div>
+        <div class="hp-lbl">Hit Points</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:8px">
+      <div class="db"><div class="db-lbl">Sneak Atk</div><div class="db-val">${sneakDice}d6</div></div>
+      <div class="db"><div class="db-lbl">Wails</div><div class="db-val">${wLeft}/${wMax}</div></div>
+      <div class="db"><div class="db-lbl">Wails dmg</div><div class="db-val" style="font-size:12px">${wDice}d6 🩸</div></div>
+    </div>
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--os);margin-bottom:4px">WAILS FROM THE GRAVE</div>
+    <div class="pips-row">${wPips}</div>
+    <div style="font-size:11px;color:var(--os)">Usos restants: ${wLeft} · Recupera en Long Rest</div>`;
+
+  // Stats
+  const statBoxes=STAT_KEYS.map((k,i)=>`
+    <div class="st-box">
+      <div class="st-abbr">${STAT_ABBR[i]}</div>
+      <div class="st-val">${stats[i]}</div>
+      <div class="st-mod">${fmtMod(mods[i])}</div>
+    </div>`).join('');
+  const der2=`
+    <div class="db"><div class="db-lbl">Prof</div><div class="db-val">${fmtMod(prof)}</div></div>
+    <div class="db"><div class="db-lbl">AC</div><div class="db-val">${ac}</div></div>
+    <div class="db"><div class="db-lbl">Init</div><div class="db-val">${fmtMod(init)}</div></div>
+    <div class="db"><div class="db-lbl">Pass. Perc</div><div class="db-val">${passive}</div></div>`;
+  g('sec-stats').innerHTML=`
+    <div class="sec-lbl">ESTADÍSTIQUES</div>
+    <div class="stat-row">${statBoxes}</div>
+    <div class="der-row">${der2}</div>`;
+
+  // Skills (proficient only, sorted by value)
+  const profSkills=SKILLS_LIST
+    .filter(sk=>skillP.has(sk.name))
+    .map(sk=>{
+      const idx=STAT_KEYS.indexOf(sk.stat);
+      const haE=skillE.has(sk.name);
+      const val=mods[idx>=0?idx:1]+prof*(haE?2:1);
+      return {...sk,val,haE};
+    })
+    .sort((a,b)=>b.val-a.val);
+  g('sec-skills').innerHTML=`
+    <div class="sec-lbl">HABILITATS AMB COMPETÈNCIA</div>
+    ${profSkills.length?profSkills.map(sk=>`
+      <div class="sk-item">
+        <span class="sk-badge${sk.haE?' exp':''}">${sk.haE?'E':'P'}</span>
+        <span class="sk-name">${sk.name}</span>
+        <span class="sk-stat">${sk.stat.replace('_','').toUpperCase().slice(0,3)}</span>
+        <span class="sk-val">${fmtMod(sk.val)}</span>
+      </div>`).join('')
+    :'<p style="font-size:13px;color:var(--os)">Cap habilitat seleccionada.</p>'}`;
+
+  // Saving Throws
+  g('sec-saves').innerHTML=`
+    <div class="sec-lbl">TIRADES DE SALVACIÓ</div>
+    ${SAVES_LIST.map((sv,i)=>{
+      const idx=STAT_KEYS.indexOf(sv.id);
+      const on=saves.has(sv.id);
+      const val=mods[idx>=0?idx:0]+(on?prof:0);
+      return `<div class="sv-item">
+        <div class="sv-dot${on?' on':''}"></div>
+        <div class="sv-name">${sv.name}</div>
+        <div class="sv-val">${fmtMod(val)}</div>
+      </div>`;
+    }).join('')}`;
+
+  // Feats + Whispers
+  const feats=d.feats||[];
+  const whispOn=d.whispOn||false;
+  const whisp=d.whisp||'';
+  g('sec-misc').innerHTML=`
+    <div class="sec-lbl">FEATS</div>
+    <div style="margin-bottom:10px">
+      ${feats.length?feats.map(f=>`<span class="feat-chip">✦ ${f}</span>`).join('')
+      :'<span style="font-size:13px;color:var(--os)">Cap feat seleccionat.</span>'}
+    </div>
+    <div class="sec-lbl">WHISPERS OF THE DEAD</div>
+    <div class="whisp-box${whispOn?' active':''}">
+      <div class="whisp-status${whispOn?' active':''}">
+        ${whispOn?'✓ ACTIU'+(whisp?' — '+whisp:''):'Inactiu'}
+      </div>
+      <div style="font-size:11px;color:var(--os);margin-top:3px">Competència de fantasma · Recupera: Short/Long Rest</div>
+    </div>`;
+
+  // Timestamp
+  const ts=d.ts?new Date(d.ts*1000).toLocaleString('ca-ES',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}):'';
+  g('ts-lbl').textContent=ts?`Instantània: ${ts}`:'';
+}
+
+// ── INIT ─────────────────────────────────────────────────
+const params=new URLSearchParams(location.search);
+const raw=params.get('d');
+if(raw){
+  const data=decode(raw);
+  if(data){
+    g('content').style.display='';
+    render(data);
+  } else {
+    g('error-state').style.display='';
+  }
+} else {
+  // No data — show open app button
+  g('error-state').innerHTML=`
+    <h2>Vista de lectura DM</h2>
+    <p>Obre l'app i prem el botó QR per generar un link de compartició.</p>
+    <a class="back-btn" href="preview.html">Obre l'app</a>`;
+  g('error-state').style.display='';
+}
+</script>
+</body>
+</html>

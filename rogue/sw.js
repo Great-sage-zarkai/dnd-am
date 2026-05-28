@@ -1,6 +1,6 @@
-const CACHE = 'dnd-rg-v8';
+const CACHE = 'dnd-rg-v9';
 const ASSETS = [
-  './preview.html', './manifest.json',
+  './preview.html', './view.html', './manifest.json',
   '../icon.png', '../logo.png',
   '../icons/rogue.png', '../icons/d20.png', '../icons/slash.png',
   '../icons/basic.png', '../icons/stats.png', '../icons/classf.png',

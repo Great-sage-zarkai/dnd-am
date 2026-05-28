@@ -296,6 +296,23 @@ html,body{height:100%;background:var(--bg);color:var(--tx);font-family:-apple-sy
 .sneak-display{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:8px}
 .sneak-val{font-size:28px;font-weight:700;color:var(--a)}
 .sneak-lbl{font-size:11px;color:var(--os);text-align:center}
+
+/* QR SHARE */
+.qr-fab{position:fixed;right:16px;bottom:calc(var(--tabh) + 14px);width:48px;height:48px;border-radius:50%;background:var(--p);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 14px rgba(0,0,0,.35);z-index:200;transition:transform .15s}
+.qr-fab:active{transform:scale(.9)}
+.qr-fab svg{width:22px;height:22px;fill:#fff}
+.qr-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:400;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s}
+.qr-overlay.open{opacity:1;pointer-events:all}
+.qr-sheet{background:var(--sf);border-radius:20px 20px 0 0;padding:20px 20px 36px;width:100%;max-width:440px;transform:translateY(100%);transition:transform .28s cubic-bezier(.32,1,.23,1)}
+.qr-overlay.open .qr-sheet{transform:translateY(0)}
+.qr-drag{width:40px;height:4px;border-radius:2px;background:var(--ol);margin:0 auto 16px}
+.qr-title{font-size:16px;font-weight:700;text-align:center;margin-bottom:3px}
+.qr-sub{font-size:12px;color:var(--os);text-align:center;margin-bottom:16px}
+.qr-canvas-wrap{display:flex;justify-content:center;margin-bottom:14px;padding:14px;background:#fff;border-radius:12px;min-height:80px;align-items:center}
+.qr-url{width:100%;border:1px solid var(--ol);border-radius:8px;padding:8px 10px;font-size:10px;color:var(--os);background:var(--sv);margin-bottom:10px;word-break:break-all;cursor:text}
+.qr-copy-btn{width:100%;padding:13px;border-radius:10px;border:none;background:var(--p);color:#fff;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:8px}
+.qr-copy-btn:active{opacity:.85}
+.qr-close-btn{width:100%;padding:10px;border-radius:10px;border:1.5px solid var(--ol);background:none;color:var(--os);font-size:13px;cursor:pointer}
 </style>
 </head>
 <body>
@@ -628,6 +645,26 @@ html,body{height:100%;background:var(--bg);color:var(--tx);font-family:-apple-sy
 
 </div><!-- /scroll -->
 
+<!-- QR FAB -->
+<button class="qr-fab" onclick="openQRModal()" title="Compartir via QR">
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M3 3h7v7H3V3zm1 1v5h5V4H4zm1 1h3v3H5V5zM14 3h7v7h-7V3zm1 1v5h5V4h-5zm1 1h3v3h-3V5zM3 14h7v7H3v-7zm1 1v5h5v-5H4zm1 1h3v3H5v-3zm9-1h2v2h-2v-2zm0 3h2v-1h3v3h-1v1h-2v1h-2v-4zm5 2v-1h-1v1h1zm-3 1h1v-1h-1v1zm3 0h-1v2h1v-2zm-6-2h1v2h-1v-2zm3 2h-1v-1h1v1zm0-3v1h1v-1h-1z"/>
+  </svg>
+</button>
+
+<!-- QR MODAL -->
+<div class="qr-overlay" id="qr-overlay" onclick="if(event.target===this)closeQRModal()">
+  <div class="qr-sheet">
+    <div class="qr-drag"></div>
+    <div class="qr-title">Compartir personatge</div>
+    <div class="qr-sub" id="qr-identity-sub">QR per al DM · Vista de lectura</div>
+    <div class="qr-canvas-wrap" id="qr-canvas-wrap"></div>
+    <div class="qr-url" id="qr-url-text" onclick="this.select?.()"></div>
+    <button class="qr-copy-btn" onclick="copyQRUrl()">📋 Copia l'URL</button>
+    <button class="qr-close-btn" onclick="closeQRModal()">Tanca</button>
+  </div>
+</div>
+
 <!-- TAB BAR -->
 <div class="tabbar">
   <button class="tab-btn active" id="tbtn-character" onclick="showTab('character')">
@@ -652,6 +689,7 @@ html,body{height:100%;background:var(--bg);color:var(--tx);font-family:-apple-sy
   </button>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
 // ── CONSTANTS ──────────────────────────────────────────────
 const CLASS_FEATURES_RG = [
@@ -1554,6 +1592,67 @@ function load(){
       }
     },0);
   }catch(e){ console.warn('Load error',e); }
+}
+
+// ── QR SHARE ─────────────────────────────────────────────
+function buildShareURLRogue(){
+  const active=identities[activeIdIdx]||identities[0];
+  const payload={
+    n:g('c-name')?.value||'',
+    id:active.name||'???',
+    lv,
+    bg:g('c-bg')?.value||'',
+    al:g('c-align')?.value||'',
+    age:g('c-age')?.value||'',
+    st:[statVals.str,statVals.dex,statVals.con,statVals.int_,statVals.wis,statVals.cha],
+    h:curHp===-1?getMaxHp():curHp,
+    mh:getMaxHp(),
+    wails:[usedWails,profBonus()],
+    whisp:whisperProf,
+    whispOn:whisperActive,
+    feats:[...selF],
+    skillP:[...skillProf],
+    skillE:[...skillExp],
+    saves:[...selSaves],
+    ts:Math.floor(Date.now()/1000)
+  };
+  const enc=btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
+  const base=location.href.replace(/[^/]*$/, '');
+  return base+'view.html?d='+encodeURIComponent(enc);
+}
+
+function openQRModal(){
+  const active=identities[activeIdIdx]||identities[0];
+  g('qr-identity-sub').textContent=(active.name||'???')+' · Lv'+lv+' Phantom Rogue · QR per al DM';
+  const url=buildShareURLRogue();
+  g('qr-url-text').textContent=url;
+  const wrap=g('qr-canvas-wrap');
+  wrap.innerHTML='';
+  try{
+    new QRCode(wrap,{text:url,width:200,height:200,colorDark:'#111',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});
+  } catch(e){
+    wrap.innerHTML='<p style="font-size:12px;color:#666;text-align:center">QR no disponible offline.<br>Copia l\'URL manualment.</p>';
+  }
+  g('qr-overlay').classList.add('open');
+}
+
+function closeQRModal(){
+  g('qr-overlay').classList.remove('open');
+}
+
+function copyQRUrl(){
+  const url=g('qr-url-text').textContent;
+  if(navigator.clipboard?.writeText){
+    navigator.clipboard.writeText(url).then(()=>showToast('URL copiada! ✓')).catch(()=>fallbackCopy(url));
+  } else { fallbackCopy(url); }
+}
+
+function fallbackCopy(text){
+  const ta=document.createElement('textarea');
+  ta.value=text; ta.style.cssText='position:fixed;opacity:0';
+  document.body.appendChild(ta); ta.select();
+  try{ document.execCommand('copy'); showToast('URL copiada! ✓'); } catch(e){ showToast('Selecciona i copia manualment.'); }
+  document.body.removeChild(ta);
 }
 
 // ── INIT ─────────────────────────────────────────────────

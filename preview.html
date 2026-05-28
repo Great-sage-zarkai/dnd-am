@@ -334,10 +334,11 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
 .sv-val{font-size:15px;font-weight:700;color:var(--os);min-width:34px;text-align:right;font-variant-numeric:tabular-nums}
 .sv-val.pro{color:var(--p)}
 /* ── INVENTORY ── */
-.inv-row{display:flex;align-items:center;gap:6px;margin-bottom:6px}
-.inv-name{flex:1;border:1px solid var(--ol);border-radius:7px;padding:7px 9px;font-size:13px;background:var(--sf);color:var(--tx)}
-.inv-qty{width:54px;border:1px solid var(--ol);border-radius:7px;padding:7px 6px;font-size:13px;text-align:center;background:var(--sf);color:var(--tx)}
-.inv-del{width:28px;height:28px;border-radius:50%;border:none;background:var(--rl);color:var(--r);cursor:pointer;font-size:13px;flex-shrink:0}
+.inv-row{display:flex;align-items:center;gap:5px;margin-bottom:6px}
+.inv-name{flex:1;min-width:0;border:1px solid var(--ol);border-radius:7px;padding:7px 8px;font-size:13px;background:var(--sf);color:var(--tx)}
+.inv-qty{width:46px;max-width:46px;flex-shrink:0;border:1px solid var(--ol);border-radius:7px;padding:7px 4px;font-size:13px;text-align:center;background:var(--sf);color:var(--tx);-moz-appearance:textfield}
+.inv-qty::-webkit-outer-spin-button,.inv-qty::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.inv-del{width:28px;height:28px;border-radius:50%;border:none;background:var(--rl);color:var(--r);cursor:pointer;font-size:13px;flex-shrink:0;padding:0}
 .inv-add{width:100%;padding:8px;margin-top:4px;border:1.5px dashed var(--ol);border-radius:7px;background:transparent;color:var(--os);cursor:pointer;font-size:13px;transition:all .15s}
 .inv-add:active{border-color:var(--p);color:var(--p)}
 /* ── TRAIT CARDS ── */

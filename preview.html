@@ -324,6 +324,33 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
 .new-bc-btn:active{border-color:var(--p);background:var(--pl)}
 .new-bc-btn span{font-size:13px;font-weight:500;color:var(--os)}
 
+/* ── SAVES & SKILLS ── */
+.sv-row{display:flex;align-items:center;gap:8px;padding:5px 2px;border-bottom:1px solid var(--ol)}
+.sv-row:last-child{border-bottom:none}
+.sv-chk{width:22px;height:22px;border-radius:50%;border:2px solid var(--ol);background:transparent;cursor:pointer;font-size:11px;color:var(--os);display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:0;transition:all .15s}
+.sv-chk.act{border-color:var(--p);background:var(--pl);color:var(--p)}
+.sv-ab{font-size:10px;font-weight:700;color:var(--os);width:28px;flex-shrink:0;letter-spacing:.5px}
+.sv-nm{font-size:13px;color:var(--tx);flex:1}
+.sv-val{font-size:15px;font-weight:700;color:var(--os);min-width:34px;text-align:right;font-variant-numeric:tabular-nums}
+.sv-val.pro{color:var(--p)}
+/* ── INVENTORY ── */
+.inv-row{display:flex;align-items:center;gap:6px;margin-bottom:6px}
+.inv-name{flex:1;border:1px solid var(--ol);border-radius:7px;padding:7px 9px;font-size:13px;background:var(--sf);color:var(--tx)}
+.inv-qty{width:54px;border:1px solid var(--ol);border-radius:7px;padding:7px 6px;font-size:13px;text-align:center;background:var(--sf);color:var(--tx)}
+.inv-del{width:28px;height:28px;border-radius:50%;border:none;background:var(--rl);color:var(--r);cursor:pointer;font-size:13px;flex-shrink:0}
+.inv-add{width:100%;padding:8px;margin-top:4px;border:1.5px dashed var(--ol);border-radius:7px;background:transparent;color:var(--os);cursor:pointer;font-size:13px;transition:all .15s}
+.inv-add:active{border-color:var(--p);color:var(--p)}
+/* ── TRAIT CARDS ── */
+.trait-card{padding:10px 12px;border-left:3px solid var(--p);margin-bottom:8px;background:var(--sv);border-radius:0 8px 8px 0}
+.trait-card.locked{opacity:.45;border-left-color:var(--ol)}
+.trait-nm{font-size:13px;font-weight:600;color:var(--tx);margin-bottom:3px}
+.trait-src{display:inline-block;font-size:10px;font-weight:400;color:var(--os);margin-left:6px}
+.trait-ds{font-size:12px;color:var(--tx);line-height:1.55}
+/* ── HP EDITABLE ── */
+.dval-edit{width:56px;font-size:20px;font-weight:700;border:none;border-bottom:2px solid var(--ol);background:transparent;color:var(--tx);text-align:center;padding:2px 0}
+.dval-edit:focus{outline:none;border-bottom-color:var(--p)}
+.hp-reset{font-size:10px;color:var(--os);background:none;border:none;cursor:pointer;padding:2px 4px;border-radius:4px}
+.hp-reset:active{color:var(--p)}
 /* ── MISC ── */
 ::-webkit-scrollbar{width:4px}
 ::-webkit-scrollbar-thumb{background:var(--ol);border-radius:2px}
@@ -439,7 +466,12 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
       </div>
       <div class="sec-lbl" id="drv-lbl">Estadístiques derivades — Nivell 7</div>
       <div class="drv-grid">
-        <div class="dbox"><div class="dlbl">HIT POINTS</div><div class="dval" id="d-hp">42</div><div class="dsub">d6+CON×nivell</div></div>
+        <div class="dbox"><div class="dlbl">HIT POINTS</div>
+          <div style="display:flex;align-items:baseline;gap:4px">
+            <input type="number" class="dval-edit" id="d-hp" value="42" min="1" max="999" oninput="maxHpMan=+this.value;renderTracker();save()">
+            <button class="hp-reset" onclick="maxHpMan=-1;recalc();renderTracker();save()" title="Reset al valor calculat">↺</button>
+          </div>
+          <div class="dsub" id="d-hp-auto">auto: 42</div></div>
         <div class="dbox"><div class="dlbl">ARMOR CLASS</div><div class="dval" id="d-ac">12</div><div class="dsub">10 + DEX mod</div></div>
         <div class="dbox"><div class="dlbl">PROFICIENCY</div><div class="dval" id="d-prof">+3</div><div class="dsub">Nivells 5–8</div></div>
         <div class="dbox"><div class="dlbl">SPELL SAVE DC</div><div class="dval" id="d-dc">14</div><div class="dsub">8 + Prof + CHA</div></div>
@@ -466,6 +498,52 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
       <div class="fi"><label data-i18n="loreLabel">La teva història</label>
         <textarea id="c-backstory" style="min-height:130px">A psionic rift opened in my mind during a dream, leaving me with voices I can't silence — and power I can't fully control.</textarea>
       </div>
+    </div>
+  </div>
+
+  <!-- Saving Throws -->
+  <div class="acc" id="acc-saves">
+    <div class="acc-hd" onclick="toggleAcc('saves')">
+      <img class="acc-ic" src="icons/stats.png"><span class="acc-tl">Tirades de Salvació</span>
+      <span class="acc-ch" id="ch-saves">▼</span>
+    </div>
+    <div class="acc-bd" id="bd-saves">
+      <div style="font-size:11px;color:var(--os);margin-bottom:8px">● proficient &nbsp;·&nbsp; valor = modificador + boni de competència</div>
+      <div id="saves-list"></div>
+    </div>
+  </div>
+
+  <!-- Skills -->
+  <div class="acc" id="acc-skills">
+    <div class="acc-hd" onclick="toggleAcc('skills')">
+      <img class="acc-ic" src="icons/feats.png"><span class="acc-tl">Habilitats</span>
+      <span class="acc-ch" id="ch-skills">▼</span>
+    </div>
+    <div class="acc-bd" id="bd-skills">
+      <div style="font-size:11px;color:var(--os);margin-bottom:8px">● proficient &nbsp;·&nbsp; valor = modificador + boni de competència</div>
+      <div id="skills-list"></div>
+    </div>
+  </div>
+
+  <!-- Inventory -->
+  <div class="acc" id="acc-inv">
+    <div class="acc-hd" onclick="toggleAcc('inv')">
+      <img class="acc-ic" src="icons/notes.png"><span class="acc-tl">Inventari</span>
+      <span class="acc-ch" id="ch-inv">▼</span>
+    </div>
+    <div class="acc-bd" id="bd-inv">
+      <div id="inv-list"></div>
+    </div>
+  </div>
+
+  <!-- Traits & Passives -->
+  <div class="acc" id="acc-traits">
+    <div class="acc-hd" onclick="toggleAcc('traits')">
+      <img class="acc-ic" src="icons/subclass.png"><span class="acc-tl">Trets &amp; Passius</span>
+      <span class="acc-ch" id="ch-traits">▼</span>
+    </div>
+    <div class="acc-bd" id="bd-traits">
+      <div id="traits-list"></div>
     </div>
   </div>
 </div>
@@ -903,6 +981,47 @@ const GEN_FEATS=[
   {name:"Telepathic",type:"General",desc:"Telepathic speech 60 ft. Free Detect Thoughts/long rest. +1 CHA.",tip:"Thematically perfect for Aberrant Mind."},
 ];
 
+// ─── Saves / Skills / Traits data ────────────────────────────────────────────
+const SAVES_LIST=[
+  {id:'str',name:'Strength',abbr:'STR'},{id:'dex',name:'Dexterity',abbr:'DEX'},
+  {id:'con',name:'Constitution',abbr:'CON'},{id:'int_',name:'Intelligence',abbr:'INT'},
+  {id:'wis',name:'Wisdom',abbr:'WIS'},{id:'cha',name:'Charisma',abbr:'CHA'},
+];
+const SKILLS_LIST=[
+  {name:'Acrobatics',stat:'dex'},{name:'Animal Handling',stat:'wis'},{name:'Arcana',stat:'int_'},
+  {name:'Athletics',stat:'str'},{name:'Deception',stat:'cha'},{name:'History',stat:'int_'},
+  {name:'Insight',stat:'wis'},{name:'Intimidation',stat:'cha'},{name:'Investigation',stat:'int_'},
+  {name:'Medicine',stat:'wis'},{name:'Nature',stat:'int_'},{name:'Perception',stat:'wis'},
+  {name:'Performance',stat:'cha'},{name:'Persuasion',stat:'cha'},{name:'Religion',stat:'int_'},
+  {name:'Sleight of Hand',stat:'dex'},{name:'Stealth',stat:'dex'},{name:'Survival',stat:'wis'},
+];
+const PASSIVE_TRAITS=[
+  {name:'Telepathic Speech',level:1,source:'Aberrant Mind',desc:'Bonus action: establish telepathic link with a creature you can see within 30 ft (1 min). Works across language barriers. Only you initiate the link.'},
+  {name:'Psionic Sorcery',level:6,source:'Aberrant Mind',desc:'Cast a psionic innate spell by spending Sorcery Points equal to its level — cast without Verbal or Somatic components.'},
+  {name:'Psychic Defenses',level:6,source:'Aberrant Mind',desc:'Resistance to Psychic damage. Advantage on saving throws against being Charmed or Frightened.'},
+  {name:'Revelation in Flesh',level:14,source:'Aberrant Mind',desc:'Bonus action, spend 1–4 Sorcery Points (10 min): each point grants one — swim speed & breathe water; climb speed & climb freely; fly speed; or see through solid matter 30 ft.'},
+  {name:'Warping Implosion',level:18,source:'Aberrant Mind',desc:'Action: teleport up to 120 ft. Creatures within 30 ft of origin: STR save (DC = Spell Save DC) or 3d10 Force + pulled 30 ft toward origin. Recharge: Long Rest or 5 SP.'},
+];
+const SPECIES_TRAITS={
+  'Kalashtar':[
+    {name:'Dual Mind',desc:'Advantage on Wisdom saving throws.'},
+    {name:'Mental Discipline',desc:'Resistance to Psychic damage.'},
+    {name:'Mind Link',desc:'Telepathically communicate with any creature you can see within 60 ft. No shared language needed. The creature cannot reply telepathically.'},
+    {name:'Severed from Dreams',desc:"You don't dream. Immune to the Dream spell and effects requiring you to dream. Advantage on saves vs magical sleep."},
+    {name:'Extra Skill (Daily)',desc:'Each Long Rest you can swap one of your skill proficiencies for any other skill. Declare it at the start of the day.'},
+  ],
+  'Aasimar':[
+    {name:'Darkvision',desc:'See in dim light within 60 ft as bright light, in darkness as dim light.'},
+    {name:'Celestial Resistance',desc:'Resistance to Necrotic and Radiant damage.'},
+    {name:'Healing Hands',desc:'Action: touch a creature and restore HP equal to your Proficiency Bonus. Recharge: Long Rest.'},
+    {name:'Light Bearer',desc:'You know the Light cantrip (CHA is your spellcasting ability for it).'},
+  ],
+  'Tiefling':[
+    {name:'Darkvision',desc:'See in dim light within 60 ft as bright light, in darkness as dim light.'},
+    {name:'Hellish Resistance',desc:'Resistance to Fire damage.'},
+    {name:'Infernal Legacy',desc:'You know the Thaumaturgy cantrip. At 3rd level, Hellish Rebuke (2nd-level). At 5th level, Darkness. CHA is your spellcasting ability.'},
+  ],
+};
 // ─── i18n ─────────────────────────────────────────────────────────────────────
 let lang='cat';
 const LANGS={
@@ -1069,7 +1188,11 @@ let selS=new Set(['Shield','Chaos Bolt','Absorb Elements']);
 let selM=new Set(['Quickened Spell','Heightened Spell']);
 let selF=new Set(['Alert','War Caster']);
 let expSp=new Set();
-let accSt={basic:true,stats:true,lore:false,meta:true,classf:false,sub:true,feats:false,notes:false};
+let selSaves=new Set(['con','cha']);   // Sorcerer default saves
+let selSkills=new Set();
+let maxHpMan=-1;                       // -1 = auto-calc, else manual override
+let inventory=[];                      // [{name:'', qty:1}, ...]
+let accSt={basic:true,stats:true,lore:false,saves:false,skills:false,inv:false,traits:false,meta:true,classf:false,sub:true,feats:false,notes:false};
 
 // ─── Storage ──────────────────────────────────────────────────────────────────
 function save(){
@@ -1083,6 +1206,8 @@ function save(){
       str:g('s-str')?.value,dex:g('s-dex')?.value,con:g('s-con')?.value,
       int_:g('s-int')?.value,wis:g('s-wis')?.value,cha:g('s-cha')?.value,
       selC:[...selC],selS:[...selS],selM:[...selM],selF:[...selF],
+      selSaves:[...selSaves],selSkills:[...selSkills],
+      maxHpMan,inventory,
       BUILDS,accSt,
     };
     localStorage.setItem('dnd_am',JSON.stringify(d));
@@ -1105,8 +1230,12 @@ function loadStorage(){
     if(d.selS)selS=new Set(d.selS);
     if(d.selM)selM=new Set(d.selM);
     if(d.selF)selF=new Set(d.selF);
+    if(d.selSaves)selSaves=new Set(d.selSaves);
+    if(d.selSkills)selSkills=new Set(d.selSkills);
+    if(d.maxHpMan!==undefined)maxHpMan=d.maxHpMan;
+    if(d.inventory)inventory=d.inventory;
     if(d.BUILDS)BUILDS=d.BUILDS;
-    if(d.accSt)accSt=d.accSt;
+    if(d.accSt)accSt={...accSt,...d.accSt};
     const setV=(id,v)=>{const el=g(id);if(el&&v!==undefined)el.value=v;};
     setV('c-name',d.c_name);setV('c-level',lv);
     setV('c-age',d.age);setV('c-backstory',d.backstory);setV('c-notes',d.notes);
@@ -1154,6 +1283,11 @@ function profB(l){return Math.floor((l-1)/4)+2;}
 function getSlots(l){return ST[Math.min(l-1,19)];}
 function getMaxHp(){
   const con=parseInt(g('s-con')?.value)||10;
+  const auto=lv*(4+Math.floor((con-10)/2));
+  return maxHpMan>=1?maxHpMan:auto;
+}
+function getAutoHp(){
+  const con=parseInt(g('s-con')?.value)||10;
   return lv*(4+Math.floor((con-10)/2));
 }
 function spLeft(){return lv-usedSP;}
@@ -1200,6 +1334,7 @@ function updateHero(){
   if(g('h-sub'))g('h-sub').textContent=[species,bg,align].filter(Boolean).join(' · ');
   if(g('tb-name'))g('tb-name').textContent=name;
   if(g('tb-sub'))g('tb-sub').textContent=`Aberrant Mind · Lv ${lv}`;
+  renderTraits();
 }
 
 // ─── Level & Recalc ───────────────────────────────────────────────────────────
@@ -1217,8 +1352,11 @@ function recalc(){
   stats.forEach((id,i)=>sv('m-'+id,mod(vals[i])));
   const prof=profB(lv);
   const cham=Math.floor((cha-10)/2),conm=Math.floor((con-10)/2),dexm=Math.floor((dex-10)/2);
-  const maxHp=lv*(4+conm);
-  sv('d-hp',maxHp);sv('d-ac',10+dexm);sv('d-prof','+'+prof);
+  const autoHp=lv*(4+conm);
+  // HP input: update value only if not manually overridden; always update auto hint
+  const hpEl=g('d-hp');if(hpEl){if(maxHpMan<1)hpEl.value=autoHp;}
+  const hpAu=g('d-hp-auto');if(hpAu)hpAu.textContent=`auto: ${autoHp}`;
+  sv('d-ac',10+dexm);sv('d-prof','+'+prof);
   sv('d-dc',8+prof+cham);
   sv('d-atk',(prof+cham>=0?'+':'')+(prof+cham));
   sv('d-sp',lv);
@@ -1231,6 +1369,7 @@ function recalc(){
   const ch=g('cant-hdr');
   if(ch)ch.textContent=`${t('selectC')} ${CK[lv-1]} · ${t('selCount')} ${selC.size}`;
   updateChips();
+  renderSaves();renderSkills();renderTraits();renderInventory();
 }
 function updateChips(){
   const cc=g('chip-c'),cs=g('chip-s');
@@ -1587,6 +1726,77 @@ function toggleSpell(name,isPsi){
   renderSpells(g('spell-search')?.value||'');updateChips();renderMySpells();save();
 }
 function filterSpells(v){renderSpells(v);}
+
+// ─── SAVES & SKILLS ───────────────────────────────────────────────────────────
+function getStats(){
+  return{str:parseInt(g('s-str')?.value)||10,dex:parseInt(g('s-dex')?.value)||10,
+    con:parseInt(g('s-con')?.value)||10,int_:parseInt(g('s-int')?.value)||10,
+    wis:parseInt(g('s-wis')?.value)||10,cha:parseInt(g('s-cha')?.value)||10};
+}
+function renderSaves(){
+  const el=g('saves-list');if(!el)return;
+  const st=getStats(),pr=profB(lv);
+  el.innerHTML=SAVES_LIST.map(s=>{
+    const v=st[s.id]||10,m=Math.floor((v-10)/2),pro=selSaves.has(s.id);
+    const tot=m+(pro?pr:0),sign=tot>=0?'+':'';
+    return`<div class="sv-row">
+      <button class="sv-chk${pro?' act':''}" data-sid="${s.id}" onclick="toggleSave(this.dataset.sid)">${pro?'●':'○'}</button>
+      <span class="sv-ab">${s.abbr}</span>
+      <span class="sv-nm">${s.name}</span>
+      <span class="sv-val${pro?' pro':''}">${sign}${tot}</span>
+    </div>`;
+  }).join('');
+}
+function toggleSave(id){selSaves.has(id)?selSaves.delete(id):selSaves.add(id);renderSaves();save();}
+
+function renderSkills(){
+  const el=g('skills-list');if(!el)return;
+  const st=getStats(),pr=profB(lv);
+  const ab={str:'STR',dex:'DEX',con:'CON',int_:'INT',wis:'WIS',cha:'CHA'};
+  el.innerHTML=SKILLS_LIST.map(s=>{
+    const v=st[s.stat]||10,m=Math.floor((v-10)/2),pro=selSkills.has(s.name);
+    const tot=m+(pro?pr:0),sign=tot>=0?'+':'';
+    return`<div class="sv-row">
+      <button class="sv-chk${pro?' act':''}" data-sk="${s.name.replace(/"/g,'&quot;')}" onclick="toggleSkill(this.dataset.sk)">${pro?'●':'○'}</button>
+      <span class="sv-ab">${ab[s.stat]}</span>
+      <span class="sv-nm">${s.name}</span>
+      <span class="sv-val${pro?' pro':''}">${sign}${tot}</span>
+    </div>`;
+  }).join('');
+}
+function toggleSkill(name){selSkills.has(name)?selSkills.delete(name):selSkills.add(name);renderSkills();save();}
+
+// ─── INVENTORY ─────────────────────────────────────────────────────────────────
+function renderInventory(){
+  const el=g('inv-list');if(!el)return;
+  el.innerHTML=inventory.map((item,i)=>`<div class="inv-row">
+    <input class="inv-name" type="text" value="${item.name.replace(/"/g,'&quot;')}" placeholder="Nom de l'ítem..." oninput="updInv(${i},'name',this.value)">
+    <input class="inv-qty" type="number" value="${item.qty}" min="0" max="999" oninput="updInv(${i},'qty',+this.value||0)">
+    <button class="inv-del" onclick="delInv(${i})">✕</button>
+  </div>`).join('')+`<button class="inv-add" onclick="addInv()">+ Afegir ítem</button>`;
+}
+function addInv(){inventory.push({name:'',qty:1});renderInventory();save();}
+function delInv(i){inventory.splice(i,1);renderInventory();save();}
+function updInv(i,f,v){if(inventory[i])inventory[i][f]=v;save();}
+
+// ─── TRAITS ────────────────────────────────────────────────────────────────────
+function renderTraits(){
+  const el=g('traits-list');if(!el)return;
+  const species=g('c-species')?.value||'Human';
+  const specTraits=(SPECIES_TRAITS[species]||[]).map(t=>`<div class="trait-card">
+    <div class="trait-nm">${t.name}<span class="trait-src">${species}</span></div>
+    <div class="trait-ds">${t.desc}</div>
+  </div>`).join('');
+  const classTraits=PASSIVE_TRAITS.filter(t=>t.level<=lv).map(t=>`<div class="trait-card">
+    <div class="trait-nm">${t.name}<span class="trait-src">${t.source} · Nv ${t.level}</span></div>
+    <div class="trait-ds">${t.desc}</div>
+  </div>`).join('');
+  const lockedTraits=PASSIVE_TRAITS.filter(t=>t.level>lv).map(t=>`<div class="trait-card locked">
+    <div class="trait-nm">${t.name}<span class="trait-src">${t.source} · Nv ${t.level} 🔒</span></div>
+    <div class="trait-ds">${t.desc}</div>
+  </div>`).join('');
+  el.innerHTML=(specTraits+classTraits+lockedTraits)||`<div style="color:var(--os);font-size:13px;padding:6px 0">Cap tret especial per ${species}.</div>`;
+}
 
 // ─── RENDER BUILD ─────────────────────────────────────────────────────────────
 function metaMax(){const base=lv>=17?4:lv>=10?3:2;return base+(selF.has('Metamagic Adept')?2:0);}

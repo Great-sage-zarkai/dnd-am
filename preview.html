@@ -1940,9 +1940,12 @@ applyLang();
 updateHero();
 if(spTab===1)switchSpellTab(1);
 
-// PWA Service Worker
+// PWA Service Worker — auto-reload when new SW activates (fresh cache)
 if('serviceWorker' in navigator && location.protocol!=='file:'){
   navigator.serviceWorker.register('./sw.js').catch(()=>{});
+  navigator.serviceWorker.addEventListener('message', e => {
+    if(e.data?.type==='SW_UPDATED') window.location.reload();
+  });
 }
 </script>
 </body>

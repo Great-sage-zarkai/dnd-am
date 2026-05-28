@@ -433,16 +433,16 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
     <div class="acc-bd open" id="bd-basic">
       <div class="fg">
         <div class="fi"><label data-i18n="charName">Nom del personatge</label>
-          <input type="text" id="c-name" value="Zariel" oninput="updateHero()"></div>
+          <input type="text" id="c-name" value="Zar'Kai" oninput="updateHero()"></div>
         <div class="fi" style="max-width:90px"><label data-i18n="level">Nivell</label>
-          <input type="number" id="c-level" min="1" max="20" value="7" oninput="updateLevel(this.value)"></div>
+          <input type="number" id="c-level" min="1" max="20" value="3" oninput="updateLevel(this.value)"></div>
       </div>
       <div class="fg">
         <div class="fi"><label data-i18n="species">Espècie</label>
           <select id="c-species" onchange="updateHero()">
-            <option selected>Human</option><option>Aasimar</option><option>Dragonborn</option>
+            <option>Human</option><option>Aasimar</option><option>Dragonborn</option>
             <option>Elf</option><option>Gnome</option><option>Goliath</option><option>Half-Elf</option>
-            <option>Halfling</option><option>Kalashtar</option><option>Tiefling</option><option>Other</option>
+            <option>Halfling</option><option selected>Kalashtar</option><option>Tiefling</option><option>Other</option>
           </select></div>
         <div class="fi"><label>Background</label>
           <select id="c-bg" onchange="updateHero()">
@@ -456,8 +456,8 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
         <div class="fi"><label data-i18n="age">Edat</label><input type="text" id="c-age" value="28"></div>
         <div class="fi"><label data-i18n="alignment">Alineament</label>
           <select id="c-align" onchange="updateHero()">
-            <option>Lawful Good</option><option>Neutral Good</option><option selected>Chaotic Good</option>
-            <option>Lawful Neutral</option><option>True Neutral</option><option>Chaotic Neutral</option>
+            <option>Lawful Good</option><option>Neutral Good</option><option>Chaotic Good</option>
+            <option>Lawful Neutral</option><option>True Neutral</option><option selected>Chaotic Neutral</option>
             <option>Lawful Evil</option><option>Neutral Evil</option><option>Chaotic Evil</option>
           </select></div>
       </div>
@@ -471,14 +471,14 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
       <span class="acc-ch open" id="ch-stats">▼</span>
     </div>
     <div class="acc-bd open" id="bd-stats">
-      <div style="font-size:12px;color:var(--os);margin-bottom:10px" data-i18n="statsRec">Recomanat: CHA 17, DEX 15, CON 14, WIS 10, INT 8, STR 8</div>
+      <div style="font-size:12px;color:var(--os);margin-bottom:10px" data-i18n="statsRec">Build: STR 11, DEX 6, CON 12, INT 14, WIS 10, CHA 14</div>
       <div class="stat-grid">
-        <div class="sbox"><div class="slbl">STR</div><input type="number" id="s-str" value="8" oninput="recalc()"><div class="smod" id="m-str">−1</div></div>
-        <div class="sbox"><div class="slbl">DEX</div><input type="number" id="s-dex" value="15" oninput="recalc()"><div class="smod" id="m-dex">+2</div></div>
-        <div class="sbox"><div class="slbl">CON</div><input type="number" id="s-con" value="14" oninput="recalc()"><div class="smod" id="m-con">+2</div></div>
-        <div class="sbox"><div class="slbl">INT</div><input type="number" id="s-int" value="8" oninput="recalc()"><div class="smod" id="m-int">−1</div></div>
+        <div class="sbox"><div class="slbl">STR</div><input type="number" id="s-str" value="11" oninput="recalc()"><div class="smod" id="m-str">+0</div></div>
+        <div class="sbox"><div class="slbl">DEX</div><input type="number" id="s-dex" value="6" oninput="recalc()"><div class="smod" id="m-dex">−2</div></div>
+        <div class="sbox"><div class="slbl">CON</div><input type="number" id="s-con" value="12" oninput="recalc()"><div class="smod" id="m-con">+1</div></div>
+        <div class="sbox"><div class="slbl">INT</div><input type="number" id="s-int" value="14" oninput="recalc()"><div class="smod" id="m-int">+2</div></div>
         <div class="sbox"><div class="slbl">WIS</div><input type="number" id="s-wis" value="10" oninput="recalc()"><div class="smod" id="m-wis">+0</div></div>
-        <div class="sbox"><div class="slbl">CHA</div><input type="number" id="s-cha" value="17" oninput="recalc()"><div class="smod" id="m-cha">+3</div></div>
+        <div class="sbox"><div class="slbl">CHA</div><input type="number" id="s-cha" value="14" oninput="recalc()"><div class="smod" id="m-cha">+2</div></div>
       </div>
       <div class="sec-lbl" id="drv-lbl">Estadístiques derivades — Nivell 7</div>
       <div class="drv-grid">
@@ -1210,22 +1210,24 @@ function applyLang(){
 
 // ─── Saved Builds ─────────────────────────────────────────────────────────────
 let BUILDS=[
-  {name:"Zariel",level:7,species:"Human",bg:"Sage",age:"28",align:"Chaotic Good",
-   backstory:"A psionic rift opened in my mind during a dream, leaving me with voices I can't silence — and power I can't fully control.",
-   str:8,dex:15,con:14,int_:8,wis:10,cha:17,
-   cantrips:["Fire Bolt","Minor Illusion"],spells:["Shield","Chaos Bolt","Absorb Elements"],
-   meta:["Quickened Spell","Heightened Spell"],feats:["Alert","War Caster"],notes:""},
+  {name:"Zar'Kai",level:3,species:"Kalashtar",bg:"Sage",age:"",align:"Chaotic Neutral",
+   backstory:"",
+   str:11,dex:6,con:12,int_:14,wis:10,cha:14,
+   cantrips:["Acid Splash","Light","Poison Spray","Sorcerous Burst","Mage Hand"],
+   spells:["Charm Person","Expeditious Retreat","Comprehend Languages","Mirror Image","Sleep","Phantasmal Force"],
+   meta:["Extended Spell","Quickened Spell","Twinned Spell","Subtle Spell"],
+   feats:["Metamagic Adept","Telekinetic"],notes:""},
 ];
 
 // ─── App State ────────────────────────────────────────────────────────────────
 let darkMode=false;
-let lv=7,sesMode=false,curHp=-1,usedSl={},usedSP=0,usedMetaSP=0;
+let lv=3,sesMode=false,curHp=-1,usedSl={},usedSP=0,usedMetaSP=0;
 let charImg='';
-let innActive=false,innLeft=3,concSp='',concRnd=0,showConv=false,spTab=0,metaStripOpen=false;
-let selC=new Set(['Fire Bolt','Minor Illusion']);
-let selS=new Set(['Shield','Chaos Bolt','Absorb Elements']);
-let selM=new Set(['Quickened Spell','Heightened Spell']);
-let selF=new Set(['Alert','War Caster']);
+let innActive=false,innLeft=2,concSp='',concRnd=0,showConv=false,spTab=0,metaStripOpen=false;
+let selC=new Set(['Acid Splash','Light','Poison Spray','Sorcerous Burst','Mage Hand']);
+let selS=new Set(['Charm Person','Expeditious Retreat','Comprehend Languages','Mirror Image','Sleep','Phantasmal Force']);
+let selM=new Set(['Extended Spell','Quickened Spell','Twinned Spell','Subtle Spell']);
+let selF=new Set(['Metamagic Adept','Telekinetic']);
 let expSp=new Set();
 let selSaves=new Set(['con','cha']);   // Sorcerer default saves
 let selSkills=new Set();

@@ -1,6 +1,6 @@
-const CACHE = 'dnd-am-v12';
+const CACHE = 'dnd-am-v13';
 const ASSETS = [
-  './preview.html', './manifest.json', './icon.png', './logo.png',
+  './preview.html', './view.html', './manifest.json', './icon.png', './logo.png',
   './icons/char.png', './icons/spells.png', './icons/tracker.png', './icons/build.png',
   './icons/saved.png', './icons/basic.png', './icons/stats.png', './icons/lore.png',
   './icons/classf.png', './icons/subclass.png', './icons/feats.png', './icons/notes.png',

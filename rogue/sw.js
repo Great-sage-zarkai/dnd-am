@@ -1,4 +1,4 @@
-const CACHE = 'dnd-rg-v3';
+const CACHE = 'dnd-rg-v4';
 const ASSETS = [
   './preview.html', './manifest.json',
   '../icon.png', '../logo.png',

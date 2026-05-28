@@ -236,11 +236,6 @@ html,body{height:100%;background:var(--bg);color:var(--tx);font-family:-apple-sy
   <!-- ========== CHARACTER TAB ========== -->
   <div class="tab-panel active" id="tab-character">
 
-    <!-- IDENTITY SWITCHER -->
-    <div class="lbl" style="margin-bottom:6px" id="lbl-identitats">IDENTITATS · CHANGELING</div>
-    <div class="id-switcher" id="id-switcher"></div>
-    <div id="id-notes-wrap" style="margin-bottom:14px"></div>
-
     <!-- BASIC INFO -->
     <div class="sec-hd open" onclick="toggleSec('basic',this)">
       <img src="../icons/basic.png" alt="">
@@ -255,12 +250,25 @@ html,body{height:100%;background:var(--bg);color:var(--tx);font-family:-apple-sy
           <img id="avatar-img" src="" alt="" style="display:none">
         </div>
         <div class="char-fields">
-          <input class="char-inp" id="c-name" placeholder="Nom del personatge" value="" oninput="onNameChange()">
+          <input class="char-inp" id="c-name" placeholder="Nom (forma veritable)" value="" oninput="save()">
           <input class="char-inp sm" id="c-bg" placeholder="Orígen / Background" value="Criminal">
           <input class="char-inp sm" id="c-align" placeholder="Alineació" value="Caòtic Neutral">
         </div>
       </div>
       <input type="file" id="img-input" accept="image/*" style="display:none" onchange="loadImg(event)">
+    </div>
+
+    <!-- IDENTITATS -->
+    <div class="sec-hd open" onclick="toggleSec('identity',this)">
+      <img src="../icons/shadow.png" alt="">
+      <span class="sec-lbl" id="lbl-identitats">Identitats · Changeling</span>
+      <span class="chev">▼</span>
+    </div>
+    <div class="sec-sep"></div>
+    <div class="sec-body open" id="sec-identity">
+      <p class="sec-note" id="note-identity">Changeling Shapechanger: pots canviar d'aparença com a Acció Màgica. Cada forma té la seva pròpia identitat.</p>
+      <div class="id-switcher" id="id-switcher"></div>
+      <div id="id-notes-wrap"></div>
     </div>
 
     <!-- STATS -->
@@ -272,7 +280,20 @@ html,body{height:100%;background:var(--bg);color:var(--tx);font-family:-apple-sy
     <div class="sec-sep"></div>
     <div class="sec-body open" id="sec-stats">
       <div class="stat-grid" id="stat-grid"></div>
+      <div class="lbl" style="margin:8px 0 5px" id="lbl-derived">VALORS DERIVATS</div>
       <div class="der-grid" id="der-grid"></div>
+      <div class="der-grid" style="margin-top:6px" id="der-grid2"></div>
+    </div>
+
+    <!-- TRETS PASSIUS -->
+    <div class="sec-hd" onclick="toggleSec('traits',this)">
+      <img src="../icons/lore.png" alt="">
+      <span class="sec-lbl" id="lbl-traits">Trets Passius</span>
+      <span class="chev">▼</span>
+    </div>
+    <div class="sec-sep"></div>
+    <div class="sec-body" id="sec-traits">
+      <div id="traits-list"></div>
     </div>
 
     <!-- SAVING THROWS -->
@@ -595,7 +616,7 @@ let selF      = new Set();
 let expFeats  = new Set();
 let charImg   = '';
 let charNotes = '';
-let accSt = {basic:true,stats:true,saves:false,skills:false,weaps:true,notes:false,classf:true,subclass:true,cunning:false,feats:false};
+let accSt = {basic:true,identity:true,stats:true,traits:false,saves:false,skills:false,weaps:true,notes:false,classf:true,subclass:true,cunning:false,feats:false};
 
 // ── HELPERS ───────────────────────────────────────────────
 const g = id => document.getElementById(id);
@@ -618,6 +639,7 @@ function renderAll(){
   renderSaves();
   renderSkills();
   renderWeapons();
+  renderTraits();
   renderTracker();
   renderBuild();
 }
@@ -646,7 +668,8 @@ function renderIdSwitcher(){
       <div class="id-card-name">${id.name}</div>
       <div class="id-card-note">${id.notes||'&nbsp;'}</div>
     </div>`).join('');
-  g('tb-name').textContent=identities[activeIdIdx].name;
+  const charName=g('c-name')?.value;
+  g('tb-name').textContent=(charName&&charName.trim())?charName.trim()+' · '+identities[activeIdIdx].name:identities[activeIdIdx].name;
   // identity notes below
   const nw=g('id-notes-wrap');
   nw.innerHTML=`<div class="lbl" style="margin-bottom:4px">Notes: ${identities[activeIdIdx].name}</div>
@@ -673,16 +696,45 @@ function renderStats(){
 }
 
 function renderDerived(){
-  const dex=getMod('dex'), con=getMod('con'), wis=getMod('wis'), prof=profBonus();
-  const ac=10+dex; // leather armor default
+  const dex=getMod('dex'), wis=getMod('wis'), prof=profBonus();
+  const ac=10+dex;
   const init=dex;
-  const dc=8+dex+prof; // Cunning Strike DC (DEX based)
+  const csDC=8+dex+prof;
   const passive=10+wis+(skillProf.has('Perception')?prof*(skillExp.has('Perception')?2:1):0);
+  const sneak=sneakDice();
   g('der-grid').innerHTML=`
     <div class="der-box"><div class="der-lbl">Prof</div><div class="der-val">${fmtMod(prof)}</div></div>
     <div class="der-box"><div class="der-lbl">AC</div><div class="der-val">${ac}</div></div>
     <div class="der-box"><div class="der-lbl">Init</div><div class="der-val">${fmtMod(init)}</div></div>
     <div class="der-box"><div class="der-lbl">Passive Perc</div><div class="der-val">${passive}</div></div>`;
+  g('der-grid2').innerHTML=`
+    <div class="der-box"><div class="der-lbl">Sneak Atk</div><div class="der-val" style="font-size:13px">${sneak}d6</div></div>
+    <div class="der-box"><div class="der-lbl">Speed</div><div class="der-val" style="font-size:13px">30 ft</div></div>
+    <div class="der-box" style="${lv<5?'opacity:.45':''}"><div class="der-lbl">CS DC${lv<5?' ⌛':''}</div><div class="der-val">${csDC}</div></div>
+    <div class="der-box"><div class="der-lbl">Wails</div><div class="der-val" style="font-size:13px">${wailsDice()}d6 🩸</div></div>`;
+}
+
+function renderTraits(){
+  const traits=[
+    {src:'Changeling',name:'Shapechanger',
+     desc:'Com a <b>Acció Màgica</b>, pots canviar la teva aparença: cara, veu, color de pell/cabell/ulls i altres trets físics. Pots semblar qualsevol humanoide de mida Small o Medium. La roba i l\'equip no canvien. No hi ha límit d\'usos.'},
+    {src:'Changeling',name:'Otherworldly Presence',
+     desc:'Coneixes l\'encanteri <b>Detect Thoughts</b>. Pots llançar-lo <b>1 vegada per Long Rest</b> sense gastar spell slot. Stats: CHA.'},
+    {src:'Phantom Rogue',name:'Expertise',
+     desc:`Tens Expertise (×2 Prof Bonus) en les habilitats triades. Lv1: 2 habilitats. Lv6: 2 més.`},
+    {src:'Phantom Rogue',name:"Thieves' Cant",
+     desc:"Coneixes Thieves' Cant i un altre idioma de la teva elecció. Permet comunicar-se de forma encoberta amb altres lladres."},
+    {src:'Phantom Rogue',name:'Weapon Mastery',
+     desc:'Pots usar la propietat Mastery de 2 armes (ex: Dagger i Shortbow). Canviable en finalitzar un Long Rest.'},
+  ];
+  g('traits-list').innerHTML=traits.map(tr=>`
+    <div class="feat-card">
+      <div style="display:flex;align-items:center;gap:7px;margin-bottom:6px">
+        <span class="feat-lv${tr.src==='Changeling'?'':' sub'}">${tr.src}</span>
+        <span class="feat-name">${tr.name}</span>
+      </div>
+      <div class="feat-body open" style="display:block">${tr.desc}</div>
+    </div>`).join('');
 }
 
 function renderSaves(){
@@ -954,10 +1006,6 @@ function loadImg(e){
   reader.readAsDataURL(file);
 }
 
-function onNameChange(){
-  identities[activeIdIdx].name=g('c-name').value||'Rohk';
-  renderIdSwitcher(); save();
-}
 
 // ── SAVE / LOAD ──────────────────────────────────────────
 function save(){

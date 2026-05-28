@@ -1600,6 +1600,8 @@ function buildShareURLRogue(){
   const payload={
     n:g('c-name')?.value||'',
     id:active.name||'???',
+    activeIdx:activeIdIdx,
+    ids:identities.map(id=>({n:id.name||'???',notes:id.notes||''})),
     lv,
     bg:g('c-bg')?.value||'',
     al:g('c-align')?.value||'',

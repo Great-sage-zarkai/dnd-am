@@ -103,6 +103,16 @@ html,body{min-height:100%;background:var(--bg);color:var(--tx);font-family:-appl
 
 .ver-badge{display:flex;align-items:center;justify-content:center;gap:6px;background:var(--sv);border:1px solid var(--ol);border-radius:8px;padding:6px 10px;font-size:11px;color:var(--os);margin-bottom:14px}
 .ver-badge img{width:16px;height:16px;object-fit:contain;opacity:.6}
+
+/* IDENTITATS */
+.ids-grid{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:2px}
+.id-form{flex:1;min-width:110px;border-radius:10px;border:2px solid var(--ol);background:var(--sv);padding:10px 10px 8px;transition:all .15s}
+.id-form.active-form{border-color:var(--p);background:var(--pl)}
+.id-form-icon{font-size:22px;margin-bottom:4px}
+.id-form-name{font-size:13px;font-weight:700;color:var(--tx)}
+.id-form.active-form .id-form-name{color:var(--pd)}
+.id-form-badge{font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px;background:var(--p);color:#fff;display:inline-block;margin-top:3px;margin-bottom:4px}
+.id-form-notes{font-size:11px;color:var(--os);line-height:1.4;margin-top:4px;font-style:italic}
 </style>
 </head>
 <body>
@@ -131,6 +141,9 @@ html,body{min-height:100%;background:var(--bg);color:var(--tx);font-family:-appl
       <img src="../icons/d20.png" alt="">
       <span>Phantom Rogue · Changeling · D&D 5e 2024</span>
     </div>
+
+    <!-- Identitats / Formes -->
+    <div class="sec" id="sec-ids"></div>
 
     <!-- HP + Wails -->
     <div class="sec" id="sec-hp"></div>
@@ -212,6 +225,24 @@ function render(d){
       <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--os)">AC / Init</div>
       <div style="font-size:26px;font-weight:800;color:var(--p)">${ac}</div>
       <div style="font-size:13px;color:var(--os)">${fmtMod(init)} Init</div>
+    </div>`;
+
+  // Identitats (Changeling forms)
+  const allIds=d.ids||[{n:d.id||'???',notes:''}];
+  const activeIdx=d.activeIdx??0;
+  const ID_ICONS=['⚔️','🎵','👤','🌟','🌿','🔮'];
+  g('sec-ids').innerHTML=`
+    <div class="sec-lbl">FORMES · CHANGELING (${allIds.length})</div>
+    <div class="ids-grid">
+      ${allIds.map((id,i)=>{
+        const isActive=i===activeIdx;
+        return `<div class="id-form${isActive?' active-form':''}">
+          <div class="id-form-icon">${ID_ICONS[i]||'🎭'}</div>
+          <div class="id-form-name">${id.n||'???'}</div>
+          ${isActive?'<span class="id-form-badge">ACTIVA</span>':''}
+          ${id.notes?`<div class="id-form-notes">${id.notes}</div>`:''}
+        </div>`;
+      }).join('')}
     </div>`;
 
   // HP + Wails

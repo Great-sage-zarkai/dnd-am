@@ -724,8 +724,8 @@ function renderIdSwitcher(){
         <div class="id-detail-photo" onclick="pickIdImg(${activeIdIdx})">
           ${photoContent}<div class="id-photo-overlay" style="border-radius:50%">📷</div>
         </div>
-        <input class="id-name-inp" value="${active.name||''}" placeholder="Nom identitat"
-          oninput="identities[${activeIdIdx}].name=this.value;renderIdSwitcher();save()">
+        <input class="id-name-inp" value="${(active.name||'').replace(/"/g,'&quot;')}" placeholder="Nom identitat"
+          oninput="updateIdName(${activeIdIdx},this.value)">
         ${delBtn}
       </div>
       <textarea class="id-notes-ta" placeholder="Aparença, context, relacions..."
@@ -734,6 +734,22 @@ function renderIdSwitcher(){
 
   const charName=g('c-name')?.value||'';
   g('tb-name').textContent=charName.trim()?`${charName.trim()} · ${active.name||'???'}`:active.name||'???';
+}
+
+function updateIdName(idx, name){
+  identities[idx].name=name;
+  // Actualitza NOMÉS el text del card, sense re-renderitzar tot
+  const cards=g('id-switcher').querySelectorAll('.id-card');
+  if(cards[idx]){
+    const el=cards[idx].querySelector('.id-card-name');
+    if(el) el.textContent=name||'???';
+  }
+  // Actualitza topbar si és la identitat activa
+  if(idx===activeIdIdx){
+    const charName=g('c-name')?.value||'';
+    g('tb-name').textContent=charName.trim()?`${charName.trim()} · ${name||'???'}`:name||'???';
+  }
+  save();
 }
 
 function addIdentity(){
@@ -781,8 +797,8 @@ function renderStats(){
     <div class="stat-box">
       <div class="stat-abbr">${ABBRS[i]}</div>
       <div><input type="number" class="stat-inp" id="si-${k}" value="${statVals[k]}" min="1" max="30"
-        oninput="statVals['${k}']=+this.value;renderDerived();renderSkills();renderSaves();renderWeapons();renderTracker();save()"></div>
-      <div class="stat-mod">${fmtMod(getMod(k))}</div>
+        oninput="statVals['${k}']=+this.value;g('sm-${k}').textContent=fmtMod(getMod('${k}'));renderDerived();renderSkills();renderSaves();renderWeapons();renderTracker();save()"></div>
+      <div class="stat-mod" id="sm-${k}">${fmtMod(getMod(k))}</div>
     </div>`).join('');
   renderDerived();
 }
@@ -1123,7 +1139,7 @@ function load(){
     usedWails=d.usedWails||0;
     whisperProf=d.whisperProf||''; whisperActive=!!d.whisperActive;
     activeIdIdx=d.activeIdIdx||0;
-    identities=d.identities||identities;
+    identities=(d.identities||identities).map(id=>({name:id.name||'',notes:id.notes||'',img:id.img||''}));
     statVals=d.statVals||statVals;
     skillProf=new Set(d.skillProf||[]);
     skillExp=new Set(d.skillExp||[]);

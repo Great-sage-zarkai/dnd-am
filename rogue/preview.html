@@ -119,6 +119,26 @@ html,body{height:100%;background:var(--bg);color:var(--tx);font-family:-apple-sy
 .sess-ab-body{font-size:13px;color:var(--os);line-height:1.55;margin-top:8px;display:none}
 .sess-ab-body.open{display:block}
 .mb4{margin-bottom:4px}
+/* DESATS */
+.save-now-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;padding:14px;border-radius:var(--rr);border:2px solid var(--p);background:var(--pl);color:var(--pd);font-size:15px;font-weight:700;cursor:pointer;margin-bottom:16px}
+.save-now-btn img{width:22px;height:22px;object-fit:contain}
+.save-now-btn:active{background:var(--p);color:#fff}
+.saved-card{background:var(--sf);border-radius:var(--rr);border:1px solid var(--ol);padding:12px;margin-bottom:10px;display:flex;align-items:center;gap:10px}
+.saved-photo{width:46px;height:46px;border-radius:50%;overflow:hidden;border:2px solid var(--ol);flex-shrink:0;background:var(--sv);display:flex;align-items:center;justify-content:center}
+.saved-photo img{width:100%;height:100%;object-fit:cover}
+.saved-photo img.icon{width:24px;height:24px;object-fit:contain;opacity:.6}
+.saved-info{flex:1;min-width:0}
+.saved-name{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.saved-sub{font-size:11px;color:var(--os);margin-top:2px}
+.saved-date{font-size:10px;color:var(--os);margin-top:2px}
+.saved-btns{display:flex;flex-direction:column;gap:5px;flex-shrink:0}
+.saved-load{padding:5px 12px;border-radius:6px;border:1.5px solid var(--p);background:none;color:var(--pd);font-size:12px;font-weight:700;cursor:pointer}
+.saved-load:active{background:var(--pl)}
+.saved-del{padding:5px 12px;border-radius:6px;border:1.5px solid var(--ol);background:none;color:var(--os);font-size:12px;cursor:pointer}
+.saved-del:active{background:var(--rl);color:var(--r);border-color:var(--r)}
+.saved-empty{text-align:center;padding:40px 20px;color:var(--os)}
+.saved-empty img{width:48px;height:48px;opacity:.3;margin-bottom:10px}
+.saved-empty p{font-size:14px}
 /* LEVEL STEPPER */
 .lv-stepper{display:flex;align-items:center;gap:5px;flex-shrink:0}
 .lv-btn{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--ol);background:var(--sv);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--tx);line-height:1}
@@ -597,6 +617,15 @@ html,body{height:100%;background:var(--bg);color:var(--tx);font-family:-apple-sy
     </div>
   </div>
 
+  <!-- ========== DESATS TAB ========== -->
+  <div class="tab-panel" id="tab-saved">
+    <button class="save-now-btn" onclick="saveCurrentBuild()">
+      <img src="../icons/saved.png" alt="">
+      <span id="lbl-save-now">Guarda l'estat actual</span>
+    </button>
+    <div id="saved-list"></div>
+  </div>
+
 </div><!-- /scroll -->
 
 <!-- TAB BAR -->
@@ -616,6 +645,10 @@ html,body{height:100%;background:var(--bg);color:var(--tx);font-family:-apple-sy
   <button class="tab-btn" id="tbtn-build" onclick="showTab('build')">
     <img src="../icons/slash.png" alt="">
     <span id="lbl-tab-build">Build</span>
+  </button>
+  <button class="tab-btn" id="tbtn-saved" onclick="showTab('saved')">
+    <img src="../icons/saved.png" alt="">
+    <span id="lbl-tab-saved">Desats</span>
   </button>
 </div>
 
@@ -1185,11 +1218,12 @@ function initAccordions(){
 
 // ── TAB ──────────────────────────────────────────────────
 function showTab(name){
-  ['character','tracker','session','build'].forEach(t=>{
+  ['character','tracker','session','build','saved'].forEach(t=>{
     g('tab-'+t)?.classList.toggle('active',t===name);
     g('tbtn-'+t)?.classList.toggle('active',t===name);
   });
   if(name==='session') renderSession();
+  if(name==='saved') renderSaved();
 }
 
 function showSubtab(name){
@@ -1367,6 +1401,108 @@ function loadImg(e){
   reader.readAsDataURL(file);
 }
 
+
+// ── BUILDS (DESATS) ──────────────────────────────────────────
+function getBuildsStore(){ try{ return JSON.parse(localStorage.getItem('dnd_rg_builds')||'[]'); }catch(e){ return []; } }
+function setBuildsStore(arr){ localStorage.setItem('dnd_rg_builds',JSON.stringify(arr)); }
+
+function saveCurrentBuild(){
+  const active=identities[activeIdIdx]||identities[0];
+  const label=g('c-name')?.value?.trim()||active.name||'Rogue';
+  const builds=getBuildsStore();
+  const snapshot={
+    id:Date.now(),
+    label,
+    activeIdName:active.name||'???',
+    activeIdImg:active.img||'',
+    activeIdIdx,
+    lv,
+    feats:[...selF],
+    ts:new Date().toLocaleString('ca-ES',{day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'}),
+    state:{
+      lv,darkMode,lang,curHp,maxHpMan,usedWails,whisperProf,whisperActive,
+      activeIdIdx,identities:JSON.parse(JSON.stringify(identities)),statVals:{...statVals},
+      skillProf:[...skillProf],skillExp:[...skillExp],
+      selSaves:[...selSaves],selF:[...selF],expFeats:[...expFeats],
+      charImg,
+      name:g('c-name')?.value||'',bg:g('c-bg')?.value||'',
+      age:g('c-age')?.value||'',align:g('c-align')?.value||'',
+      charNotes:g('char-notes')?.value||'',
+    }
+  };
+  builds.unshift(snapshot);
+  setBuildsStore(builds);
+  renderSaved();
+  showToast(`"${label}" desat! ✓`);
+}
+
+function loadBuild(id){
+  const builds=getBuildsStore();
+  const b=builds.find(x=>x.id===id); if(!b) return;
+  if(!confirm(`Carregar "${b.label}"? Es perdrà l'estat actual no desat.`)) return;
+  const d=b.state;
+  lv=d.lv||3; darkMode=!!d.darkMode; lang=d.lang||'cat';
+  curHp=d.curHp??-1; maxHpMan=d.maxHpMan??-1;
+  usedWails=d.usedWails||0; whisperProf=d.whisperProf||''; whisperActive=!!d.whisperActive;
+  activeIdIdx=d.activeIdIdx||0;
+  identities=(d.identities||identities).map(id=>({name:id.name||'',notes:id.notes||'',img:id.img||''}));
+  statVals=d.statVals||statVals;
+  skillProf=new Set(d.skillProf||[]); skillExp=new Set(d.skillExp||[]);
+  selSaves=new Set(d.selSaves||['dex','int_']); selF=new Set(d.selF||[]);
+  expFeats=new Set(d.expFeats||[]); charImg=d.charImg||'';
+  document.body.classList.toggle('dark',darkMode);
+  setTimeout(()=>{
+    if(g('c-name')) g('c-name').value=d.name||'';
+    if(g('c-bg')) g('c-bg').value=d.bg||'Criminal';
+    if(g('c-age')) g('c-age').value=d.age||'';
+    if(g('c-align')) g('c-align').value=d.align||'Caòtic Neutral';
+    if(g('lv-disp')) g('lv-disp').textContent=lv;
+    if(g('tb-lv')) g('tb-lv').textContent=lv;
+    if(g('char-notes')) g('char-notes').value=d.charNotes||'';
+    if(charImg){ const img=g('avatar-img'); img.src=charImg; img.style.display='block'; g('avatar-placeholder').style.display='none'; }
+    else{ g('avatar-img').style.display='none'; g('avatar-placeholder').style.display=''; }
+  },0);
+  renderAll(); save();
+  showToast(`"${b.label}" carregat!`);
+  showTab('character');
+}
+
+function deleteBuild(id){
+  const builds=getBuildsStore();
+  const b=builds.find(x=>x.id===id); if(!b) return;
+  if(!confirm(`Eliminar "${b.label}"?`)) return;
+  setBuildsStore(builds.filter(x=>x.id!==id));
+  renderSaved();
+}
+
+function renderSaved(){
+  const builds=getBuildsStore();
+  if(!builds.length){
+    g('saved-list').innerHTML=`<div class="saved-empty">
+      <img src="../icons/saved.png" alt=""><p>Cap personatge desat encara.<br>Prem el botó de dalt per guardar l'estat actual.</p>
+    </div>`; return;
+  }
+  g('saved-list').innerHTML=builds.map(b=>{
+    const icon=ID_DEFAULT_ICONS[b.activeIdIdx||0]||'../icons/shadow.png';
+    const photoHtml=b.activeIdImg
+      ?`<img src="${b.activeIdImg}" alt="">`
+      :`<img class="icon" src="${icon}" alt="">`;
+    const featsStr=b.feats?.length?b.feats.slice(0,3).join(' · ')+(b.feats.length>3?' +'+( b.feats.length-3):''):'Sense feats';
+    return `<div class="saved-card">
+      <div class="saved-photo">${photoHtml}</div>
+      <div class="saved-info">
+        <div class="saved-name">${b.label}</div>
+        <div class="saved-sub">Lv${b.lv} · ${b.activeIdName} · Phantom Rogue</div>
+        <div class="saved-sub" style="margin-top:2px;font-size:10px">${featsStr}</div>
+        <div class="saved-date">${b.ts}</div>
+      </div>
+      <div class="saved-btns">
+        <button class="saved-load" onclick="loadBuild(${b.id})">Carrega</button>
+        <button class="saved-del" onclick="deleteBuild(${b.id})">Elimina</button>
+      </div>
+    </div>`;
+  }).join('');
+}
 
 // ── SAVE / LOAD ──────────────────────────────────────────
 function save(){

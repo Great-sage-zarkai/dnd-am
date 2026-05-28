@@ -1,4 +1,4 @@
-const CACHE = 'dnd-rg-v2';
+const CACHE = 'dnd-rg-v3';
 const ASSETS = [
   './preview.html', './manifest.json',
   '../icon.png', '../logo.png',
@@ -8,7 +8,7 @@ const ASSETS = [
   '../icons/dagger.png', '../icons/hacker.png', '../icons/speed.png',
   '../icons/skeleton.png', '../icons/shadow.png',
   '../icons/bonfire.png', '../icons/moon.png', '../icons/sun.png',
-  '../icons/id1.png', '../icons/id2.png', '../icons/id3.png',
+  '../icons/sword.png', '../icons/bard.png',
   '../icons/crystal-ball.png', '../icons/bow-and-arrow.png',
 ];
 

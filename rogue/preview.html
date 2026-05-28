@@ -638,7 +638,7 @@ function setLang(l){ lang=l; renderAll(); save(); }
 
 function renderIdSwitcher(){
   const sw=g('id-switcher');
-  const idIcons=['../icons/id1.png','../icons/id2.png','../icons/id3.png'];
+  const idIcons=['../icons/sword.png','../icons/bard.png','../icons/shadow.png'];
   sw.innerHTML=identities.map((id,i)=>`
     <div class="id-card${i===activeIdIdx?' active-id':''}" onclick="setIdentity(${i})">
       <div class="id-dot"></div>

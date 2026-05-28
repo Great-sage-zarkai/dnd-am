@@ -51,14 +51,33 @@ html,body{height:100%;background:var(--bg);color:var(--tx);font-family:-apple-sy
 .tab-btn.active img{opacity:1;filter:drop-shadow(0 0 3px var(--p))}
 
 /* IDENTITY */
-.id-switcher{display:flex;gap:8px;margin-bottom:14px}
-.id-card{flex:1;border-radius:var(--rr);border:2px solid var(--ol);background:var(--sv);padding:10px 6px 8px;text-align:center;cursor:pointer;transition:all .15s;position:relative;min-width:0}
+.id-switcher{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.id-card{flex:0 0 72px;border-radius:var(--rr);border:2px solid var(--ol);background:var(--sv);padding:8px 4px 6px;text-align:center;cursor:pointer;transition:all .15s;position:relative}
 .id-card.active-id{border-color:var(--p);background:var(--pl)}
-.id-card-name{font-size:13px;font-weight:700;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.id-card-name{font-size:11px;font-weight:700;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 2px}
 .id-card.active-id .id-card-name{color:var(--pd)}
-.id-card-note{font-size:10px;color:var(--os);margin-top:3px;min-height:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.id-dot{width:7px;height:7px;border-radius:50%;background:var(--p);position:absolute;top:5px;right:5px;display:none}
+.id-dot{width:7px;height:7px;border-radius:50%;background:var(--p);position:absolute;top:4px;right:4px;display:none}
 .id-card.active-id .id-dot{display:block}
+.id-photo-wrap{width:42px;height:42px;border-radius:50%;overflow:hidden;margin:0 auto 5px;background:var(--sv);position:relative;border:2px solid var(--ol)}
+.id-card.active-id .id-photo-wrap{border-color:var(--p)}
+.id-photo-wrap img.id-photo-img{width:100%;height:100%;object-fit:cover}
+.id-photo-wrap img.id-photo-icon{width:22px;height:22px;object-fit:contain;opacity:.5;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)}
+.id-photo-overlay{position:absolute;inset:0;background:rgba(0,0,0,.45);color:#fff;font-size:14px;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;cursor:pointer}
+.id-photo-wrap:hover .id-photo-overlay{opacity:1}
+.id-add-card{flex:0 0 72px;border-radius:var(--rr);border:2px dashed var(--ol);background:transparent;padding:8px 4px;text-align:center;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.id-add-plus{font-size:22px;line-height:1;color:var(--os)}
+.id-add-lbl{font-size:10px;color:var(--os)}
+.id-detail{background:var(--sv);border-radius:var(--rr);border:1px solid var(--ol);padding:10px;margin-bottom:10px}
+.id-detail-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.id-detail-photo{width:54px;height:54px;border-radius:50%;border:2px solid var(--p);background:var(--sf);flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.id-name-inp{flex:1;min-width:0;border:none;background:none;color:var(--tx);font-size:15px;font-weight:700;border-bottom:1px solid var(--ol);padding:3px 0;outline:none;font-family:inherit}
+.id-name-inp:focus{border-color:var(--p)}
+.id-del-btn{background:none;border:1.5px solid var(--r);border-radius:6px;color:var(--r);padding:4px 8px;cursor:pointer;font-size:13px;flex-shrink:0}
+/* LEVEL STEPPER */
+.lv-stepper{display:flex;align-items:center;gap:5px;flex-shrink:0}
+.lv-btn{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--ol);background:var(--sv);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--tx);line-height:1}
+.lv-btn:active{background:var(--ol)}
+.lv-val{font-size:13px;font-weight:700;color:var(--p);min-width:32px;text-align:center}
 
 /* SECTION */
 .sec-hd{display:flex;align-items:center;gap:8px;padding:10px 0 5px;cursor:pointer;user-select:none}
@@ -250,12 +269,23 @@ html,body{height:100%;background:var(--bg);color:var(--tx);font-family:-apple-sy
           <img id="avatar-img" src="" alt="" style="display:none">
         </div>
         <div class="char-fields">
-          <input class="char-inp" id="c-name" placeholder="Nom (forma veritable)" value="" oninput="save()">
-          <input class="char-inp sm" id="c-bg" placeholder="Orígen / Background" value="Criminal">
-          <input class="char-inp sm" id="c-align" placeholder="Alineació" value="Caòtic Neutral">
+          <input class="char-inp" id="c-name" placeholder="Nom (forma veritable / nom del jugador)" value="" oninput="renderIdSwitcher();save()">
+          <div style="display:flex;gap:6px;align-items:center;margin-bottom:5px">
+            <input class="char-inp sm" id="c-bg" placeholder="Background" value="Criminal" style="flex:1;margin:0">
+            <input class="char-inp sm" id="c-age" placeholder="Edat" value="" style="width:56px;margin:0;text-align:center">
+          </div>
+          <div style="display:flex;gap:6px;align-items:center">
+            <input class="char-inp sm" id="c-align" placeholder="Alineació" value="Caòtic Neutral" style="flex:1;margin:0">
+            <div class="lv-stepper">
+              <button class="lv-btn" onclick="adjLv(-1)">−</button>
+              <span class="lv-val">Lv<span id="lv-disp">3</span></span>
+              <button class="lv-btn" onclick="adjLv(+1)">+</button>
+            </div>
+          </div>
         </div>
       </div>
       <input type="file" id="img-input" accept="image/*" style="display:none" onchange="loadImg(event)">
+      <input type="file" id="id-img-input" accept="image/*" style="display:none" onchange="loadIdImg(event)">
     </div>
 
     <!-- IDENTITATS -->
@@ -266,7 +296,7 @@ html,body{height:100%;background:var(--bg);color:var(--tx);font-family:-apple-sy
     </div>
     <div class="sec-sep"></div>
     <div class="sec-body open" id="sec-identity">
-      <p class="sec-note" id="note-identity">Changeling Shapechanger: pots canviar d'aparença com a Acció Màgica. Cada forma té la seva pròpia identitat.</p>
+      <p class="sec-note" id="note-identity">Shapechanger: Acció Màgica per canviar d'aparença. Toca la foto de cada identitat per canviar-la.</p>
       <div class="id-switcher" id="id-switcher"></div>
       <div id="id-notes-wrap"></div>
     </div>
@@ -607,7 +637,7 @@ let usedWails = 0;
 let whisperProf = '';
 let whisperActive = false;
 let activeIdIdx = 0;
-let identities = [{name:'Rohk',notes:''},{name:'Kesh',notes:''},{name:'???',notes:''}];
+let identities = [{name:'Rohk',notes:'',img:''},{name:'Kesh',notes:'',img:''},{name:'???',notes:'',img:''}];
 let statVals = {str:10,dex:10,con:10,int_:10,wis:10,cha:10};
 let skillProf = new Set(['Stealth','Sleight of Hand','Deception','Perception']);
 let skillExp  = new Set(['Stealth','Sleight of Hand']);
@@ -658,28 +688,90 @@ function applyLang(){
 
 function setLang(l){ lang=l; renderAll(); save(); }
 
+const ID_DEFAULT_ICONS=['../icons/sword.png','../icons/bard.png','../icons/shadow.png'];
+let currentIdPhotoIdx=0;
+
 function renderIdSwitcher(){
   const sw=g('id-switcher');
-  const idIcons=['../icons/sword.png','../icons/bard.png','../icons/shadow.png'];
-  sw.innerHTML=identities.map((id,i)=>`
-    <div class="id-card${i===activeIdIdx?' active-id':''}" onclick="setIdentity(${i})">
+  let html=identities.map((id,i)=>{
+    const icon=ID_DEFAULT_ICONS[i]||'../icons/shadow.png';
+    const photoHtml=id.img
+      ?`<img class="id-photo-img" src="${id.img}" alt="">`
+      :`<img class="id-photo-icon" src="${icon}" alt="">`;
+    return `<div class="id-card${i===activeIdIdx?' active-id':''}" onclick="setIdentity(${i})">
       <div class="id-dot"></div>
-      <img src="${idIcons[i]||idIcons[2]}" alt="" style="width:28px;height:28px;object-fit:contain;opacity:${i===activeIdIdx?'1':'.5'};margin-bottom:4px">
-      <div class="id-card-name">${id.name}</div>
-      <div class="id-card-note">${id.notes||'&nbsp;'}</div>
-    </div>`).join('');
-  const charName=g('c-name')?.value;
-  g('tb-name').textContent=(charName&&charName.trim())?charName.trim()+' · '+identities[activeIdIdx].name:identities[activeIdIdx].name;
-  // identity notes below
-  const nw=g('id-notes-wrap');
-  nw.innerHTML=`<div class="lbl" style="margin-bottom:4px">Notes: ${identities[activeIdIdx].name}</div>
-    <textarea class="id-notes-ta" placeholder="Notes d'aquesta identitat..." oninput="identities[${activeIdIdx}].notes=this.value;renderIdSwitcher();save()">${identities[activeIdIdx].notes}</textarea>`;
+      <div class="id-photo-wrap" onclick="event.stopPropagation();pickIdImg(${i})">
+        ${photoHtml}<div class="id-photo-overlay">📷</div>
+      </div>
+      <div class="id-card-name">${id.name||'???'}</div>
+    </div>`;
+  }).join('');
+  html+=`<div class="id-add-card" onclick="addIdentity()">
+    <div class="id-add-plus">+</div><div class="id-add-lbl">Afegir</div>
+  </div>`;
+  sw.innerHTML=html;
+
+  const active=identities[activeIdIdx];
+  const icon=ID_DEFAULT_ICONS[activeIdIdx]||'../icons/shadow.png';
+  const photoContent=active.img
+    ?`<img src="${active.img}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`
+    :`<img src="${icon}" alt="" style="width:28px;height:28px;object-fit:contain;opacity:.6">`;
+  const delBtn=identities.length>1
+    ?`<button class="id-del-btn" onclick="removeIdentity(${activeIdIdx})">🗑</button>`:'';
+  g('id-notes-wrap').innerHTML=`
+    <div class="id-detail">
+      <div class="id-detail-row">
+        <div class="id-detail-photo" onclick="pickIdImg(${activeIdIdx})">
+          ${photoContent}<div class="id-photo-overlay" style="border-radius:50%">📷</div>
+        </div>
+        <input class="id-name-inp" value="${active.name||''}" placeholder="Nom identitat"
+          oninput="identities[${activeIdIdx}].name=this.value;renderIdSwitcher();save()">
+        ${delBtn}
+      </div>
+      <textarea class="id-notes-ta" placeholder="Aparença, context, relacions..."
+        oninput="identities[${activeIdIdx}].notes=this.value;save()">${active.notes||''}</textarea>
+    </div>`;
+
+  const charName=g('c-name')?.value||'';
+  g('tb-name').textContent=charName.trim()?`${charName.trim()} · ${active.name||'???'}`:active.name||'???';
+}
+
+function addIdentity(){
+  identities.push({name:'Nova identitat',notes:'',img:''});
+  activeIdIdx=identities.length-1;
+  renderIdSwitcher(); save();
+}
+
+function removeIdentity(idx){
+  if(identities.length<=1) return;
+  if(!confirm(`Eliminar la identitat "${identities[idx].name}"?`)) return;
+  identities.splice(idx,1);
+  if(activeIdIdx>=identities.length) activeIdIdx=identities.length-1;
+  renderIdSwitcher(); save();
+}
+
+function pickIdImg(idx){
+  currentIdPhotoIdx=idx;
+  const inp=g('id-img-input'); inp.value=''; inp.click();
+}
+
+function loadIdImg(e){
+  const file=e.target.files[0]; if(!file) return;
+  const reader=new FileReader();
+  reader.onload=ev=>{ identities[currentIdPhotoIdx].img=ev.target.result; renderIdSwitcher(); save(); };
+  reader.readAsDataURL(file);
 }
 
 function setIdentity(i){
   activeIdIdx=i;
-  renderIdSwitcher();
-  save();
+  renderIdSwitcher(); save();
+}
+
+function adjLv(d){
+  lv=Math.max(1,Math.min(20,lv+d));
+  g('lv-disp').textContent=lv;
+  g('tb-lv').textContent=lv;
+  renderDerived(); renderSkills(); renderWeapons(); renderTracker(); renderBuild(); save();
 }
 
 function renderStats(){
@@ -1015,7 +1107,8 @@ function save(){
     skillProf:[...skillProf],skillExp:[...skillExp],
     selSaves:[...selSaves],selF:[...selF],expFeats:[...expFeats],
     charImg,charNotes:g('char-notes')?.value||'',
-    bg:g('c-bg')?.value||'',align:g('c-align')?.value||'',
+    name:g('c-name')?.value||'',bg:g('c-bg')?.value||'',
+    age:g('c-age')?.value||'',align:g('c-align')?.value||'',
   };
   localStorage.setItem('dnd_rg',JSON.stringify(data));
 }
@@ -1042,8 +1135,12 @@ function load(){
     document.body.classList.toggle('dark',darkMode);
     // Restore text fields
     setTimeout(()=>{
+      if(g('c-name')) g('c-name').value=d.name||'';
       if(g('c-bg')) g('c-bg').value=d.bg||'Criminal';
+      if(g('c-age')) g('c-age').value=d.age||'';
       if(g('c-align')) g('c-align').value=d.align||'Caòtic Neutral';
+      if(g('lv-disp')) g('lv-disp').textContent=lv;
+      if(g('tb-lv')) g('tb-lv').textContent=lv;
       if(g('char-notes')) g('char-notes').value=charNotes;
       if(charImg){
         const img=g('avatar-img');

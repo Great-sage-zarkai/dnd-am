@@ -136,6 +136,17 @@ textarea{resize:vertical;min-height:90px}
 .ws-thp-row{display:flex;align-items:center;gap:10px;margin-top:8px;padding-top:8px;border-top:1px solid rgba(58,124,165,.25)}
 .ws-thp-lbl{font-size:11px;font-weight:700;color:var(--td)}
 .ws-thp-val{font-size:20px;font-weight:800;color:var(--t)}
+.ws-mode-banner{background:var(--td);color:#fff;border-radius:var(--rr);padding:6px 12px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;font-size:12px;font-weight:700}
+.ws-beast-hp-lbl{font-size:11px;font-weight:700;color:var(--td);margin-top:10px;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px}
+.hp-fill-beast{height:100%;border-radius:99px;transition:width .4s,background .4s;background:var(--a)}
+.ws-druid-row{display:flex;align-items:center;justify-content:space-between;background:var(--pl);border-radius:8px;padding:8px 12px;margin-top:8px;border:1px solid var(--ol)}
+.ws-druid-lbl{font-size:11px;color:var(--pd);font-weight:700}
+.ws-druid-val{font-size:16px;font-weight:800;color:var(--pd)}
+.btn-heal-form{width:100%;margin-top:8px;padding:8px;background:var(--tl);border:1.5px solid var(--t);border-radius:8px;color:var(--td);font-size:12px;font-weight:700;cursor:pointer;transition:background .15s}
+.btn-heal-form:active{background:var(--t);color:#fff}
+.ws-feat-row{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.ws-feat-chip{background:var(--al);border:1px solid var(--a);border-radius:6px;padding:3px 8px;font-size:10px;color:var(--ad);font-weight:600;cursor:pointer}
+.ws-feat-chip.exp{background:var(--ad);color:#fff}
 .ws-btns{display:flex;gap:8px;margin-top:8px}
 .btn-ws{flex:1;padding:10px 8px;border-radius:9px;border:1.5px solid var(--p);background:var(--pl);color:var(--pd);font-size:12px;font-weight:600;cursor:pointer;transition:all .1s}
 .btn-ws:active{background:var(--p);color:#fff}
@@ -957,29 +968,29 @@ const DRUID_SPELLS=[
 // crVal: 0=CR0, 0.25=CR1/4, 0.5=CR1/2, 1=CR1, 2=CR2, 3=CR3, 4=CR4
 // fly:true = requires lv8+ (base Wild Shape fly unlock)
 const BEAST_FORMS=[
- {id:'rat',n:'Rat',cr:'0',crVal:0,hp:2,ac:10,spd:'20 ft',atk:'Bite +0, 1 Piercing',fly:false,icon:''},
- {id:'spider',n:'Spider',cr:'0',crVal:0,hp:2,ac:12,spd:'20 ft / climb 20',atk:'Bite +2, 1 Piercing + poison (CON)',fly:false,icon:'spider.png'},
- {id:'cat',n:'Cat',cr:'0',crVal:0,hp:2,ac:12,spd:'40 ft / climb 30',atk:'Claws +0, 1 Slashing',fly:false,icon:''},
- {id:'wolf',n:'Wolf',cr:'1/4',crVal:0.25,hp:11,ac:13,spd:'40 ft',atk:'Bite +4, 2d4+2 Piercing (Trip: STR save)',fly:false,icon:'wolf.png'},
- {id:'elk',n:'Elk',cr:'1/4',crVal:0.25,hp:13,ac:10,spd:'50 ft',atk:'Ram +3, 1d6+1 Bludg. / Hooves +5, 2d4+3 Bludg.',fly:false,icon:'elk.png'},
- {id:'boar',n:'Boar',cr:'1/4',crVal:0.25,hp:11,ac:11,spd:'40 ft',atk:'Tusk +3, 1d6+1 Piercing',fly:false,icon:''},
- {id:'giant-spider',n:'Giant Spider',cr:'1',crVal:1,hp:26,ac:14,spd:'30 ft / climb 30',atk:'Bite +5, 1d8+3 + poison / Web (Restrained, DC 12)',fly:false,icon:'spider.png'},
- {id:'giant-toad',n:'Giant Toad',cr:'1/4',crVal:0.25,hp:39,ac:11,spd:'20 ft / swim 40',atk:'Bite +4, 1d10+4 + grapple (swallow Small)',fly:false,icon:''},
- {id:'panther',n:'Panther',cr:'1/2',crVal:0.5,hp:13,ac:12,spd:'50 ft / climb 40',atk:'Bite +4 1d6+2 / Claw +4 1d6+2 (Pounce)',fly:false,icon:''},
- {id:'black-bear',n:'Black Bear',cr:'1/2',crVal:0.5,hp:19,ac:11,spd:'40 ft / climb 30',atk:'Bite +3 1d6+2 / Claws +3 2×1d6+2',fly:false,icon:'bear.png'},
- {id:'crocodile',n:'Crocodile',cr:'1/2',crVal:0.5,hp:19,ac:12,spd:'20 ft / swim 20',atk:'Bite +4, 1d10+2 + grapple (escape DC 12)',fly:false,icon:''},
- {id:'brown-bear',n:'Brown Bear',cr:'1',crVal:1,hp:34,ac:11,spd:'40 ft / climb 30',atk:'Bite +5 1d8+4 / Claws +5 2×2d6+4',fly:false,icon:'bear.png'},
- {id:'dire-wolf',n:'Dire Wolf',cr:'1',crVal:1,hp:37,ac:14,spd:'50 ft',atk:'Bite +5, 2d6+3 Piercing (Pack Tactics; Trip STR DC 13)',fly:false,icon:'wolf.png'},
- {id:'giant-hyena',n:'Giant Hyena',cr:'1',crVal:1,hp:45,ac:12,spd:'50 ft',atk:'Bite +5, 2d6+3 Piercing (Rampage)',fly:false,icon:''},
- {id:'lion',n:'Lion',cr:'1',crVal:1,hp:26,ac:12,spd:'50 ft',atk:'Bite +5 1d8+3 / Claws +5 2×1d6+3 (Pounce)',fly:false,icon:''},
- {id:'tiger',n:'Tiger',cr:'1',crVal:1,hp:37,ac:12,spd:'40 ft',atk:'Bite +5 1d10+3 / Claws +5 2×1d6+3 (Pounce)',fly:false,icon:''},
- {id:'giant-eagle',n:'Giant Eagle',cr:'1',crVal:1,hp:26,ac:13,spd:'10 ft / fly 80',atk:'Talons +5, 2×2d6+3 (Grab)',fly:true,icon:''},
- {id:'giant-constrictor',n:'Giant Constrictor',cr:'2',crVal:2,hp:60,ac:12,spd:'30 ft / swim 30',atk:'Bite +6 3d6+4 / Constrict +6 2d8+4 (grapple)',fly:false,icon:''},
- {id:'polar-bear',n:'Polar Bear',cr:'2',crVal:2,hp:42,ac:12,spd:'40 ft / swim 30',atk:'Bite +7 1d8+5 / Claws +7 2×2d6+5',fly:false,icon:'bear.png'},
- {id:'rhinoceros',n:'Rhinoceros',cr:'2',crVal:2,hp:45,ac:11,spd:'40 ft',atk:'Gore +7, 2d10+5 Piercing (Charge: +2d10)',fly:false,icon:''},
- {id:'saber-toothed-tiger',n:'Saber-Toothed Tiger',cr:'2',crVal:2,hp:52,ac:12,spd:'40 ft',atk:'Bite +5 1d10+4 / Claws +5 2×1d6+4 (Pounce)',fly:false,icon:''},
- {id:'killer-whale',n:'Killer Whale',cr:'3',crVal:3,hp:90,ac:12,spd:'swim 60',atk:'Bite +7, 5d6+5 Piercing',fly:false,icon:''},
- {id:'elephant',n:'Elephant',cr:'4',crVal:4,hp:76,ac:12,spd:'40 ft',atk:'Gore +8 2d10+7 / Stomp +8 4d10+7 (prone)',fly:false,icon:''},
+ {id:'rat',n:'Rat',cr:'0',crVal:0,hp:2,ac:10,spd:'20 ft',atk:'Bite +0, 1 Piercing',fly:false,icon:'',features:[]},
+ {id:'spider',n:'Spider',cr:'0',crVal:0,hp:2,ac:12,spd:'20 ft / climb 20',atk:'Bite +2, 1 Piercing + poison (CON)',fly:false,icon:'spider.png',features:['Web Sense: detecta vibracions a la teranyina fins 30 ft']},
+ {id:'cat',n:'Cat',cr:'0',crVal:0,hp:2,ac:12,spd:'40 ft / climb 30',atk:'Claws +0, 1 Slashing',fly:false,icon:'',features:['Keen Smell: Avantatge en Percepció (olfacte)']},
+ {id:'wolf',n:'Wolf',cr:'1/4',crVal:0.25,hp:11,ac:13,spd:'40 ft',atk:'Bite +4, 2d4+2 Piercing (Trip: STR save)',fly:false,icon:'wolf.png',features:['Pack Tactics: Avantatge si un aliat és adjacent a l\'objectiu','Keen Hearing & Smell']},
+ {id:'elk',n:'Elk',cr:'1/4',crVal:0.25,hp:13,ac:10,spd:'50 ft',atk:'Ram +3, 1d6+1 Bludg. / Hooves +5, 2d4+3 Bludg.',fly:false,icon:'elk.png',features:['Charge: mou 20+ ft en línia recta → Ram +2d6 extra i STR DC 11 o Prone']},
+ {id:'boar',n:'Boar',cr:'1/4',crVal:0.25,hp:11,ac:11,spd:'40 ft',atk:'Tusk +3, 1d6+1 Piercing',fly:false,icon:'',features:['Charge: mou 20+ ft → Tusk +1d6 extra i STR DC 11 o Prone','Relentless: si arriba a 0 HP per primer cop, queda a 1 HP (1/Long Rest)']},
+ {id:'giant-spider',n:'Giant Spider',cr:'1',crVal:1,hp:26,ac:14,spd:'30 ft / climb 30',atk:'Bite +5, 1d8+3 + poison / Web (Restrained, DC 12)',fly:false,icon:'spider.png',features:['Web Sense: detecta vibracions a teranyina fins 60 ft','Web Walker: no quedes atrapat per teranyines','Web (BA): llança xarxa DC 12 STR o Restrained (escape DC 12)']},
+ {id:'giant-toad',n:'Giant Toad',cr:'1/4',crVal:0.25,hp:39,ac:11,spd:'20 ft / swim 40',atk:'Bite +4, 1d10+4 + grapple (swallow Small)',fly:false,icon:'',features:['Standing Leap: salta 20 ft llarg / 10 ft alt','Swallow: criatura Tiny grappled → tragada, Blinded+Restrained, 2d6 àcid/torn']},
+ {id:'panther',n:'Panther',cr:'1/2',crVal:0.5,hp:13,ac:12,spd:'50 ft / climb 40',atk:'Bite +4 1d6+2 / Claw +4 1d6+2 (Pounce)',fly:false,icon:'',features:['Pounce: si mous 20+ ft i ataques → STR DC 13 o Prone + atac de Garra com BA','Keen Smell: Avantatge en Percepció (olfacte)']},
+ {id:'black-bear',n:'Black Bear',cr:'1/2',crVal:0.5,hp:19,ac:11,spd:'40 ft / climb 30',atk:'Bite +3 1d6+2 / Claws +3 2×1d6+2',fly:false,icon:'bear.png',features:['Keen Smell: Avantatge en Percepció (olfacte)','Multiattack: Claws × 2 + Bite']},
+ {id:'crocodile',n:'Crocodile',cr:'1/2',crVal:0.5,hp:19,ac:12,spd:'20 ft / swim 20',atk:'Bite +4, 1d10+2 + grapple (escape DC 12)',fly:false,icon:'',features:['Hold Breath: aguanta la respiració fins 15 min','Grapple on hit: DC 12 STR per escapar']},
+ {id:'brown-bear',n:'Brown Bear',cr:'1',crVal:1,hp:34,ac:11,spd:'40 ft / climb 30',atk:'Bite +5 1d8+4 / Claws +5 2×2d6+4',fly:false,icon:'bear.png',features:['Keen Smell: Avantatge en Percepció (olfacte)','Multiattack: Claws × 2 (o Claws + Bite)']},
+ {id:'dire-wolf',n:'Dire Wolf',cr:'1',crVal:1,hp:37,ac:14,spd:'50 ft',atk:'Bite +5, 2d6+3 Piercing (Pack Tactics; Trip STR DC 13)',fly:false,icon:'wolf.png',features:['Pack Tactics: Avantatge si un aliat és adjacent a l\'objectiu','Keen Hearing & Smell: Avantatge en Percepció','Trip on Bite: STR DC 13 o Prone']},
+ {id:'giant-hyena',n:'Giant Hyena',cr:'1',crVal:1,hp:45,ac:12,spd:'50 ft',atk:'Bite +5, 2d6+3 Piercing (Rampage)',fly:false,icon:'',features:['Rampage: quan mates una criatura, mou mig Speed i fes un Bite com BA']},
+ {id:'lion',n:'Lion',cr:'1',crVal:1,hp:26,ac:12,spd:'50 ft',atk:'Bite +5 1d8+3 / Claws +5 2×1d6+3 (Pounce)',fly:false,icon:'',features:['Pounce: mou 20+ ft → STR DC 13 o Prone + Bite BA','Pack Tactics: Avantatge si aliat adjacent','Keen Smell']},
+ {id:'tiger',n:'Tiger',cr:'1',crVal:1,hp:37,ac:12,spd:'40 ft',atk:'Bite +5 1d10+3 / Claws +5 2×1d6+3 (Pounce)',fly:false,icon:'',features:['Pounce: mou 20+ ft → STR DC 13 o Prone + Bite BA','Keen Smell: Avantatge Percepció']},
+ {id:'giant-eagle',n:'Giant Eagle',cr:'1',crVal:1,hp:26,ac:13,spd:'10 ft / fly 80',atk:'Talons +5, 2×2d6+3 (Grab)',fly:true,icon:'',features:['Keen Sight: Avantatge en Percepció (vista)','Flyby: no provoca Opportunity Attacks quan vola sobre enemics']},
+ {id:'giant-constrictor',n:'Giant Constrictor',cr:'2',crVal:2,hp:60,ac:12,spd:'30 ft / swim 30',atk:'Bite +6 3d6+4 / Constrict +6 2d8+4 (grapple)',fly:false,icon:'',features:['Constrict: DC 16 STR o Grappled+Restrained (2d8+4 dany/torn automàtic)']},
+ {id:'polar-bear',n:'Polar Bear',cr:'2',crVal:2,hp:42,ac:12,spd:'40 ft / swim 30',atk:'Bite +7 1d8+5 / Claws +7 2×2d6+5',fly:false,icon:'bear.png',features:['Keen Smell: Avantatge en Percepció (olfacte)','Multiattack: Claws × 2 + Bite']},
+ {id:'rhinoceros',n:'Rhinoceros',cr:'2',crVal:2,hp:45,ac:11,spd:'40 ft',atk:'Gore +7, 2d10+5 Piercing (Charge: +2d10)',fly:false,icon:'',features:['Charge: mou 20+ ft en línia recta → Gore +2d10 extra i STR DC 15 o Prone']},
+ {id:'saber-toothed-tiger',n:'Saber-Toothed Tiger',cr:'2',crVal:2,hp:52,ac:12,spd:'40 ft',atk:'Bite +5 1d10+4 / Claws +5 2×1d6+4 (Pounce)',fly:false,icon:'',features:['Pounce: mou 20+ ft → STR DC 13 o Prone + Claws BA','Keen Smell: Avantatge Percepció']},
+ {id:'killer-whale',n:'Killer Whale',cr:'3',crVal:3,hp:90,ac:12,spd:'swim 60',atk:'Bite +7, 5d6+5 Piercing',fly:false,icon:'',features:['Echolocation: no pots usar si Deafened','Hold Breath: aguanta fins 30 min','Keen Hearing']},
+ {id:'elephant',n:'Elephant',cr:'4',crVal:4,hp:76,ac:12,spd:'40 ft',atk:'Gore +8 2d10+7 / Stomp +8 4d10+7 (prone)',fly:false,icon:'',features:['Trampling Charge: mou 20+ ft → STR DC 12 o Prone + Stomp BA','Stomp: només vs creatures Prone']},
 ];
 
 // Slot table [lv0..lv20][slot1..slot9]
@@ -1026,7 +1037,8 @@ let lv=3;
 let stats={str:8,dex:14,con:14,int:10,wis:17,cha:8};
 let curHp=22, maxHpMan=-1;
 let slots=[]; // current remaining slots [lv1..lv9]
-let wsUses=2, wsActive=null, wsCurTHP=0;
+let wsUses=2, wsActive=null, wsCurTHP=0, wsBeastCurHp=0;
+// wsCurTHP = Circle of Moon THP (lv×3), wsBeastCurHp = beast's actual HP pool
 let prepared=new Set(); // user-chosen spell ids (cantrips + leveled)
 let concSpell=null;
 let primalOrder='magician'; // 'magician'|'warden'
@@ -1063,7 +1075,7 @@ function wsTHP(){return lv*3;}
 
 // ── SAVE / LOAD ──
 function getState(){
-  return{lv,stats,curHp,maxHpMan,slots,wsUses,wsActive,wsCurTHP,
+  return{lv,stats,curHp,maxHpMan,slots,wsUses,wsActive,wsCurTHP,wsBeastCurHp,
     prepared:[...prepared],concSpell,primalOrder,eleFury,
     expanded:[...expanded],dark,inventory,
     profSaves:[...profSaves],profSkills:[...profSkills],
@@ -1078,6 +1090,7 @@ function setState(s){
   slots=s.slots||[];
   wsUses=s.wsUses!=null?s.wsUses:2;
   wsActive=s.wsActive||null; wsCurTHP=s.wsCurTHP||0;
+  wsBeastCurHp=s.wsBeastCurHp||0;
   prepared=new Set(s.prepared||[]);
   concSpell=s.concSpell||null;
   primalOrder=s.primalOrder||'magician';
@@ -1310,92 +1323,215 @@ function renderTracker(){
     <button style="background:none;border:none;cursor:pointer;font-size:15px" onclick="concSpell=null;renderTracker();save()">✕</button>
   </div>`:'';
 
-  // Wild Shape section
-  let wsHtml='';
   const usesMax=wsMaxUses(lv);
   const pips=Array.from({length:usesMax},(_,i)=>`<div class="ws-pip ${i<wsUses?'f':'e'}" onclick="toggleWsUse(${i})"></div>`).join('');
-  if(wsActive){
-    const f=BEAST_FORMS.find(x=>x.id===wsActive)||{n:'Forma',cr:'?',hp:10,ac:10,spd:'30 ft',atk:'—',icon:''};
-    const fIcon=f.icon?`<img src="../icons/${f.icon}" style="width:28px;height:28px;object-fit:contain;border-radius:6px;background:var(--pl);padding:3px;margin-right:6px" onerror="this.style.display='none'">`:'<span style="font-size:22px;margin-right:6px">🐾</span>';
-    wsHtml=`<div class="ws-active">
-      <div style="display:flex;align-items:center;gap:4px">
-        ${fIcon}
-        <span class="ws-form-name">${f.n}</span>
-        <span style="font-size:11px;color:var(--td)">CR ${f.cr}</span>
-      </div>
-      <div class="ws-stats">❤️ ${f.hp} HP · 🛡️ ${f.ac} AC · ⚡ ${f.spd}<br>⚔️ ${f.atk}</div>
-      <div class="ws-thp-row">
-        <span class="ws-thp-lbl">HP Temporals:</span>
-        <span class="ws-thp-val" id="ws-thp-disp">${wsCurTHP}</span>
-        <span style="font-size:11px;color:var(--td)">&nbsp;/&nbsp;${wsTHP()}</span>
-        <button class="hbtn m" onclick="changeWsTHP(-1)" style="padding:4px 8px;font-size:12px">−</button>
-        <button class="hbtn p" onclick="changeWsTHP(+1)" style="padding:4px 8px;font-size:12px">+</button>
-      </div>
-      <div style="font-size:10px;color:var(--td);margin-top:4px">AC = max(${f.ac}, ${13+mod(stats.wis)}) = ${Math.max(f.ac,13+mod(stats.wis))} · WIS mod: ${fmod(mod(stats.wis))}</div>
-    </div>`;
-  }
   const slotHtml=renderSlotPips();
-  g('tracker-content').innerHTML=`
-    ${concHtml}
-    <div class="tr-sec">
-      <div class="tr-lbl">❤️ Punts de Vida</div>
-      <div class="hp-wrap"><div class="hp-fill" style="width:${pct}%;background:${hpColor}"></div></div>
-      <div class="hp-row">
-        <div class="hp-btns">
-          <button class="hbtn m" onclick="changeHp(-1)">−</button>
-          <button class="hbtn m" onclick="damagePrompt()">💥</button>
+
+  if(wsActive){
+    // ── WILD SHAPE MODE: show beast as main character ──
+    const f=BEAST_FORMS.find(x=>x.id===wsActive)||{n:'Forma',cr:'?',hp:10,ac:10,spd:'30 ft',atk:'—',icon:'',features:[]};
+    const fIcon=f.icon?`<img src="../icons/${f.icon}" style="width:32px;height:32px;object-fit:contain;border-radius:8px;background:rgba(255,255,255,.25);padding:4px" onerror="this.style.display='none'">`:'<span style="font-size:26px">🐾</span>';
+    const bPct=Math.max(0,wsBeastCurHp/f.hp*100);
+    const bColor=bPct>50?'var(--a)':bPct>25?'#E07020':'var(--r)';
+    const thpPct=Math.max(0,wsCurTHP/wsTHP()*100);
+    const acFinal=Math.max(f.ac,13+mod(stats.wis));
+    const featsHtml=f.features&&f.features.length
+      ? `<div class="ws-feat-row">${f.features.map((ft,i)=>`<span class="ws-feat-chip" onclick="this.classList.toggle('exp')" title="${ft}">${ft.split(':')[0]}</span>`).join('')}</div>`
+      : '';
+    g('tracker-content').innerHTML=`
+      ${concHtml}
+      <div class="ws-mode-banner">
+        <div style="display:flex;align-items:center;gap:8px">${fIcon}<div><div style="font-size:14px">${f.n}</div><div style="font-weight:400;opacity:.8;font-size:10px">CR ${f.cr} · 🛡️ ${acFinal} AC · ⚡ ${f.spd}</div></div></div>
+        <div style="display:flex;gap:6px">
+          <button class="btn-ws" style="padding:5px 10px;font-size:11px;background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.3);color:#fff" onclick="openWSModal()">↻</button>
+          <button class="btn-ws btn-ws-leave" style="padding:5px 10px;font-size:11px" onclick="leaveWS()">🧑 Sortir</button>
         </div>
-        <div class="hp-disp">${curHp}<span class="hpmax"> / ${mhp}</span></div>
-        <div class="hp-btns">
-          <button class="hbtn p" onclick="healPrompt()">💊</button>
-          <button class="hbtn p" onclick="changeHp(+1)">+</button>
+      </div>
+      <div class="tr-sec">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div class="ws-beast-hp-lbl">🐾 HP Bestia</div>
+          <div style="font-size:11px;color:var(--os)">⚔️ ${f.atk}</div>
+        </div>
+        <div class="hp-wrap" style="margin-bottom:8px"><div class="hp-fill-beast" style="width:${bPct}%;background:${bColor}"></div></div>
+        <div class="hp-row">
+          <div class="hp-btns">
+            <button class="hbtn m" onclick="changeBeastHp(-1)">−</button>
+            <button class="hbtn m" onclick="damagePrompt()">💥</button>
+          </div>
+          <div class="hp-disp">${wsBeastCurHp}<span class="hpmax"> / ${f.hp}</span></div>
+          <div class="hp-btns">
+            <button class="hbtn p" onclick="healBeastPrompt()">💊</button>
+            <button class="hbtn p" onclick="changeBeastHp(+1)">+</button>
+          </div>
+        </div>
+        <button class="btn-heal-form" onclick="healInForm()">🌿 Curar en Forma (BA) — gastar slot → 1d8/nivell</button>
+        ${featsHtml}
+        <div class="ws-thp-row" style="margin-top:10px">
+          <span class="ws-thp-lbl">🛡️ THP Circle of Moon:</span>
+          <div style="flex:1"><div style="height:6px;background:var(--ol);border-radius:99px;overflow:hidden;margin-bottom:4px"><div style="height:100%;border-radius:99px;background:var(--t);width:${thpPct}%;transition:width .3s"></div></div></div>
+          <span class="ws-thp-val">${wsCurTHP}</span><span style="font-size:11px;color:var(--os)">/${wsTHP()}</span>
+          <button class="hbtn m" onclick="changeWsTHP(-1)" style="padding:3px 8px;font-size:12px">−</button>
+          <button class="hbtn p" onclick="changeWsTHP(+1)" style="padding:3px 8px;font-size:12px">+</button>
+        </div>
+        <div class="ws-druid-row">
+          <div><div class="ws-druid-lbl">🧑 HP Druida (protegit)</div><div class="ws-druid-val">${curHp} <span style="font-size:12px;font-weight:400;color:var(--os)">/ ${mhp}</span></div></div>
+          <button class="hbtn m" style="font-size:11px;padding:4px 8px" onclick="damagePromptDruid()">💥 dany directe</button>
         </div>
       </div>
-    </div>
-    <div class="tr-sec">
-      <div class="tr-lbl">
-        🐺 Forma Salvatge
-        <span style="font-size:10px;color:var(--pd)">Max CR ${Math.floor(lv/3)||'¼'} · THP ${wsTHP()}</span>
+      <div class="tr-sec">
+        <div class="tr-lbl">
+          🐺 Forma Salvatge
+          <span style="font-size:10px;color:var(--pd)">Usos: ${wsUses}/${usesMax}</span>
+        </div>
+        <div class="ws-uses-row">${pips}</div>
       </div>
-      <div class="ws-uses-row">
-        <span class="ws-lbl">Usos:</span>
-        ${pips}
-        <span style="font-size:11px;color:var(--os)">${wsUses}/${usesMax}</span>
+      <div class="tr-sec">
+        <div class="tr-lbl">📖 Slots d'Encanteri</div>
+        ${slotHtml}
       </div>
-      ${wsHtml}
-      <div class="ws-btns">
-        <button class="btn-ws" onclick="openWSModal()" ${wsUses===0&&!wsActive?'disabled style="opacity:.4"':''}>🐻 ${wsActive?'Canviar Forma':'Entrar Forma Salvatge'}</button>
-        ${wsActive?`<button class="btn-ws btn-ws-leave" onclick="leaveWS()">🧑 Sortir de Forma</button>`:''}
+      <div class="rest-row">
+        <button class="btn-rest btn-sr" onclick="shortRest()">☀️ Short Rest</button>
+        <button class="btn-rest btn-lr" onclick="longRest()">🌙 Long Rest</button>
+      </div>`;
+  } else {
+    // ── NORMAL MODE ──
+    g('tracker-content').innerHTML=`
+      ${concHtml}
+      <div class="tr-sec">
+        <div class="tr-lbl">❤️ Punts de Vida</div>
+        <div class="hp-wrap"><div class="hp-fill" style="width:${pct}%;background:${hpColor}"></div></div>
+        <div class="hp-row">
+          <div class="hp-btns">
+            <button class="hbtn m" onclick="changeHp(-1)">−</button>
+            <button class="hbtn m" onclick="damagePrompt()">💥</button>
+          </div>
+          <div class="hp-disp">${curHp}<span class="hpmax"> / ${mhp}</span></div>
+          <div class="hp-btns">
+            <button class="hbtn p" onclick="healPrompt()">💊</button>
+            <button class="hbtn p" onclick="changeHp(+1)">+</button>
+          </div>
+        </div>
       </div>
-      ${lv>=6?`<div style="margin-top:8px;font-size:11px;color:var(--td);background:var(--tl);border-radius:6px;padding:6px 8px">✨ Improved Circle Forms: atacs poden ser Radiant</div>`:''}
-    </div>
-    <div class="tr-sec">
-      <div class="tr-lbl">📖 Slots d'Encanteri</div>
-      ${slotHtml}
-    </div>
-    <div class="rest-row">
-      <button class="btn-rest btn-sr" onclick="shortRest()">☀️ Short Rest</button>
-      <button class="btn-rest btn-lr" onclick="longRest()">🌙 Long Rest</button>
-    </div>`;
+      <div class="tr-sec">
+        <div class="tr-lbl">
+          🐺 Forma Salvatge
+          <span style="font-size:10px;color:var(--pd)">Max CR ${Math.floor(lv/3)||'¼'} · THP ${wsTHP()}</span>
+        </div>
+        <div class="ws-uses-row">
+          <span class="ws-lbl">Usos:</span>
+          ${pips}
+          <span style="font-size:11px;color:var(--os)">${wsUses}/${usesMax}</span>
+        </div>
+        <div class="ws-btns">
+          <button class="btn-ws" onclick="openWSModal()" ${wsUses===0?'disabled style="opacity:.4"':''}>🐻 Entrar Forma Salvatge</button>
+        </div>
+        ${lv>=6?`<div style="margin-top:8px;font-size:11px;color:var(--td);background:var(--tl);border-radius:6px;padding:6px 8px">✨ Improved Circle Forms (Lv6): atacs poden ser Radiant</div>`:''}
+      </div>
+      <div class="tr-sec">
+        <div class="tr-lbl">📖 Slots d'Encanteri</div>
+        ${slotHtml}
+      </div>
+      <div class="rest-row">
+        <button class="btn-rest btn-sr" onclick="shortRest()">☀️ Short Rest</button>
+        <button class="btn-rest btn-lr" onclick="longRest()">🌙 Long Rest</button>
+      </div>`;
+  }
 }
 
 let lastDmg=0;
+
+// ── HP DRUIDA (normal) ──
 function changeHp(d){
   curHp=clamp(curHp+d,0,maxHp());
   renderTracker(); save();
 }
-function damagePrompt(){
-  const v=prompt('Dany rebut:');
+function damagePromptDruid(){
+  const v=prompt('Dany directe al druida (bypassa bestia):');
   if(!v||isNaN(+v))return;
-  lastDmg=+v; curHp=clamp(curHp-lastDmg,0,maxHp());
+  curHp=clamp(curHp-(+v),0,maxHp());
   renderTracker(); save();
 }
 function healPrompt(){
-  const v=prompt('Curar (HP):');
+  const v=prompt('Curar HP druida:');
   if(!v||isNaN(+v))return;
   curHp=clamp(curHp+(+v),0,maxHp());
   renderTracker(); save();
 }
+
+// ── DANY INTEL·LIGENT: THP → HP Bestia → forma es trenca + overflow al druida ──
+function damagePrompt(){
+  const v=prompt('Dany rebut:');
+  if(!v||isNaN(+v)||+v<=0)return;
+  lastDmg=+v;
+  if(wsActive){
+    applyDamageToForm(lastDmg);
+  } else {
+    curHp=clamp(curHp-lastDmg,0,maxHp());
+  }
+  renderTracker(); save();
+}
+
+function applyDamageToForm(dmg){
+  let rem=dmg;
+  // 1. Absorbeix amb THP Circle of Moon primer
+  if(wsCurTHP>0){
+    const abs=Math.min(wsCurTHP,rem);
+    wsCurTHP-=abs; rem-=abs;
+  }
+  if(rem<=0) return;
+  // 2. Aplica al HP de la bestia
+  wsBeastCurHp-=rem;
+  if(wsBeastCurHp<=0){
+    const overflow=Math.abs(wsBeastCurHp);
+    wsBeastCurHp=0;
+    const prevForm=BEAST_FORMS.find(x=>x.id===wsActive)||{n:'Forma'};
+    wsActive=null; wsCurTHP=0;
+    curHp=clamp(curHp-overflow,0,maxHp());
+    // Show toast
+    const msg=overflow>0
+      ? `💔 Forma trencada! ${overflow} HP d'excés al druida (ara ${curHp}/${maxHp()} HP)`
+      : '💔 Forma trencada! Tornes a forma druida.';
+    showToast(msg);
+  }
+}
+
+// ── HP BESTIA (manual ±1) ──
+function changeBeastHp(d){
+  const f=BEAST_FORMS.find(x=>x.id===wsActive);
+  if(!f)return;
+  wsBeastCurHp=clamp(wsBeastCurHp+d,0,f.hp);
+  renderTracker(); save();
+}
+function healBeastPrompt(){
+  const f=BEAST_FORMS.find(x=>x.id===wsActive);
+  if(!f)return;
+  const v=prompt(`Curar HP bestia (màx ${f.hp-wsBeastCurHp}):`);
+  if(!v||isNaN(+v))return;
+  wsBeastCurHp=clamp(wsBeastCurHp+(+v),0,f.hp);
+  renderTracker(); save();
+}
+
+// ── CURAR EN FORMA (BA): slot → 1d8/nivell ──
+function healInForm(){
+  if(!wsActive){return;}
+  const f=BEAST_FORMS.find(x=>x.id===wsActive);
+  if(!f)return;
+  const avail=slots.map((cur,i)=>cur>0?`Lv${i+1}(×${cur})`:null).filter(Boolean);
+  if(!avail.length){alert('Sense slots disponibles!');return;}
+  const slotN=prompt(`Quin slot gastar? (entra el número 1-9)\n${avail.join(' · ')}`);
+  if(!slotN||isNaN(+slotN)||+slotN<1||+slotN>9)return;
+  const idx=+slotN-1;
+  if(!slots[idx]){alert(`Sense slots de Lv${slotN}!`);return;}
+  slots[idx]--;
+  const healRoll=prompt(`Tira ${slotN}d8 i entra el resultat (${+slotN}–${+slotN*8}):`);
+  if(!healRoll||isNaN(+healRoll)){slots[idx]++;return;}
+  const prev=wsBeastCurHp;
+  wsBeastCurHp=clamp(wsBeastCurHp+(+healRoll),0,f.hp);
+  showToast(`🌿 Cura en Forma: +${wsBeastCurHp-prev} HP (${wsBeastCurHp}/${f.hp})`);
+  renderTracker(); save();
+}
+
+// ── THP CIRCLE ──
 function changeWsTHP(d){
   wsCurTHP=clamp(wsCurTHP+d,0,wsTHP());
   renderTracker(); save();
@@ -1455,14 +1591,21 @@ function enterWS(id){
   closeWSModal();
   if(wsUses<=0&&!wsActive) return;
   if(!wsActive) wsUses--;
-  wsActive=id; wsCurTHP=wsTHP();
+  const f=BEAST_FORMS.find(x=>x.id===id);
+  wsActive=id;
+  wsCurTHP=wsTHP(); // Circle of Moon bonus THP
+  wsBeastCurHp=f?f.hp:10; // beast's actual HP pool
   renderTracker(); save();
 }
-function leaveWS(){wsActive=null; wsCurTHP=0; renderTracker(); save();}
+function leaveWS(){
+  wsActive=null; wsCurTHP=0; wsBeastCurHp=0;
+  renderTracker(); save();
+}
 
 // ── SHORT / LONG REST ──
 function shortRest(){
   wsUses=Math.min(wsUses+1,wsMaxUses(lv));
+  showToast('☀️ Short Rest: Wild Shape recuperat.');
   renderTracker(); save();
 }
 function longRest(){
@@ -1470,8 +1613,22 @@ function longRest(){
   const tbl=SLOT_TABLE[Math.min(lv,20)]||[];
   slots=[...tbl];
   wsUses=wsMaxUses(lv);
-  wsActive=null; wsCurTHP=0; concSpell=null;
+  wsActive=null; wsCurTHP=0; wsBeastCurHp=0; concSpell=null;
+  showToast('🌙 Long Rest: HP, slots i Wild Shape recuperats!');
   renderTracker(); save();
+}
+function showToast(msg){
+  let t=document.getElementById('dr-toast');
+  if(!t){
+    t=document.createElement('div');
+    t.id='dr-toast';
+    t.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:9px 18px;border-radius:20px;font-size:13px;z-index:999;opacity:0;transition:opacity .3s;max-width:85vw;text-align:center;pointer-events:none';
+    document.body.appendChild(t);
+  }
+  t.textContent=msg;
+  t.style.opacity='1';
+  clearTimeout(t._to);
+  t._to=setTimeout(()=>t.style.opacity='0',2800);
 }
 
 // ── SPELLS ──

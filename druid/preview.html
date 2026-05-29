@@ -298,19 +298,19 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
 <!-- TOPBAR -->
 <div class="topbar">
   <div class="tb-info">
-    <div class="tb-name" id="tb-name">Druida</div>
+    <div class="tb-name" id="tb-name">Druid</div>
     <div class="tb-sub" id="tb-sub">Circle of the Moon · Lv 3</div>
   </div>
   <span class="save-flash" id="save-ok" style="display:none">✓</span>
   <div class="lang-tog">
-    <button class="lang-btn active" id="lb-cat" onclick="setLang('cat')">CAT</button>
-    <button class="lang-btn" id="lb-eng" onclick="setLang('eng')">ENG</button>
-    <button class="lang-btn" id="lb-esp" onclick="setLang('esp')">ESP</button>
+    <button class="lang-btn active" id="lb-en" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" id="lb-ca" onclick="setLang('ca')">CA</button>
+    <button class="lang-btn" id="lb-es" onclick="setLang('es')">ES</button>
   </div>
   <button class="dark-tog" id="dark-tog" onclick="toggleDark()">
     <img id="dark-ic" src="../icons/moon.png">
   </button>
-  <button class="btn-save-g" onclick="saveBuild()">💾 Desa</button>
+  <button class="btn-save-g" id="btn-save-top" onclick="saveBuild()" data-i18n="btnSave">💾 Save</button>
 </div>
 
 <div class="scroll-area" id="scroll-area">
@@ -325,34 +325,34 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
     </div>
     <input type="file" id="c-img" accept="image/*" style="display:none" onchange="handleImg(this)">
     <div>
-      <div class="hero-name" id="h-name">Druida</div>
+      <div class="hero-name" id="h-name">Druid</div>
       <div class="hero-s1">Circle of the Moon Druid</div>
       <div class="hero-s2" id="h-sub">Human · Outlander</div>
     </div>
     <div class="hero-r">
       <div class="hero-lv" id="h-lv">3</div>
-      <div class="hero-ls">Nivell</div>
+      <div class="hero-ls" data-i18n="labelLevel">Level</div>
     </div>
   </div>
 
   <div class="acc">
     <div class="acc-hd" onclick="toggleAcc('basic')">
-      <img class="acc-ic" src="../icons/basic.png"><span class="acc-tl">Informació bàsica</span>
+      <img class="acc-ic" src="../icons/basic.png"><span class="acc-tl" data-i18n="basicInfo">Basic Info</span>
       <span class="acc-ch open" id="ch-basic">▼</span>
     </div>
     <div class="acc-bd open" id="bd-basic">
       <div class="fg">
-        <div class="fi"><label>Nom</label><input type="text" id="c-name" value="Druida" oninput="updateHero()"></div>
-        <div class="fi" style="max-width:80px"><label>Nivell</label><input type="number" id="c-level" min="1" max="20" value="3" oninput="updateLevel(+this.value)"></div>
+        <div class="fi"><label data-i18n="labelName">Name</label><input type="text" id="c-name" value="Druid" oninput="updateHero()"></div>
+        <div class="fi" style="max-width:80px"><label data-i18n="labelLevel">Level</label><input type="number" id="c-level" min="1" max="20" value="3" oninput="updateLevel(+this.value)"></div>
       </div>
       <div class="fg">
-        <div class="fi"><label>Espècie</label>
+        <div class="fi"><label data-i18n="labelSpecies">Species</label>
           <select id="c-species" onchange="updateHero()">
             <option>Human</option><option>Aasimar</option><option>Dragonborn</option>
             <option>Elf</option><option>Gnome</option><option>Goliath</option>
             <option>Half-Elf</option><option>Halfling</option><option>Tiefling</option><option>Other</option>
           </select></div>
-        <div class="fi"><label>Background</label>
+        <div class="fi"><label data-i18n="labelBg">Background</label>
           <select id="c-bg" onchange="updateHero()">
             <option>Acolyte</option><option>Charlatan</option><option>Criminal</option>
             <option>Entertainer</option><option>Folk Hero</option><option>Hermit</option>
@@ -361,8 +361,8 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
           </select></div>
       </div>
       <div class="fg">
-        <div class="fi"><label>Edat</label><input type="text" id="c-age" value=""></div>
-        <div class="fi"><label>Alineament</label>
+        <div class="fi"><label data-i18n="labelAge">Age</label><input type="text" id="c-age" value=""></div>
+        <div class="fi"><label data-i18n="labelAlign">Alignment</label>
           <select id="c-align" onchange="updateHero()">
             <option>Lawful Good</option><option selected>Neutral Good</option><option>Chaotic Good</option>
             <option>Lawful Neutral</option><option>True Neutral</option><option>Chaotic Neutral</option>
@@ -374,7 +374,7 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
 
   <div class="acc">
     <div class="acc-hd" onclick="toggleAcc('stats')">
-      <img class="acc-ic" src="../icons/stats.png"><span class="acc-tl">Puntuacions & Estadístiques</span>
+      <img class="acc-ic" src="../icons/stats.png"><span class="acc-tl" data-i18n="statsTitle">Scores & Statistics</span>
       <span class="acc-ch open" id="ch-stats">▼</span>
     </div>
     <div class="acc-bd open" id="bd-stats">
@@ -387,7 +387,7 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
         <div class="sbox"><div class="slbl">WIS</div><input type="number" id="s-wis" value="17" oninput="recalc()"><div class="smod" id="m-wis">+3</div></div>
         <div class="sbox"><div class="slbl">CHA</div><input type="number" id="s-cha" value="8" oninput="recalc()"><div class="smod" id="m-cha">−1</div></div>
       </div>
-      <div class="sec-lbl" id="drv-lbl">Estadístiques derivades — Nivell 3</div>
+      <div class="sec-lbl" id="drv-lbl">Derived Stats — Level 3</div>
       <div class="drv-grid">
         <div class="dbox"><div class="dlbl">HIT POINTS</div>
           <div style="display:flex;align-items:baseline;gap:4px">
@@ -396,48 +396,48 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
           </div>
           <div class="dsub" id="d-hp-auto">auto: 22</div></div>
         <div class="dbox"><div class="dlbl">ARMOR CLASS</div><div class="dval" id="d-ac">14</div><div class="dsub" id="d-ac-sub">Leather + DEX</div></div>
-        <div class="dbox"><div class="dlbl">PROFICIENCY</div><div class="dval" id="d-prof">+2</div><div class="dsub" id="d-prof-sub">Nivells 1–4</div></div>
+        <div class="dbox"><div class="dlbl">PROFICIENCY</div><div class="dval" id="d-prof">+2</div><div class="dsub" id="d-prof-sub">Levels 1–4</div></div>
         <div class="dbox"><div class="dlbl">SPELL SAVE DC</div><div class="dval" id="d-dc">13</div><div class="dsub">8 + Prof + WIS</div></div>
         <div class="dbox"><div class="dlbl">SPELL ATTACK</div><div class="dval" id="d-atk">+5</div><div class="dsub">Prof + WIS</div></div>
-        <div class="dbox"><div class="dlbl">PREPARATS</div><div class="dval" id="d-prep">6</div><div class="dsub" id="d-prep-sub">WIS mod + Lv</div></div>
+        <div class="dbox"><div class="dlbl" id="lbl-prep" data-i18n="labelPrep">PREPARED</div><div class="dval" id="d-prep">6</div><div class="dsub" id="d-prep-sub">WIS mod + Lv</div></div>
       </div>
-      <div class="sec-lbl">Slots d'encanteri disponibles</div>
+      <div class="sec-lbl" data-i18n="slotsAvail">Available Spell Slots</div>
       <div id="slots-row-char" style="display:flex;flex-wrap:wrap;gap:6px"></div>
     </div>
   </div>
 
   <div class="acc">
     <div class="acc-hd" onclick="toggleAcc('sv')">
-      <img class="acc-ic" src="../icons/classf.png"><span class="acc-tl">Tirades de Salvació & Habilitats</span>
+      <img class="acc-ic" src="../icons/classf.png"><span class="acc-tl" data-i18n="savesTitle">Saving Throws & Skills</span>
       <span class="acc-ch" id="ch-sv">▼</span>
     </div>
     <div class="acc-bd" id="bd-sv">
-      <div class="sec-lbl">Tirades de salvació</div>
+      <div class="sec-lbl" data-i18n="savesLabel">Saving Throws</div>
       <div id="saves-list"></div>
-      <div class="sec-lbl" style="margin-top:8px">Habilitats</div>
+      <div class="sec-lbl" style="margin-top:8px" data-i18n="skillsLabel">Skills</div>
       <div id="skills-list"></div>
     </div>
   </div>
 
   <div class="acc">
     <div class="acc-hd" onclick="toggleAcc('inv')">
-      <img class="acc-ic" src="../icons/potion.png"><span class="acc-tl">Equipament & Inventari</span>
+      <img class="acc-ic" src="../icons/potion.png"><span class="acc-tl" data-i18n="equipTitle">Equipment & Inventory</span>
       <span class="acc-ch" id="ch-inv">▼</span>
     </div>
     <div class="acc-bd" id="bd-inv">
       <div id="inv-list"></div>
-      <button class="inv-add" onclick="addInvItem()">+ Afegir objecte</button>
+      <button class="inv-add" onclick="addInvItem()" data-i18n="btnAddItem">+ Add Item</button>
     </div>
   </div>
 
   <div class="acc">
     <div class="acc-hd" onclick="toggleAcc('lore')">
-      <img class="acc-ic" src="../icons/lore.png"><span class="acc-tl">Història & Personalitat</span>
+      <img class="acc-ic" src="../icons/lore.png"><span class="acc-tl" data-i18n="loreTitle">History & Personality</span>
       <span class="acc-ch" id="ch-lore">▼</span>
     </div>
     <div class="acc-bd" id="bd-lore">
-      <div class="fi"><label>La teva història</label>
-        <textarea id="c-backstory" style="min-height:130px" placeholder="Origen, motivacions, vincles..."></textarea></div>
+      <div class="fi"><label data-i18n="labelBackstory">Your story</label>
+        <textarea id="c-backstory" style="min-height:130px" data-i18n-ph="phBackstory" placeholder="Origins, motivations, bonds..."></textarea></div>
     </div>
   </div>
 </div><!-- /sc-char -->
@@ -450,21 +450,21 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
 <!-- ══ ENCANTERIS ══ -->
 <div class="screen" id="sc-spells">
   <div class="stab-bar">
-    <button class="stab-btn active" id="stb-0" onclick="switchSpellTab(0)">🌿 Els meus</button>
-    <button class="stab-btn" id="stb-1" onclick="switchSpellTab(1)">🔍 Explorar &amp; Afegir</button>
+    <button class="stab-btn active" id="stb-0" onclick="switchSpellTab(0)" data-i18n="spMySpells">🌿 My Spells</button>
+    <button class="stab-btn" id="stb-1" onclick="switchSpellTab(1)" data-i18n="spBrowse">🔍 Browse &amp; Add</button>
   </div>
   <div id="spt-0">
     <div class="chips">
       <div class="chip" style="background:var(--sv)">
-        <div style="font-size:10px;font-weight:700;color:var(--os)">Cantrips</div>
+        <div style="font-size:10px;font-weight:700;color:var(--os)" data-i18n="chipCantrips">Cantrips</div>
         <div style="font-size:16px;font-weight:700;color:var(--os)" id="chip-c">0</div>
       </div>
       <div class="chip" style="background:var(--pl)">
-        <div style="font-size:10px;font-weight:700;color:var(--pd)">Preparats</div>
+        <div style="font-size:10px;font-weight:700;color:var(--pd)" data-i18n="chipPrepared">Prepared</div>
         <div style="font-size:16px;font-weight:700;color:var(--pd)" id="chip-p">0/<span id="chip-max">6</span></div>
       </div>
       <div class="chip" style="background:var(--tl)">
-        <div style="font-size:10px;font-weight:700;color:var(--td)">Cercle 🌙</div>
+        <div style="font-size:10px;font-weight:700;color:var(--td)" data-i18n="chipCircle">Circle 🌙</div>
         <div style="font-size:16px;font-weight:700;color:var(--td)" id="chip-circ">3</div>
       </div>
     </div>
@@ -473,7 +473,7 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
   <div id="spt-1" style="display:none">
     <div class="srch-box">
       <span class="srch-ic">🔍</span>
-      <input type="text" id="spell-search" placeholder="Busca encanteris..." oninput="filterSpells(this.value)">
+      <input type="text" id="spell-search" data-i18n-ph="spSearch" placeholder="Search spells..." oninput="filterSpells(this.value)">
     </div>
     <div id="explore-list"></div>
   </div>
@@ -488,17 +488,17 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
 <div class="screen" id="sc-builds">
   <button class="new-bc-btn" onclick="newBuild()">
     <span style="font-size:26px">＋</span>
-    <span>Nou personatge — des de zero</span>
+    <span data-i18n="buildsNewChar">New character — from scratch</span>
   </button>
-  <div class="sec-lbl">Personatges desats</div>
+  <div class="sec-lbl" data-i18n="buildsSaved">Saved Characters</div>
   <div id="builds-list"></div>
   <div class="acc" style="margin-top:12px">
     <div class="acc-hd" onclick="toggleAcc('notes')">
-      <img class="acc-ic" src="../icons/notes.png"><span class="acc-tl">Notes de sessió</span>
+      <img class="acc-ic" src="../icons/notes.png"><span class="acc-tl" data-i18n="notesTitle">Session Notes</span>
       <span class="acc-ch" id="ch-notes">▼</span>
     </div>
     <div class="acc-bd" id="bd-notes">
-      <textarea id="c-notes" style="min-height:200px" placeholder="Combos, tàctiques, notes..."></textarea>
+      <textarea id="c-notes" style="min-height:200px" data-i18n-ph="phNotes" placeholder="Combos, tactics, notes..."></textarea>
     </div>
   </div>
 </div>
@@ -507,32 +507,32 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
 
 <div class="tab-bar">
   <button class="tab-item active" id="tab-0" onclick="switchTab(0)">
-    <img class="ti" src="../icons/druid.png"><span>Personatge</span>
+    <img class="ti" src="../icons/druid.png"><span data-i18n="tabChar">Character</span>
   </button>
   <button class="tab-item" id="tab-1" onclick="switchTab(1)">
-    <img class="ti" src="../icons/moon.png"><span>Tracker</span>
+    <img class="ti" src="../icons/moon.png"><span data-i18n="tabTracker">Tracker</span>
   </button>
   <button class="tab-item" id="tab-2" onclick="switchTab(2)">
-    <img class="ti" src="../icons/spellbook.png"><span>Encanteris</span>
+    <img class="ti" src="../icons/spellbook.png"><span data-i18n="tabSpells">Spells</span>
   </button>
   <button class="tab-item" id="tab-3" onclick="switchTab(3)">
-    <img class="ti" src="../icons/bear.png"><span>Classe</span>
+    <img class="ti" src="../icons/bear.png"><span data-i18n="tabClass">Class</span>
   </button>
   <button class="tab-item" id="tab-4" onclick="switchTab(4)">
-    <img class="ti" src="../icons/saved.png"><span>Builds</span>
+    <img class="ti" src="../icons/saved.png"><span data-i18n="tabBuilds">Builds</span>
   </button>
 </div>
 
 <!-- QR MODAL -->
 <div class="qr-overlay" id="qr-ov" style="display:none" onclick="if(event.target===this)closeQR()">
   <div class="qr-box">
-    <div class="qr-title" id="qr-nm">Druida</div>
+    <div class="qr-title" id="qr-nm">Druid</div>
     <div class="qr-sub">Snapshot · Circle of the Moon</div>
     <div class="qr-wrap" id="qr-cvs"></div>
     <div class="qr-url" id="qr-url"></div>
     <div class="qr-actions">
-      <button class="qr-btn qr-copy" onclick="copyQR()">📋 Copia URL</button>
-      <button class="qr-btn qr-close" onclick="closeQR()">Tanca</button>
+      <button class="qr-btn qr-copy" onclick="copyQR()" data-i18n="qrCopy">📋 Copy URL</button>
+      <button class="qr-btn qr-close" onclick="closeQR()" data-i18n="qrClose">Close</button>
     </div>
   </div>
 </div>
@@ -548,7 +548,7 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
 <div class="modal-ov" id="ws-modal" style="display:none" onclick="if(event.target===this)closeWSModal()">
   <div class="modal-box">
     <div class="modal-hd">
-      <span class="modal-tl">🐻 Tria forma salvatge</span>
+      <span class="modal-tl" data-i18n="beastTitle">🐻 Choose Wild Shape</span>
       <button class="modal-cl" onclick="closeWSModal()">✕</button>
     </div>
     <div id="beast-list"></div>
@@ -985,28 +985,28 @@ const DRUID_SPELLS=[
 // fly:true = requires lv8+ (base Wild Shape fly unlock)
 const BEAST_FORMS=[
  {id:'rat',n:'Rat',cr:'0',crVal:0,hp:2,ac:10,spd:'20 ft',atk:'Bite +0, 1 Piercing',fly:false,icon:'rat.png',features:[]},
- {id:'spider',n:'Spider',cr:'0',crVal:0,hp:2,ac:12,spd:'20 ft / climb 20',atk:'Bite +2, 1 Piercing + poison (CON)',fly:false,icon:'spider.png',features:['Web Sense: detecta vibracions a la teranyina fins 30 ft']},
- {id:'cat',n:'Cat',cr:'0',crVal:0,hp:2,ac:12,spd:'40 ft / climb 30',atk:'Claws +0, 1 Slashing',fly:false,icon:'cat.png',features:['Keen Smell: Avantatge en Percepció (olfacte)']},
- {id:'wolf',n:'Wolf',cr:'1/4',crVal:0.25,hp:11,ac:13,spd:'40 ft',atk:'Bite +4, 2d4+2 Piercing (Trip: STR save)',fly:false,icon:'wolf.png',features:['Pack Tactics: Avantatge si un aliat és adjacent a l\'objectiu','Keen Hearing & Smell']},
- {id:'elk',n:'Elk',cr:'1/4',crVal:0.25,hp:13,ac:10,spd:'50 ft',atk:'Ram +3, 1d6+1 Bludg. / Hooves +5, 2d4+3 Bludg.',fly:false,icon:'elk.png',features:['Charge: mou 20+ ft en línia recta → Ram +2d6 extra i STR DC 11 o Prone']},
- {id:'boar',n:'Boar',cr:'1/4',crVal:0.25,hp:11,ac:11,spd:'40 ft',atk:'Tusk +3, 1d6+1 Piercing',fly:false,icon:'boar.png',features:['Charge: mou 20+ ft → Tusk +1d6 extra i STR DC 11 o Prone','Relentless: si arriba a 0 HP per primer cop, queda a 1 HP (1/Long Rest)']},
- {id:'giant-spider',n:'Giant Spider',cr:'1',crVal:1,hp:26,ac:14,spd:'30 ft / climb 30',atk:'Bite +5, 1d8+3 + poison / Web (Restrained, DC 12)',fly:false,icon:'spider.png',features:['Web Sense: detecta vibracions a teranyina fins 60 ft','Web Walker: no quedes atrapat per teranyines','Web (BA): llança xarxa DC 12 STR o Restrained (escape DC 12)']},
- {id:'giant-toad',n:'Giant Toad',cr:'1/4',crVal:0.25,hp:39,ac:11,spd:'20 ft / swim 40',atk:'Bite +4, 1d10+4 + grapple (swallow Small)',fly:false,icon:'frog.png',features:['Standing Leap: salta 20 ft llarg / 10 ft alt','Swallow: criatura Tiny grappled → tragada, Blinded+Restrained, 2d6 àcid/torn']},
- {id:'panther',n:'Panther',cr:'1/2',crVal:0.5,hp:13,ac:12,spd:'50 ft / climb 40',atk:'Bite +4 1d6+2 / Claw +4 1d6+2 (Pounce)',fly:false,icon:'panther.png',features:['Pounce: si mous 20+ ft i ataques → STR DC 13 o Prone + atac de Garra com BA','Keen Smell: Avantatge en Percepció (olfacte)']},
- {id:'black-bear',n:'Black Bear',cr:'1/2',crVal:0.5,hp:19,ac:11,spd:'40 ft / climb 30',atk:'Bite +3 1d6+2 / Claws +3 2×1d6+2',fly:false,icon:'bear.png',features:['Keen Smell: Avantatge en Percepció (olfacte)','Multiattack: Claws × 2 + Bite']},
- {id:'crocodile',n:'Crocodile',cr:'1/2',crVal:0.5,hp:19,ac:12,spd:'20 ft / swim 20',atk:'Bite +4, 1d10+2 + grapple (escape DC 12)',fly:false,icon:'crocodile.png',features:['Hold Breath: aguanta la respiració fins 15 min','Grapple on hit: DC 12 STR per escapar']},
- {id:'brown-bear',n:'Brown Bear',cr:'1',crVal:1,hp:34,ac:11,spd:'40 ft / climb 30',atk:'Bite +5 1d8+4 / Claws +5 2×2d6+4',fly:false,icon:'bear.png',features:['Keen Smell: Avantatge en Percepció (olfacte)','Multiattack: Claws × 2 (o Claws + Bite)']},
- {id:'dire-wolf',n:'Dire Wolf',cr:'1',crVal:1,hp:37,ac:14,spd:'50 ft',atk:'Bite +5, 2d6+3 Piercing (Pack Tactics; Trip STR DC 13)',fly:false,icon:'wolf.png',features:['Pack Tactics: Avantatge si un aliat és adjacent a l\'objectiu','Keen Hearing & Smell: Avantatge en Percepció','Trip on Bite: STR DC 13 o Prone']},
- {id:'giant-hyena',n:'Giant Hyena',cr:'1',crVal:1,hp:45,ac:12,spd:'50 ft',atk:'Bite +5, 2d6+3 Piercing (Rampage)',fly:false,icon:'hyena.png',features:['Rampage: quan mates una criatura, mou mig Speed i fes un Bite com BA']},
- {id:'lion',n:'Lion',cr:'1',crVal:1,hp:26,ac:12,spd:'50 ft',atk:'Bite +5 1d8+3 / Claws +5 2×1d6+3 (Pounce)',fly:false,icon:'lion.png',features:['Pounce: mou 20+ ft → STR DC 13 o Prone + Bite BA','Pack Tactics: Avantatge si aliat adjacent','Keen Smell']},
- {id:'tiger',n:'Tiger',cr:'1',crVal:1,hp:37,ac:12,spd:'40 ft',atk:'Bite +5 1d10+3 / Claws +5 2×1d6+3 (Pounce)',fly:false,icon:'tiger.png',features:['Pounce: mou 20+ ft → STR DC 13 o Prone + Bite BA','Keen Smell: Avantatge Percepció']},
- {id:'giant-eagle',n:'Giant Eagle',cr:'1',crVal:1,hp:26,ac:13,spd:'10 ft / fly 80',atk:'Talons +5, 2×2d6+3 (Grab)',fly:true,icon:'',features:['Keen Sight: Avantatge en Percepció (vista)','Flyby: no provoca Opportunity Attacks quan vola sobre enemics']},
- {id:'giant-constrictor',n:'Giant Constrictor',cr:'2',crVal:2,hp:60,ac:12,spd:'30 ft / swim 30',atk:'Bite +6 3d6+4 / Constrict +6 2d8+4 (grapple)',fly:false,icon:'',features:['Constrict: DC 16 STR o Grappled+Restrained (2d8+4 dany/torn automàtic)']},
- {id:'polar-bear',n:'Polar Bear',cr:'2',crVal:2,hp:42,ac:12,spd:'40 ft / swim 30',atk:'Bite +7 1d8+5 / Claws +7 2×2d6+5',fly:false,icon:'bear.png',features:['Keen Smell: Avantatge en Percepció (olfacte)','Multiattack: Claws × 2 + Bite']},
- {id:'rhinoceros',n:'Rhinoceros',cr:'2',crVal:2,hp:45,ac:11,spd:'40 ft',atk:'Gore +7, 2d10+5 Piercing (Charge: +2d10)',fly:false,icon:'',features:['Charge: mou 20+ ft en línia recta → Gore +2d10 extra i STR DC 15 o Prone']},
- {id:'saber-toothed-tiger',n:'Saber-Toothed Tiger',cr:'2',crVal:2,hp:52,ac:12,spd:'40 ft',atk:'Bite +5 1d10+4 / Claws +5 2×1d6+4 (Pounce)',fly:false,icon:'',features:['Pounce: mou 20+ ft → STR DC 13 o Prone + Claws BA','Keen Smell: Avantatge Percepció']},
- {id:'killer-whale',n:'Killer Whale',cr:'3',crVal:3,hp:90,ac:12,spd:'swim 60',atk:'Bite +7, 5d6+5 Piercing',fly:false,icon:'',features:['Echolocation: no pots usar si Deafened','Hold Breath: aguanta fins 30 min','Keen Hearing']},
- {id:'elephant',n:'Elephant',cr:'4',crVal:4,hp:76,ac:12,spd:'40 ft',atk:'Gore +8 2d10+7 / Stomp +8 4d10+7 (prone)',fly:false,icon:'',features:['Trampling Charge: mou 20+ ft → STR DC 12 o Prone + Stomp BA','Stomp: només vs creatures Prone']},
+ {id:'spider',n:'Spider',cr:'0',crVal:0,hp:2,ac:12,spd:'20 ft / climb 20',atk:'Bite +2, 1 Piercing + poison (CON)',fly:false,icon:'spider.png',features:['Web Sense: detects vibrations through web up to 30 ft']},
+ {id:'cat',n:'Cat',cr:'0',crVal:0,hp:2,ac:12,spd:'40 ft / climb 30',atk:'Claws +0, 1 Slashing',fly:false,icon:'cat.png',features:['Keen Smell: Advantage on Perception (smell)']},
+ {id:'wolf',n:'Wolf',cr:'1/4',crVal:0.25,hp:11,ac:13,spd:'40 ft',atk:'Bite +4, 2d4+2 Piercing (Trip: STR save)',fly:false,icon:'wolf.png',features:['Pack Tactics: Advantage when ally is adjacent to target','Keen Hearing & Smell']},
+ {id:'elk',n:'Elk',cr:'1/4',crVal:0.25,hp:13,ac:10,spd:'50 ft',atk:'Ram +3, 1d6+1 Bludg. / Hooves +5, 2d4+3 Bludg.',fly:false,icon:'elk.png',features:['Charge: move 20+ ft straight → Ram +2d6 extra and STR DC 11 or Prone']},
+ {id:'boar',n:'Boar',cr:'1/4',crVal:0.25,hp:11,ac:11,spd:'40 ft',atk:'Tusk +3, 1d6+1 Piercing',fly:false,icon:'boar.png',features:['Charge: move 20+ ft → Tusk +1d6 extra and STR DC 11 or Prone','Relentless: if reduced to 0 HP for the first time, stays at 1 HP (1/LR)']},
+ {id:'giant-spider',n:'Giant Spider',cr:'1',crVal:1,hp:26,ac:14,spd:'30 ft / climb 30',atk:'Bite +5, 1d8+3 + poison / Web (Restrained, DC 12)',fly:false,icon:'spider.png',features:['Web Sense: detects vibrations through web up to 60 ft','Web Walker: not restrained by webs','Web (BA): throw web DC 12 STR or Restrained (escape DC 12)']},
+ {id:'giant-toad',n:'Giant Toad',cr:'1/4',crVal:0.25,hp:39,ac:11,spd:'20 ft / swim 40',atk:'Bite +4, 1d10+4 + grapple (swallow Small)',fly:false,icon:'frog.png',features:['Standing Leap: jump 20 ft long / 10 ft high','Swallow: Tiny grappled creature → swallowed, Blinded+Restrained, 2d6 acid/turn']},
+ {id:'panther',n:'Panther',cr:'1/2',crVal:0.5,hp:13,ac:12,spd:'50 ft / climb 40',atk:'Bite +4 1d6+2 / Claw +4 1d6+2 (Pounce)',fly:false,icon:'panther.png',features:['Pounce: move 20+ ft and attack → STR DC 13 or Prone + Claw as BA','Keen Smell: Advantage on Perception (smell)']},
+ {id:'black-bear',n:'Black Bear',cr:'1/2',crVal:0.5,hp:19,ac:11,spd:'40 ft / climb 30',atk:'Bite +3 1d6+2 / Claws +3 2×1d6+2',fly:false,icon:'bear.png',features:['Keen Smell: Advantage on Perception (smell)','Multiattack: Claws × 2 + Bite']},
+ {id:'crocodile',n:'Crocodile',cr:'1/2',crVal:0.5,hp:19,ac:12,spd:'20 ft / swim 20',atk:'Bite +4, 1d10+2 + grapple (escape DC 12)',fly:false,icon:'crocodile.png',features:['Hold Breath: can hold breath for 15 min','Grapple on hit: DC 12 STR to escape']},
+ {id:'brown-bear',n:'Brown Bear',cr:'1',crVal:1,hp:34,ac:11,spd:'40 ft / climb 30',atk:'Bite +5 1d8+4 / Claws +5 2×2d6+4',fly:false,icon:'bear.png',features:['Keen Smell: Advantage on Perception (smell)','Multiattack: Claws × 2 (or Claws + Bite)']},
+ {id:'dire-wolf',n:'Dire Wolf',cr:'1',crVal:1,hp:37,ac:14,spd:'50 ft',atk:'Bite +5, 2d6+3 Piercing (Pack Tactics; Trip STR DC 13)',fly:false,icon:'wolf.png',features:['Pack Tactics: Advantage when ally is adjacent to target','Keen Hearing & Smell: Advantage on Perception','Trip on Bite: STR DC 13 or Prone']},
+ {id:'giant-hyena',n:'Giant Hyena',cr:'1',crVal:1,hp:45,ac:12,spd:'50 ft',atk:'Bite +5, 2d6+3 Piercing (Rampage)',fly:false,icon:'hyena.png',features:['Rampage: when you kill a creature, move half Speed and make a Bite as BA']},
+ {id:'lion',n:'Lion',cr:'1',crVal:1,hp:26,ac:12,spd:'50 ft',atk:'Bite +5 1d8+3 / Claws +5 2×1d6+3 (Pounce)',fly:false,icon:'lion.png',features:['Pounce: move 20+ ft → STR DC 13 or Prone + Bite BA','Pack Tactics: Advantage when ally is adjacent','Keen Smell']},
+ {id:'tiger',n:'Tiger',cr:'1',crVal:1,hp:37,ac:12,spd:'40 ft',atk:'Bite +5 1d10+3 / Claws +5 2×1d6+3 (Pounce)',fly:false,icon:'tiger.png',features:['Pounce: move 20+ ft → STR DC 13 or Prone + Bite BA','Keen Smell: Advantage on Perception']},
+ {id:'giant-eagle',n:'Giant Eagle',cr:'1',crVal:1,hp:26,ac:13,spd:'10 ft / fly 80',atk:'Talons +5, 2×2d6+3 (Grab)',fly:true,icon:'',features:['Keen Sight: Advantage on Perception (sight)','Flyby: does not provoke Opportunity Attacks when flying over enemies']},
+ {id:'giant-constrictor',n:'Giant Constrictor',cr:'2',crVal:2,hp:60,ac:12,spd:'30 ft / swim 30',atk:'Bite +6 3d6+4 / Constrict +6 2d8+4 (grapple)',fly:false,icon:'',features:['Constrict: DC 16 STR or Grappled+Restrained (automatic 2d8+4 damage/turn)']},
+ {id:'polar-bear',n:'Polar Bear',cr:'2',crVal:2,hp:42,ac:12,spd:'40 ft / swim 30',atk:'Bite +7 1d8+5 / Claws +7 2×2d6+5',fly:false,icon:'bear.png',features:['Keen Smell: Advantage on Perception (smell)','Multiattack: Claws × 2 + Bite']},
+ {id:'rhinoceros',n:'Rhinoceros',cr:'2',crVal:2,hp:45,ac:11,spd:'40 ft',atk:'Gore +7, 2d10+5 Piercing (Charge: +2d10)',fly:false,icon:'',features:['Charge: move 20+ ft straight → Gore +2d10 extra and STR DC 15 or Prone']},
+ {id:'saber-toothed-tiger',n:'Saber-Toothed Tiger',cr:'2',crVal:2,hp:52,ac:12,spd:'40 ft',atk:'Bite +5 1d10+4 / Claws +5 2×1d6+4 (Pounce)',fly:false,icon:'',features:['Pounce: move 20+ ft → STR DC 13 or Prone + Claws BA','Keen Smell: Advantage on Perception']},
+ {id:'killer-whale',n:'Killer Whale',cr:'3',crVal:3,hp:90,ac:12,spd:'swim 60',atk:'Bite +7, 5d6+5 Piercing',fly:false,icon:'',features:['Echolocation: cannot use if Deafened','Hold Breath: can hold breath for 30 min','Keen Hearing']},
+ {id:'elephant',n:'Elephant',cr:'4',crVal:4,hp:76,ac:12,spd:'40 ft',atk:'Gore +8 2d10+7 / Stomp +8 4d10+7 (prone)',fly:false,icon:'',features:['Trampling Charge: move 20+ ft → STR DC 12 or Prone + Stomp BA','Stomp: only vs Prone creatures']},
 ];
 
 // Slot table [lv0..lv20][slot1..slot9]
@@ -1044,32 +1044,417 @@ function wsMaxUses(lv){return lv>=17?4:lv>=9?3:2;}
 const FEATS_DR=[
   {id:'tough',name:'Tough',
    effect:'hp',icon:'⚡',tag:'+2 HP/Lv',
-   desc:'Afegeix +2 HP màxim per nivell. Simple i molt eficient per Moon Druid.'},
+   desc:'Adds +2 max HP per level. Simple and very efficient for Moon Druid.'},
   {id:'war-caster',name:'War Caster',
    effect:'conc',icon:'🌀',tag:'Adv. CON (conc)',
-   desc:'Avantatge en tirades CON per mantenir concentració. Pots llançar encanteris com a Reacció per Opportunity Attacks. Essencial per Moon Druid.'},
+   desc:'Advantage on CON saves to maintain concentration. You can cast spells as a Reaction for Opportunity Attacks. Essential for Moon Druid.'},
   {id:'resilient-con',name:'Resilient (CON)',
    effect:'con',icon:'🛡️',tag:'+1 CON + Prof CON',
-   desc:'+1 CON (millora HP i concentració). Afegeix Proficiency a tirades CON (inclòs concentració). Fins Lv8 no tens CON save per defecte.'},
+   desc:'+1 CON (improves HP and concentration). Adds Proficiency to CON saves (including concentration). Until Lv8 you lack CON save proficiency by default.'},
   {id:'asi-wis',name:'ASI +2 WIS',
    effect:'wis',icon:'✨',tag:'+2 WIS',
-   desc:'+2 WIS. Millora DC d\'encanteri, tirada d\'atac d\'encanteri, i spells preparats. Molt recomanat.'},
+   desc:'+2 WIS. Improves spell DC, spell attack roll, and spells prepared. Highly recommended.'},
   {id:'asi-con',name:'ASI +2 CON',
    effect:'con2',icon:'❤️',tag:'+2 CON',
-   desc:'+2 CON. Millora HP màxim i tirades de concentració (CON save).'},
+   desc:'+2 CON. Improves max HP and concentration saves (CON save).'},
   {id:'alert',name:'Alert',
    effect:'init',icon:'👁️',tag:'+2 Init',
-   desc:'+2 a la tirada d\'iniciativa. No pots ser sorprès mentre estàs conscient.'},
+   desc:'+2 to initiative rolls. You cannot be surprised while conscious.'},
   {id:'mobile',name:'Mobile',
    effect:'speed',icon:'💨',tag:'+10 ft Speed',
-   desc:'+10 ft de velocitat. Dash no provoca Opportunity Attacks de criatures que hagis atacat. Útil en Wild Shape.'},
+   desc:'+10 ft speed. Dash does not provoke Opportunity Attacks from creatures you attacked. Useful in Wild Shape.'},
   {id:'sentinel',name:'Sentinel',
-   effect:'reaction',icon:'⚔️',tag:'Reacció d\'atac',
-   desc:'Reacció: quan una criatura dins 5 ft ataca un aliat, pots atacar-la. Si impactes, la seva Speed → 0. No provoca Opp. Attacks si Disengage.'},
+   effect:'reaction',icon:'⚔️',tag:'Attack Reaction',
+   desc:'Reaction: when a creature within 5 ft attacks an ally, you can attack it. On hit, target\'s Speed → 0. No Opportunity Attacks if target Disengages.'},
   {id:'elemental-adept',name:'Elemental Adept',
-   effect:'elem',icon:'🔥',tag:'Ignora resistència',
-   desc:'Tria un element (Foc, Llamp, Tro, Àcid, Fred). Ignores resistència a aquest element. 1s en daus de dany compten com 2s.'},
+   effect:'elem',icon:'🔥',tag:'Ignore resistance',
+   desc:'Choose an element (Fire, Lightning, Thunder, Acid, Cold). Ignore resistance to that element. 1s on damage dice count as 2s.'},
 ];
+
+// ══════════════════════════════════════════════
+//  LANG / i18n
+// ══════════════════════════════════════════════
+const LANG={
+en:{
+  tabChar:'Character',tabTracker:'Tracker',tabSpells:'Spells',tabClass:'Class',tabBuilds:'Builds',
+  btnSave:'💾 Save',
+  basicInfo:'Basic Info',
+  labelName:'Name',labelLevel:'Level',labelSpecies:'Species',labelAge:'Age',labelAlign:'Alignment',labelBg:'Background',
+  statsTitle:'Scores & Statistics',
+  derivedStats:'Derived Stats — Level',
+  labelPrep:'PREPARED',
+  slotsAvail:'Available Spell Slots',
+  savesTitle:'Saving Throws & Skills',
+  savesLabel:'Saving Throws',
+  skillsLabel:'Skills',
+  equipTitle:'Equipment & Inventory',
+  btnAddItem:'+ Add Item',
+  loreTitle:'History & Personality',
+  labelBackstory:'Your story',
+  phBackstory:'Origins, motivations, bonds...',
+  phNotes:'Combos, tactics, notes...',
+  spMySpells:'🌿 My Spells',
+  spBrowse:'🔍 Browse & Add',
+  spSearch:'Search spells...',
+  chipCantrips:'Cantrips',chipPrepared:'Prepared',chipCircle:'Circle 🌙',
+  spEmptyMsg:'No spells prepared.<br>Go to "Browse &amp; Add".',
+  spCircleLabel:'🌙 Circle of the Moon',
+  spAlways:'Always prepared',
+  spPreparedBy:'Prepared by you',
+  spDruidic:'Druidic',
+  spCastSlot:'Cast with slot:',
+  spNoSlots:'No slots available',
+  spActive:'🌀 Active',
+  spBreak:'End',
+  spConc:'Concentrate',
+  spConcReq:'Requires concentration',
+  spCantrip:'✦ Cantrip — unlimited uses',
+  spNoFound:'No spells found.',
+  spLevelLabel:'Level',
+  spSlotsAvail:'available',
+  trHP:'❤️ Hit Points',
+  trWS:'🐺 Wild Shape',
+  trMaxCR:'Max CR',
+  trUses:'Uses:',
+  trEnterWS:'🐻 Enter Wild Shape',
+  trImproved:'✨ Improved Circle Forms (Lv6): attacks can be Radiant',
+  trSlots:'📖 Spell Slots',
+  trShortRest:'☀️ Short Rest',
+  trLongRest:'🌙 Long Rest',
+  wsExit:'🧑 Exit Form',
+  wsBeastHP:'🐾 Beast HP',
+  wsHealForm:'🌿 Heal in Form (BA) — spend slot → 1d8/level',
+  wsTHPlbl:'🛡️ THP Circle of Moon:',
+  wsDruidHP:'🧑 Druid HP (protected)',
+  wsDmgDirect:'💥 direct damage',
+  wsUsesLbl:'Wild Shape',
+  concActing:'🌀 Concentrating:',
+  concMaintain:'to maintain concentration',
+  concWC:'Adv. (War Caster)',
+  concRC:'Prof CON (Resilient)',
+  clPO:'⚔️ Primal Order',
+  clPOMagicianSub:'+cantrip · WIS→Arcana/Nature',
+  clPOWardenSub:'Martial weapons · Medium armor',
+  clPOMagDesc:'Arcana/Nature = {0} (WIS mod + Prof)',
+  clPOWarDesc:'Proficiency with martial weapons and medium armor (AC max 11+DEX mod in breastplate)',
+  clCircleForms:'🐺 Circle Forms',
+  clRadiance:'· Lunar Radiance: attacks deal Radiant or normal damage (your choice per hit)',
+  clToughness:'· Increased Toughness: add WIS mod to CON saving throws',
+  clMoonStepDesc:'Bonus action: teleport up to 30 ft. Advantage on next attack. Uses = WIS mod ({0}).',
+  clLunarFormA:'· 1/turn: +2d10 Radiant on Wild Shape attack',
+  clLunarFormB:'· Moonlight Step: also teleport one allied creature (10 ft)',
+  clEF:'⚡ Elemental Fury',
+  clEFPotentDesc:'+{0} damage to cantrips',
+  clEFPrimalDesc:'+1d8 element/turn in Wild Shape',
+  clEFImpPotent:'<strong>Improved (Lv 15):</strong> Druid cantrip range +300 ft (if range ≥ 10 ft)',
+  clEFImpPrimal:'<strong>Improved (Lv 15):</strong> Primal Strike deals +2d8 (upgrade from 1d8)',
+  clWR:'♻️ Wild Resurgence',
+  clWRDesc1:'· If out of Wild Shape uses: spend a slot to regain 1 (no action required).',
+  clWRDesc2:'· Spend 1 Wild Shape use: regain a Lv 1 slot (1/long rest).',
+  clBS:'🌟 Beast Spells',
+  clBSDesc:'You can cast spells while in beast form (except those requiring expensive material components).',
+  clFeatures:'📋 Class Features',
+  clWC:'<b>Wild Companion (Lv 2):</b> Spend a Wild Shape use or slot to cast Find Familiar (Fey, no material components).',
+  clArchdruid:'<b>Archdruid (Lv 20):</b> Evergreen Wild Shape · Nature Magician · Longevity',
+  clFeatsTitle:'🏅 Active Feats',
+  clFeatsDesc:'Toggle the feats your character has. Effects apply automatically to stats.',
+  buildsNewChar:'New character — from scratch',
+  buildsSaved:'Saved Characters',
+  buildsEmpty:'No saved characters.',
+  buildsActive:'ACTIVE',
+  buildsLoad:'Load',
+  buildsOverwrite:'Overwrite',
+  buildsDelete:'Delete',
+  notesTitle:'Session Notes',
+  qrCopy:'📋 Copy URL',
+  qrClose:'Close',
+  beastTitle:'🐻 Choose Wild Shape',
+  promptDamage:'Damage received:',
+  promptDmgDirect:'Direct damage to druid (bypasses beast):',
+  promptHeal:'Heal druid HP:',
+  promptWhichSlot:'Which slot to spend? (enter number 1-9)\n{0}',
+  promptRollDice:'Roll {0}d8 and enter the result ({1}–{2}):',
+  alertMaxPrep:'You already have {0} spells prepared (max at Lv {1}).',
+  alertNoSlots:'No available slots!',
+  alertNoSlotLv:'No Lv{0} slots!',
+  confirmConc:'You are concentrating on "{0}". Replace?',
+  confirmDelete:'Delete this character?',
+  confirmNew:'Create a blank character? (Current progress will be lost if not saved.)',
+  alertCopied:'URL copied!',
+  toastSR:'☀️ Short Rest: Wild Shape recovered.',
+  toastLR:'🌙 Long Rest: HP, slots and Wild Shape recovered!',
+  toastFormBroken:'💔 Form broken! {0} overflow HP to druid (now {1}/{2} HP)',
+  toastFormBrokenClean:'💔 Form broken! Returning to druid form.',
+  toastHealForm:'🌿 Heal in Form: +{0} HP ({1}/{2})',
+  toastFeatOn:'✅ Feat {0} activated',
+  toastFeatOff:'❌ Feat {0} deactivated',
+  profLv1:'Levels 1–4',profLv5:'Levels 5–8',profLv9:'Levels 9–12',profLv13:'Levels 13–16',profLv17:'Levels 17–20',
+  acSub:'10 + DEX mod',acSubWarden:'Warden: medium armor',prepSub:'= Table Lv',
+  druidDefault:'Druid',levelAbbr:'Lv',
+  saves:{str:'Strength',dex:'Dexterity',con:'Constitution',int:'Intelligence',wis:'Wisdom',cha:'Charisma'},
+  skills:{acrobatics:'Acrobatics','animal-handling':'Animal Handling',arcana:'Arcana',athletics:'Athletics',
+    deception:'Deception',history:'History',insight:'Insight',intimidation:'Intimidation',
+    investigation:'Investigation',medicine:'Medicine',nature:'Nature',perception:'Perception',
+    performance:'Performance',persuasion:'Persuasion',religion:'Religion',
+    'sleight-of-hand':'Sleight of Hand',stealth:'Stealth',survival:'Survival'},
+},
+ca:{
+  tabChar:'Personatge',tabTracker:'Tracker',tabSpells:'Encanteris',tabClass:'Classe',tabBuilds:'Builds',
+  btnSave:'💾 Desa',
+  basicInfo:'Informació bàsica',
+  labelName:'Nom',labelLevel:'Nivell',labelSpecies:'Espècie',labelAge:'Edat',labelAlign:'Alineament',labelBg:'Background',
+  statsTitle:'Puntuacions & Estadístiques',
+  derivedStats:'Estadístiques derivades — Nivell',
+  labelPrep:'PREPARATS',
+  slotsAvail:"Slots d'encanteri disponibles",
+  savesTitle:'Tirades de Salvació & Habilitats',
+  savesLabel:'Tirades de salvació',
+  skillsLabel:'Habilitats',
+  equipTitle:'Equipament & Inventari',
+  btnAddItem:'+ Afegir objecte',
+  loreTitle:'Història & Personalitat',
+  labelBackstory:'La teva història',
+  phBackstory:'Origen, motivacions, vincles...',
+  phNotes:'Combos, tàctiques, notes...',
+  spMySpells:'🌿 Els meus',
+  spBrowse:'🔍 Explorar & Afegir',
+  spSearch:'Busca encanteris...',
+  chipCantrips:'Cantrips',chipPrepared:'Preparats',chipCircle:'Cercle 🌙',
+  spEmptyMsg:'Cap encanteri preparat.<br>Ves a "Explorar &amp; Afegir".',
+  spCircleLabel:'🌙 Cercle de la Lluna',
+  spAlways:'Sempre preparats',
+  spPreparedBy:'Preparats per tu',
+  spDruidic:'Druidic',
+  spCastSlot:'Lançar amb slot:',
+  spNoSlots:'Sense slots disponibles',
+  spActive:'🌀 Actiu',
+  spBreak:'Trencar',
+  spConc:'Concentrar-se',
+  spConcReq:'Requereix concentració',
+  spCantrip:"✦ Cantrip — sense límit d'usos",
+  spNoFound:'Cap encanteri trobat.',
+  spLevelLabel:'Nivell',
+  spSlotsAvail:'disponibles',
+  trHP:'❤️ Punts de Vida',
+  trWS:'🐺 Forma Salvatge',
+  trMaxCR:'Max CR',
+  trUses:'Usos:',
+  trEnterWS:'🐻 Entrar Forma Salvatge',
+  trImproved:'✨ Improved Circle Forms (Lv6): atacs poden ser Radiant',
+  trSlots:"📖 Slots d'Encanteri",
+  trShortRest:'☀️ Short Rest',
+  trLongRest:'🌙 Long Rest',
+  wsExit:'🧑 Sortir',
+  wsBeastHP:'🐾 HP Bestia',
+  wsHealForm:'🌿 Curar en Forma (BA) — gastar slot → 1d8/nivell',
+  wsTHPlbl:'🛡️ THP Circle of Moon:',
+  wsDruidHP:'🧑 HP Druida (protegit)',
+  wsDmgDirect:'💥 dany directe',
+  wsUsesLbl:'Forma Salvatge',
+  concActing:'🌀 Concentrant-se:',
+  concMaintain:'per mantenir concentració',
+  concWC:'Adv. (War Caster)',
+  concRC:'Prof CON (Resilient)',
+  clPO:'⚔️ Primal Order',
+  clPOMagicianSub:'+cantrip · WIS→Arcana/Natura',
+  clPOWardenSub:'Armes marcials · Armadura mitja',
+  clPOMagDesc:'Arcana/Natura = {0} (WIS mod + Prof)',
+  clPOWarDesc:"Proficiència amb armes marcials i armadura mitja (CA màx. 11+DEX mod en cuirass)",
+  clCircleForms:'🐺 Circle Forms',
+  clRadiance:'· Lunar Radiance: atacs fan Radiant o dany normal (tries per cop)',
+  clToughness:'· Increased Toughness: afegeix WIS mod a tirades CON',
+  clMoonStepDesc:'Bonus action: teleporta fins 30 ft. Avantatge en el proper atac. Usos = WIS mod ({0}).',
+  clLunarFormA:'· 1/torn: +2d10 Radiant a atac de Wild Shape',
+  clLunarFormB:'· Moonlight Step: teleporta una criatura aliada addicional (10 ft)',
+  clEF:'⚡ Elemental Fury',
+  clEFPotentDesc:'+{0} dany als cantrips',
+  clEFPrimalDesc:'+1d8 element/torn en Wild Shape',
+  clEFImpPotent:'<strong>Millorat (Lv 15):</strong> Rang dels cantrips Druid +300 ft (si rang ≥ 10 ft)',
+  clEFImpPrimal:'<strong>Millorat (Lv 15):</strong> Primal Strike fa +2d8 (millora des de 1d8)',
+  clWR:'♻️ Wild Resurgence',
+  clWRDesc1:"· Si no tens usos de Wild Shape: gasta un slot per recuperar-ne 1 (sense acció).",
+  clWRDesc2:"· Gasta 1 ús de Wild Shape: recuperes un slot de Lv 1 (1/descans llarg).",
+  clBS:'🌟 Beast Spells',
+  clBSDesc:'Pots llançar encanteris mentre ets en forma de bestia (excepte els que consumeixen components de material cars).',
+  clFeatures:'📋 Característiques de classe',
+  clWC:'<b>Wild Companion (Lv 2):</b> Gasta Wild Shape o slot per llançar Find Familiar (Fey, sense comp. material).',
+  clArchdruid:'<b>Archdruid (Lv 20):</b> Evergreen Wild Shape · Nature Magician · Longevity',
+  clFeatsTitle:'🏅 Feats actius',
+  clFeatsDesc:"Activa els feats que té el teu personatge. Els efectes s'apliquen automàticament als stats.",
+  buildsNewChar:'Nou personatge — des de zero',
+  buildsSaved:'Personatges desats',
+  buildsEmpty:'Cap personatge desat.',
+  buildsActive:'ACTIU',
+  buildsLoad:'Carregar',
+  buildsOverwrite:'Sobreescriure',
+  buildsDelete:'Eliminar',
+  notesTitle:'Notes de sessió',
+  qrCopy:'📋 Copia URL',
+  qrClose:'Tanca',
+  beastTitle:'🐻 Tria forma salvatge',
+  promptDamage:'Dany rebut:',
+  promptDmgDirect:'Dany directe al druida (bypassa bestia):',
+  promptHeal:'Curar HP druida:',
+  promptWhichSlot:'Quin slot gastar? (entra el número 1-9)\n{0}',
+  promptRollDice:'Tira {0}d8 i entra el resultat ({1}–{2}):',
+  alertMaxPrep:'Ja tens {0} encanteris preparats (màxim al Lv {1}).',
+  alertNoSlots:'Sense slots disponibles!',
+  alertNoSlotLv:'Sense slots de Lv{0}!',
+  confirmConc:'Ja et concentres a "{0}". Substituir?',
+  confirmDelete:'Eliminar aquest personatge?',
+  confirmNew:'Crear un personatge en blanc? (El progrés actual es perd si no el deses.)',
+  alertCopied:'URL copiada!',
+  toastSR:'☀️ Short Rest: Wild Shape recuperat.',
+  toastLR:'🌙 Long Rest: HP, slots i Wild Shape recuperats!',
+  toastFormBroken:"💔 Forma trencada! {0} HP d'excés al druida (ara {1}/{2} HP)",
+  toastFormBrokenClean:'💔 Forma trencada! Tornes a forma druida.',
+  toastHealForm:'🌿 Cura en Forma: +{0} HP ({1}/{2})',
+  toastFeatOn:'✅ Feat {0} activat',
+  toastFeatOff:'❌ Feat {0} desactivat',
+  profLv1:'Nivells 1–4',profLv5:'Nivells 5–8',profLv9:'Nivells 9–12',profLv13:'Nivells 13–16',profLv17:'Nivells 17–20',
+  acSub:'10 + DEX mod',acSubWarden:'Warden: armadura mitja',prepSub:'= Taula Nv',
+  druidDefault:'Druida',levelAbbr:'Nv',
+  saves:{str:'Força',dex:'Destresa',con:'Constitució',int:"Intel·ligència",wis:'Saviesa',cha:'Carisma'},
+  skills:{acrobatics:'Acrobàtics','animal-handling':'Tracte amb Animals',arcana:'Arcana',athletics:'Atletisme',
+    deception:'Engany',history:'Història',insight:'Intuïció',intimidation:'Intimidació',
+    investigation:'Investigació',medicine:'Medicina',nature:'Natura',perception:'Percepció',
+    performance:'Actuació',persuasion:'Persuasió',religion:'Religió',
+    'sleight-of-hand':'Joc de Mans',stealth:'Sigil',survival:'Supervivència'},
+},
+es:{
+  tabChar:'Personaje',tabTracker:'Tracker',tabSpells:'Conjuros',tabClass:'Clase',tabBuilds:'Builds',
+  btnSave:'💾 Guardar',
+  basicInfo:'Información básica',
+  labelName:'Nombre',labelLevel:'Nivel',labelSpecies:'Especie',labelAge:'Edad',labelAlign:'Alineamiento',labelBg:'Trasfondo',
+  statsTitle:'Puntuaciones & Estadísticas',
+  derivedStats:'Estadísticas derivadas — Nivel',
+  labelPrep:'PREPARADOS',
+  slotsAvail:'Espacios de conjuro disponibles',
+  savesTitle:'Tiradas de Salvación & Habilidades',
+  savesLabel:'Tiradas de salvación',
+  skillsLabel:'Habilidades',
+  equipTitle:'Equipo & Inventario',
+  btnAddItem:'+ Añadir objeto',
+  loreTitle:'Historia & Personalidad',
+  labelBackstory:'Tu historia',
+  phBackstory:'Origen, motivaciones, vínculos...',
+  phNotes:'Combos, tácticas, notas...',
+  spMySpells:'🌿 Mis conjuros',
+  spBrowse:'🔍 Explorar & Añadir',
+  spSearch:'Buscar conjuros...',
+  chipCantrips:'Trucos',chipPrepared:'Preparados',chipCircle:'Círculo 🌙',
+  spEmptyMsg:'Sin conjuros preparados.<br>Ve a "Explorar &amp; Añadir".',
+  spCircleLabel:'🌙 Círculo de la Luna',
+  spAlways:'Siempre preparados',
+  spPreparedBy:'Preparados por ti',
+  spDruidic:'Druídico',
+  spCastSlot:'Lanzar con espacio:',
+  spNoSlots:'Sin espacios disponibles',
+  spActive:'🌀 Activo',
+  spBreak:'Romper',
+  spConc:'Concentrarse',
+  spConcReq:'Requiere concentración',
+  spCantrip:'✦ Truco — sin límite de usos',
+  spNoFound:'Sin conjuros encontrados.',
+  spLevelLabel:'Nivel',
+  spSlotsAvail:'disponibles',
+  trHP:'❤️ Puntos de Golpe',
+  trWS:'🐺 Forma Salvaje',
+  trMaxCR:'RC máx.',
+  trUses:'Usos:',
+  trEnterWS:'🐻 Entrar Forma Salvaje',
+  trImproved:'✨ Improved Circle Forms (Nv6): los ataques pueden ser Radiante',
+  trSlots:'📖 Espacios de Conjuro',
+  trShortRest:'☀️ Descanso Corto',
+  trLongRest:'🌙 Descanso Largo',
+  wsExit:'🧑 Salir',
+  wsBeastHP:'🐾 HP Bestia',
+  wsHealForm:'🌿 Curar en Forma (BA) — gastar espacio → 1d8/nivel',
+  wsTHPlbl:'🛡️ THP Circle of Moon:',
+  wsDruidHP:'🧑 HP Druida (protegido)',
+  wsDmgDirect:'💥 daño directo',
+  wsUsesLbl:'Forma Salvaje',
+  concActing:'🌀 Concentrándose:',
+  concMaintain:'para mantener concentración',
+  concWC:'Ven. (War Caster)',
+  concRC:'Prof CON (Resilient)',
+  clPO:'⚔️ Primal Order',
+  clPOMagicianSub:'+truco · SAB→Arcana/Naturaleza',
+  clPOWardenSub:'Armas marciales · Armadura media',
+  clPOMagDesc:'Arcana/Naturaleza = {0} (mod SAB + Prof)',
+  clPOWarDesc:'Competencia con armas marciales y armadura media (CA máx. 11+mod DES en coraza)',
+  clCircleForms:'🐺 Circle Forms',
+  clRadiance:'· Lunar Radiance: ataques hacen Radiante o daño normal (eliges por golpe)',
+  clToughness:'· Increased Toughness: suma mod SAB a tiradas de CON',
+  clMoonStepDesc:'Acción bonus: teleporta hasta 30 ft. Ventaja en el próximo ataque. Usos = mod SAB ({0}).',
+  clLunarFormA:'· 1/turno: +2d10 Radiante en ataque de Wild Shape',
+  clLunarFormB:'· Moonlight Step: también teleporta una criatura aliada (10 ft)',
+  clEF:'⚡ Elemental Fury',
+  clEFPotentDesc:'+{0} daño a los trucos',
+  clEFPrimalDesc:'+1d8 elemento/turno en Wild Shape',
+  clEFImpPotent:'<strong>Mejorado (Nv 15):</strong> Alcance de trucos Druida +300 ft (si alcance ≥ 10 ft)',
+  clEFImpPrimal:'<strong>Mejorado (Nv 15):</strong> Primal Strike hace +2d8 (mejora desde 1d8)',
+  clWR:'♻️ Wild Resurgence',
+  clWRDesc1:'· Si no tienes usos de Wild Shape: gasta un espacio para recuperar 1 (sin acción).',
+  clWRDesc2:'· Gasta 1 uso de Wild Shape: recuperas un espacio de Nv 1 (1/descanso largo).',
+  clBS:'🌟 Beast Spells',
+  clBSDesc:'Puedes lanzar conjuros mientras estás en forma de bestia (excepto los que consumen componentes de material caros).',
+  clFeatures:'📋 Características de clase',
+  clWC:'<b>Wild Companion (Nv 2):</b> Gasta un uso de Wild Shape o espacio para lanzar Find Familiar (Feérico, sin comp. material).',
+  clArchdruid:'<b>Archdruid (Nv 20):</b> Evergreen Wild Shape · Nature Magician · Longevidad',
+  clFeatsTitle:'🏅 Dotes activos',
+  clFeatsDesc:'Activa los dotes que tiene tu personaje. Los efectos se aplican automáticamente a las estadísticas.',
+  buildsNewChar:'Nuevo personaje — desde cero',
+  buildsSaved:'Personajes guardados',
+  buildsEmpty:'Sin personajes guardados.',
+  buildsActive:'ACTIVO',
+  buildsLoad:'Cargar',
+  buildsOverwrite:'Sobrescribir',
+  buildsDelete:'Eliminar',
+  notesTitle:'Notas de sesión',
+  qrCopy:'📋 Copiar URL',
+  qrClose:'Cerrar',
+  beastTitle:'🐻 Elegir Forma Salvaje',
+  promptDamage:'Daño recibido:',
+  promptDmgDirect:'Daño directo al druida (ignora bestia):',
+  promptHeal:'Curar HP druida:',
+  promptWhichSlot:'¿Qué espacio gastar? (introduce el número 1-9)\n{0}',
+  promptRollDice:'Tira {0}d8 e introduce el resultado ({1}–{2}):',
+  alertMaxPrep:'Ya tienes {0} conjuros preparados (máximo en Nv {1}).',
+  alertNoSlots:'¡Sin espacios disponibles!',
+  alertNoSlotLv:'¡Sin espacios de Nv{0}!',
+  confirmConc:'Te estás concentrando en "{0}". ¿Sustituir?',
+  confirmDelete:'¿Eliminar este personaje?',
+  confirmNew:'¿Crear un personaje en blanco? (El progreso se perderá si no lo guardas.)',
+  alertCopied:'¡URL copiada!',
+  toastSR:'☀️ Descanso Corto: ¡Wild Shape recuperado!',
+  toastLR:'🌙 Descanso Largo: ¡HP, espacios y Wild Shape recuperados!',
+  toastFormBroken:'💔 ¡Forma rota! {0} HP de exceso al druida (ahora {1}/{2} HP)',
+  toastFormBrokenClean:'💔 ¡Forma rota! Vuelves a forma druida.',
+  toastHealForm:'🌿 Curar en Forma: +{0} HP ({1}/{2})',
+  toastFeatOn:'✅ Dote {0} activado',
+  toastFeatOff:'❌ Dote {0} desactivado',
+  profLv1:'Niveles 1–4',profLv5:'Niveles 5–8',profLv9:'Niveles 9–12',profLv13:'Niveles 13–16',profLv17:'Niveles 17–20',
+  acSub:'10 + mod DES',acSubWarden:'Warden: armadura media',prepSub:'= Tabla Nv',
+  druidDefault:'Druida',levelAbbr:'Nv',
+  saves:{str:'Fuerza',dex:'Destreza',con:'Constitución',int:'Inteligencia',wis:'Sabiduría',cha:'Carisma'},
+  skills:{acrobatics:'Acrobacias','animal-handling':'Trato con Animales',arcana:'Arcanos',athletics:'Atletismo',
+    deception:'Engaño',history:'Historia',insight:'Perspicacia',intimidation:'Intimidación',
+    investigation:'Investigación',medicine:'Medicina',nature:'Naturaleza',perception:'Percepción',
+    performance:'Interpretación',persuasion:'Persuasión',religion:'Religión',
+    'sleight-of-hand':'Juego de Manos',stealth:'Sigilo',survival:'Supervivencia'},
+},
+};
+function T(key,...args){
+  const dict=(LANG[lang]||LANG.en);
+  const s=dict[key]!==undefined?dict[key]:(LANG.en[key]||key);
+  return args.reduce((r,a,i)=>r.replace('{'+i+'}',a),s);
+}
+function applyI18n(){
+  document.querySelectorAll('[data-i18n]').forEach(el=>el.textContent=T(el.getAttribute('data-i18n')));
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>el.placeholder=T(el.getAttribute('data-i18n-ph')));
+  document.querySelectorAll('[data-i18n-html]').forEach(el=>el.innerHTML=T(el.getAttribute('data-i18n-html')));
+}
 
 // ══════════════════════════════════════════════
 //  PART 4: APP LOGIC
@@ -1095,6 +1480,7 @@ let eleFury='potent'; // 'potent'|'primal'
 let spTab=0;
 let expanded=new Set();
 let dark=false;
+let lang='en';
 let builds=[];
 let inventory=[];
 let profSaves=new Set(['int','wis']);
@@ -1149,7 +1535,7 @@ function maxSpellLevel(){
 function getState(){
   return{lv,stats,curHp,maxHpMan,slots,wsUses,wsActive,wsCurTHP,wsBeastCurHp,
     prepared:[...prepared],concSpell,primalOrder,eleFury,druidFeats:[...druidFeats],
-    expanded:[...expanded],dark,inventory,
+    expanded:[...expanded],dark,lang,inventory,
     profSaves:[...profSaves],profSkills:[...profSkills],
     name:g('c-name').value,species:g('c-species').value,
     bg:g('c-bg').value,align:g('c-align').value,age:g('c-age').value,
@@ -1170,6 +1556,7 @@ function setState(s){
   druidFeats=new Set(s.druidFeats||[]);
   expanded=new Set(s.expanded||[]);
   dark=s.dark||false;
+  lang=s.lang||'en';
   inventory=s.inventory||[];
   profSaves=new Set(s.profSaves||['int','wis']);
   profSkills=new Set(s.profSkills||['animal-handling','nature','perception','survival']);
@@ -1212,15 +1599,16 @@ function recalc(){
   g('m-cha').textContent=fmod(mod(stats.cha));
   const p=prof(lv), mhp=maxHp();
   g('d-prof').textContent=fmod(p);
-  g('d-prof-sub').textContent=lv<5?'Nivells 1–4':lv<9?'Nivells 5–8':lv<13?'Nivells 9–12':lv<17?'Nivells 13–16':'Nivells 17–20';
+  g('d-prof-sub').textContent=lv<5?T('profLv1'):lv<9?T('profLv5'):lv<13?T('profLv9'):lv<17?T('profLv13'):T('profLv17');
   g('d-dc').innerHTML=(8+p+mod(effWIS))+wisBoost;
   g('d-atk').innerHTML=fmod(p+mod(effWIS))+wisBoost;
   const ac=10+mod(stats.dex);
   g('d-ac').textContent=ac;
-  g('d-ac-sub').textContent='10 + DEX mod ('+(primalOrder==='warden'?'Warden: medium armor':'Leather/Unarmored')+')';
+  g('d-ac-sub').textContent=T('acSub')+(primalOrder==='warden'?' ('+T('acSubWarden')+')':' (Leather/Unarmored)');
   const prepMax=PREP_TABLE[lv]||lv;
   g('d-prep').textContent=prepMax;
-  g('d-prep-sub').textContent='= Taula Lv'+lv;
+  g('d-prep-sub').textContent=T('prepSub')+lv;
+  g('drv-lbl').textContent=T('derivedStats')+' '+lv;
   g('d-hp').value=mhp; g('d-hp-auto').textContent='auto: '+mhp;
   if(maxHpMan<0){g('d-hp').value=mhp;}
   curHp=clamp(curHp,0,maxHp());
@@ -1242,7 +1630,7 @@ function initSlots(){
 
 // ── HERO ──
 function updateHero(){
-  const nm=g('c-name').value||'Druida';
+  const nm=g('c-name').value||T('druidDefault');
   g('tb-name').textContent=nm; g('h-name').textContent=nm;
   g('h-lv').textContent=lv;
   g('tb-sub').textContent='Circle of the Moon · Lv '+lv;
@@ -1308,35 +1696,37 @@ function toggleDark(){
 
 // ── LANGUAGE ──
 function setLang(l){
-  ['cat','eng','esp'].forEach(x=>g('lb-'+x).classList.toggle('active',x===l));
+  lang=l;
+  ['en','ca','es'].forEach(x=>g('lb-'+x).classList.toggle('active',x===l));
+  applyI18n();
+  recalc();
+  renderBuilds();
   save();
 }
 
 // ── SAVES & SKILLS ──
-const SAVES=[
-  {k:'str',n:'Força'},  {k:'dex',n:'Destresa'}, {k:'con',n:'Constitució'},
-  {k:'int',n:'Intel·ligència'},{k:'wis',n:'Saviesa'},{k:'cha',n:'Carisma'}
-];
+const SAVES=['str','dex','con','int','wis','cha'];
 const SKILLS=[
-  {k:'acrobatics',ab:'dex',n:'Acrobàtics'},{k:'animal-handling',ab:'wis',n:'Tracte amb Animals'},
-  {k:'arcana',ab:'int',n:'Arcana'},{k:'athletics',ab:'str',n:'Atletisme'},
-  {k:'deception',ab:'cha',n:'Engany'},{k:'history',ab:'int',n:'Història'},
-  {k:'insight',ab:'wis',n:'Intuïció'},{k:'intimidation',ab:'cha',n:'Intimidació'},
-  {k:'investigation',ab:'int',n:'Investigació'},{k:'medicine',ab:'wis',n:'Medicina'},
-  {k:'nature',ab:'int',n:'Natura'},{k:'perception',ab:'wis',n:'Percepció'},
-  {k:'performance',ab:'cha',n:'Actuació'},{k:'persuasion',ab:'cha',n:'Persuasió'},
-  {k:'religion',ab:'int',n:'Religió'},{k:'sleight-of-hand',ab:'dex',n:'Joc de Mans'},
-  {k:'stealth',ab:'dex',n:'Sigil'},{k:'survival',ab:'wis',n:'Supervivència'}
+  {k:'acrobatics',ab:'dex'},{k:'animal-handling',ab:'wis'},
+  {k:'arcana',ab:'int'},{k:'athletics',ab:'str'},
+  {k:'deception',ab:'cha'},{k:'history',ab:'int'},
+  {k:'insight',ab:'wis'},{k:'intimidation',ab:'cha'},
+  {k:'investigation',ab:'int'},{k:'medicine',ab:'wis'},
+  {k:'nature',ab:'int'},{k:'perception',ab:'wis'},
+  {k:'performance',ab:'cha'},{k:'persuasion',ab:'cha'},
+  {k:'religion',ab:'int'},{k:'sleight-of-hand',ab:'dex'},
+  {k:'stealth',ab:'dex'},{k:'survival',ab:'wis'}
 ];
 function renderSaves(){
   const el=g('saves-list'); el.innerHTML='';
   const p=prof(lv);
-  SAVES.forEach(sv=>{
-    const pro=profSaves.has(sv.k), v=mod(stats[sv.k])+(pro?p:0);
+  const snames=(LANG[lang]||LANG.en).saves||LANG.en.saves;
+  SAVES.forEach(k=>{
+    const pro=profSaves.has(k), v=mod(stats[k])+(pro?p:0);
     el.innerHTML+=`<div class="sv-row">
-      <button class="sv-chk${pro?' act':''}" onclick="toggleSave('${sv.k}')">${pro?'●':''}</button>
-      <span class="sv-ab">${sv.k.toUpperCase().slice(0,3)}</span>
-      <span class="sv-nm">${sv.n}</span>
+      <button class="sv-chk${pro?' act':''}" onclick="toggleSave('${k}')">${pro?'●':''}</button>
+      <span class="sv-ab">${k.toUpperCase().slice(0,3)}</span>
+      <span class="sv-nm">${snames[k]||k}</span>
       <span class="sv-val${pro?' pro':''}">${fmod(v)}</span>
     </div>`;
   });
@@ -1348,12 +1738,13 @@ function toggleSave(k){
 function renderSkills(){
   const el=g('skills-list'); el.innerHTML='';
   const p=prof(lv);
+  const sknames=(LANG[lang]||LANG.en).skills||LANG.en.skills;
   SKILLS.forEach(sk=>{
     const pro=profSkills.has(sk.k), v=mod(stats[sk.ab])+(pro?p:0);
     el.innerHTML+=`<div class="sv-row">
       <button class="sv-chk${pro?' act':''}" onclick="toggleSkill('${sk.k}')">${pro?'●':''}</button>
       <span class="sv-ab">${sk.ab.toUpperCase().slice(0,3)}</span>
-      <span class="sv-nm">${sk.n}</span>
+      <span class="sv-nm">${sknames[sk.k]||sk.k}</span>
       <span class="sv-val${pro?' pro':''}">${fmod(v)}</span>
     </div>`;
   });
@@ -1382,7 +1773,7 @@ function renderSlotsChar(){
   const el=g('slots-row-char'); el.innerHTML='';
   const tbl=SLOT_TABLE[Math.min(lv,20)]||[];
   for(let i=0;i<9;i++){
-    if(tbl[i]>0) el.innerHTML+=`<span class="slot-chip" style="background:var(--tl);color:var(--td)">Nv${i+1}: ${tbl[i]}</span>`;
+    if(tbl[i]>0) el.innerHTML+=`<span class="slot-chip" style="background:var(--tl);color:var(--td)">${T('levelAbbr')}${i+1}: ${tbl[i]}</span>`;
   }
 }
 function slotLabel(i){return['1r','2n','3r','4t','5è','6è','7è','8è','9è'][i]||`${i+1}è`;}
@@ -1395,8 +1786,8 @@ function renderTracker(){
   const concHtml=concSpell?`<div class="conc-bar">
     <div class="conc-dot"></div>
     <div class="conc-inf">
-      <div class="conc-sp">🌀 Concentrant-se: ${concSpell}</div>
-      <div class="conc-rn">CON DC ${Math.max(10,Math.floor(lastDmg/2)||10)} per mantenir concentració${druidFeats.has('war-caster')?' <span class="feat-boost-tag">⚡Adv. (War Caster)</span>':druidFeats.has('resilient-con')?' <span class="feat-boost-tag">⚡Prof CON (Resilient)</span>':''}</div>
+      <div class="conc-sp">${T('concActing')} ${concSpell}</div>
+      <div class="conc-rn">CON DC ${Math.max(10,Math.floor(lastDmg/2)||10)} ${T('concMaintain')}${druidFeats.has('war-caster')?' <span class="feat-boost-tag">⚡'+T('concWC')+'</span>':druidFeats.has('resilient-con')?' <span class="feat-boost-tag">⚡'+T('concRC')+'</span>':''}</div>
     </div>
     <button style="background:none;border:none;cursor:pointer;font-size:15px" onclick="concSpell=null;renderTracker();save()">✕</button>
   </div>`:'';
@@ -1422,12 +1813,12 @@ function renderTracker(){
         <div style="display:flex;align-items:center;gap:8px">${fIcon}<div><div style="font-size:14px">${f.n}</div><div style="font-weight:400;opacity:.8;font-size:10px">CR ${f.cr} · 🛡️ ${acFinal} AC · ⚡ ${f.spd}</div></div></div>
         <div style="display:flex;gap:6px">
           <button class="btn-ws" style="padding:5px 10px;font-size:11px;background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.3);color:#fff" onclick="openWSModal()">↻</button>
-          <button class="btn-ws btn-ws-leave" style="padding:5px 10px;font-size:11px" onclick="leaveWS()">🧑 Sortir</button>
+          <button class="btn-ws btn-ws-leave" style="padding:5px 10px;font-size:11px" onclick="leaveWS()">${T('wsExit')}</button>
         </div>
       </div>
       <div class="tr-sec">
         <div style="display:flex;align-items:center;justify-content:space-between">
-          <div class="ws-beast-hp-lbl">🐾 HP Bestia</div>
+          <div class="ws-beast-hp-lbl">${T('wsBeastHP')}</div>
           <div style="font-size:11px;color:var(--os)">⚔️ ${f.atk}</div>
         </div>
         <div class="hp-wrap" style="margin-bottom:8px"><div class="hp-fill-beast" style="width:${bPct}%;background:${bColor}"></div></div>
@@ -1442,41 +1833,41 @@ function renderTracker(){
             <button class="hbtn p" onclick="changeBeastHp(+1)">+</button>
           </div>
         </div>
-        <button class="btn-heal-form" onclick="healInForm()">🌿 Curar en Forma (BA) — gastar slot → 1d8/nivell</button>
+        <button class="btn-heal-form" onclick="healInForm()">${T('wsHealForm')}</button>
         ${featsHtml}
         <div class="ws-thp-row" style="margin-top:10px">
-          <span class="ws-thp-lbl">🛡️ THP Circle of Moon:</span>
+          <span class="ws-thp-lbl">${T('wsTHPlbl')}</span>
           <div style="flex:1"><div style="height:6px;background:var(--ol);border-radius:99px;overflow:hidden;margin-bottom:4px"><div style="height:100%;border-radius:99px;background:var(--t);width:${thpPct}%;transition:width .3s"></div></div></div>
           <span class="ws-thp-val">${wsCurTHP}</span><span style="font-size:11px;color:var(--os)">/${wsTHP()}</span>
           <button class="hbtn m" onclick="changeWsTHP(-1)" style="padding:3px 8px;font-size:12px">−</button>
           <button class="hbtn p" onclick="changeWsTHP(+1)" style="padding:3px 8px;font-size:12px">+</button>
         </div>
         <div class="ws-druid-row">
-          <div><div class="ws-druid-lbl">🧑 HP Druida (protegit)</div><div class="ws-druid-val">${curHp} <span style="font-size:12px;font-weight:400;color:var(--os)">/ ${mhp}</span></div></div>
-          <button class="hbtn m" style="font-size:11px;padding:4px 8px" onclick="damagePromptDruid()">💥 dany directe</button>
+          <div><div class="ws-druid-lbl">${T('wsDruidHP')}</div><div class="ws-druid-val">${curHp} <span style="font-size:12px;font-weight:400;color:var(--os)">/ ${mhp}</span></div></div>
+          <button class="hbtn m" style="font-size:11px;padding:4px 8px" onclick="damagePromptDruid()">${T('wsDmgDirect')}</button>
         </div>
       </div>
       <div class="tr-sec">
         <div class="tr-lbl">
-          🐺 Forma Salvatge
-          <span style="font-size:10px;color:var(--pd)">Usos: ${wsUses}/${usesMax}</span>
+          🐺 ${T('wsUsesLbl')}
+          <span style="font-size:10px;color:var(--pd)">${T('trUses')} ${wsUses}/${usesMax}</span>
         </div>
         <div class="ws-uses-row">${pips}</div>
       </div>
       <div class="tr-sec">
-        <div class="tr-lbl">📖 Slots d'Encanteri</div>
+        <div class="tr-lbl">${T('trSlots')}</div>
         ${slotHtml}
       </div>
       <div class="rest-row">
-        <button class="btn-rest btn-sr" onclick="shortRest()">☀️ Short Rest</button>
-        <button class="btn-rest btn-lr" onclick="longRest()">🌙 Long Rest</button>
+        <button class="btn-rest btn-sr" onclick="shortRest()">${T('trShortRest')}</button>
+        <button class="btn-rest btn-lr" onclick="longRest()">${T('trLongRest')}</button>
       </div>`;
   } else {
     // ── NORMAL MODE ──
     g('tracker-content').innerHTML=`
       ${concHtml}
       <div class="tr-sec">
-        <div class="tr-lbl">❤️ Punts de Vida</div>
+        <div class="tr-lbl">${T('trHP')}</div>
         <div class="hp-wrap"><div class="hp-fill" style="width:${pct}%;background:${hpColor}"></div></div>
         <div class="hp-row">
           <div class="hp-btns">
@@ -1492,26 +1883,26 @@ function renderTracker(){
       </div>
       <div class="tr-sec">
         <div class="tr-lbl">
-          🐺 Forma Salvatge
-          <span style="font-size:10px;color:var(--pd)">Max CR ${Math.floor(lv/3)||'¼'} · THP ${wsTHP()}</span>
+          ${T('trWS')}
+          <span style="font-size:10px;color:var(--pd)">${T('trMaxCR')} ${Math.floor(lv/3)||'¼'} · THP ${wsTHP()}</span>
         </div>
         <div class="ws-uses-row">
-          <span class="ws-lbl">Usos:</span>
+          <span class="ws-lbl">${T('trUses')}</span>
           ${pips}
           <span style="font-size:11px;color:var(--os)">${wsUses}/${usesMax}</span>
         </div>
         <div class="ws-btns">
-          <button class="btn-ws" onclick="openWSModal()" ${wsUses===0?'disabled style="opacity:.4"':''}>🐻 Entrar Forma Salvatge</button>
+          <button class="btn-ws" onclick="openWSModal()" ${wsUses===0?'disabled style="opacity:.4"':''}>${T('trEnterWS')}</button>
         </div>
-        ${lv>=6?`<div style="margin-top:8px;font-size:11px;color:var(--td);background:var(--tl);border-radius:6px;padding:6px 8px">✨ Improved Circle Forms (Lv6): atacs poden ser Radiant</div>`:''}
+        ${lv>=6?`<div style="margin-top:8px;font-size:11px;color:var(--td);background:var(--tl);border-radius:6px;padding:6px 8px">${T('trImproved')}</div>`:''}
       </div>
       <div class="tr-sec">
-        <div class="tr-lbl">📖 Slots d'Encanteri</div>
+        <div class="tr-lbl">${T('trSlots')}</div>
         ${slotHtml}
       </div>
       <div class="rest-row">
-        <button class="btn-rest btn-sr" onclick="shortRest()">☀️ Short Rest</button>
-        <button class="btn-rest btn-lr" onclick="longRest()">🌙 Long Rest</button>
+        <button class="btn-rest btn-sr" onclick="shortRest()">${T('trShortRest')}</button>
+        <button class="btn-rest btn-lr" onclick="longRest()">${T('trLongRest')}</button>
       </div>`;
   }
 }
@@ -1524,13 +1915,13 @@ function changeHp(d){
   renderTracker(); save();
 }
 function damagePromptDruid(){
-  const v=prompt('Dany directe al druida (bypassa bestia):');
+  const v=prompt(T('promptDmgDirect'));
   if(!v||isNaN(+v))return;
   curHp=clamp(curHp-(+v),0,maxHp());
   renderTracker(); save();
 }
 function healPrompt(){
-  const v=prompt('Curar HP druida:');
+  const v=prompt(T('promptHeal'));
   if(!v||isNaN(+v))return;
   curHp=clamp(curHp+(+v),0,maxHp());
   renderTracker(); save();
@@ -1538,7 +1929,7 @@ function healPrompt(){
 
 // ── DANY INTEL·LIGENT: THP → HP Bestia → forma es trenca + overflow al druida ──
 function damagePrompt(){
-  const v=prompt('Dany rebut:');
+  const v=prompt(T('promptDamage'));
   if(!v||isNaN(+v)||+v<=0)return;
   lastDmg=+v;
   if(wsActive){
@@ -1567,8 +1958,8 @@ function applyDamageToForm(dmg){
     curHp=clamp(curHp-overflow,0,maxHp());
     // Show toast
     const msg=overflow>0
-      ? `💔 Forma trencada! ${overflow} HP d'excés al druida (ara ${curHp}/${maxHp()} HP)`
-      : '💔 Forma trencada! Tornes a forma druida.';
+      ? T('toastFormBroken',overflow,curHp,maxHp())
+      : T('toastFormBrokenClean');
     showToast(msg);
   }
 }
@@ -1583,7 +1974,7 @@ function changeBeastHp(d){
 function healBeastPrompt(){
   const f=BEAST_FORMS.find(x=>x.id===wsActive);
   if(!f)return;
-  const v=prompt(`Curar HP bestia (màx ${f.hp-wsBeastCurHp}):`);
+  const v=prompt(`Heal Beast HP (max ${f.hp-wsBeastCurHp}):`);
   if(!v||isNaN(+v))return;
   wsBeastCurHp=clamp(wsBeastCurHp+(+v),0,f.hp);
   renderTracker(); save();
@@ -1595,17 +1986,17 @@ function healInForm(){
   const f=BEAST_FORMS.find(x=>x.id===wsActive);
   if(!f)return;
   const avail=slots.map((cur,i)=>cur>0?`Lv${i+1}(×${cur})`:null).filter(Boolean);
-  if(!avail.length){alert('Sense slots disponibles!');return;}
-  const slotN=prompt(`Quin slot gastar? (entra el número 1-9)\n${avail.join(' · ')}`);
+  if(!avail.length){alert(T('alertNoSlots'));return;}
+  const slotN=prompt(T('promptWhichSlot',avail.join(' · ')));
   if(!slotN||isNaN(+slotN)||+slotN<1||+slotN>9)return;
   const idx=+slotN-1;
-  if(!slots[idx]){alert(`Sense slots de Lv${slotN}!`);return;}
+  if(!slots[idx]){alert(T('alertNoSlotLv',slotN));return;}
   slots[idx]--;
-  const healRoll=prompt(`Tira ${slotN}d8 i entra el resultat (${+slotN}–${+slotN*8}):`);
+  const healRoll=prompt(T('promptRollDice',slotN,+slotN,+slotN*8));
   if(!healRoll||isNaN(+healRoll)){slots[idx]++;return;}
   const prev=wsBeastCurHp;
   wsBeastCurHp=clamp(wsBeastCurHp+(+healRoll),0,f.hp);
-  showToast(`🌿 Cura en Forma: +${wsBeastCurHp-prev} HP (${wsBeastCurHp}/${f.hp})`);
+  showToast(T('toastHealForm',wsBeastCurHp-prev,wsBeastCurHp,f.hp));
   renderTracker(); save();
 }
 
@@ -1696,7 +2087,7 @@ function leaveWS(){
 // ── SHORT / LONG REST ──
 function shortRest(){
   wsUses=Math.min(wsUses+1,wsMaxUses(lv));
-  showToast('☀️ Short Rest: Wild Shape recuperat.');
+  showToast(T('toastSR'));
   renderTracker(); save();
 }
 function longRest(){
@@ -1705,7 +2096,7 @@ function longRest(){
   slots=[...tbl];
   wsUses=wsMaxUses(lv);
   wsActive=null; wsCurTHP=0; wsBeastCurHp=0; concSpell=null;
-  showToast('🌙 Long Rest: HP, slots i Wild Shape recuperats!');
+  showToast(T('toastLR'));
   renderTracker(); save();
 }
 function showToast(msg){
@@ -1742,22 +2133,22 @@ function renderSpells(){
   // My spells tab
   const el=g('my-spells-list'); el.innerHTML='';
   if(!all.size){
-    el.innerHTML='<div class="empty-st"><div class="ei">📜</div>Cap encanteri preparat.<br>Ves a "Explorar & Afegir".</div>';
+    el.innerHTML=`<div class="empty-st"><div class="ei">📜</div>${T('spEmptyMsg')}</div>`;
   } else {
     // Cantrips
     const myC=DRUID_SPELLS.filter(s=>s.level===0&&(prepared.has(s.id)||(primalOrder==='magician'&&prepared.has(s.id))));
     if(myC.length){
-      el.innerHTML+='<div class="gh"><span class="badge bg">Cantrips</span></div>';
+      el.innerHTML+=`<div class="gh"><span class="badge bg">${T('chipCantrips')}</span></div>`;
       myC.forEach(s=>el.innerHTML+=spellCard(s,false,false));
     }
     // Circle always-prepared
     if(circleSpells.length){
-      el.innerHTML+='<div class="gh"><span class="badge bt">🌙 Cercle de la Lluna</span><span class="gh-sub">Sempre preparats</span></div>';
+      el.innerHTML+=`<div class="gh"><span class="badge bt">${T('spCircleLabel')}</span><span class="gh-sub">${T('spAlways')}</span></div>`;
       circleSpells.forEach(s=>el.innerHTML+=spellCard(s,true,false));
     }
     // User-prepared
     if(userLv.length){
-      el.innerHTML+='<div class="gh"><span class="badge bp">Preparats per tu</span></div>';
+      el.innerHTML+=`<div class="gh"><span class="badge bp">${T('spPreparedBy')}</span></div>`;
       userLv.sort((a,b)=>a.level-b.level||a.name.localeCompare(b.name))
              .forEach(s=>el.innerHTML+=spellCard(s,false,false));
     }
@@ -1765,7 +2156,7 @@ function renderSpells(){
     if(!circleSpells.find(s=>s.id==='speak-with-animals')&&!prepared.has('speak-with-animals')){
       const sw=DRUID_SPELLS.find(s=>s.id==='speak-with-animals');
       if(sw){
-        el.innerHTML+='<div class="gh"><span class="badge bg">Drudic</span><span class="gh-sub">Sempre preparat</span></div>';
+        el.innerHTML+=`<div class="gh"><span class="badge bg">${T('spDruidic')}</span><span class="gh-sub">${T('spAlways')}</span></div>`;
         el.innerHTML+=spellCard(sw,true,false);
       }
     }
@@ -1827,15 +2218,15 @@ function spellCard(s,locked,explore){
       if(!tbl[i]) continue;
       const cur=slots[i]||0;
       const up=i>s.level-1;
-      btns+=`<button class="cbt${up?' cbt-up':''}" onclick="castSpell('${s.id}',${i})" ${cur===0?'disabled':''}>Lv${i+1} (${cur})</button>`;
+      btns+=`<button class="cbt${up?' cbt-up':''}" onclick="castSpell('${s.id}',${i})" ${cur===0?'disabled':''}>${T('levelAbbr')}${i+1} (${cur})</button>`;
     }
     const concRow=isConc?`<div class="cast-div"></div><div class="cast-sp-row">
-      ${isActive?`<span class="cast-sp-lbl">🌀 Actiu</span><button class="cast-spb" style="background:var(--r)" onclick="concSpell=null;renderTracker();renderSpells();save()">Trencar</button>`
-      :`<button class="cast-spb" onclick="castConc('${s.name}')">Concentrar-se</button><span class="cast-hint">Requereix concentració</span>`}
+      ${isActive?`<span class="cast-sp-lbl">${T('spActive')}</span><button class="cast-spb" style="background:var(--r)" onclick="concSpell=null;renderTracker();renderSpells();save()">${T('spBreak')}</button>`
+      :`<button class="cast-spb" onclick="castConc('${s.name}')">${T('spConc')}</button><span class="cast-hint">${T('spConcReq')}</span>`}
     </div>`:'';
-    castPanel=`<div class="cast-pan"><div class="cast-lbl">Lançar amb slot:</div><div class="cast-btns">${btns||'<span style="font-size:11px;color:var(--os)">Sense slots disponibles</span>'}</div>${concRow}</div>`;
+    castPanel=`<div class="cast-pan"><div class="cast-lbl">${T('spCastSlot')}</div><div class="cast-btns">${btns||`<span style="font-size:11px;color:var(--os)">${T('spNoSlots')}</span>`}</div>${concRow}</div>`;
   } else {
-    castPanel=`<div class="cast-pan" style="padding:6px 9px"><span style="font-size:11px;color:var(--td)">✦ Cantrip — sense límit d'usos</span></div>`;
+    castPanel=`<div class="cast-pan" style="padding:6px 9px"><span style="font-size:11px;color:var(--td)">${T('spCantrip')}</span></div>`;
   }
 
   const descHtml=isExp?`<div class="sp-desc">${s.desc}</div>${s.tip?`<div class="tip-note"><span style="font-size:13px">💡</span><span class="tip-tx">${s.tip}</span></div>`:''}${castPanel}`:'';
@@ -1872,7 +2263,7 @@ function togglePrep(id){
   } else {
     const userLv=DRUID_SPELLS.filter(x=>x.level>0&&prepared.has(x.id)&&!ap.has(x.id));
     if(s.level>0&&userLv.length>=prepMax){
-      alert(`Ja tens ${prepMax} encanteris preparats (màxim al Lv ${lv}).`); return;
+      alert(T('alertMaxPrep',prepMax,lv)); return;
     }
     prepared.add(id);
   }
@@ -1885,7 +2276,7 @@ function castSpell(id,slotIdx){
 }
 function castConc(name){
   if(concSpell&&concSpell!==name){
-    if(!confirm(`Ja et concentres a "${concSpell}". Substituir?`)) return;
+    if(!confirm(T('confirmConc',concSpell))) return;
   }
   concSpell=name;
   renderTracker(); renderSpells(); save();
@@ -1902,94 +2293,94 @@ function renderExplore(q){
     let spells=DRUID_SPELLS.filter(s=>s.level===lev);
     if(q) spells=spells.filter(s=>s.name.toLowerCase().includes(q)||s.desc.toLowerCase().includes(q)||s.school.toLowerCase().includes(q));
     if(!spells.length) return;
-    const label=lev===0?'Cantrips':`Nivell ${lev}`;
+    const label=lev===0?T('chipCantrips'):`${T('spLevelLabel')} ${lev}`;
     const slotsAvail=(SLOT_TABLE[Math.min(lv,20)]||[])[lev-1]||0;
-    el.innerHTML+=`<div class="gh"><span class="badge ${lev===0?'bg':'bt'}">${label}</span>${lev===0?'':(`<span class="gh-sub">Slots: ${slotsAvail} disponibles</span>`)}</div><hr class="hr">`;
+    el.innerHTML+=`<div class="gh"><span class="badge ${lev===0?'bg':'bt'}">${label}</span>${lev===0?'':(`<span class="gh-sub">${slotsAvail} ${T('spSlotsAvail')}</span>`)}</div><hr class="hr">`;
     spells.forEach(s=>{
       const locked=ap.has(s.id);
       el.innerHTML+=spellCard(s,locked,true);
     });
   });
-  if(!el.innerHTML) el.innerHTML='<div class="empty-st"><div class="ei">🔍</div>Cap encanteri trobat.</div>';
+  if(!el.innerHTML) el.innerHTML=`<div class="empty-st"><div class="ei">🔍</div>${T('spNoFound')}</div>`;
 }
 function filterSpells(q){renderExplore(q);}
 
 // ── SLOTS CHAR VIEW ──
-function slotLabel(i){return['1r','2n','3r','4t','5è','6è','7è','8è','9è'][i]||`${i+1}è`;}
+function slotLabel(i){return['1st','2nd','3rd','4th','5th','6th','7th','8th','9th'][i]||`${i+1}th`;}
 
 // ── CLASS TAB ──
 function renderClass(){
   const el=g('class-content'); el.innerHTML='';
   // Primal Order
   el.innerHTML+=`<div class="tr-sec">
-    <div class="tr-lbl">⚔️ Primal Order <span style="font-size:10px">(Lv 1)</span></div>
+    <div class="tr-lbl">${T('clPO')} <span style="font-size:10px">(Lv 1)</span></div>
     <div class="po-row">
-      <button class="po-chip${primalOrder==='magician'?' on':''}" onclick="setPO('magician')">🔮 Magician<br><span style="font-size:10px;font-weight:400">+cantrip · WIS→Arcana/Natura</span></button>
-      <button class="po-chip${primalOrder==='warden'?' on':''}" onclick="setPO('warden')">🛡️ Warden<br><span style="font-size:10px;font-weight:400">Armes marcials · Armadura mitja</span></button>
+      <button class="po-chip${primalOrder==='magician'?' on':''}" onclick="setPO('magician')">🔮 Magician<br><span style="font-size:10px;font-weight:400">${T('clPOMagicianSub')}</span></button>
+      <button class="po-chip${primalOrder==='warden'?' on':''}" onclick="setPO('warden')">🛡️ Warden<br><span style="font-size:10px;font-weight:400">${T('clPOWardenSub')}</span></button>
     </div>
-    <div style="font-size:12px;color:var(--os);line-height:1.5">${primalOrder==='magician'?`Arcana/Natura = ${fmod(mod(stats.wis)+prof(lv))} (WIS mod + Prof)`:'Proficiència amb armes marcials i armadura mitja (AC max 11+DEX mod en cuirass)'}</div>
+    <div style="font-size:12px;color:var(--os);line-height:1.5">${primalOrder==='magician'?T('clPOMagDesc',fmod(mod(stats.wis)+prof(lv))):T('clPOWarDesc')}</div>
   </div>`;
   // Circle Forms
   el.innerHTML+=`<div class="tr-sec">
-    <div class="tr-lbl">🐺 Circle Forms <span style="font-size:10px">(Lv 3)</span></div>
-    <div class="info-bn">Max CR = <strong>${Math.floor(lv/3)||'¼'}</strong> · AC = max(bestia, <strong>${13+mod(stats.wis)}</strong>) · THP = <strong>${wsTHP()}</strong></div>
+    <div class="tr-lbl">${T('clCircleForms')} <span style="font-size:10px">(Lv 3)</span></div>
+    <div class="info-bn">${T('trMaxCR')} = <strong>${Math.floor(lv/3)||'¼'}</strong> · AC = max(beast, <strong>${13+mod(stats.wis)}</strong>) · THP = <strong>${wsTHP()}</strong></div>
     ${lv>=6?`<div style="background:var(--tl);border-radius:8px;padding:10px 12px;margin-bottom:8px;font-size:12px;color:var(--td)">
-      <strong>Improved Circle Forms (Lv 6):</strong><br>
-      · Lunar Radiance: atacs fan Radiant o dany normal (tu tries per cop)<br>
-      · Increased Toughness: afegeix WIS mod a tirades de salvació CON
+      <strong>${T('clImproved6')}</strong><br>
+      ${T('clRadiance')}<br>
+      ${T('clToughness')}
     </div>`:''}
     ${lv>=10?`<div style="background:var(--tl);border-radius:8px;padding:10px 12px;margin-bottom:8px;font-size:12px;color:var(--td)">
       <strong>Moonlight Step (Lv 10):</strong><br>
-      Bonus action: teleporta fins 30 ft. Avantatge en el proper atac. Usos = WIS mod (${mod(stats.wis)}).
+      ${T('clMoonStepDesc',mod(stats.wis))}
     </div>`:''}
     ${lv>=14?`<div style="background:var(--tl);border-radius:8px;padding:10px 12px;margin-bottom:8px;font-size:12px;color:var(--td)">
       <strong>Lunar Form (Lv 14):</strong><br>
-      · 1/torn: +2d10 Radiant a atac de Wild Shape<br>
-      · Moonlight Step: teleporta una criatura aliada addicional (10 ft)
+      ${T('clLunarFormA')}<br>
+      ${T('clLunarFormB')}
     </div>`:''}
   </div>`;
   // Elemental Fury (lv7+)
   if(lv>=7){
     el.innerHTML+=`<div class="tr-sec">
-      <div class="tr-lbl">⚡ Elemental Fury <span style="font-size:10px">(Lv 7)</span></div>
+      <div class="tr-lbl">${T('clEF')} <span style="font-size:10px">(Lv 7)</span></div>
       <div class="po-row">
-        <button class="po-chip${eleFury==='potent'?' on':''}" onclick="setEF('potent')">✨ Potent Spellcasting<br><span style="font-size:10px;font-weight:400">+${fmod(mod(stats.wis))} dany als cantrips</span></button>
-        <button class="po-chip${eleFury==='primal'?' on':''}" onclick="setEF('primal')">🗡️ Primal Strike<br><span style="font-size:10px;font-weight:400">+1d8 element/torn en Wild Shape</span></button>
+        <button class="po-chip${eleFury==='potent'?' on':''}" onclick="setEF('potent')">✨ Potent Spellcasting<br><span style="font-size:10px;font-weight:400">${T('clEFPotentDesc',fmod(mod(stats.wis)))}</span></button>
+        <button class="po-chip${eleFury==='primal'?' on':''}" onclick="setEF('primal')">🗡️ Primal Strike<br><span style="font-size:10px;font-weight:400">${T('clEFPrimalDesc')}</span></button>
       </div>
       ${lv>=15?`<div style="font-size:12px;color:var(--pd);margin-top:6px;background:var(--pl);padding:7px 9px;border-radius:6px">
-        <strong>Improved (Lv 15):</strong> ${eleFury==='potent'?'Rang dels cantrips Druid +300 ft (si rang ≥ 10 ft)':'Primal Strike fa +2d8 (millora des de 1d8)'}
+        ${eleFury==='potent'?T('clEFImpPotent'):T('clEFImpPrimal')}
       </div>`:''}
     </div>`;
   }
   // Wild Resurgence (lv5+)
   if(lv>=5){
     el.innerHTML+=`<div class="tr-sec">
-      <div class="tr-lbl">♻️ Wild Resurgence <span style="font-size:10px">(Lv 5)</span></div>
+      <div class="tr-lbl">${T('clWR')} <span style="font-size:10px">(Lv 5)</span></div>
       <div style="font-size:12px;color:var(--tx);line-height:1.6">
-        · Si no tens usos de Wild Shape: gasta un slot per recuperar-ne 1 (sense acció).<br>
-        · Gasta 1 ús de Wild Shape: recuperes un slot de Lv 1 (1/descans llarg).
+        ${T('clWRDesc1')}<br>
+        ${T('clWRDesc2')}
       </div>
     </div>`;
   }
   // Beast Spells (lv18+)
   if(lv>=18){
     el.innerHTML+=`<div class="tr-sec">
-      <div class="tr-lbl">🌟 Beast Spells <span style="font-size:10px">(Lv 18)</span></div>
-      <div style="font-size:12px;color:var(--tx)">Pots llançar encanteris mentre ets en forma de bestia (excepte els que consumeixen components de material cars).</div>
+      <div class="tr-lbl">${T('clBS')} <span style="font-size:10px">(Lv 18)</span></div>
+      <div style="font-size:12px;color:var(--tx)">${T('clBSDesc')}</div>
     </div>`;
   }
-  // Wild Shape uses info
+  // Class features
   el.innerHTML+=`<div class="tr-sec">
-    <div class="tr-lbl">📋 Característiques de classe</div>
+    <div class="tr-lbl">${T('clFeatures')}</div>
     <div style="font-size:12px;color:var(--tx);line-height:1.8">
-      <b>Wild Companion (Lv 2):</b> Gasta Wild Shape o slot per llançar Find Familiar (Fey, sense comp. material).<br>
-      ${lv>=20?`<b>Archdruid (Lv 20):</b> Evergreen Wild Shape · Nature Magician · Longevity<br>`:''}
+      ${T('clWC')}<br>
+      ${lv>=20?T('clArchdruid')+'<br>':''}
     </div>
   </div>`;
   // ── FEATS ──
   el.innerHTML+=`<div class="tr-sec">
-    <div class="tr-lbl">🏅 Feats actius</div>
-    <div style="font-size:11px;color:var(--os);margin-bottom:8px">Activa els feats que té el teu personatge. Els efectes s'apliquen automàticament als stats.</div>
+    <div class="tr-lbl">${T('clFeatsTitle')}</div>
+    <div style="font-size:11px;color:var(--os);margin-bottom:8px">${T('clFeatsDesc')}</div>
     <div class="feat-grid">
       ${FEATS_DR.map(f=>{
         const on=druidFeats.has(f.id);
@@ -2013,14 +2404,14 @@ function toggleDruidFeat(id){
   recalc(); // recalc aplica els efectes automàticament (HP, WIS, CON, etc.)
   renderClass();
   const f=FEATS_DR.find(x=>x.id===id);
-  if(f) showToast(`${druidFeats.has(id)?'✅':'❌'} Feat ${f.name} ${druidFeats.has(id)?'activat':'desactivat'}`);
+  if(f) showToast(druidFeats.has(id)?T('toastFeatOn',f.name):T('toastFeatOff',f.name));
 }
 
 // ── BUILDS ──
 function renderBuilds(){
   const el=g('builds-list'); el.innerHTML='';
   if(!builds.length){
-    el.innerHTML='<div class="empty-st"><div class="ei">💾</div>Cap personatge desat.</div>';
+    el.innerHTML=`<div class="empty-st"><div class="ei">💾</div>${T('buildsEmpty')}</div>`;
     return;
   }
   builds.forEach((b,i)=>{
@@ -2029,14 +2420,14 @@ function renderBuilds(){
       <div class="bc-top">
         <div class="bc-av">🌿</div>
         <div class="bc-inf">
-          <div class="bc-nm">${b.name||'Druida'}${act?'<span style="font-size:10px;background:var(--p);color:#fff;padding:2px 7px;border-radius:5px;font-weight:600">ACTIU</span>':''}</div>
-          <div class="bc-mt">Circle of the Moon · Lv ${b.lv||1} · ${new Date(b.ts).toLocaleDateString()}</div>
+          <div class="bc-nm">${b.name||T('druidDefault')}${act?`<span style="font-size:10px;background:var(--p);color:#fff;padding:2px 7px;border-radius:5px;font-weight:600">${T('buildsActive')}</span>`:''}</div>
+          <div class="bc-mt">Circle of the Moon · ${T('levelAbbr')} ${b.lv||1} · ${new Date(b.ts).toLocaleDateString()}</div>
         </div>
       </div>
       <div class="bc-act">
-        <button class="btn-sm btn-pr" onclick="loadBuild(${i})">Carregar</button>
-        <button class="btn-sm btn-ou" onclick="overwriteBuild(${i})">Sobreescriure</button>
-        <button class="btn-sm btn-dn" onclick="deleteBuild(${i})">Eliminar</button>
+        <button class="btn-sm btn-pr" onclick="loadBuild(${i})">${T('buildsLoad')}</button>
+        <button class="btn-sm btn-ou" onclick="overwriteBuild(${i})">${T('buildsOverwrite')}</button>
+        <button class="btn-sm btn-dn" onclick="deleteBuild(${i})">${T('buildsDelete')}</button>
       </div>
     </div>`;
   });
@@ -2064,13 +2455,13 @@ function overwriteBuild(i){
   renderBuilds();
 }
 function deleteBuild(i){
-  if(!confirm('Eliminar aquest personatge?')) return;
+  if(!confirm(T('confirmDelete'))) return;
   builds.splice(i,1);
   try{localStorage.setItem(SKB,JSON.stringify(builds));}catch(e){}
   renderBuilds();
 }
 function newBuild(){
-  if(!confirm('Crear un personatge en blanc? (El progrés actual es perd si no el deses.)')) return;
+  if(!confirm(T('confirmNew'))) return;
   localStorage.removeItem(SK);
   location.reload();
 }
@@ -2096,16 +2487,20 @@ function shareState(){
 function closeQR(){g('qr-ov').style.display='none';}
 function copyQR(){
   const url=g('qr-url').textContent;
-  navigator.clipboard?.writeText(url).then(()=>alert('URL copiada!'));
+  navigator.clipboard?.writeText(url).then(()=>alert(T('alertCopied')));
 }
 
 // ── INIT ──
 window.onload=function(){
   load();
   if(dark) document.body.classList.add('dark');
+  // Apply lang button state
+  ['en','ca','es'].forEach(x=>g('lb-'+x).classList.toggle('active',x===lang));
+  applyI18n();
   recalc();
   renderInventory();
   renderSlotsChar();
+  renderBuilds();
   switchTab(0);
 };
 </script>

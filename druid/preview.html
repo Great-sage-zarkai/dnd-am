@@ -252,7 +252,7 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
 .beast-card{display:flex;align-items:center;gap:10px;background:var(--sv);border-radius:9px;padding:10px 12px;margin-bottom:6px;cursor:pointer;border:1.5px solid transparent;transition:all .1s}
 .beast-card.avail:active{border-color:var(--p);background:var(--pl)}
 .beast-card.locked{opacity:.4;cursor:not-allowed}
-.beast-cr{font-size:11px;font-weight:700;min-width:34px;color:var(--pd)}
+.beast-cr{font-size:11px;font-weight:700;color:var(--pd);margin-left:4px}
 .beast-nm{font-size:13px;font-weight:600;flex:1}
 .beast-stats{font-size:11px;color:var(--os)}
 .beast-thp{font-size:11px;font-weight:700;color:var(--t)}
@@ -957,27 +957,29 @@ const DRUID_SPELLS=[
 // crVal: 0=CR0, 0.25=CR1/4, 0.5=CR1/2, 1=CR1, 2=CR2, 3=CR3, 4=CR4
 // fly:true = requires lv8+ (base Wild Shape fly unlock)
 const BEAST_FORMS=[
- {id:'rat',n:'Rat',cr:'0',crVal:0,hp:2,ac:10,spd:'20 ft',atk:'Bite +0, 1 Piercing',fly:false},
- {id:'spider',n:'Spider',cr:'0',crVal:0,hp:2,ac:12,spd:'20 ft / climb 20',atk:'Bite +2, 1 Piercing + poison (CON)',fly:false},
- {id:'cat',n:'Cat',cr:'0',crVal:0,hp:2,ac:12,spd:'40 ft / climb 30',atk:'Claws +0, 1 Slashing',fly:false},
- {id:'wolf',n:'Wolf',cr:'1/4',crVal:0.25,hp:11,ac:13,spd:'40 ft',atk:'Bite +4, 2d4+2 Piercing (Trip: STR save)',fly:false},
- {id:'boar',n:'Boar',cr:'1/4',crVal:0.25,hp:11,ac:11,spd:'40 ft',atk:'Tusk +3, 1d6+1 Piercing',fly:false},
- {id:'giant-spider',n:'Giant Spider',cr:'1/4',crVal:0.25,hp:26,ac:14,spd:'30 ft / climb 30',atk:'Bite +5, 1d8+3 + poison, Web (Restrained)',fly:false},
- {id:'giant-toad',n:'Giant Toad',cr:'1/4',crVal:0.25,hp:39,ac:11,spd:'20 ft / swim 40',atk:'Bite +4, 1d10+4 + grapple (swallow Small)',fly:false},
- {id:'panther',n:'Panther',cr:'1/2',crVal:0.5,hp:13,ac:12,spd:'50 ft / climb 40',atk:'Bite +4 1d6+2 / Claw +4 1d6+2 (Pounce)',fly:false},
- {id:'black-bear',n:'Black Bear',cr:'1/2',crVal:0.5,hp:19,ac:11,spd:'40 ft / climb 30',atk:'Bite +3 1d6+2 / Claws +3 2×1d6+2',fly:false},
- {id:'crocodile',n:'Crocodile',cr:'1/2',crVal:0.5,hp:19,ac:12,spd:'20 ft / swim 20',atk:'Bite +4, 1d10+2 + grapple (escape DC 12)',fly:false},
- {id:'brown-bear',n:'Brown Bear',cr:'1',crVal:1,hp:34,ac:11,spd:'40 ft / climb 30',atk:'Bite +5 1d8+4 / Claws +5 2×2d6+4',fly:false},
- {id:'giant-hyena',n:'Giant Hyena',cr:'1',crVal:1,hp:45,ac:12,spd:'50 ft',atk:'Bite +5, 2d6+3 Piercing (Rampage)',fly:false},
- {id:'lion',n:'Lion',cr:'1',crVal:1,hp:26,ac:12,spd:'50 ft',atk:'Bite +5 1d8+3 / Claws +5 2×1d6+3 (Pounce)',fly:false},
- {id:'tiger',n:'Tiger',cr:'1',crVal:1,hp:37,ac:12,spd:'40 ft',atk:'Bite +5 1d10+3 / Claws +5 2×1d6+3 (Pounce)',fly:false},
- {id:'giant-eagle',n:'Giant Eagle',cr:'1',crVal:1,hp:26,ac:13,spd:'10 ft / fly 80',atk:'Talons +5, 2×2d6+3 (Grab)',fly:true},
- {id:'giant-constrictor',n:'Giant Constrictor',cr:'2',crVal:2,hp:60,ac:12,spd:'30 ft / swim 30',atk:'Bite +6 3d6+4 / Constrict +6 2d8+4 (grapple)',fly:false},
- {id:'polar-bear',n:'Polar Bear',cr:'2',crVal:2,hp:42,ac:12,spd:'40 ft / swim 30',atk:'Bite +7 1d8+5 / Claws +7 2×2d6+5',fly:false},
- {id:'rhinoceros',n:'Rhinoceros',cr:'2',crVal:2,hp:45,ac:11,spd:'40 ft',atk:'Gore +7, 2d10+5 Piercing (Charge: +2d10)',fly:false},
- {id:'saber-toothed-tiger',n:'Saber-Toothed Tiger',cr:'2',crVal:2,hp:52,ac:12,spd:'40 ft',atk:'Bite +5 1d10+4 / Claws +5 2×1d6+4 (Pounce)',fly:false},
- {id:'killer-whale',n:'Killer Whale',cr:'3',crVal:3,hp:90,ac:12,spd:'swim 60',atk:'Bite +7, 5d6+5 Piercing',fly:false},
- {id:'elephant',n:'Elephant',cr:'4',crVal:4,hp:76,ac:12,spd:'40 ft',atk:'Gore +8 2d10+7 / Stomp +8 4d10+7 (prone)',fly:false},
+ {id:'rat',n:'Rat',cr:'0',crVal:0,hp:2,ac:10,spd:'20 ft',atk:'Bite +0, 1 Piercing',fly:false,icon:''},
+ {id:'spider',n:'Spider',cr:'0',crVal:0,hp:2,ac:12,spd:'20 ft / climb 20',atk:'Bite +2, 1 Piercing + poison (CON)',fly:false,icon:'spider.png'},
+ {id:'cat',n:'Cat',cr:'0',crVal:0,hp:2,ac:12,spd:'40 ft / climb 30',atk:'Claws +0, 1 Slashing',fly:false,icon:''},
+ {id:'wolf',n:'Wolf',cr:'1/4',crVal:0.25,hp:11,ac:13,spd:'40 ft',atk:'Bite +4, 2d4+2 Piercing (Trip: STR save)',fly:false,icon:'wolf.png'},
+ {id:'elk',n:'Elk',cr:'1/4',crVal:0.25,hp:13,ac:10,spd:'50 ft',atk:'Ram +3, 1d6+1 Bludg. / Hooves +5, 2d4+3 Bludg.',fly:false,icon:'elk.png'},
+ {id:'boar',n:'Boar',cr:'1/4',crVal:0.25,hp:11,ac:11,spd:'40 ft',atk:'Tusk +3, 1d6+1 Piercing',fly:false,icon:''},
+ {id:'giant-spider',n:'Giant Spider',cr:'1',crVal:1,hp:26,ac:14,spd:'30 ft / climb 30',atk:'Bite +5, 1d8+3 + poison / Web (Restrained, DC 12)',fly:false,icon:'spider.png'},
+ {id:'giant-toad',n:'Giant Toad',cr:'1/4',crVal:0.25,hp:39,ac:11,spd:'20 ft / swim 40',atk:'Bite +4, 1d10+4 + grapple (swallow Small)',fly:false,icon:''},
+ {id:'panther',n:'Panther',cr:'1/2',crVal:0.5,hp:13,ac:12,spd:'50 ft / climb 40',atk:'Bite +4 1d6+2 / Claw +4 1d6+2 (Pounce)',fly:false,icon:''},
+ {id:'black-bear',n:'Black Bear',cr:'1/2',crVal:0.5,hp:19,ac:11,spd:'40 ft / climb 30',atk:'Bite +3 1d6+2 / Claws +3 2×1d6+2',fly:false,icon:'bear.png'},
+ {id:'crocodile',n:'Crocodile',cr:'1/2',crVal:0.5,hp:19,ac:12,spd:'20 ft / swim 20',atk:'Bite +4, 1d10+2 + grapple (escape DC 12)',fly:false,icon:''},
+ {id:'brown-bear',n:'Brown Bear',cr:'1',crVal:1,hp:34,ac:11,spd:'40 ft / climb 30',atk:'Bite +5 1d8+4 / Claws +5 2×2d6+4',fly:false,icon:'bear.png'},
+ {id:'dire-wolf',n:'Dire Wolf',cr:'1',crVal:1,hp:37,ac:14,spd:'50 ft',atk:'Bite +5, 2d6+3 Piercing (Pack Tactics; Trip STR DC 13)',fly:false,icon:'wolf.png'},
+ {id:'giant-hyena',n:'Giant Hyena',cr:'1',crVal:1,hp:45,ac:12,spd:'50 ft',atk:'Bite +5, 2d6+3 Piercing (Rampage)',fly:false,icon:''},
+ {id:'lion',n:'Lion',cr:'1',crVal:1,hp:26,ac:12,spd:'50 ft',atk:'Bite +5 1d8+3 / Claws +5 2×1d6+3 (Pounce)',fly:false,icon:''},
+ {id:'tiger',n:'Tiger',cr:'1',crVal:1,hp:37,ac:12,spd:'40 ft',atk:'Bite +5 1d10+3 / Claws +5 2×1d6+3 (Pounce)',fly:false,icon:''},
+ {id:'giant-eagle',n:'Giant Eagle',cr:'1',crVal:1,hp:26,ac:13,spd:'10 ft / fly 80',atk:'Talons +5, 2×2d6+3 (Grab)',fly:true,icon:''},
+ {id:'giant-constrictor',n:'Giant Constrictor',cr:'2',crVal:2,hp:60,ac:12,spd:'30 ft / swim 30',atk:'Bite +6 3d6+4 / Constrict +6 2d8+4 (grapple)',fly:false,icon:''},
+ {id:'polar-bear',n:'Polar Bear',cr:'2',crVal:2,hp:42,ac:12,spd:'40 ft / swim 30',atk:'Bite +7 1d8+5 / Claws +7 2×2d6+5',fly:false,icon:'bear.png'},
+ {id:'rhinoceros',n:'Rhinoceros',cr:'2',crVal:2,hp:45,ac:11,spd:'40 ft',atk:'Gore +7, 2d10+5 Piercing (Charge: +2d10)',fly:false,icon:''},
+ {id:'saber-toothed-tiger',n:'Saber-Toothed Tiger',cr:'2',crVal:2,hp:52,ac:12,spd:'40 ft',atk:'Bite +5 1d10+4 / Claws +5 2×1d6+4 (Pounce)',fly:false,icon:''},
+ {id:'killer-whale',n:'Killer Whale',cr:'3',crVal:3,hp:90,ac:12,spd:'swim 60',atk:'Bite +7, 5d6+5 Piercing',fly:false,icon:''},
+ {id:'elephant',n:'Elephant',cr:'4',crVal:4,hp:76,ac:12,spd:'40 ft',atk:'Gore +8 2d10+7 / Stomp +8 4d10+7 (prone)',fly:false,icon:''},
 ];
 
 // Slot table [lv0..lv20][slot1..slot9]
@@ -1313,10 +1315,12 @@ function renderTracker(){
   const usesMax=wsMaxUses(lv);
   const pips=Array.from({length:usesMax},(_,i)=>`<div class="ws-pip ${i<wsUses?'f':'e'}" onclick="toggleWsUse(${i})"></div>`).join('');
   if(wsActive){
-    const f=BEAST_FORMS.find(x=>x.id===wsActive)||{n:'Forma',cr:'?',hp:10,ac:10,spd:'30 ft',atk:'—'};
+    const f=BEAST_FORMS.find(x=>x.id===wsActive)||{n:'Forma',cr:'?',hp:10,ac:10,spd:'30 ft',atk:'—',icon:''};
+    const fIcon=f.icon?`<img src="../icons/${f.icon}" style="width:28px;height:28px;object-fit:contain;border-radius:6px;background:var(--pl);padding:3px;margin-right:6px" onerror="this.style.display='none'">`:'<span style="font-size:22px;margin-right:6px">🐾</span>';
     wsHtml=`<div class="ws-active">
-      <div style="display:flex;align-items:baseline;gap:8px">
-        <span class="ws-form-name">🐻 ${f.n}</span>
+      <div style="display:flex;align-items:center;gap:4px">
+        ${fIcon}
+        <span class="ws-form-name">${f.n}</span>
         <span style="font-size:11px;color:var(--td)">CR ${f.cr}</span>
       </div>
       <div class="ws-stats">❤️ ${f.hp} HP · 🛡️ ${f.ac} AC · ⚡ ${f.spd}<br>⚔️ ${f.atk}</div>
@@ -1433,10 +1437,11 @@ function openWSModal(){
     const crOk=f.crVal<=mc;
     const avail=flyOk&&crOk;
     const thp=wsTHP(), ac=Math.max(f.ac,13+mod(stats.wis));
+    const bIcon=f.icon?`<img src="../icons/${f.icon}" style="width:32px;height:32px;object-fit:contain;border-radius:8px;background:var(--pl);padding:4px;flex-shrink:0" onerror="this.style.display='none'">`:`<span style="font-size:24px;width:32px;text-align:center;flex-shrink:0">${f.fly?'🦅':'🐾'}</span>`;
     el.innerHTML+=`<div class="beast-card ${avail?'avail':'locked'}" onclick="${avail?`enterWS('${f.id}')`:''}" title="${!avail?(!crOk?'CR massa alt (max '+mc+')':'Necessites Lv 8+ per volar'):''}">
-      <span class="beast-cr">CR ${f.cr}</span>
-      <div style="flex:1">
-        <div class="beast-nm">${f.fly?'🦅 ':''} ${f.n}</div>
+      ${bIcon}
+      <div style="flex:1;min-width:0">
+        <div class="beast-nm">${f.n} <span class="beast-cr">CR ${f.cr}</span></div>
         <div class="beast-stats">❤️ ${f.hp} HP · 🛡️ ${ac} AC · ⚡ ${f.spd}</div>
         <div class="beast-stats">⚔️ ${f.atk}</div>
       </div>
@@ -1525,22 +1530,49 @@ function spellCard(s,locked,explore){
   const isExp=expanded.has(s.id);
   const ap=getAP();
   const isCircle=ap.has(s.id);
-  let cardClass=isActive?'conca':isCircle?'circle':locked||isCircle?'circle':'';
-  if(!locked&&!isCircle&&prepared.has(s.id)&&s.level>0) cardClass='sel-p';
-  if(prepared.has(s.id)&&s.level===0) cardClass='sel-p';
 
+  // Card color class
+  let cardClass='';
+  if(explore){
+    cardClass=isCircle||locked?'circle':(prepared.has(s.id)?'sel-p':'');
+  } else {
+    cardClass=isActive?'conca':isCircle||locked?'circle':(prepared.has(s.id)?'sel-p':'');
+  }
+
+  // Checkbox
   const cbHtml=explore
     ? `<div class="sp-cb ${locked?'locked':(prepared.has(s.id)?'ckp':'')}" onclick="${locked?'':(`togglePrep('${s.id}')`)}">${locked?'🌙':(prepared.has(s.id)?'<span class="ck">✓</span>':'')}</div>`
     : `<div class="sp-cb locked">${isCircle?'🌙':'✓'}</div>`;
 
-  const lvLabel=s.level===0?'Cantrip':`Lv ${s.level}`;
+  // Badges
   const concBadge=isConc?'<span class="badge br" style="font-size:9px">CONC</span>':'';
   const saveBadge=s.save?`<span class="badge bg" style="font-size:9px">${s.save}</span>`:'';
   const castBadge=s.cast==='B'?'<span class="badge ba" style="font-size:9px">BONUS</span>':s.cast==='R'?'<span class="badge br" style="font-size:9px">REACT</span>':s.cast==='rit'?'<span class="badge bg" style="font-size:9px">RITUAL</span>':'';
+  const lvLabel=s.level===0?'Cantrip':`Lv ${s.level}`;
   const meta=`${s.school} · ${s.range} · ${s.dur}`;
 
+  if(explore){
+    // ── BROWSE & ADD: compact card, expandable description (no cast buttons)
+    const descBody=isExp?`<div class="sp-desc">${s.desc}</div>${s.tip?`<div class="tip-note"><span style="font-size:13px">💡</span><span class="tip-tx">${s.tip}</span></div>`:''}`:'';
+    return `<div class="card ${cardClass}" id="card-${s.id}">
+      <div class="sp-row-c">
+        ${cbHtml}
+        <div class="sp-inf">
+          <div class="sp-nr">
+            <span class="sp-nm">${s.name}</span>
+            ${concBadge}${saveBadge}${castBadge}
+          </div>
+          <div class="sp-mt">${meta}</div>
+        </div>
+        <button class="exp-btn" onclick="toggleExp('${s.id}')">${isExp?'▲':'▼'}</button>
+      </div>
+      ${descBody}
+    </div>`;
+  }
+
+  // ── MY SPELLS: full card with cast buttons
   let castPanel='';
-  if(!explore&&s.level>0){
+  if(s.level>0){
     const tbl=SLOT_TABLE[Math.min(lv,20)]||[];
     let btns='';
     for(let i=s.level-1;i<9;i++){
@@ -1554,8 +1586,7 @@ function spellCard(s,locked,explore){
       :`<button class="cast-spb" onclick="castConc('${s.name}')">Concentrar-se</button><span class="cast-hint">Requereix concentració</span>`}
     </div>`:'';
     castPanel=`<div class="cast-pan"><div class="cast-lbl">Lançar amb slot:</div><div class="cast-btns">${btns||'<span style="font-size:11px;color:var(--os)">Sense slots disponibles</span>'}</div>${concRow}</div>`;
-  }
-  if(!explore&&s.level===0){
+  } else {
     castPanel=`<div class="cast-pan" style="padding:6px 9px"><span style="font-size:11px;color:var(--td)">✦ Cantrip — sense límit d'usos</span></div>`;
   }
 

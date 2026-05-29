@@ -115,13 +115,17 @@ textarea{resize:vertical;min-height:90px}
 .dval-edit:focus{outline:none;border-bottom-color:var(--p)}
 .hp-reset{font-size:10px;color:var(--os);background:none;border:none;cursor:pointer;padding:2px 4px;border-radius:4px}
 .hp-reset:active{color:var(--p)}
-.spip-row{display:flex;flex-wrap:wrap;gap:6px}
-.spip-grp{display:flex;align-items:center;gap:4px;border-radius:7px;padding:5px 9px;cursor:pointer;user-select:none;transition:background .2s}
-.spip-grp.hs{background:var(--tl)}
-.spip-grp.ns{background:var(--sv)}
-.spip-lv{font-size:11px;font-weight:700}
-.spip-grp.hs .spip-lv{color:var(--td)}
-.spip-grp.ns .spip-lv{color:var(--os)}
+.spip-row{display:flex;flex-direction:column;gap:6px}
+.slot-row{display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:8px;background:var(--sv);transition:background .2s}
+.slot-row.hs{background:var(--tl)}
+.slot-lv-lbl{font-size:11px;font-weight:700;min-width:26px;color:var(--os)}
+.slot-row.hs .slot-lv-lbl{color:var(--td)}
+.slot-pips{display:flex;gap:3px;flex:1}
+.slot-adj{border-radius:6px;border:1.5px solid var(--ol);background:var(--sf);font-size:13px;font-weight:700;cursor:pointer;padding:2px 9px;color:var(--os);transition:all .1s;line-height:1.4}
+.slot-adj:not([disabled]):hover{border-color:var(--p);color:var(--p)}
+.slot-adj[disabled]{opacity:.3;cursor:default}
+.slot-count{font-size:11px;color:var(--os);min-width:28px;text-align:right}
+.slot-row.hs .slot-count{color:var(--td);font-weight:700}
 .pip{width:9px;height:9px;border-radius:50%;display:inline-block;transition:background .2s}
 .pip.f{background:var(--t)}
 .pip.e{background:var(--ol)}
@@ -147,6 +151,18 @@ textarea{resize:vertical;min-height:90px}
 .ws-feat-row{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
 .ws-feat-chip{background:var(--al);border:1px solid var(--a);border-radius:6px;padding:3px 8px;font-size:10px;color:var(--ad);font-weight:600;cursor:pointer}
 .ws-feat-chip.exp{background:var(--ad);color:#fff}
+/* Feat boost tag (inline in stat values) */
+.feat-boost-tag{display:inline-block;background:var(--al);color:var(--ad);border:1px solid var(--a);border-radius:4px;padding:0 4px;font-size:9px;font-weight:700;margin-left:3px;vertical-align:middle}
+/* Feat toggle cards */
+.feat-grid{display:flex;flex-direction:column;gap:6px}
+.feat-toggle-card{background:var(--sv);border:1.5px solid var(--ol);border-radius:8px;padding:9px 12px;cursor:pointer;transition:all .15s}
+.feat-toggle-card.on{background:var(--al);border-color:var(--a)}
+.feat-tc-head{display:flex;align-items:center;gap:7px;margin-bottom:4px}
+.feat-tc-icon{font-size:16px;flex-shrink:0}
+.feat-tc-name{font-size:13px;font-weight:700;color:var(--tx);flex:1}
+.feat-tc-tag{background:var(--a);color:#fff;border-radius:10px;padding:2px 8px;font-size:10px;font-weight:700;flex-shrink:0}
+.feat-tc-desc{font-size:11px;color:var(--os);line-height:1.4}
+.feat-toggle-card.on .feat-tc-desc{color:var(--ad)}
 .ws-btns{display:flex;gap:8px;margin-top:8px}
 .btn-ws{flex:1;padding:10px 8px;border-radius:9px;border:1.5px solid var(--p);background:var(--pl);color:var(--pd);font-size:12px;font-weight:600;cursor:pointer;transition:all .1s}
 .btn-ws:active{background:var(--p);color:#fff}
@@ -968,22 +984,22 @@ const DRUID_SPELLS=[
 // crVal: 0=CR0, 0.25=CR1/4, 0.5=CR1/2, 1=CR1, 2=CR2, 3=CR3, 4=CR4
 // fly:true = requires lv8+ (base Wild Shape fly unlock)
 const BEAST_FORMS=[
- {id:'rat',n:'Rat',cr:'0',crVal:0,hp:2,ac:10,spd:'20 ft',atk:'Bite +0, 1 Piercing',fly:false,icon:'',features:[]},
+ {id:'rat',n:'Rat',cr:'0',crVal:0,hp:2,ac:10,spd:'20 ft',atk:'Bite +0, 1 Piercing',fly:false,icon:'rat.png',features:[]},
  {id:'spider',n:'Spider',cr:'0',crVal:0,hp:2,ac:12,spd:'20 ft / climb 20',atk:'Bite +2, 1 Piercing + poison (CON)',fly:false,icon:'spider.png',features:['Web Sense: detecta vibracions a la teranyina fins 30 ft']},
- {id:'cat',n:'Cat',cr:'0',crVal:0,hp:2,ac:12,spd:'40 ft / climb 30',atk:'Claws +0, 1 Slashing',fly:false,icon:'',features:['Keen Smell: Avantatge en Percepció (olfacte)']},
+ {id:'cat',n:'Cat',cr:'0',crVal:0,hp:2,ac:12,spd:'40 ft / climb 30',atk:'Claws +0, 1 Slashing',fly:false,icon:'cat.png',features:['Keen Smell: Avantatge en Percepció (olfacte)']},
  {id:'wolf',n:'Wolf',cr:'1/4',crVal:0.25,hp:11,ac:13,spd:'40 ft',atk:'Bite +4, 2d4+2 Piercing (Trip: STR save)',fly:false,icon:'wolf.png',features:['Pack Tactics: Avantatge si un aliat és adjacent a l\'objectiu','Keen Hearing & Smell']},
  {id:'elk',n:'Elk',cr:'1/4',crVal:0.25,hp:13,ac:10,spd:'50 ft',atk:'Ram +3, 1d6+1 Bludg. / Hooves +5, 2d4+3 Bludg.',fly:false,icon:'elk.png',features:['Charge: mou 20+ ft en línia recta → Ram +2d6 extra i STR DC 11 o Prone']},
- {id:'boar',n:'Boar',cr:'1/4',crVal:0.25,hp:11,ac:11,spd:'40 ft',atk:'Tusk +3, 1d6+1 Piercing',fly:false,icon:'',features:['Charge: mou 20+ ft → Tusk +1d6 extra i STR DC 11 o Prone','Relentless: si arriba a 0 HP per primer cop, queda a 1 HP (1/Long Rest)']},
+ {id:'boar',n:'Boar',cr:'1/4',crVal:0.25,hp:11,ac:11,spd:'40 ft',atk:'Tusk +3, 1d6+1 Piercing',fly:false,icon:'boar.png',features:['Charge: mou 20+ ft → Tusk +1d6 extra i STR DC 11 o Prone','Relentless: si arriba a 0 HP per primer cop, queda a 1 HP (1/Long Rest)']},
  {id:'giant-spider',n:'Giant Spider',cr:'1',crVal:1,hp:26,ac:14,spd:'30 ft / climb 30',atk:'Bite +5, 1d8+3 + poison / Web (Restrained, DC 12)',fly:false,icon:'spider.png',features:['Web Sense: detecta vibracions a teranyina fins 60 ft','Web Walker: no quedes atrapat per teranyines','Web (BA): llança xarxa DC 12 STR o Restrained (escape DC 12)']},
- {id:'giant-toad',n:'Giant Toad',cr:'1/4',crVal:0.25,hp:39,ac:11,spd:'20 ft / swim 40',atk:'Bite +4, 1d10+4 + grapple (swallow Small)',fly:false,icon:'',features:['Standing Leap: salta 20 ft llarg / 10 ft alt','Swallow: criatura Tiny grappled → tragada, Blinded+Restrained, 2d6 àcid/torn']},
- {id:'panther',n:'Panther',cr:'1/2',crVal:0.5,hp:13,ac:12,spd:'50 ft / climb 40',atk:'Bite +4 1d6+2 / Claw +4 1d6+2 (Pounce)',fly:false,icon:'',features:['Pounce: si mous 20+ ft i ataques → STR DC 13 o Prone + atac de Garra com BA','Keen Smell: Avantatge en Percepció (olfacte)']},
+ {id:'giant-toad',n:'Giant Toad',cr:'1/4',crVal:0.25,hp:39,ac:11,spd:'20 ft / swim 40',atk:'Bite +4, 1d10+4 + grapple (swallow Small)',fly:false,icon:'frog.png',features:['Standing Leap: salta 20 ft llarg / 10 ft alt','Swallow: criatura Tiny grappled → tragada, Blinded+Restrained, 2d6 àcid/torn']},
+ {id:'panther',n:'Panther',cr:'1/2',crVal:0.5,hp:13,ac:12,spd:'50 ft / climb 40',atk:'Bite +4 1d6+2 / Claw +4 1d6+2 (Pounce)',fly:false,icon:'panther.png',features:['Pounce: si mous 20+ ft i ataques → STR DC 13 o Prone + atac de Garra com BA','Keen Smell: Avantatge en Percepció (olfacte)']},
  {id:'black-bear',n:'Black Bear',cr:'1/2',crVal:0.5,hp:19,ac:11,spd:'40 ft / climb 30',atk:'Bite +3 1d6+2 / Claws +3 2×1d6+2',fly:false,icon:'bear.png',features:['Keen Smell: Avantatge en Percepció (olfacte)','Multiattack: Claws × 2 + Bite']},
- {id:'crocodile',n:'Crocodile',cr:'1/2',crVal:0.5,hp:19,ac:12,spd:'20 ft / swim 20',atk:'Bite +4, 1d10+2 + grapple (escape DC 12)',fly:false,icon:'',features:['Hold Breath: aguanta la respiració fins 15 min','Grapple on hit: DC 12 STR per escapar']},
+ {id:'crocodile',n:'Crocodile',cr:'1/2',crVal:0.5,hp:19,ac:12,spd:'20 ft / swim 20',atk:'Bite +4, 1d10+2 + grapple (escape DC 12)',fly:false,icon:'crocodile.png',features:['Hold Breath: aguanta la respiració fins 15 min','Grapple on hit: DC 12 STR per escapar']},
  {id:'brown-bear',n:'Brown Bear',cr:'1',crVal:1,hp:34,ac:11,spd:'40 ft / climb 30',atk:'Bite +5 1d8+4 / Claws +5 2×2d6+4',fly:false,icon:'bear.png',features:['Keen Smell: Avantatge en Percepció (olfacte)','Multiattack: Claws × 2 (o Claws + Bite)']},
  {id:'dire-wolf',n:'Dire Wolf',cr:'1',crVal:1,hp:37,ac:14,spd:'50 ft',atk:'Bite +5, 2d6+3 Piercing (Pack Tactics; Trip STR DC 13)',fly:false,icon:'wolf.png',features:['Pack Tactics: Avantatge si un aliat és adjacent a l\'objectiu','Keen Hearing & Smell: Avantatge en Percepció','Trip on Bite: STR DC 13 o Prone']},
- {id:'giant-hyena',n:'Giant Hyena',cr:'1',crVal:1,hp:45,ac:12,spd:'50 ft',atk:'Bite +5, 2d6+3 Piercing (Rampage)',fly:false,icon:'',features:['Rampage: quan mates una criatura, mou mig Speed i fes un Bite com BA']},
- {id:'lion',n:'Lion',cr:'1',crVal:1,hp:26,ac:12,spd:'50 ft',atk:'Bite +5 1d8+3 / Claws +5 2×1d6+3 (Pounce)',fly:false,icon:'',features:['Pounce: mou 20+ ft → STR DC 13 o Prone + Bite BA','Pack Tactics: Avantatge si aliat adjacent','Keen Smell']},
- {id:'tiger',n:'Tiger',cr:'1',crVal:1,hp:37,ac:12,spd:'40 ft',atk:'Bite +5 1d10+3 / Claws +5 2×1d6+3 (Pounce)',fly:false,icon:'',features:['Pounce: mou 20+ ft → STR DC 13 o Prone + Bite BA','Keen Smell: Avantatge Percepció']},
+ {id:'giant-hyena',n:'Giant Hyena',cr:'1',crVal:1,hp:45,ac:12,spd:'50 ft',atk:'Bite +5, 2d6+3 Piercing (Rampage)',fly:false,icon:'hyena.png',features:['Rampage: quan mates una criatura, mou mig Speed i fes un Bite com BA']},
+ {id:'lion',n:'Lion',cr:'1',crVal:1,hp:26,ac:12,spd:'50 ft',atk:'Bite +5 1d8+3 / Claws +5 2×1d6+3 (Pounce)',fly:false,icon:'lion.png',features:['Pounce: mou 20+ ft → STR DC 13 o Prone + Bite BA','Pack Tactics: Avantatge si aliat adjacent','Keen Smell']},
+ {id:'tiger',n:'Tiger',cr:'1',crVal:1,hp:37,ac:12,spd:'40 ft',atk:'Bite +5 1d10+3 / Claws +5 2×1d6+3 (Pounce)',fly:false,icon:'tiger.png',features:['Pounce: mou 20+ ft → STR DC 13 o Prone + Bite BA','Keen Smell: Avantatge Percepció']},
  {id:'giant-eagle',n:'Giant Eagle',cr:'1',crVal:1,hp:26,ac:13,spd:'10 ft / fly 80',atk:'Talons +5, 2×2d6+3 (Grab)',fly:true,icon:'',features:['Keen Sight: Avantatge en Percepció (vista)','Flyby: no provoca Opportunity Attacks quan vola sobre enemics']},
  {id:'giant-constrictor',n:'Giant Constrictor',cr:'2',crVal:2,hp:60,ac:12,spd:'30 ft / swim 30',atk:'Bite +6 3d6+4 / Constrict +6 2d8+4 (grapple)',fly:false,icon:'',features:['Constrict: DC 16 STR o Grappled+Restrained (2d8+4 dany/torn automàtic)']},
  {id:'polar-bear',n:'Polar Bear',cr:'2',crVal:2,hp:42,ac:12,spd:'40 ft / swim 30',atk:'Bite +7 1d8+5 / Claws +7 2×2d6+5',fly:false,icon:'bear.png',features:['Keen Smell: Avantatge en Percepció (olfacte)','Multiattack: Claws × 2 + Bite']},
@@ -1023,6 +1039,39 @@ const PREP_TABLE=[0,4,5,6,7,9,10,11,12,14,15,16,16,17,17,18,18,19,19,20,21];
 function wsMaxUses(lv){return lv>=17?4:lv>=9?3:2;}
 
 // ══════════════════════════════════════════════
+//  FEATS (druida) — efectes automàtics sobre stats
+// ══════════════════════════════════════════════
+const FEATS_DR=[
+  {id:'tough',name:'Tough',
+   effect:'hp',icon:'⚡',tag:'+2 HP/Lv',
+   desc:'Afegeix +2 HP màxim per nivell. Simple i molt eficient per Moon Druid.'},
+  {id:'war-caster',name:'War Caster',
+   effect:'conc',icon:'🌀',tag:'Adv. CON (conc)',
+   desc:'Avantatge en tirades CON per mantenir concentració. Pots llançar encanteris com a Reacció per Opportunity Attacks. Essencial per Moon Druid.'},
+  {id:'resilient-con',name:'Resilient (CON)',
+   effect:'con',icon:'🛡️',tag:'+1 CON + Prof CON',
+   desc:'+1 CON (millora HP i concentració). Afegeix Proficiency a tirades CON (inclòs concentració). Fins Lv8 no tens CON save per defecte.'},
+  {id:'asi-wis',name:'ASI +2 WIS',
+   effect:'wis',icon:'✨',tag:'+2 WIS',
+   desc:'+2 WIS. Millora DC d\'encanteri, tirada d\'atac d\'encanteri, i spells preparats. Molt recomanat.'},
+  {id:'asi-con',name:'ASI +2 CON',
+   effect:'con2',icon:'❤️',tag:'+2 CON',
+   desc:'+2 CON. Millora HP màxim i tirades de concentració (CON save).'},
+  {id:'alert',name:'Alert',
+   effect:'init',icon:'👁️',tag:'+2 Init',
+   desc:'+2 a la tirada d\'iniciativa. No pots ser sorprès mentre estàs conscient.'},
+  {id:'mobile',name:'Mobile',
+   effect:'speed',icon:'💨',tag:'+10 ft Speed',
+   desc:'+10 ft de velocitat. Dash no provoca Opportunity Attacks de criatures que hagis atacat. Útil en Wild Shape.'},
+  {id:'sentinel',name:'Sentinel',
+   effect:'reaction',icon:'⚔️',tag:'Reacció d\'atac',
+   desc:'Reacció: quan una criatura dins 5 ft ataca un aliat, pots atacar-la. Si impactes, la seva Speed → 0. No provoca Opp. Attacks si Disengage.'},
+  {id:'elemental-adept',name:'Elemental Adept',
+   effect:'elem',icon:'🔥',tag:'Ignora resistència',
+   desc:'Tria un element (Foc, Llamp, Tro, Àcid, Fred). Ignores resistència a aquest element. 1s en daus de dany compten com 2s.'},
+];
+
+// ══════════════════════════════════════════════
 //  PART 4: APP LOGIC
 // ══════════════════════════════════════════════
 const SK='dnd_dr', SKB='dnd_dr_builds';
@@ -1051,6 +1100,19 @@ let inventory=[];
 let profSaves=new Set(['int','wis']);
 let profSkills=new Set(['animal-handling','nature','perception','survival']);
 let curTab=0;
+let druidFeats=new Set(); // active feat ids
+
+// ── FEAT BONUS HELPERS ──
+function featBonusWIS(){return druidFeats.has('asi-wis')?2:0;}
+function featBonusCON(){
+  let b=0;
+  if(druidFeats.has('resilient-con'))b+=1;
+  if(druidFeats.has('asi-con'))b+=2;
+  return b;
+}
+function featBoostTag(tags){
+  return tags.length?`<span class="feat-boost-tag">⚡ ${tags.join(' · ')}</span>`:'';
+}
 
 // always-prepared: Speak with Animals always (Druidic), plus Circle spells by level
 function getAP(){
@@ -1065,18 +1127,28 @@ function getAP(){
 
 function maxHp(){
   if(maxHpMan>0) return maxHpMan;
-  return (8+mod(stats.con)) + (lv-1)*(5+mod(stats.con));
+  const effCon=Math.min(20,stats.con+featBonusCON());
+  const conMod=mod(effCon);
+  let hp=(8+conMod)+(lv-1)*(5+conMod);
+  if(druidFeats.has('tough')) hp+=2*lv;
+  return hp;
 }
 function maxCR(){
   if(lv<3) return 0.25;
   return Math.floor(lv/3);
 }
 function wsTHP(){return lv*3;}
+// Max spell level available at current druid level (based on slot table)
+function maxSpellLevel(){
+  const tbl=SLOT_TABLE[Math.min(lv,20)]||[];
+  for(let i=8;i>=0;i--) if(tbl[i]>0) return i+1;
+  return 1;
+}
 
 // ── SAVE / LOAD ──
 function getState(){
   return{lv,stats,curHp,maxHpMan,slots,wsUses,wsActive,wsCurTHP,wsBeastCurHp,
-    prepared:[...prepared],concSpell,primalOrder,eleFury,
+    prepared:[...prepared],concSpell,primalOrder,eleFury,druidFeats:[...druidFeats],
     expanded:[...expanded],dark,inventory,
     profSaves:[...profSaves],profSkills:[...profSkills],
     name:g('c-name').value,species:g('c-species').value,
@@ -1095,6 +1167,7 @@ function setState(s){
   concSpell=s.concSpell||null;
   primalOrder=s.primalOrder||'magician';
   eleFury=s.eleFury||'potent';
+  druidFeats=new Set(s.druidFeats||[]);
   expanded=new Set(s.expanded||[]);
   dark=s.dark||false;
   inventory=s.inventory||[];
@@ -1126,17 +1199,22 @@ function recalc(){
     con:+g('s-con').value||10, int:+g('s-int').value||10,
     wis:+g('s-wis').value||17, cha:+g('s-cha').value||10
   };
+  const effWIS=Math.min(20,stats.wis+featBonusWIS());
+  const effCON=Math.min(20,stats.con+featBonusCON());
+  const wisBoost=featBonusWIS()>0?` <span class="feat-boost-tag">⚡+${featBonusWIS()}</span>`:'';
+  const conBoost=featBonusCON()>0?` <span class="feat-boost-tag">⚡+${featBonusCON()}</span>`:'';
+  const hpBoost=(druidFeats.has('tough')||featBonusCON()>0)?` <span class="feat-boost-tag">⚡feat</span>`:'';
   g('m-str').textContent=fmod(mod(stats.str));
   g('m-dex').textContent=fmod(mod(stats.dex));
-  g('m-con').textContent=fmod(mod(stats.con));
+  g('m-con').innerHTML=fmod(mod(effCON))+conBoost;
   g('m-int').textContent=fmod(mod(stats.int));
-  g('m-wis').textContent=fmod(mod(stats.wis));
+  g('m-wis').innerHTML=fmod(mod(effWIS))+wisBoost;
   g('m-cha').textContent=fmod(mod(stats.cha));
   const p=prof(lv), mhp=maxHp();
   g('d-prof').textContent=fmod(p);
   g('d-prof-sub').textContent=lv<5?'Nivells 1–4':lv<9?'Nivells 5–8':lv<13?'Nivells 9–12':lv<17?'Nivells 13–16':'Nivells 17–20';
-  g('d-dc').textContent=8+p+mod(stats.wis);
-  g('d-atk').textContent=fmod(p+mod(stats.wis));
+  g('d-dc').innerHTML=(8+p+mod(effWIS))+wisBoost;
+  g('d-atk').innerHTML=fmod(p+mod(effWIS))+wisBoost;
   const ac=10+mod(stats.dex);
   g('d-ac').textContent=ac;
   g('d-ac-sub').textContent='10 + DEX mod ('+(primalOrder==='warden'?'Warden: medium armor':'Leather/Unarmored')+')';
@@ -1318,7 +1396,7 @@ function renderTracker(){
     <div class="conc-dot"></div>
     <div class="conc-inf">
       <div class="conc-sp">🌀 Concentrant-se: ${concSpell}</div>
-      <div class="conc-rn">Perd concentració si prens dany i falles CON DC ${Math.max(10,Math.floor(lastDmg/2)||10)}</div>
+      <div class="conc-rn">CON DC ${Math.max(10,Math.floor(lastDmg/2)||10)} per mantenir concentració${druidFeats.has('war-caster')?' <span class="feat-boost-tag">⚡Adv. (War Caster)</span>':druidFeats.has('resilient-con')?' <span class="feat-boost-tag">⚡Prof CON (Resilient)</span>':''}</div>
     </div>
     <button style="background:none;border:none;cursor:pointer;font-size:15px" onclick="concSpell=null;renderTracker();save()">✕</button>
   </div>`:'';
@@ -1549,20 +1627,33 @@ function renderSlotPips(){
     const max=tbl[i]; if(!max) continue;
     const cur=slots[i]||0;
     const hs=cur>0;
-    const pips=Array.from({length:max},(_,j)=>`<span class="pip ${j<cur?'f':'e'}"></span>`).join('');
-    html+=`<div class="spip-grp ${hs?'hs':'ns'}" onclick="useSlot(${i})" title="Click: gastar slot | Right: recuperar">
-      <span class="spip-lv">Nv${i+1}</span>${pips}
+    const pips=Array.from({length:max},(_,j)=>
+      `<span class="pip ${j<cur?'f':'e'}" onclick="clickSlotPip(${i},${j})"></span>`
+    ).join('');
+    html+=`<div class="slot-row ${hs?'hs':''}">
+      <span class="slot-lv-lbl">Nv${i+1}</span>
+      <button class="slot-adj" onclick="adjustSlot(${i},-1)" ${cur<=0?'disabled':''}>−</button>
+      <div class="slot-pips">${pips}</div>
+      <button class="slot-adj" onclick="adjustSlot(${i},+1)" ${cur>=max?'disabled':''}>+</button>
+      <span class="slot-count">${cur}/${max}</span>
     </div>`;
   }
   return html+'</div>';
 }
-function useSlot(i){
-  if(slots[i]>0){slots[i]--;} else {
-    const max=(SLOT_TABLE[Math.min(lv,20)]||[])[i]||0;
-    if(slots[i]<max) slots[i]++;
-  }
-  renderTracker(); save();
+function adjustSlot(i,d){
+  const max=(SLOT_TABLE[Math.min(lv,20)]||[])[i]||0;
+  slots[i]=clamp((slots[i]||0)+d,0,max);
+  renderTracker(); if(spTab===0) renderSpells(); save();
 }
+function clickSlotPip(slotIdx,pipIdx){
+  // Click pip: if pip is filled → spend down to that pip; if empty → recover to that pip+1
+  const cur=slots[slotIdx]||0;
+  slots[slotIdx]=pipIdx<cur?pipIdx:pipIdx+1;
+  const max=(SLOT_TABLE[Math.min(lv,20)]||[])[slotIdx]||0;
+  slots[slotIdx]=clamp(slots[slotIdx],0,max);
+  renderTracker(); if(spTab===0) renderSpells(); save();
+}
+function useSlot(i){ adjustSlot(i,-1); }
 
 // ── WILD SHAPE ──
 function openWSModal(){
@@ -1804,16 +1895,16 @@ function renderExplore(q){
   const el=g('explore-list'); el.innerHTML='';
   q=(q||'').toLowerCase();
   const ap=getAP();
-  const groups=[-1,0,1,2,3,4,5,6,7,8,9];
-  const levelNames=['','Cantrip','Nivell 1','Nivell 2','Nivell 3','Nivell 4','Nivell 5','Nivell 6','Nivell 7','Nivell 8','Nivell 9'];
-  const groupLabels=['Cantrips','Cantrips','Nv 1','Nv 2','Nv 3','Nv 4','Nv 5','Nv 6','Nv 7','Nv 8','Nv 9'];
+  const maxSL=maxSpellLevel(); // only show spells up to this level
   [0,1,2,3,4,5,6,7,8,9].forEach(lev=>{
+    // Filter: level 0 always shown; leveled spells only up to maxSpellLevel
+    if(lev>0&&lev>maxSL) return;
     let spells=DRUID_SPELLS.filter(s=>s.level===lev);
     if(q) spells=spells.filter(s=>s.name.toLowerCase().includes(q)||s.desc.toLowerCase().includes(q)||s.school.toLowerCase().includes(q));
     if(!spells.length) return;
     const label=lev===0?'Cantrips':`Nivell ${lev}`;
-    const apCount=spells.filter(s=>ap.has(s.id)).length;
-    el.innerHTML+=`<div class="gh"><span class="badge ${lev===0?'bg':'bt'}">${label}</span>${lev===0?'':(`<span class="gh-sub">Slots: ${(SLOT_TABLE[Math.min(lv,20)]||[])[lev-1]||0} disponibles</span>`)}</div><hr class="hr">`;
+    const slotsAvail=(SLOT_TABLE[Math.min(lv,20)]||[])[lev-1]||0;
+    el.innerHTML+=`<div class="gh"><span class="badge ${lev===0?'bg':'bt'}">${label}</span>${lev===0?'':(`<span class="gh-sub">Slots: ${slotsAvail} disponibles</span>`)}</div><hr class="hr">`;
     spells.forEach(s=>{
       const locked=ap.has(s.id);
       el.innerHTML+=spellCard(s,locked,true);
@@ -1895,9 +1986,35 @@ function renderClass(){
       ${lv>=20?`<b>Archdruid (Lv 20):</b> Evergreen Wild Shape · Nature Magician · Longevity<br>`:''}
     </div>
   </div>`;
+  // ── FEATS ──
+  el.innerHTML+=`<div class="tr-sec">
+    <div class="tr-lbl">🏅 Feats actius</div>
+    <div style="font-size:11px;color:var(--os);margin-bottom:8px">Activa els feats que té el teu personatge. Els efectes s'apliquen automàticament als stats.</div>
+    <div class="feat-grid">
+      ${FEATS_DR.map(f=>{
+        const on=druidFeats.has(f.id);
+        return `<div class="feat-toggle-card ${on?'on':''}" onclick="toggleDruidFeat('${f.id}')">
+          <div class="feat-tc-head">
+            <span class="feat-tc-icon">${f.icon}</span>
+            <span class="feat-tc-name">${f.name}</span>
+            ${on?`<span class="feat-tc-tag">${f.tag}</span>`:''}
+          </div>
+          <div class="feat-tc-desc">${f.desc}</div>
+        </div>`;
+      }).join('')}
+    </div>
+  </div>`;
 }
 function setPO(v){primalOrder=v;recalc();renderClass();}
 function setEF(v){eleFury=v;renderClass();save();}
+function toggleDruidFeat(id){
+  if(druidFeats.has(id)) druidFeats.delete(id);
+  else druidFeats.add(id);
+  recalc(); // recalc aplica els efectes automàticament (HP, WIS, CON, etc.)
+  renderClass();
+  const f=FEATS_DR.find(x=>x.id===id);
+  if(f) showToast(`${druidFeats.has(id)?'✅':'❌'} Feat ${f.name} ${druidFeats.has(id)?'activat':'desactivat'}`);
+}
 
 // ── BUILDS ──
 function renderBuilds(){

@@ -2,1569 +2,1807 @@
 <html lang="ca">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<title>D&D · Circle of the Moon Druid</title>
-<link rel="manifest" href="manifest.json">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="theme-color" content="#5A7C2E">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Druid">
+<link rel="apple-touch-icon" href="../icon.png">
+<link rel="manifest" href="manifest.json">
+<title>Circle of the Moon — Druid</title>
 <style>
 :root{
   --p:#5A7C2E;--pl:#EBF2E0;--pd:#2E4A10;
-  --m:#3A5C7A;--ml:#E0EBF4;--md:#1A3A54;
-  --a:#8B6B30;--al:#F4EDD8;--ad:#5C4018;
-  --r:#C44830;--rl:#FAE8E4;
-  --bg:#F2F4F0;--sf:#FFF;--sv:#EEF2EA;
-  --ol:#C8D4BE;--os:#5A6A4A;--rr:10px;
-  --tx:#1A201A;--tabh:62px;--toph:52px;
+  --t:#3A7CA5;--tl:#DFF0FB;--td:#1A4A6A;
+  --a:#BA7517;--al:#FAEEDB;--ad:#633806;
+  --r:#D85A30;--rl:#FAECE7;
+  --bg:#F2F5EE;--sf:#FFF;--sv:#EEF3E8;
+  --ol:#CDD8B8;--os:#587040;--rr:10px;
+  --tabh:62px;--toph:52px;--tx:#1a1a1a;
 }
 body.dark{
-  --pl:#182A10;--pd:#88C458;
-  --ml:#0E1E2A;--md:#70A8D0;
-  --al:#221800;--ad:#C8A050;
-  --rl:#280C08;
-  --bg:#0C1208;--sf:#141A10;--sv:#1A2214;
-  --ol:#2A3A1A;--os:#7A9060;--tx:#DCE8CC;
+  --pl:#1A2A0A;--pd:#9EC870;
+  --tl:#0A1E2A;--td:#7ABFDF;
+  --al:#2A1A00;--ad:#E8B96A;
+  --rl:#2A0F08;
+  --bg:#0E1409;--sf:#161E0F;--sv:#1E2A14;
+  --ol:#2E3D20;--os:#7A9860;--tx:#E0EED0;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;background:var(--bg);color:var(--tx);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:15px;overflow:hidden}
-
-.topbar{position:fixed;top:0;left:0;right:0;height:var(--toph);background:var(--sf);border-bottom:1px solid var(--ol);display:flex;align-items:center;padding:0 10px;gap:8px;z-index:100}
-.topbar img.logo{height:26px;object-fit:contain}
-.tb-title{flex:1;min-width:0}
-.tb-name{font-size:15px;font-weight:700;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.tb-sub{font-size:10px;color:var(--os)}
-.lang-btns{display:flex;gap:3px;flex-shrink:0}
-.lang-btn{padding:3px 7px;border-radius:6px;border:1px solid var(--ol);background:var(--sv);color:var(--os);font-size:10px;font-weight:700;cursor:pointer}
-.lang-btn.active{background:var(--p);color:#fff;border-color:var(--p)}
-.tb-icon{width:32px;height:32px;border-radius:50%;border:1px solid var(--ol);background:var(--sv);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
-.tb-icon img{width:17px;height:17px;object-fit:contain;opacity:.65}
-
-.scroll{position:fixed;top:var(--toph);bottom:var(--tabh);left:0;right:0;overflow-y:auto;-webkit-overflow-scrolling:touch}
-.tab-panel{display:none;padding:12px 12px 24px}
-.tab-panel.active{display:block}
-
-.tabbar{position:fixed;bottom:0;left:0;right:0;height:var(--tabh);background:var(--sf);border-top:1px solid var(--ol);display:flex;z-index:100}
-.tab-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;color:var(--os);font-size:10px;font-weight:500;border:none;background:none;padding:0}
-.tab-btn img{width:24px;height:24px;object-fit:contain;opacity:.4;transition:opacity .15s}
-.tab-btn.active{color:var(--p)}
-.tab-btn.active img{opacity:1;filter:drop-shadow(0 0 3px var(--p))}
-
-/* SUBTABS */
-.subtab-bar{display:flex;gap:0;margin-bottom:14px;border-radius:var(--rr);overflow:hidden;border:1px solid var(--ol)}
-.subtab-btn{flex:1;padding:9px 0;background:var(--sv);color:var(--os);font-size:13px;font-weight:600;border:none;cursor:pointer;transition:all .15s}
-.subtab-btn.active{background:var(--p);color:#fff}
-.subtab-panel{display:none}
-.subtab-panel.active{display:block}
-
-/* SECTION */
-.sec-hd{display:flex;align-items:center;gap:8px;padding:10px 0 5px;cursor:pointer;user-select:none}
-.sec-hd img{width:20px;height:20px;object-fit:contain;opacity:.6}
-.sec-hd .sec-lbl{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--os);flex:1}
-.chev{font-size:12px;color:var(--os);transition:transform .2s}
-.sec-hd.open .chev{transform:rotate(180deg)}
-.sec-body{display:none}
-.sec-body.open{display:block}
-.sec-sep{height:1px;background:var(--ol);margin:2px 0 10px}
-
-/* CHAR HEADER */
-.char-hdr{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px}
-.char-avatar{width:72px;height:72px;border-radius:50%;overflow:hidden;border:2px solid var(--p);flex-shrink:0;cursor:pointer;background:var(--sv);display:flex;align-items:center;justify-content:center;font-size:28px}
-.char-avatar img{width:100%;height:100%;object-fit:cover}
-.char-fields{flex:1;min-width:0}
-.char-inp{width:100%;border:none;background:none;color:var(--tx);border-bottom:1px solid var(--ol);padding:3px 0;margin-bottom:5px;font-size:14px;font-weight:600;outline:none;font-family:inherit}
-.char-inp:focus{border-color:var(--p)}
-.char-inp.sm{font-size:12px;font-weight:400;color:var(--os)}
-.lv-stepper{display:flex;align-items:center;gap:5px;flex-shrink:0}
-.lv-btn{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--ol);background:var(--sv);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--tx);line-height:1}
-.lv-btn:active{background:var(--ol)}
-.lv-val{font-size:13px;font-weight:700;color:var(--p);min-width:32px;text-align:center}
-
-/* STATS */
-.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:10px}
-.stat-box{background:var(--sv);border-radius:var(--rr);border:1px solid var(--ol);padding:7px 4px;text-align:center}
-.stat-abbr{font-size:10px;font-weight:700;text-transform:uppercase;color:var(--os);margin-bottom:3px}
-.stat-inp{width:100%;border:none;background:none;text-align:center;font-size:22px;font-weight:700;color:var(--tx);outline:none;-moz-appearance:textfield}
-.stat-inp::-webkit-outer-spin-button,.stat-inp::-webkit-inner-spin-button{-webkit-appearance:none}
-.stat-mod{font-size:11px;color:var(--pd);font-weight:700;margin-top:2px}
-.der-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:6px}
-.der-box{background:var(--sv);border-radius:8px;border:1px solid var(--ol);padding:6px 3px;text-align:center}
-.der-lbl{font-size:9px;font-weight:700;text-transform:uppercase;color:var(--os);margin-bottom:2px}
-.der-val{font-size:16px;font-weight:700;color:var(--tx)}
-
-/* SKILLS / SAVES */
-.skill-item{display:flex;align-items:center;gap:6px;padding:4px 0;border-bottom:1px solid var(--sv)}
-.sk-dots{display:flex;gap:3px;flex-shrink:0}
-.sk-dot{width:17px;height:17px;border-radius:50%;border:2px solid var(--ol);cursor:pointer;transition:all .15s;font-size:8px;font-weight:700;display:flex;align-items:center;justify-content:center;color:transparent;flex-shrink:0}
-.sk-dot.prof{border-color:var(--p);background:var(--p);color:#fff}
-.sk-dot.exp{border-color:var(--pd);background:var(--pd);color:#fff}
-.sk-name{flex:1;font-size:13px}
-.sk-stat{font-size:10px;color:var(--os);width:26px;text-align:center;flex-shrink:0}
-.sk-val{font-size:14px;font-weight:700;color:var(--p);width:28px;text-align:right;flex-shrink:0}
-.save-item{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--sv)}
-.save-dot{width:17px;height:17px;border-radius:50%;border:2px solid var(--ol);cursor:pointer;flex-shrink:0;transition:all .15s}
-.save-dot.on{background:var(--p);border-color:var(--p)}
-.save-name{flex:1;font-size:13px}
-.save-val{font-size:14px;font-weight:700;color:var(--p)}
-
-/* TRACKER */
-.tracker-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
-.tbox{background:var(--sf);border-radius:var(--rr);border:1px solid var(--ol);padding:12px;text-align:center}
-.tbox.full{grid-column:1/-1}
-.tbox-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--os);margin-bottom:6px}
-.hp-row{display:flex;align-items:baseline;justify-content:center;gap:4px;margin-bottom:5px}
-.hp-cur{font-size:38px;font-weight:700;line-height:1;-moz-appearance:textfield;width:70px;border:none;background:none;text-align:center;color:var(--tx);outline:none}
-.hp-cur::-webkit-outer-spin-button,.hp-cur::-webkit-inner-spin-button{-webkit-appearance:none}
-.hp-sep{font-size:20px;color:var(--os)}
-.hp-max-inp{font-size:20px;font-weight:600;color:var(--os);width:50px;border:none;background:none;text-align:center;-moz-appearance:textfield;outline:none}
-.hp-max-inp::-webkit-outer-spin-button,.hp-max-inp::-webkit-inner-spin-button{-webkit-appearance:none}
-.hp-bar{height:6px;border-radius:3px;background:var(--ol);margin:4px 0 8px;overflow:hidden}
-.hp-fill{height:100%;border-radius:3px;background:var(--p);transition:width .3s}
-.hp-fill.lo{background:var(--r)}
-.hp-fill.md{background:#E8A020}
-.hp-btns{display:flex;gap:6px;justify-content:center}
-.hp-btn{padding:6px 14px;border-radius:20px;border:1.5px solid var(--ol);background:var(--sv);cursor:pointer;font-size:13px;font-weight:700;color:var(--tx)}
-.hp-btn.dmg{border-color:var(--r);color:var(--r)}
-.hp-btn.heal{border-color:var(--p);color:var(--pd)}
-
-/* PIPS */
-.pips-wrap{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:6px 0}
-.pip{width:24px;height:24px;border-radius:50%;border:2px solid var(--p);background:var(--p);cursor:pointer;transition:all .15s}
-.pip.empty{background:transparent}
-.pip.moon{border-color:var(--m);background:var(--m)}
-.pip.moon.empty{background:transparent;border-color:var(--m)}
-.pips-sub{font-size:11px;color:var(--os);margin-top:2px}
-
-/* WILD SHAPE */
-.ws-box{background:var(--sf);border-radius:var(--rr);border:2px solid var(--m);padding:12px;margin-bottom:10px}
-.ws-hd{display:flex;align-items:center;gap:8px;margin-bottom:8px}
-.ws-title{font-size:14px;font-weight:700;flex:1;color:var(--md)}
-.ws-cr-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;background:var(--ml);color:var(--md);flex-shrink:0}
-.ws-stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:8px}
-.ws-stat{background:var(--sv);border-radius:6px;padding:5px;text-align:center}
-.ws-stat-lbl{font-size:9px;font-weight:700;text-transform:uppercase;color:var(--os)}
-.ws-stat-val{font-size:16px;font-weight:700;color:var(--tx)}
-.ws-attacks{font-size:12px;color:var(--os);line-height:1.5;margin-bottom:6px}
-.ws-thp-row{display:flex;align-items:center;gap:8px;justify-content:center;margin-bottom:6px}
-.ws-thp-lbl{font-size:11px;color:var(--os)}
-.ws-thp-val{font-size:20px;font-weight:700;color:var(--m)}
-.ws-exit-btn{width:100%;padding:8px;border-radius:8px;border:1.5px solid var(--r);background:none;color:var(--r);font-size:13px;font-weight:700;cursor:pointer}
-.ws-exit-btn:active{background:var(--rl)}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
-.form-card{background:var(--sv);border-radius:var(--rr);border:2px solid var(--ol);padding:8px;cursor:pointer;transition:all .15s}
-.form-card:active{border-color:var(--m);background:var(--ml)}
-.form-name{font-size:13px;font-weight:700;color:var(--tx)}
-.form-cr{font-size:10px;font-weight:700;color:var(--os)}
-.form-mini{font-size:11px;color:var(--os);margin-top:2px}
-
-/* CONCENTRATION */
-.conc-box{background:var(--sf);border-radius:var(--rr);border:1px solid var(--ol);padding:10px 12px;margin-bottom:10px;display:flex;align-items:center;gap:10px}
-.conc-dot{width:12px;height:12px;border-radius:50%;background:var(--ol);flex-shrink:0;transition:background .2s}
-.conc-dot.on{background:var(--m)}
-.conc-label{font-size:12px;font-weight:700;color:var(--os);flex-shrink:0}
-.conc-inp{flex:1;border:none;background:none;color:var(--tx);font-size:13px;outline:none;font-family:inherit}
-
-/* SLOT LEVELS */
-.slot-level{background:var(--sf);border-radius:var(--rr);border:1px solid var(--ol);padding:10px 12px;margin-bottom:8px}
-.slot-level-hd{display:flex;align-items:center;gap:8px;margin-bottom:6px}
-.slot-lv-badge{font-size:11px;font-weight:700;padding:2px 9px;border-radius:20px;background:var(--pl);color:var(--pd)}
-.slot-lv-name{font-size:13px;color:var(--os);flex:1}
-.slot-count{font-size:11px;color:var(--os)}
-
-/* SPELL CARDS */
-.spell-card{background:var(--sv);border-radius:var(--rr);border:2px solid var(--ol);padding:9px 12px;margin-bottom:6px;cursor:pointer;transition:border-color .15s}
-.spell-card.prep{border-color:var(--p);background:var(--pl)}
-.spell-card.always{border-color:var(--m);background:var(--ml);cursor:default}
-.spell-hd{display:flex;align-items:center;gap:6px}
-.spell-name{font-size:13px;font-weight:700;flex:1}
-.spell-school{font-size:10px;color:var(--os);flex-shrink:0}
-.spell-chk{width:18px;height:18px;border-radius:50%;border:2px solid var(--ol);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;color:transparent}
-.spell-card.prep .spell-chk{background:var(--p);border-color:var(--p);color:#fff}
-.spell-card.always .spell-chk{background:var(--m);border-color:var(--m);color:#fff}
-.spell-sub{font-size:11px;color:var(--os);margin-top:3px}
-.spell-count{font-size:11px;color:var(--pd);margin-bottom:8px;font-weight:600}
-
-/* BROWSE */
-.browse-filter{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
-.browse-filter select,.browse-search{border:1px solid var(--ol);border-radius:8px;padding:7px 10px;background:var(--sv);color:var(--tx);font-size:13px;font-family:inherit;outline:none}
-.browse-search{flex:1;min-width:0}
-.browse-search:focus,.browse-filter select:focus{border-color:var(--p)}
-.browse-item{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:8px;background:var(--sf);border:1px solid var(--ol);margin-bottom:5px;text-decoration:none;color:var(--tx)}
-.browse-item:active{background:var(--pl)}
-.bi-name{flex:1;font-size:13px;font-weight:600}
-.bi-school{font-size:10px;color:var(--os);flex-shrink:0}
-.bi-rng{font-size:10px;color:var(--os);flex-shrink:0;min-width:60px;text-align:right}
-.bi-lv{font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px;background:var(--pl);color:var(--pd);flex-shrink:0}
-.bi-lv.c0{background:var(--sv);color:var(--os)}
-.bi-src{font-size:9px;color:var(--os);flex-shrink:0}
-
-/* BUILD / FEATS */
-.feat-card{background:var(--sv);border-radius:var(--rr);border:1px solid var(--ol);padding:10px 12px;margin-bottom:7px}
-.feat-hd{display:flex;align-items:center;gap:7px;cursor:pointer}
-.feat-lv{font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;background:var(--pl);color:var(--pd);flex-shrink:0}
-.feat-lv.sub{background:var(--ml);color:var(--md)}
-.feat-lv.na{background:var(--sv);color:var(--os);border:1px solid var(--ol)}
-.feat-name{font-size:14px;font-weight:600;flex:1}
-.feat-chev{font-size:11px;color:var(--os);transition:transform .2s;flex-shrink:0}
-.feat-hd.open .feat-chev{transform:rotate(180deg)}
-.feat-body{font-size:13px;color:var(--os);line-height:1.55;margin-top:8px;display:none}
-.feat-body.open{display:block}
-.feat-na{opacity:.5}
-
-/* PRIMAL ORDER / CHOICE */
-.choice-row{display:flex;gap:8px;margin-bottom:10px}
-.choice-btn{flex:1;padding:10px;border-radius:var(--rr);border:2px solid var(--ol);background:var(--sv);color:var(--os);font-size:13px;font-weight:600;cursor:pointer;text-align:center;transition:all .15s}
-.choice-btn.sel{border-color:var(--p);background:var(--pl);color:var(--pd)}
-
-/* REST */
-.rest-row{display:flex;gap:10px;margin-top:10px}
-.rest-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:11px;border-radius:var(--rr);border:1.5px solid var(--ol);background:var(--sf);cursor:pointer;font-size:13px;font-weight:600;color:var(--os)}
-.rest-btn img{width:20px;height:20px;opacity:.55}
-.rest-btn:active{background:var(--sv)}
-
-/* SAVED */
-.save-now-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;padding:14px;border-radius:var(--rr);border:2px solid var(--p);background:var(--pl);color:var(--pd);font-size:15px;font-weight:700;cursor:pointer;margin-bottom:16px}
-.save-now-btn img{width:22px;height:22px;object-fit:contain}
-.save-now-btn:active{background:var(--p);color:#fff}
-.saved-card{background:var(--sf);border-radius:var(--rr);border:1px solid var(--ol);padding:12px;margin-bottom:10px;display:flex;align-items:center;gap:10px}
-.saved-info{flex:1;min-width:0}
-.saved-name{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.saved-sub{font-size:11px;color:var(--os);margin-top:2px}
-.saved-date{font-size:10px;color:var(--os);margin-top:2px}
-.saved-btns{display:flex;flex-direction:column;gap:5px;flex-shrink:0}
-.saved-load{padding:5px 12px;border-radius:6px;border:1.5px solid var(--p);background:none;color:var(--pd);font-size:12px;font-weight:700;cursor:pointer}
-.saved-load:active{background:var(--pl)}
-.saved-del{padding:5px 12px;border-radius:6px;border:1.5px solid var(--ol);background:none;color:var(--os);font-size:12px;cursor:pointer}
-.saved-del:active{background:var(--rl);color:var(--r);border-color:var(--r)}
-.saved-empty{text-align:center;padding:40px 20px;color:var(--os)}
-
-/* NOTES */
-.notes-ta{width:100%;min-height:110px;border:1px solid var(--ol);border-radius:var(--rr);padding:10px;background:var(--sv);color:var(--tx);font-size:14px;resize:vertical;font-family:inherit}
-.notes-ta:focus{outline:none;border-color:var(--p)}
-.sec-note{font-size:12px;color:var(--os);padding:3px 0 8px;line-height:1.4}
-.lbl{font-size:11px;font-weight:700;color:var(--os);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
-.mt10{margin-top:10px}
-.mb10{margin-bottom:10px}
-.chip-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
-.chip{display:inline-flex;align-items:center;gap:4px;background:var(--pl);color:var(--pd);border:1px solid var(--p);border-radius:20px;padding:5px 11px;font-size:12px;font-weight:600}
-.chip.moon{background:var(--ml);color:var(--md);border-color:var(--m)}
-
-/* QR FAB */
-.qr-fab{position:fixed;right:16px;bottom:calc(var(--tabh) + 14px);width:48px;height:48px;border-radius:50%;background:var(--p);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 14px rgba(0,0,0,.35);z-index:200;transition:transform .15s}
-.qr-fab:active{transform:scale(.9)}
-.qr-fab svg{width:22px;height:22px;fill:#fff}
-.qr-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:400;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s}
-.qr-overlay.open{opacity:1;pointer-events:all}
-.qr-sheet{background:var(--sf);border-radius:20px 20px 0 0;padding:20px 20px 36px;width:100%;max-width:440px;transform:translateY(100%);transition:transform .28s cubic-bezier(.32,1,.23,1)}
-.qr-overlay.open .qr-sheet{transform:translateY(0)}
-.qr-drag{width:40px;height:4px;border-radius:2px;background:var(--ol);margin:0 auto 16px}
-.qr-title{font-size:16px;font-weight:700;text-align:center;margin-bottom:3px}
-.qr-sub{font-size:12px;color:var(--os);text-align:center;margin-bottom:16px}
-.qr-canvas-wrap{display:flex;justify-content:center;margin-bottom:14px;padding:14px;background:#fff;border-radius:12px;min-height:80px;align-items:center}
-.qr-url{width:100%;border:1px solid var(--ol);border-radius:8px;padding:8px 10px;font-size:10px;color:var(--os);background:var(--sv);margin-bottom:10px;word-break:break-all}
-.qr-copy-btn{width:100%;padding:13px;border-radius:10px;border:none;background:var(--p);color:#fff;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:8px}
-.qr-copy-btn:active{opacity:.85}
-.qr-close-btn{width:100%;padding:10px;border-radius:10px;border:1.5px solid var(--ol);background:none;color:var(--os);font-size:13px;cursor:pointer}
-
-/* TOGGLE */
-.toggle-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
-.toggle-lbl{font-size:13px;flex:1}
-.toggle{width:40px;height:22px;border-radius:11px;background:var(--ol);border:none;cursor:pointer;position:relative;transition:background .2s;flex-shrink:0}
-.toggle::after{content:'';position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;transition:transform .2s;box-shadow:0 1px 2px rgba(0,0,0,.2)}
-.toggle.on{background:var(--p)}
-.toggle.on::after{transform:translateX(18px)}
+html,body{height:100%;overflow:hidden}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--tx);font-size:14px;display:flex;flex-direction:column;transition:background .3s,color .3s}
+.topbar{height:var(--toph);background:var(--sf);border-bottom:1px solid var(--ol);display:flex;align-items:center;padding:0 14px;gap:10px;flex-shrink:0;z-index:20}
+.tb-info{flex:1;min-width:0}
+.tb-name{font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tb-sub{font-size:11px;color:var(--os)}
+.btn-save-g{background:var(--p);color:#fff;border:none;border-radius:8px;padding:7px 14px;font-size:13px;font-weight:600;cursor:pointer;flex-shrink:0}
+.btn-save-g:active{background:var(--pd)}
+.save-flash{font-size:12px;color:var(--p);font-weight:600;flex-shrink:0;animation:fadein .2s}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
+.lang-tog{display:flex;gap:1px;background:var(--sv);border:1px solid var(--ol);border-radius:7px;padding:2px;flex-shrink:0}
+.lang-btn{background:none;border:none;border-radius:5px;padding:3px 7px;font-size:10px;font-weight:700;cursor:pointer;color:var(--os);transition:all .15s;line-height:1.4}
+.lang-btn.active{background:var(--p);color:#fff}
+.dark-tog{background:none;border:1px solid var(--ol);border-radius:7px;padding:5px 7px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.dark-tog img{width:18px;height:18px;object-fit:contain;opacity:.65}
+body.dark .sbox{background:var(--sv)}
+body.dark .dbox{background:var(--sv)}
+body.dark .hbtn{background:var(--sv)}
+body.dark .btn-rest{background:var(--sv)}
+body.dark .spip-grp.ns{background:var(--ol)}
+body.dark select option{background:var(--sf);color:var(--tx)}
+body.dark .cast-spb:disabled{background:var(--ol)}
+body.dark .cbt:disabled{border-color:var(--ol);color:var(--os)}
+body.dark .conc-sp{color:var(--ad)}
+body.dark .conc-rn{color:var(--os)}
+body.dark .ws-active{background:var(--sv)}
+body.dark .hp-disp{color:var(--tx)}
+.scroll-area{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
+.screen{display:none;padding:14px;padding-bottom:calc(var(--tabh)+16px);min-height:100%}
+.screen.active{display:block}
+.tab-bar{height:var(--tabh);background:var(--sf);border-top:1px solid var(--ol);display:flex;align-items:stretch;flex-shrink:0;z-index:20;padding-bottom:env(safe-area-inset-bottom)}
+.tab-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;border:none;background:none;color:var(--os);font-size:10px;font-weight:500;padding:6px 0 4px;position:relative;transition:color .15s}
+.tab-item .ti{width:26px;height:26px;object-fit:contain;display:block;opacity:.45;transition:opacity .15s}
+.tab-item.active .ti{opacity:1}
+.tab-item.active{color:var(--p)}
+.tab-item.active::before{content:'';position:absolute;top:0;left:20%;right:20%;height:2.5px;background:var(--p);border-radius:0 0 3px 3px}
+.hero-card{background:linear-gradient(135deg,var(--pd) 0%,var(--p) 100%);border-radius:var(--rr);padding:16px;margin-bottom:12px;color:#fff;display:flex;align-items:center;gap:12px}
+.hero-av{width:54px;height:54px;border-radius:10px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;border:1.5px solid rgba(255,255,255,.3);overflow:hidden;cursor:pointer;position:relative}
+.hero-name{font-size:18px;font-weight:700}
+.hero-s1{font-size:12px;opacity:.85;margin-top:2px}
+.hero-s2{font-size:11px;opacity:.6;margin-top:1px}
+.hero-r{margin-left:auto;text-align:right}
+.hero-lv{font-size:30px;font-weight:800;line-height:1}
+.hero-ls{font-size:10px;opacity:.65;letter-spacing:.6px;text-transform:uppercase}
+.acc{border:.5px solid var(--ol);border-radius:var(--rr);margin-bottom:10px;overflow:hidden;background:var(--sf)}
+.acc-hd{display:flex;align-items:center;gap:10px;padding:13px 14px;cursor:pointer;user-select:none;transition:background .1s}
+.acc-hd:active{background:var(--sv)}
+.acc-ic{width:22px;height:22px;object-fit:contain;flex-shrink:0}
+.acc-tl{font-size:13px;font-weight:600;flex:1}
+.acc-ch{color:var(--os);transition:transform .2s;font-size:12px}
+.acc-ch.open{transform:rotate(180deg)}
+.acc-bd{border-top:1px solid var(--ol);display:none;padding:14px}
+.acc-bd.open{display:block}
+.fg{display:flex;gap:10px;margin-bottom:10px}
+.fi{display:flex;flex-direction:column;flex:1;min-width:0}
+.fi label{font-size:11px;color:var(--os);margin-bottom:4px;font-weight:500}
+input[type=text],input[type=number],textarea,select{border:1px solid var(--ol);border-radius:6px;padding:8px 10px;font-size:13px;font-family:inherit;background:var(--sf);width:100%;outline:none;transition:border-color .15s;color:var(--tx)}
+input:focus,textarea:focus,select:focus{border-color:var(--p)}
+textarea{resize:vertical;min-height:90px}
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.sbox{background:var(--sv);border-radius:var(--rr);padding:10px;text-align:center}
+.slbl{font-size:10px;font-weight:700;color:var(--os);letter-spacing:.8px;margin-bottom:5px}
+.sbox input{width:62px;text-align:center;font-size:20px;font-weight:600;border:1px solid var(--ol);border-radius:6px;padding:3px}
+.smod{font-size:12px;color:var(--os);margin-top:3px;font-weight:500}
+.drv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.dbox{background:var(--sv);border-radius:var(--rr);padding:10px}
+.dlbl{font-size:9px;font-weight:700;color:var(--os);letter-spacing:.6px;text-transform:uppercase}
+.dval{font-size:22px;font-weight:500;margin:2px 0}
+.dsub{font-size:10px;color:var(--os)}
+.sec-lbl{font-size:10px;font-weight:700;letter-spacing:.8px;color:var(--os);text-transform:uppercase;padding:8px 0 5px}
+.tr-sec{background:var(--sf);border:.5px solid var(--ol);border-radius:var(--rr);padding:14px;margin-bottom:10px}
+.tr-lbl{font-size:10px;font-weight:700;letter-spacing:.8px;color:var(--os);text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
+.hp-wrap{background:var(--ol);border-radius:99px;height:12px;overflow:hidden;margin-bottom:12px}
+.hp-fill{height:100%;border-radius:99px;transition:width .4s,background .4s}
+.hp-row{display:flex;align-items:center;justify-content:space-between;gap:6px}
+.hp-btns{display:flex;gap:5px}
+.hbtn{border-radius:8px;border:1.5px solid var(--ol);background:var(--sf);font-size:13px;font-weight:700;cursor:pointer;padding:7px 10px;min-width:38px;text-align:center;transition:background .1s}
+.hbtn:active{background:var(--sv)}
+.hbtn.m{border-color:var(--r);color:var(--r)}
+.hbtn.p{border-color:var(--p);color:var(--p)}
+.hp-disp{font-size:26px;font-weight:800;text-align:center;color:var(--tx);min-width:90px;line-height:1.1}
+.hp-disp .hpmax{font-size:14px;color:var(--os);font-weight:400}
+.dval-edit{width:56px;font-size:20px;font-weight:700;border:none;border-bottom:2px solid var(--ol);background:transparent;color:var(--tx);text-align:center;padding:2px 0}
+.dval-edit:focus{outline:none;border-bottom-color:var(--p)}
+.hp-reset{font-size:10px;color:var(--os);background:none;border:none;cursor:pointer;padding:2px 4px;border-radius:4px}
+.hp-reset:active{color:var(--p)}
+.spip-row{display:flex;flex-wrap:wrap;gap:6px}
+.spip-grp{display:flex;align-items:center;gap:4px;border-radius:7px;padding:5px 9px;cursor:pointer;user-select:none;transition:background .2s}
+.spip-grp.hs{background:var(--tl)}
+.spip-grp.ns{background:var(--sv)}
+.spip-lv{font-size:11px;font-weight:700}
+.spip-grp.hs .spip-lv{color:var(--td)}
+.spip-grp.ns .spip-lv{color:var(--os)}
+.pip{width:9px;height:9px;border-radius:50%;display:inline-block;transition:background .2s}
+.pip.f{background:var(--t)}
+.pip.e{background:var(--ol)}
+.ws-uses-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.ws-pip{width:20px;height:20px;border-radius:50%;border:2.5px solid var(--p);cursor:pointer;transition:background .1s;flex-shrink:0}
+.ws-pip.f{background:var(--p)}
+.ws-pip.e{background:transparent}
+.ws-lbl{font-size:12px;font-weight:700;color:var(--pd)}
+.ws-active{background:var(--tl);border-radius:var(--rr);padding:12px;margin-bottom:10px;border:1px solid var(--t)}
+.ws-form-name{font-size:16px;font-weight:700;color:var(--td)}
+.ws-stats{font-size:11px;color:var(--td);opacity:.85;margin-top:4px;line-height:1.7}
+.ws-thp-row{display:flex;align-items:center;gap:10px;margin-top:8px;padding-top:8px;border-top:1px solid rgba(58,124,165,.25)}
+.ws-thp-lbl{font-size:11px;font-weight:700;color:var(--td)}
+.ws-thp-val{font-size:20px;font-weight:800;color:var(--t)}
+.ws-btns{display:flex;gap:8px;margin-top:8px}
+.btn-ws{flex:1;padding:10px 8px;border-radius:9px;border:1.5px solid var(--p);background:var(--pl);color:var(--pd);font-size:12px;font-weight:600;cursor:pointer;transition:all .1s}
+.btn-ws:active{background:var(--p);color:#fff}
+.btn-ws-leave{border-color:var(--r);background:var(--rl);color:var(--r)}
+.btn-ws-leave:active{background:var(--r);color:#fff}
+.conc-bar{background:var(--rl);border-radius:9px;padding:9px 11px;display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.conc-dot{width:10px;height:10px;border-radius:50%;background:var(--r);flex-shrink:0}
+.conc-inf{flex:1}
+.conc-sp{font-size:12px;font-weight:600;color:#4A1B0C}
+.conc-rn{font-size:10px;color:rgba(74,27,12,.7)}
+.rest-row{display:flex;gap:8px;margin-top:10px}
+.btn-rest{flex:1;padding:11px 8px;border-radius:9px;border:1.5px solid var(--ol);background:var(--sf);font-size:13px;font-weight:600;cursor:pointer;transition:all .1s}
+.btn-rest:active{transform:scale(.97)}
+.btn-sr{border-color:var(--a);color:var(--ad)}
+.btn-lr{border-color:var(--p);color:var(--pd)}
+.stab-bar{display:flex;border-bottom:1px solid var(--ol);margin:-14px -14px 14px;background:var(--sf)}
+.stab-btn{flex:1;padding:11px 8px;font-size:12px;font-weight:500;border:none;background:none;cursor:pointer;color:var(--os);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s}
+.stab-btn.active{color:var(--p);border-bottom-color:var(--p);font-weight:700}
+.srch-box{position:relative;margin-bottom:12px}
+.srch-box input{padding-left:34px}
+.srch-ic{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:14px;pointer-events:none;opacity:.5}
+.gh{display:flex;align-items:center;gap:8px;padding:12px 0 5px}
+.gh-sub{font-size:12px;color:var(--os)}
+hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
+.chips{display:flex;gap:8px;margin-bottom:12px}
+.chip{border-radius:10px;padding:5px 11px;text-align:center;flex:1}
+.card{background:var(--sf);border:.5px solid var(--ol);border-radius:var(--rr);padding:12px;margin-bottom:6px}
+.card.sel-p{background:var(--pl);border-color:var(--p)}
+.card.circle{background:var(--tl);border-color:var(--t)}
+.card.conca{background:var(--rl);border-color:var(--r)}
+.sp-row-c{display:flex;align-items:flex-start;gap:8px}
+.sp-cb{width:20px;height:20px;border-radius:5px;border:1.5px solid var(--ol);flex-shrink:0;display:flex;align-items:center;justify-content:center;cursor:pointer;margin-top:1px;transition:all .1s}
+.sp-cb.ckp{background:var(--p);border-color:transparent}
+.sp-cb.locked{background:var(--t);border-color:transparent;cursor:default}
+.sp-cb .ck{color:#fff;font-size:10px;font-weight:700}
+.sp-inf{flex:1;min-width:0}
+.sp-nr{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.sp-nm{font-size:13px;font-weight:600}
+.sp-mt{font-size:11px;color:var(--os);margin-top:2px;line-height:1.4}
+.exp-btn{background:none;border:none;cursor:pointer;color:var(--p);font-size:17px;padding:0 2px;flex-shrink:0}
+.sp-desc{font-size:12px;color:var(--os);line-height:1.55;margin-top:7px}
+.tip-note{background:var(--pl);border-radius:6px;padding:7px 9px;display:flex;gap:6px;margin-top:6px}
+.tip-tx{font-size:11px;color:var(--pd);line-height:1.5}
+.cast-pan{background:var(--sv);border-radius:9px;padding:9px;margin-top:9px}
+.cast-lbl{font-size:11px;font-weight:700;color:var(--tx);margin-bottom:6px}
+.cast-btns{display:flex;flex-wrap:wrap;gap:5px}
+.cbt{padding:5px 11px;height:30px;border-radius:7px;border:1.5px solid var(--t);background:transparent;color:var(--td);font-size:11px;cursor:pointer;white-space:nowrap}
+.cbt:active:not(:disabled){background:var(--tl)}
+.cbt:disabled{border-color:var(--ol);color:#ccc;cursor:not-allowed}
+.cast-div{border:none;border-top:1px solid var(--ol);margin:7px 0}
+.cast-sp-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:6px}
+.cast-sp-lbl{font-size:11px;font-weight:700;color:var(--td)}
+.cast-spb{padding:5px 12px;height:30px;border-radius:7px;border:none;background:var(--t);color:#fff;font-size:11px;cursor:pointer}
+.cast-spb:active:not(:disabled){background:var(--td)}
+.cast-spb:disabled{background:var(--sv);color:#aaa;cursor:not-allowed}
+.cast-hint{font-size:10px;color:var(--td);opacity:.75}
+.badge{display:inline-block;padding:2px 7px;border-radius:10px;font-size:10px;font-weight:600;line-height:1.4}
+.bp{background:var(--pl);color:var(--pd)}
+.bt{background:var(--tl);color:var(--td)}
+.ba{background:var(--al);color:var(--ad)}
+.br{background:var(--rl);color:#4A1B0C}
+.bg{background:#F1EFE8;color:#555}
+.sv-row{display:flex;align-items:center;gap:8px;padding:5px 2px;border-bottom:1px solid var(--ol)}
+.sv-row:last-child{border-bottom:none}
+.sv-chk{width:22px;height:22px;border-radius:50%;border:2px solid var(--ol);background:transparent;cursor:pointer;font-size:11px;color:var(--os);display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:0;transition:all .15s}
+.sv-chk.act{border-color:var(--p);background:var(--pl);color:var(--p)}
+.sv-ab{font-size:10px;font-weight:700;color:var(--os);width:28px;flex-shrink:0}
+.sv-nm{font-size:13px;color:var(--tx);flex:1}
+.sv-val{font-size:15px;font-weight:700;color:var(--os);min-width:34px;text-align:right}
+.sv-val.pro{color:var(--p)}
+.trait-card{padding:10px 12px;border-left:3px solid var(--p);margin-bottom:8px;background:var(--sv);border-radius:0 8px 8px 0}
+.trait-nm{font-size:13px;font-weight:600;color:var(--tx);margin-bottom:3px;display:flex;align-items:center;gap:6px}
+.trait-src{font-size:10px;font-weight:400;color:var(--os)}
+.trait-ds{font-size:12px;color:var(--tx);line-height:1.55}
+.bc{background:var(--sf);border:.5px solid var(--ol);border-radius:var(--rr);padding:13px;margin-bottom:8px}
+.bc.isact{border-color:var(--p);border-width:1.5px;background:var(--pl)}
+.bc-top{display:flex;align-items:flex-start;gap:10px}
+.bc-av{width:44px;height:44px;border-radius:9px;background:var(--sv);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.bc-inf{flex:1}
+.bc-nm{font-weight:700;font-size:14px}
+.bc-mt{font-size:12px;color:var(--os);margin-top:2px}
+.bc-act{display:flex;gap:6px;margin-top:9px;padding-top:9px;border-top:1px solid var(--ol)}
+.btn-sm{padding:7px 13px;border-radius:7px;border:none;cursor:pointer;font-size:12px;font-weight:600}
+.btn-sm:active{transform:scale(.96)}
+.btn-pr{background:var(--p);color:#fff}
+.btn-ou{border:1px solid var(--ol);background:transparent;color:var(--tx)}
+.btn-dn{background:var(--rl);color:var(--r)}
+.new-bc-btn{display:flex;align-items:center;gap:12px;background:var(--sf);border:1.5px dashed var(--ol);border-radius:var(--rr);padding:15px;cursor:pointer;margin-bottom:10px;width:100%}
+.new-bc-btn:active{border-color:var(--p);background:var(--pl)}
+.new-bc-btn span{font-size:13px;font-weight:500;color:var(--os)}
+.inv-row{display:flex;align-items:center;gap:5px;margin-bottom:6px}
+.inv-name{flex:1;border:1px solid var(--ol);border-radius:7px;padding:7px 8px;font-size:13px;background:var(--sf);color:var(--tx);outline:none}
+.inv-qty{width:46px;border:1px solid var(--ol);border-radius:7px;padding:7px 4px;font-size:13px;text-align:center;background:var(--sf);color:var(--tx);outline:none}
+.inv-del{width:28px;height:28px;border-radius:50%;border:none;background:var(--rl);color:var(--r);cursor:pointer;font-size:13px;flex-shrink:0}
+.inv-add{width:100%;padding:8px;margin-top:4px;border:1.5px dashed var(--ol);border-radius:7px;background:transparent;color:var(--os);cursor:pointer;font-size:13px}
+.inv-add:active{border-color:var(--p);color:var(--p)}
+.qr-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(3px)}
+.qr-box{background:var(--sf);border-radius:16px;padding:24px 20px;width:100%;max-width:340px;box-shadow:0 8px 40px rgba(0,0,0,.3);text-align:center}
+.qr-title{font-size:16px;font-weight:700;color:var(--tx);margin-bottom:4px}
+.qr-sub{font-size:12px;color:var(--os);margin-bottom:16px}
+.qr-wrap{display:flex;justify-content:center;margin-bottom:16px;min-height:160px;align-items:center}
+.qr-url{font-size:10px;color:var(--os);word-break:break-all;background:var(--sv);border-radius:8px;padding:8px 10px;margin-bottom:14px;text-align:left;line-height:1.5}
+.qr-actions{display:flex;gap:8px}
+.qr-btn{flex:1;padding:10px;border-radius:9px;border:none;cursor:pointer;font-size:13px;font-weight:600}
+.qr-copy{background:var(--p);color:#fff}
+.qr-close{background:var(--sv);color:var(--tx);border:1px solid var(--ol)}
+.share-fab{position:fixed;bottom:calc(var(--tabh)+14px);right:14px;width:44px;height:44px;border-radius:50%;background:var(--p);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(90,124,46,.5);z-index:50}
+.share-fab:active{transform:scale(.92)}
+.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:150;display:flex;align-items:flex-end;justify-content:center;backdrop-filter:blur(2px)}
+.modal-box{background:var(--sf);border-radius:20px 20px 0 0;width:100%;max-width:480px;max-height:82vh;overflow-y:auto;padding:20px}
+.modal-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.modal-tl{font-size:16px;font-weight:700}
+.modal-cl{background:none;border:none;font-size:22px;cursor:pointer;color:var(--os)}
+.beast-card{display:flex;align-items:center;gap:10px;background:var(--sv);border-radius:9px;padding:10px 12px;margin-bottom:6px;cursor:pointer;border:1.5px solid transparent;transition:all .1s}
+.beast-card.avail:active{border-color:var(--p);background:var(--pl)}
+.beast-card.locked{opacity:.4;cursor:not-allowed}
+.beast-cr{font-size:11px;font-weight:700;min-width:34px;color:var(--pd)}
+.beast-nm{font-size:13px;font-weight:600;flex:1}
+.beast-stats{font-size:11px;color:var(--os)}
+.beast-thp{font-size:11px;font-weight:700;color:var(--t)}
+.po-row{display:flex;gap:8px;margin-bottom:10px}
+.po-chip{flex:1;padding:10px 8px;border-radius:9px;border:1.5px solid var(--ol);background:transparent;color:var(--os);font-size:12px;font-weight:600;cursor:pointer;text-align:center;transition:all .15s}
+.po-chip.on{border-color:var(--p);background:var(--pl);color:var(--pd)}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-thumb{background:var(--ol);border-radius:2px}
+.empty-st{padding:36px 20px;text-align:center;color:var(--os)}
+.empty-st .ei{font-size:40px;margin-bottom:10px}
+.info-bn{background:var(--pl);border-radius:8px;padding:10px 12px;margin-bottom:10px;font-size:12px;color:var(--pd);line-height:1.5}
 </style>
 </head>
 <body>
 
-<!-- TOP BAR -->
+<!-- TOPBAR -->
 <div class="topbar">
-  <img class="logo" src="../logo.png" alt="">
-  <div class="tb-title">
+  <div class="tb-info">
     <div class="tb-name" id="tb-name">Druida</div>
-    <div class="tb-sub" id="tb-sub">Circle of the Moon · Lv <span id="tb-lv">3</span></div>
+    <div class="tb-sub" id="tb-sub">Circle of the Moon · Lv 3</div>
   </div>
-  <div class="lang-btns">
-    <button class="lang-btn active" id="lb-cat" onclick="setLang('cat')">CA</button>
-    <button class="lang-btn" id="lb-esp" onclick="setLang('esp')">ES</button>
-    <button class="lang-btn" id="lb-eng" onclick="setLang('eng')">EN</button>
+  <span class="save-flash" id="save-ok" style="display:none">✓</span>
+  <div class="lang-tog">
+    <button class="lang-btn active" id="lb-cat" onclick="setLang('cat')">CAT</button>
+    <button class="lang-btn" id="lb-eng" onclick="setLang('eng')">ENG</button>
+    <button class="lang-btn" id="lb-esp" onclick="setLang('esp')">ESP</button>
   </div>
-  <div class="tb-icon" onclick="toggleDark()"><img src="../icons/sun.png" id="dark-icon" alt="dark"></div>
+  <button class="dark-tog" id="dark-tog" onclick="toggleDark()">
+    <img id="dark-ic" src="../icons/moon.png">
+  </button>
+  <button class="btn-save-g" onclick="saveBuild()">💾 Desa</button>
 </div>
 
-<!-- SCROLL -->
-<div class="scroll">
+<div class="scroll-area" id="scroll-area">
 
-<!-- ========== PERSONATGE ========== -->
-<div class="tab-panel active" id="tab-character">
-
-  <div class="sec-hd open" onclick="toggleSec('basic',this)">
-    <img src="../icons/basic.png" alt="">
-    <span class="sec-lbl" id="lbl-basic">Informació bàsica</span>
-    <span class="chev">▼</span>
+<!-- ══ PERSONATGE ══ -->
+<div class="screen active" id="sc-char">
+  <div class="hero-card">
+    <div class="hero-av" onclick="g('c-img').click()">
+      <span id="hero-ic">🌿</span>
+      <img id="hero-img" style="display:none;width:100%;height:100%;object-fit:cover;border-radius:8px" alt="">
+      <div style="position:absolute;bottom:-4px;right:-4px;background:#fff;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:11px;box-shadow:0 1px 4px rgba(0,0,0,.3)">📷</div>
+    </div>
+    <input type="file" id="c-img" accept="image/*" style="display:none" onchange="handleImg(this)">
+    <div>
+      <div class="hero-name" id="h-name">Druida</div>
+      <div class="hero-s1">Circle of the Moon Druid</div>
+      <div class="hero-s2" id="h-sub">Human · Outlander</div>
+    </div>
+    <div class="hero-r">
+      <div class="hero-lv" id="h-lv">3</div>
+      <div class="hero-ls">Nivell</div>
+    </div>
   </div>
-  <div class="sec-sep"></div>
-  <div class="sec-body open" id="sec-basic">
-    <div class="char-hdr">
-      <div class="char-avatar" id="char-avatar" onclick="pickImg()">
-        <span id="avatar-placeholder">🌿</span>
-        <img id="avatar-img" src="" alt="" style="display:none">
+
+  <div class="acc">
+    <div class="acc-hd" onclick="toggleAcc('basic')">
+      <img class="acc-ic" src="../icons/basic.png"><span class="acc-tl">Informació bàsica</span>
+      <span class="acc-ch open" id="ch-basic">▼</span>
+    </div>
+    <div class="acc-bd open" id="bd-basic">
+      <div class="fg">
+        <div class="fi"><label>Nom</label><input type="text" id="c-name" value="Druida" oninput="updateHero()"></div>
+        <div class="fi" style="max-width:80px"><label>Nivell</label><input type="number" id="c-level" min="1" max="20" value="3" oninput="updateLevel(+this.value)"></div>
       </div>
-      <div class="char-fields">
-        <input class="char-inp" id="c-name" placeholder="Nom del personatge" value="" oninput="onNameChange()">
-        <div style="display:flex;gap:6px;align-items:center;margin-bottom:5px">
-          <input class="char-inp sm" id="c-race" placeholder="Raça / Espècie" value="" oninput="save()" style="flex:1;margin:0">
-          <input class="char-inp sm" id="c-age" placeholder="Edat" value="" oninput="save()" style="width:56px;margin:0;text-align:center">
-        </div>
-        <div style="display:flex;gap:6px;align-items:center">
-          <input class="char-inp sm" id="c-bg" placeholder="Background" value="" oninput="save()" style="flex:1;margin:0">
-          <div class="lv-stepper">
-            <button class="lv-btn" onclick="adjLv(-1)">−</button>
-            <span class="lv-val">Lv<span id="lv-disp">3</span></span>
-            <button class="lv-btn" onclick="adjLv(+1)">+</button>
+      <div class="fg">
+        <div class="fi"><label>Espècie</label>
+          <select id="c-species" onchange="updateHero()">
+            <option>Human</option><option>Aasimar</option><option>Dragonborn</option>
+            <option>Elf</option><option>Gnome</option><option>Goliath</option>
+            <option>Half-Elf</option><option>Halfling</option><option>Tiefling</option><option>Other</option>
+          </select></div>
+        <div class="fi"><label>Background</label>
+          <select id="c-bg" onchange="updateHero()">
+            <option>Acolyte</option><option>Charlatan</option><option>Criminal</option>
+            <option>Entertainer</option><option>Folk Hero</option><option>Hermit</option>
+            <option>Merchant</option><option>Noble</option><option selected>Outlander</option>
+            <option>Sage</option><option>Soldier</option><option>Wayfarer</option>
+          </select></div>
+      </div>
+      <div class="fg">
+        <div class="fi"><label>Edat</label><input type="text" id="c-age" value=""></div>
+        <div class="fi"><label>Alineament</label>
+          <select id="c-align" onchange="updateHero()">
+            <option>Lawful Good</option><option selected>Neutral Good</option><option>Chaotic Good</option>
+            <option>Lawful Neutral</option><option>True Neutral</option><option>Chaotic Neutral</option>
+            <option>Lawful Evil</option><option>Neutral Evil</option><option>Chaotic Evil</option>
+          </select></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-hd" onclick="toggleAcc('stats')">
+      <img class="acc-ic" src="../icons/stats.png"><span class="acc-tl">Puntuacions & Estadístiques</span>
+      <span class="acc-ch open" id="ch-stats">▼</span>
+    </div>
+    <div class="acc-bd open" id="bd-stats">
+      <div style="font-size:12px;color:var(--os);margin-bottom:10px">Build: STR 8, DEX 14, CON 14, INT 10, WIS 17, CHA 8</div>
+      <div class="stat-grid">
+        <div class="sbox"><div class="slbl">STR</div><input type="number" id="s-str" value="8" oninput="recalc()"><div class="smod" id="m-str">−1</div></div>
+        <div class="sbox"><div class="slbl">DEX</div><input type="number" id="s-dex" value="14" oninput="recalc()"><div class="smod" id="m-dex">+2</div></div>
+        <div class="sbox"><div class="slbl">CON</div><input type="number" id="s-con" value="14" oninput="recalc()"><div class="smod" id="m-con">+2</div></div>
+        <div class="sbox"><div class="slbl">INT</div><input type="number" id="s-int" value="10" oninput="recalc()"><div class="smod" id="m-int">+0</div></div>
+        <div class="sbox"><div class="slbl">WIS</div><input type="number" id="s-wis" value="17" oninput="recalc()"><div class="smod" id="m-wis">+3</div></div>
+        <div class="sbox"><div class="slbl">CHA</div><input type="number" id="s-cha" value="8" oninput="recalc()"><div class="smod" id="m-cha">−1</div></div>
+      </div>
+      <div class="sec-lbl" id="drv-lbl">Estadístiques derivades — Nivell 3</div>
+      <div class="drv-grid">
+        <div class="dbox"><div class="dlbl">HIT POINTS</div>
+          <div style="display:flex;align-items:baseline;gap:4px">
+            <input type="number" class="dval-edit" id="d-hp" value="22" oninput="maxHpMan=+this.value;renderTracker();save()">
+            <button class="hp-reset" onclick="maxHpMan=-1;recalc();renderTracker();save()" title="↺ auto">↺</button>
           </div>
-        </div>
+          <div class="dsub" id="d-hp-auto">auto: 22</div></div>
+        <div class="dbox"><div class="dlbl">ARMOR CLASS</div><div class="dval" id="d-ac">14</div><div class="dsub" id="d-ac-sub">Leather + DEX</div></div>
+        <div class="dbox"><div class="dlbl">PROFICIENCY</div><div class="dval" id="d-prof">+2</div><div class="dsub" id="d-prof-sub">Nivells 1–4</div></div>
+        <div class="dbox"><div class="dlbl">SPELL SAVE DC</div><div class="dval" id="d-dc">13</div><div class="dsub">8 + Prof + WIS</div></div>
+        <div class="dbox"><div class="dlbl">SPELL ATTACK</div><div class="dval" id="d-atk">+5</div><div class="dsub">Prof + WIS</div></div>
+        <div class="dbox"><div class="dlbl">PREPARATS</div><div class="dval" id="d-prep">6</div><div class="dsub" id="d-prep-sub">WIS mod + Lv</div></div>
       </div>
-    </div>
-    <input type="file" id="img-input" accept="image/*" style="display:none" onchange="loadImg(event)">
-    <!-- Primal Order -->
-    <div class="lbl mt10" id="lbl-order">PRIMAL ORDER</div>
-    <div class="choice-row">
-      <button class="choice-btn sel" id="po-mag" onclick="setPrimalOrder('magician')">
-        🔮 Magician<br><span style="font-size:10px;font-weight:400">Cantrip extra · WIS a Arcana/Nature</span>
-      </button>
-      <button class="choice-btn" id="po-war" onclick="setPrimalOrder('warden')">
-        ⚔️ Warden<br><span style="font-size:10px;font-weight:400">Martial weapons · Medium armor</span>
-      </button>
-    </div>
-    <!-- Elemental Fury (lv7+) -->
-    <div id="fury-wrap" style="display:none">
-      <div class="lbl mt10" id="lbl-fury">ELEMENTAL FURY (Lv 7)</div>
-      <div class="choice-row">
-        <button class="choice-btn sel" id="ef-pot" onclick="setFury('potent')">
-          ✨ Potent Spellcasting<br><span style="font-size:10px;font-weight:400">+WIS als cantrips</span>
-        </button>
-        <button class="choice-btn" id="ef-pri" onclick="setFury('primal')">
-          🐾 Primal Strike<br><span style="font-size:10px;font-weight:400">+1d8 elemental en atac</span>
-        </button>
-      </div>
+      <div class="sec-lbl">Slots d'encanteri disponibles</div>
+      <div id="slots-row-char" style="display:flex;flex-wrap:wrap;gap:6px"></div>
     </div>
   </div>
 
-  <div class="sec-hd open" onclick="toggleSec('stats',this)">
-    <img src="../icons/stats.png" alt="">
-    <span class="sec-lbl" id="lbl-stats">Estadístiques</span>
-    <span class="chev">▼</span>
-  </div>
-  <div class="sec-sep"></div>
-  <div class="sec-body open" id="sec-stats">
-    <div class="stat-grid" id="stat-grid"></div>
-    <div class="lbl" style="margin:8px 0 5px" id="lbl-derived">VALORS DERIVATS</div>
-    <div class="der-grid" id="der-grid"></div>
-    <div class="der-grid" style="margin-top:6px" id="der-grid2"></div>
-  </div>
-
-  <div class="sec-hd" onclick="toggleSec('saves',this)">
-    <img src="../icons/stats.png" alt="">
-    <span class="sec-lbl" id="lbl-saves">Tirades de Salvació</span>
-    <span class="chev">▼</span>
-  </div>
-  <div class="sec-sep"></div>
-  <div class="sec-body" id="sec-saves">
-    <p class="sec-note" id="note-saves">INT i WIS per defecte (Druid).</p>
-    <div id="saves-list"></div>
-  </div>
-
-  <div class="sec-hd" onclick="toggleSec('skills',this)">
-    <img src="../icons/hacker.png" alt="">
-    <span class="sec-lbl" id="lbl-skills">Habilitats</span>
-    <span class="chev">▼</span>
-  </div>
-  <div class="sec-sep"></div>
-  <div class="sec-body" id="sec-skills">
-    <p class="sec-note">⬤ = Competència · <b>E</b> = Expertise (×2 prof)</p>
-    <div id="skills-list"></div>
-  </div>
-
-  <div class="sec-hd" onclick="toggleSec('notes',this)">
-    <img src="../icons/notes.png" alt="">
-    <span class="sec-lbl" id="lbl-notes">Notes</span>
-    <span class="chev">▼</span>
-  </div>
-  <div class="sec-sep"></div>
-  <div class="sec-body" id="sec-notes">
-    <textarea class="notes-ta" id="notes-ta" placeholder="Notes de campanya, equipament, aliances..." oninput="save()"></textarea>
-  </div>
-</div>
-
-<!-- ========== TRACKER ========== -->
-<div class="tab-panel" id="tab-tracker">
-
-  <!-- HP -->
-  <div class="tracker-grid">
-    <div class="tbox full">
-      <div class="tbox-lbl" id="lbl-hp">Punts de Vida</div>
-      <div class="hp-row">
-        <input class="hp-cur" type="number" id="hp-cur" value="20" oninput="updateHPBar();save()">
-        <span class="hp-sep">/</span>
-        <input class="hp-max-inp" type="number" id="hp-max" value="20" oninput="updateHPBar();save()">
-      </div>
-      <div class="hp-bar"><div class="hp-fill" id="hp-fill" style="width:100%"></div></div>
-      <div class="hp-btns">
-        <button class="hp-btn dmg" onclick="adjHP(-1)" id="btn-dmg">− Dany</button>
-        <button class="hp-btn" onclick="adjHP(0)" id="btn-full">Full</button>
-        <button class="hp-btn heal" onclick="adjHP(1)" id="btn-heal">+ Cura</button>
-      </div>
+  <div class="acc">
+    <div class="acc-hd" onclick="toggleAcc('sv')">
+      <img class="acc-ic" src="../icons/classf.png"><span class="acc-tl">Tirades de Salvació & Habilitats</span>
+      <span class="acc-ch" id="ch-sv">▼</span>
+    </div>
+    <div class="acc-bd" id="bd-sv">
+      <div class="sec-lbl">Tirades de salvació</div>
+      <div id="saves-list"></div>
+      <div class="sec-lbl" style="margin-top:8px">Habilitats</div>
+      <div id="skills-list"></div>
     </div>
   </div>
 
-  <!-- WILD SHAPE -->
-  <div class="tbox-lbl" style="margin-bottom:6px" id="lbl-ws-uses">WILD SHAPE · Usos</div>
-  <div class="pips-wrap" id="ws-pips"></div>
-  <p class="pips-sub" id="ws-pips-sub" style="text-align:center;margin-bottom:12px"></p>
-
-  <!-- WILD SHAPE ACTIVE / PICKER -->
-  <div id="ws-active-wrap" style="display:none">
-    <div class="ws-box" id="ws-active-box">
-      <div class="ws-hd">
-        <img src="../icons/bear.png" style="width:22px;height:22px;object-fit:contain;opacity:.8" alt="">
-        <span class="ws-title" id="ws-form-name">Forma Salvatge</span>
-        <span class="ws-cr-badge" id="ws-form-cr">CR 1</span>
-      </div>
-      <div class="ws-stats-row">
-        <div class="ws-stat"><div class="ws-stat-lbl">HP</div><div class="ws-stat-val" id="ws-hp">—</div></div>
-        <div class="ws-stat"><div class="ws-stat-lbl">AC</div><div class="ws-stat-val" id="ws-ac">—</div></div>
-        <div class="ws-stat"><div class="ws-stat-lbl">SPD</div><div class="ws-stat-val" id="ws-spd">—</div></div>
-      </div>
-      <div class="ws-thp-row">
-        <span class="ws-thp-lbl" id="lbl-thp">THP Circle of Moon:</span>
-        <span class="ws-thp-val" id="ws-thp">—</span>
-      </div>
-      <div class="ws-attacks" id="ws-attacks"></div>
-      <button class="ws-exit-btn" onclick="exitWildShape()" id="btn-exit-ws">↩ Sortir de la Forma</button>
+  <div class="acc">
+    <div class="acc-hd" onclick="toggleAcc('inv')">
+      <img class="acc-ic" src="../icons/potion.png"><span class="acc-tl">Equipament & Inventari</span>
+      <span class="acc-ch" id="ch-inv">▼</span>
+    </div>
+    <div class="acc-bd" id="bd-inv">
+      <div id="inv-list"></div>
+      <button class="inv-add" onclick="addInvItem()">+ Afegir objecte</button>
     </div>
   </div>
 
-  <div id="ws-picker-wrap">
-    <div class="lbl mb10" id="lbl-pick-form">ESCULL UNA FORMA</div>
-    <div class="form-grid" id="form-grid"></div>
-  </div>
-
-  <!-- CONCENTRATION -->
-  <div class="lbl mt10 mb10" id="lbl-conc">CONCENTRACIÓ</div>
-  <div class="conc-box">
-    <div class="conc-dot" id="conc-dot"></div>
-    <span class="conc-label" id="lbl-conc2">Concentrant-se en:</span>
-    <input class="conc-inp" id="conc-inp" placeholder="(cap)" oninput="updateConc();save()">
-    <button onclick="clearConc()" style="border:none;background:none;color:var(--os);font-size:18px;cursor:pointer;padding:0 4px">×</button>
-  </div>
-
-  <!-- REST -->
-  <div class="rest-row">
-    <button class="rest-btn" onclick="shortRest()" id="btn-sr">
-      <img src="../icons/zzz.png" alt="">
-      <span id="lbl-sr">Descans Curt</span>
-    </button>
-    <button class="rest-btn" onclick="longRest()" id="btn-lr">
-      <img src="../icons/moon.png" alt="">
-      <span id="lbl-lr">Descans Llarg</span>
-    </button>
-  </div>
-</div>
-
-<!-- ========== ESPELLS ========== -->
-<div class="tab-panel" id="tab-spells">
-  <div class="subtab-bar">
-    <button class="subtab-btn active" id="stb-slots" onclick="showSubtab('slots')">Ranures</button>
-    <button class="subtab-btn" id="stb-prep" onclick="showSubtab('prep')">Preparats</button>
-    <button class="subtab-btn" id="stb-browse" onclick="showSubtab('browse')">Explorar</button>
-  </div>
-
-  <!-- RANURES -->
-  <div class="subtab-panel active" id="sub-slots">
-    <div id="slot-levels"></div>
-  </div>
-
-  <!-- PREPARATS -->
-  <div class="subtab-panel" id="sub-prep">
-    <div class="spell-count" id="prep-count"></div>
-    <!-- Cantrips -->
-    <div class="lbl mb10" id="lbl-cantrips">CANTRIPS</div>
-    <div id="cantrip-list"></div>
-    <!-- Level spells by level -->
-    <div id="prep-by-level"></div>
-  </div>
-
-  <!-- EXPLORAR -->
-  <div class="subtab-panel" id="sub-browse">
-    <div class="browse-filter">
-      <input class="browse-search" id="browse-search" placeholder="Cerca..." oninput="filterBrowse()">
-      <select id="browse-lv" onchange="filterBrowse()">
-        <option value="">Tots els nivells</option>
-        <option value="0">Cantrips</option>
-        <option value="1">Nv 1</option>
-        <option value="2">Nv 2</option>
-        <option value="3">Nv 3</option>
-        <option value="4">Nv 4</option>
-        <option value="5">Nv 5</option>
-        <option value="6">Nv 6</option>
-        <option value="7">Nv 7</option>
-        <option value="8">Nv 8</option>
-        <option value="9">Nv 9</option>
-      </select>
+  <div class="acc">
+    <div class="acc-hd" onclick="toggleAcc('lore')">
+      <img class="acc-ic" src="../icons/lore.png"><span class="acc-tl">Història & Personalitat</span>
+      <span class="acc-ch" id="ch-lore">▼</span>
     </div>
-    <div id="browse-list"></div>
+    <div class="acc-bd" id="bd-lore">
+      <div class="fi"><label>La teva història</label>
+        <textarea id="c-backstory" style="min-height:130px" placeholder="Origen, motivacions, vincles..."></textarea></div>
+    </div>
+  </div>
+</div><!-- /sc-char -->
+
+<!-- ══ TRACKER ══ -->
+<div class="screen" id="sc-tracker">
+  <div id="tracker-content"></div>
+</div>
+
+<!-- ══ ENCANTERIS ══ -->
+<div class="screen" id="sc-spells">
+  <div class="stab-bar">
+    <button class="stab-btn active" id="stb-0" onclick="switchSpellTab(0)">🌿 Els meus</button>
+    <button class="stab-btn" id="stb-1" onclick="switchSpellTab(1)">🔍 Explorar &amp; Afegir</button>
+  </div>
+  <div id="spt-0">
+    <div class="chips">
+      <div class="chip" style="background:var(--sv)">
+        <div style="font-size:10px;font-weight:700;color:var(--os)">Cantrips</div>
+        <div style="font-size:16px;font-weight:700;color:var(--os)" id="chip-c">0</div>
+      </div>
+      <div class="chip" style="background:var(--pl)">
+        <div style="font-size:10px;font-weight:700;color:var(--pd)">Preparats</div>
+        <div style="font-size:16px;font-weight:700;color:var(--pd)" id="chip-p">0/<span id="chip-max">6</span></div>
+      </div>
+      <div class="chip" style="background:var(--tl)">
+        <div style="font-size:10px;font-weight:700;color:var(--td)">Cercle 🌙</div>
+        <div style="font-size:16px;font-weight:700;color:var(--td)" id="chip-circ">3</div>
+      </div>
+    </div>
+    <div id="my-spells-list"></div>
+  </div>
+  <div id="spt-1" style="display:none">
+    <div class="srch-box">
+      <span class="srch-ic">🔍</span>
+      <input type="text" id="spell-search" placeholder="Busca encanteris..." oninput="filterSpells(this.value)">
+    </div>
+    <div id="explore-list"></div>
   </div>
 </div>
 
-<!-- ========== BUILD ========== -->
-<div class="tab-panel" id="tab-build">
-  <div id="build-features"></div>
+<!-- ══ CLASSE ══ -->
+<div class="screen" id="sc-class">
+  <div id="class-content"></div>
 </div>
 
-<!-- ========== DESATS ========== -->
-<div class="tab-panel" id="tab-saved">
-  <button class="save-now-btn" onclick="saveSnapshot()">
-    <img src="../icons/saved.png" alt="">
-    <span id="lbl-save-now">Desa Estat Actual</span>
+<!-- ══ BUILDS ══ -->
+<div class="screen" id="sc-builds">
+  <button class="new-bc-btn" onclick="newBuild()">
+    <span style="font-size:26px">＋</span>
+    <span>Nou personatge — des de zero</span>
   </button>
-  <div id="saved-list"></div>
+  <div class="sec-lbl">Personatges desats</div>
+  <div id="builds-list"></div>
+  <div class="acc" style="margin-top:12px">
+    <div class="acc-hd" onclick="toggleAcc('notes')">
+      <img class="acc-ic" src="../icons/notes.png"><span class="acc-tl">Notes de sessió</span>
+      <span class="acc-ch" id="ch-notes">▼</span>
+    </div>
+    <div class="acc-bd" id="bd-notes">
+      <textarea id="c-notes" style="min-height:200px" placeholder="Combos, tàctiques, notes..."></textarea>
+    </div>
+  </div>
 </div>
 
-</div><!-- /scroll -->
+</div><!-- /scroll-area -->
 
-<!-- TAB BAR -->
-<div class="tabbar">
-  <button class="tab-btn active" id="tbtn-character" onclick="showTab('character')">
-    <img src="../icons/druid.png" alt=""><span id="tl-char">Personatge</span>
+<div class="tab-bar">
+  <button class="tab-item active" id="tab-0" onclick="switchTab(0)">
+    <img class="ti" src="../icons/druid.png"><span>Personatge</span>
   </button>
-  <button class="tab-btn" id="tbtn-tracker" onclick="showTab('tracker')">
-    <img src="../icons/bear.png" alt=""><span id="tl-track">Tracker</span>
+  <button class="tab-item" id="tab-1" onclick="switchTab(1)">
+    <img class="ti" src="../icons/moon.png"><span>Tracker</span>
   </button>
-  <button class="tab-btn" id="tbtn-spells" onclick="showTab('spells')">
-    <img src="../icons/storm.png" alt=""><span id="tl-spells">Espells</span>
+  <button class="tab-item" id="tab-2" onclick="switchTab(2)">
+    <img class="ti" src="../icons/spellbook.png"><span>Encanteris</span>
   </button>
-  <button class="tab-btn" id="tbtn-build" onclick="showTab('build')">
-    <img src="../icons/classf.png" alt=""><span id="tl-build">Build</span>
+  <button class="tab-item" id="tab-3" onclick="switchTab(3)">
+    <img class="ti" src="../icons/bear.png"><span>Classe</span>
   </button>
-  <button class="tab-btn" id="tbtn-saved" onclick="showTab('saved')">
-    <img src="../icons/saved.png" alt=""><span id="tl-saved">Desats</span>
+  <button class="tab-item" id="tab-4" onclick="switchTab(4)">
+    <img class="ti" src="../icons/saved.png"><span>Builds</span>
   </button>
 </div>
 
-<!-- QR FAB -->
-<button class="qr-fab" onclick="openQRModal()" title="Compartir via QR">
-  <svg viewBox="0 0 24 24"><path d="M3 3h7v7H3zm1 1v5h5V4zm1 1h3v3H5zm9-2h7v7h-7zm1 1v5h5V4zm1 1h3v3h-3zM3 14h7v7H3zm1 1v5h5v-5zm1 1h3v3H5zm9 0h2v2h-2zm2 0h2v2h2v2h-2v2h2v2h-2v-2h-2v2h-2v-2h2v-2h-2v-2h2zm-2 4h2v2h-2zm4 0h2v2h-2z"/></svg>
+<!-- QR MODAL -->
+<div class="qr-overlay" id="qr-ov" style="display:none" onclick="if(event.target===this)closeQR()">
+  <div class="qr-box">
+    <div class="qr-title" id="qr-nm">Druida</div>
+    <div class="qr-sub">Snapshot · Circle of the Moon</div>
+    <div class="qr-wrap" id="qr-cvs"></div>
+    <div class="qr-url" id="qr-url"></div>
+    <div class="qr-actions">
+      <button class="qr-btn qr-copy" onclick="copyQR()">📋 Copia URL</button>
+      <button class="qr-btn qr-close" onclick="closeQR()">Tanca</button>
+    </div>
+  </div>
+</div>
+
+<button class="share-fab" id="share-fab" style="display:none" onclick="shareState()">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+  </svg>
 </button>
-<div class="qr-overlay" id="qr-overlay" onclick="if(event.target===this)closeQRModal()">
-  <div class="qr-sheet">
-    <div class="qr-drag"></div>
-    <div class="qr-title" id="qr-title">Compartir personatge</div>
-    <div class="qr-sub">QR per al DM · Vista de lectura</div>
-    <div class="qr-canvas-wrap" id="qr-canvas-wrap"></div>
-    <div class="qr-url" id="qr-url-text"></div>
-    <button class="qr-copy-btn" onclick="copyQRUrl()" id="btn-copy-url">📋 Copia l'URL</button>
-    <button class="qr-close-btn" onclick="closeQRModal()" id="btn-close-qr">Tanca</button>
+
+<!-- BEAST PICKER MODAL -->
+<div class="modal-ov" id="ws-modal" style="display:none" onclick="if(event.target===this)closeWSModal()">
+  <div class="modal-box">
+    <div class="modal-hd">
+      <span class="modal-tl">🐻 Tria forma salvatge</span>
+      <button class="modal-cl" onclick="closeWSModal()">✕</button>
+    </div>
+    <div id="beast-list"></div>
   </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
-// ============================================================
-// DATA
-// ============================================================
-const SLOT_TABLE=[
-  [0,0,0,0,0,0,0,0,0],
-  [2,0,0,0,0,0,0,0,0],
-  [3,0,0,0,0,0,0,0,0],
-  [4,2,0,0,0,0,0,0,0],
-  [4,3,0,0,0,0,0,0,0],
-  [4,3,2,0,0,0,0,0,0],
-  [4,3,3,0,0,0,0,0,0],
-  [4,3,3,1,0,0,0,0,0],
-  [4,3,3,2,0,0,0,0,0],
-  [4,3,3,3,1,0,0,0,0],
-  [4,3,3,3,2,0,0,0,0],
-  [4,3,3,3,2,1,0,0,0],
-  [4,3,3,3,2,1,0,0,0],
-  [4,3,3,3,2,1,1,0,0],
-  [4,3,3,3,2,1,1,0,0],
-  [4,3,3,3,2,1,1,1,0],
-  [4,3,3,3,2,1,1,1,0],
-  [4,3,3,3,2,1,1,1,1],
-  [4,3,3,3,3,1,1,1,1],
-  [4,3,3,3,3,2,1,1,1],
-  [4,3,3,3,3,2,2,1,1],
+'use strict';
+// ══════════════════════════════════════════════
+//  PART 2: SPELL DATA
+// ══════════════════════════════════════════════
+const DRUID_SPELLS=[
+// ── CANTRIPS ──
+{id:'control-flames',name:'Control Flames',level:0,school:'Trans.',cast:'A',range:'60 ft',dur:'Instant/1h',conc:false,save:'',
+ desc:'Expand, move, or extinguish a nonmagical flame up to 5-ft cube. Alter color, create simple shapes, or make it shed no light. Instantaneous changes are permanent.',
+ tip:'Extinguish torches silently to create darkness. Ideal for stealth ops or setting ambushes.'},
+{id:'create-bonfire',name:'Create Bonfire',level:0,school:'Conj.',cast:'A',range:'60 ft',dur:'Conc. 1 min',conc:true,save:'DEX',
+ desc:'Create a bonfire in a 5-ft cube. CON save or 1d8 fire damage. Difficult terrain for creatures in the area. Scales: +1d8 at 5th, 11th, 17th.',
+ tip:'Excellent zone-denial cantrip. Drop it on a doorway. Enemies must pass through it or go around.'},
+{id:'druidcraft',name:'Druidcraft',level:0,school:'Trans.',cast:'A',range:'30 ft',dur:'Instant',conc:false,save:'',
+ desc:'Minor nature effects: predict weather next 24h, make a flower bloom, create harmless sensory effect, or instantly light/snuff a campfire. Cannot deal damage.',
+ tip:'Predicting weather before a long rest is underrated. Also useful for signaling or roleplay.'},
+{id:'elementalism',name:'Elementalism',level:0,school:'Trans.',cast:'A',range:'30 ft',dur:'Instant/1h',conc:false,save:'',
+ desc:'Minor elemental effect: create small earth tremor (5-ft cube, no damage), create mist or fog, cause fire to flare/dim, or move 1 gallon of water. Cannot deal damage.',
+ tip:'Move water out of boots, create concealing mist, or signal with fire. Very flexible utility.'},
+{id:'frostbite',name:'Frostbite',level:0,school:'Evoc.',cast:'A',range:'60 ft',dur:'Instant',conc:false,save:'CON',
+ desc:'CON save or 1d6 cold damage, and Disadvantage on next weapon attack before end of its next turn. Scales: +1d6 at 5th, 11th, 17th.',
+ tip:'Pairs beautifully with allies who use weapon attacks. Debuff on a save is great action economy.'},
+{id:'guidance',name:'Guidance',level:0,school:'Divin.',cast:'A',range:'Touch',dur:'Conc. 1 min',conc:true,save:'',
+ desc:'Touch one willing creature. Once during the duration it can add 1d4 to one ability check of its choice. Works on any ability check.',
+ tip:'Cast before every non-combat skill check. Best support cantrip in the game. Always have it ready.'},
+{id:'gust',name:'Gust',level:0,school:'Trans.',cast:'A',range:'30 ft',dur:'Instant',conc:false,save:'STR',
+ desc:'STR save or pushed 5 ft. Can open/close an unlocked door or window, or knock a small object (<5 lb) from a surface. Creates a brief gust effect.',
+ tip:'Knock projectiles off ledges, open doors from range, or position enemies slightly.'},
+{id:'infestation',name:'Infestation',level:0,school:'Conj.',cast:'A',range:'30 ft',dur:'Instant',conc:false,save:'CON',
+ desc:'CON save or 1d6 poison damage and moved 5 ft in a random direction (d4: N/S/E/W). Movement doesn\'t provoke OA. Scales: +1d6 at 5th, 11th, 17th.',
+ tip:'The random push can break concentration or displace enemies from chokepoints. Situationally strong.'},
+{id:'magic-stone',name:'Magic Stone',level:0,school:'Trans.',cast:'B',range:'Touch',dur:'1 min',conc:false,save:'',
+ desc:'Bonus action. Imbue 1–3 pebbles with magic. Ranged spell attack (+WIS mod+Prof), 1d6+WIS mod bludgeoning. Can be thrown or used with a sling. Duration 1 min.',
+ tip:'Hand stones to an ally with Extra Attack. They attack with your spell stat using their action economy.'},
+{id:'mending',name:'Mending',level:0,school:'Trans.',cast:'1min',range:'Touch',dur:'Instant',conc:false,save:'',
+ desc:'Repair a single break or tear in an object (metal, wood, bone, etc.) as long as the break is ≤1 ft in any dimension. Leaves no trace of repair.',
+ tip:'Fix broken weapons, doors, or lock mechanisms. Roleplay gold. Repair a ship\'s hull leak mid-adventure.'},
+{id:'mold-earth',name:'Mold Earth',level:0,school:'Trans.',cast:'A',range:'30 ft',dur:'Instant/1h',conc:false,save:'',
+ desc:'Move 5-ft cube of loose earth 5 ft. Create/destroy difficult terrain from earth. Excavate writing/images in earth. Changes last 1 hour (or until moved again).',
+ tip:'Create instant foxholes for cover, fill pit traps, or dig under walls. Incredible out-of-combat utility.'},
+{id:'poison-spray',name:'Poison Spray',level:0,school:'Necro.',cast:'A',range:'30 ft',dur:'Instant',conc:false,save:'CON',
+ desc:'CON save or 1d12 poison damage. Scales: +1d12 at 5th, 11th, 17th. Highest damage cantrip but common resistance.',
+ tip:'High damage vs creatures with no poison resistance. Avoid vs undead/constructs/many bosses.'},
+{id:'primal-savagery',name:'Primal Savagery',level:0,school:'Trans.',cast:'A',range:'Self',dur:'Instant',conc:false,save:'',
+ desc:'Melee spell attack. Your teeth or nails become natural weapons: 1d10 acid damage on hit. Scales: +1d10 at 5th, 11th, 17th.',
+ tip:'Best melee cantrip for druids. Use in Wild Shape backup or when enemies close in. Strong with Potent Spellcasting.'},
+{id:'produce-flame',name:'Produce Flame',level:0,school:'Conj.',cast:'B',range:'Self',dur:'10 min',conc:false,save:'',
+ desc:'Bonus action. Flame appears in hand giving 20-ft bright light, 20-ft dim. As action: ranged spell attack, 1d8 fire (range 60 ft). Scales: +1d8 at 5th, 11th, 17th.',
+ tip:'Free light source AND damage cantrip in one. Great for dungeon exploring. Bonus action activation saves your action.'},
+{id:'resistance',name:'Resistance',level:0,school:'Abj.',cast:'A',range:'Touch',dur:'Conc. 1 min',conc:true,save:'',
+ desc:'Touch one willing creature. Once before the spell ends, the target can add 1d4 to one saving throw of its choice.',
+ tip:'Cast on the fighter before a boss\'s save-or-suck. Best used proactively when you know a save is coming.'},
+{id:'shape-water',name:'Shape Water',level:0,school:'Trans.',cast:'A',range:'30 ft',dur:'Instant/1h',conc:false,save:'',
+ desc:'Move 5-ft cube of water 5 ft. Change water flow direction. Create simple shapes from water (last 1h). Freeze water (last 1h). Alter color/opacity.',
+ tip:'Freeze water to create bridges or trap creatures. Excellent combination with other water-based spells.'},
+{id:'shillelagh',name:'Shillelagh',level:0,school:'Trans.',cast:'B',range:'Self',dur:'1 min',conc:false,save:'',
+ desc:'Bonus action. Imbue club or quarterstaff: uses your spell attack mod, deals 1d8 bludgeoning damage (magic), uses WIS instead of STR for attacks and damage.',
+ tip:'Warden Druids: this is your go-to. WIS-based melee with magic damage. Essential for Primal Strike builds.'},
+{id:'spare-the-dying',name:'Spare the Dying',level:0,school:'Necro.',cast:'A',range:'15 ft',dur:'Instant',conc:false,save:'',
+ desc:'Stabilize a creature at 0 HP. Target becomes stable (stops death saves). Range 15 ft (no touch required in 2024). Cannot restore HP.',
+ tip:'Range 15 ft means you can stabilize from relative safety. Frees you from wasting heal slots on stable allies.'},
+{id:'starry-wisp',name:'Starry Wisp',level:0,school:'Evoc.',cast:'A',range:'60 ft',dur:'Instant',conc:false,save:'',
+ desc:'Ranged spell attack. 1d8 radiant damage. Target sheds 10-ft bright light until the start of your next turn (prevents Hiding). Scales: +1d8 at 5th, 11th, 17th.',
+ tip:'Circle spells give you this for free. Tag invisible enemies or prevent stealth. Radiant bypasses many resistances.'},
+{id:'thorn-whip',name:'Thorn Whip',level:0,school:'Trans.',cast:'A',range:'30 ft',dur:'Instant',conc:false,save:'',
+ desc:'Melee spell attack (30 ft reach). 1d6 piercing. On hit: pull target 10 ft toward you. Scales: +1d6 at 5th, 11th, 17th.',
+ tip:'Pull enemies off ledges, into hazards, or away from allies. Drag them into your Spike Growth or bonfire.'},
+{id:'thunderclap',name:'Thunderclap',level:0,school:'Evoc.',cast:'A',range:'Self (5-ft)',dur:'Instant',conc:false,save:'CON',
+ desc:'CON save or 1d6 thunder to ALL creatures within 5-ft emanation. Sound audible 100 ft away. Scales: +1d6 at 5th, 11th, 17th.',
+ tip:'Good area cantrip when surrounded. But the noise attracts attention — bad for stealth operations.'},
+// ── LEVEL 1 ──
+{id:'absorb-elements',name:'Absorb Elements',level:1,school:'Abj.',cast:'R',range:'Self',dur:'1 round',conc:false,save:'',
+ desc:'Reaction when taking acid/cold/fire/lightning/thunder damage. Gain resistance to that damage type until start of next turn. Add 1d6 of that type to next melee attack.',
+ tip:'Free reaction spell. Always worth having. Saves your life vs elementals and breath weapons.'},
+{id:'animal-friendship',name:'Animal Friendship',level:1,school:'Ench.',cast:'A',range:'30 ft',dur:'24 hrs',conc:false,save:'WIS',
+ desc:'WIS save (INT 4 or lower fails auto) or beast is charmed by you for 24 hours. Only works on beasts. Higher slots: +1 beast per slot level above 1st.',
+ tip:'Fantastic for roleplay and avoiding combat. Charm predators, get mounts, gather animal allies.'},
+{id:'charm-person',name:'Charm Person',level:1,school:'Ench.',cast:'A',range:'30 ft',dur:'1 hr',conc:false,save:'WIS',
+ desc:'WIS save or charmed for 1 hour. Regards you as friendly acquaintance. Spell ends if you/allies harm target. Target knows it was charmed afterward.',
+ tip:'Great for social situations. Talk your way past guards or extract information. Remember: they know later.'},
+{id:'cure-wounds',name:'Cure Wounds',level:1,school:'Abj.',cast:'A',range:'Touch',dur:'Instant',conc:false,save:'',
+ desc:'Touch creature and restore 2d8 + WIS mod HP. Higher slots: +2d8 per slot level above 1st. No effect on undead/constructs.',
+ tip:'Circle always-prepared at lv3. Use Healing Word (bonus action) for emergencies; Cure Wounds for big heals out of combat.'},
+{id:'detect-magic',name:'Detect Magic',level:1,school:'Divin.',cast:'A',range:'Self',dur:'Conc. 10 min',conc:true,save:'',
+ desc:'Sense presence of magic within 30 ft. As action: see faint aura and know school of each magical effect. Can be cast as ritual (no slot).',
+ tip:'Ritual casting is the key — no slot cost. Use before looting or entering new areas. Essential utility.'},
+{id:'detect-poison',name:'Detect Poison and Disease',level:1,school:'Divin.',cast:'A',range:'Self',dur:'Conc. 10 min',conc:true,save:'',
+ desc:'Sense presence and location of poisons, poisonous creatures, and diseases within 30 ft for 10 minutes. Can be cast as ritual.',
+ tip:'Ritual it before eating/drinking in dungeons. Know if the water is safe. Identify disease on allies.'},
+{id:'earth-tremor',name:'Earth Tremor',level:1,school:'Evoc.',cast:'A',range:'10 ft',dur:'Instant',conc:false,save:'DEX',
+ desc:'DEX save or 1d12 bludgeoning + knocked prone. All creatures in 10-ft radius. Creates difficult terrain from loose rock/dirt. Scales: +1d12 per slot above 1st.',
+ tip:'Massive AOE at low levels. Combine with ranged attacks — prone + difficult terrain keeps enemies stuck.'},
+{id:'entangle',name:'Entangle',level:1,school:'Conj.',cast:'A',range:'90 ft',dur:'Conc. 1 min',conc:true,save:'STR',
+ desc:'STR save or restrained for duration (repeat save each turn). 20-ft square of grasping plants (difficult terrain even for those who save). On loose soil/grass.',
+ tip:'One of the best low-level control spells. Restrained = Disadvantage on attacks, attacks vs it have Advantage. Deadly combo.'},
+{id:'faerie-fire',name:'Faerie Fire',level:1,school:'Evoc.',cast:'A',range:'60 ft',dur:'Conc. 1 min',conc:true,save:'DEX',
+ desc:'DEX save or outlined in blue/green/violet. Attacks vs outlined creatures have Advantage. Outlined creatures cannot benefit from invisibility.',
+ tip:'Best lv1 concentration spell for melee parties. Advantage for ALL allies on ALL attacks. Counters invisibility.'},
+{id:'fog-cloud',name:'Fog Cloud',level:1,school:'Conj.',cast:'A',range:'120 ft',dur:'Conc. 1 hr',conc:true,save:'',
+ desc:'Create 20-ft radius sphere of thick fog (heavily obscured) at a point. Wind cannot disperse it. Scales: +20-ft radius per slot above 1st.',
+ tip:'Creates a blinding zone. Your beasts have Blindsight? They fight fine. Enemies don\'t. Strategic escape tool.'},
+{id:'goodberry',name:'Goodberry',level:1,school:'Conj.',cast:'A',range:'Touch',dur:'24 hrs',conc:false,save:'',
+ desc:'Create 10 magical berries. Each berry heals 1 HP and provides sufficient nutrition for 24 hours. Berries lose magic after 24 hours.',
+ tip:'Pre-cast before rest. 10 HP of healing for 1 lv1 slot is incredible value. Keeps the party fed for free.'},
+{id:'healing-word',name:'Healing Word',level:1,school:'Abj.',cast:'B',range:'60 ft',dur:'Instant',conc:false,save:'',
+ desc:'Bonus action. Target within 60 ft regains 2d4 + WIS mod HP. Higher slots: +2d4 per slot above 1st. No effect on undead/constructs.',
+ tip:'Bonus action = cast PLUS another spell/attack this turn. Use to revive downed allies while staying in the fight.'},
+{id:'ice-knife',name:'Ice Knife',level:1,school:'Conj.',cast:'A',range:'60 ft',dur:'Instant',conc:false,save:'DEX',
+ desc:'Ranged spell attack: 1d10 piercing. On hit or miss: shards explode, DEX save or 2d6 cold to all within 5 ft. Higher slots: +2d6 cold per slot above 1st.',
+ tip:'Burst damage + area cold. Good for clustered enemies. Even on miss the explosion still triggers.'},
+{id:'longstrider',name:'Longstrider',level:1,school:'Trans.',cast:'A',range:'Touch',dur:'1 hr',conc:false,save:'',
+ desc:'Touch creature. Speed increases by 10 ft for 1 hour. No concentration. Higher slots: +1 target per slot above 1st.',
+ tip:'No concentration! Buff the whole party at lv5+. Huge mobility boost for melee fighters.'},
+{id:'protection-evil',name:'Protection from Evil and Good',level:1,school:'Abj.',cast:'A',range:'Touch',dur:'Conc. 10 min',conc:true,save:'',
+ desc:'Touch creature. Protected from Aberrations, Celestials, Elementals, Fey, Fiends, Undead: Disadvantage on attacks vs target, can\'t charm/frighten/possess target.',
+ tip:'Essential vs demons, devils, and fey bosses. Drop it on the tank before a big fight. Counters many boss abilities.'},
+{id:'purify-food',name:'Purify Food and Drink',level:1,school:'Trans.',cast:'A',range:'10 ft',dur:'Instant',conc:false,save:'',
+ desc:'Purify all nonmagical food and drink within a 5-ft radius sphere, removing poison and disease. Can be cast as ritual.',
+ tip:'Ritual cast it whenever you eat or drink in a dungeon. Zero slot cost for potentially life-saving effect.'},
+{id:'speak-with-animals',name:'Speak with Animals',level:1,school:'Divin.',cast:'A',range:'Self',dur:'10 min',conc:false,save:'',
+ desc:'Understand and be understood by beasts for 10 minutes. Beasts share knowledge of nearby locations, monsters, or events. They may be persuaded to help you.',
+ tip:'Always prepared via Druidic feature. Ritual cast it for free. Scouts, warning systems, find hidden creatures.'},
+{id:'thunderwave',name:'Thunderwave',level:1,school:'Evoc.',cast:'A',range:'Self (15-ft cube)',dur:'Instant',conc:false,save:'CON',
+ desc:'CON save or 2d8 thunder + pushed 10 ft. Half damage on save. Everything in a 15-ft cube. Audible 300 ft away. Scales: +2d8 per slot above 1st.',
+ tip:'Great escape spell when grappled or surrounded. Push enemies off ledges. Strong upcast at higher slots.'},
+{id:'snare',name:'Snare',level:1,school:'Abj.',cast:'1min',range:'Touch',dur:'8 hrs',conc:false,save:'DEX',
+ desc:'1 minute to cast. Create an invisible magical trap. DEX save or restrained until dispelled or triggered. 8-hour duration. 5-ft cube area.',
+ tip:'Set it before a long rest to protect the camp. Invisible trap + 8 hours = passive sentinel.'},
+// ── LEVEL 2 ──
+{id:'aid',name:'Aid',level:2,school:'Abj.',cast:'A',range:'30 ft',dur:'8 hrs',conc:false,save:'',
+ desc:'Up to 3 creatures. Each gains 5 additional maximum HP and 5 current HP for 8 hours. No concentration. Scales: +5 HP per slot above 2nd.',
+ tip:'No concentration. Cast before a big fight. More effective than healing because it also increases max HP.'},
+{id:'barkskin',name:'Barkskin',level:2,school:'Trans.',cast:'B',range:'Touch',dur:'1 hr',conc:false,save:'',
+ desc:'Bonus action. Touch creature. Minimum AC becomes 17 for 1 hour. No concentration. Works while unarmored or in Wild Shape.',
+ tip:'No concentration! Minimum AC 17 is incredible. Use on yourself before Wild Shape for the Circle Forms AC bonus calculation.'},
+{id:'darkvision',name:'Darkvision',level:2,school:'Trans.',cast:'A',range:'Touch',dur:'8 hrs',conc:false,save:'',
+ desc:'Touch willing creature. Grants Darkvision (60 ft) for 8 hours if it doesn\'t already have it. No concentration.',
+ tip:'Give it to party members without darkvision before entering a dungeon. Saves on torches and prevents ambushes.'},
+{id:'enhance-ability',name:'Enhance Ability',level:2,school:'Trans.',cast:'A',range:'Touch',dur:'Conc. 1 hr',conc:true,save:'',
+ desc:'Bestow magical enhancement: Bear\'s Endurance (CON, +2d6 temp HP), Cat\'s Grace (DEX, no falling), Eagle\'s Splendor (CHA), Fox\'s Cunning (INT), Owl\'s Wisdom (WIS), Bull\'s Strength (STR). Advantage on checks.',
+ tip:'Cat\'s Grace for rogues (zero fall damage), Owl\'s Wisdom for Perception checks. Great utility concentration.'},
+{id:'flame-blade',name:'Flame Blade',level:2,school:'Evoc.',cast:'B',range:'Self',dur:'Conc. 10 min',conc:true,save:'',
+ desc:'Bonus action. Summon scimitar-like blade of fire in free hand (evoke/dismiss as bonus action). Melee spell attack: 3d6 fire. Sheds 10-ft bright, 10-ft dim light. Scales: +1d6 per 2 slots above 2nd.',
+ tip:'Strong for Warden Druids. WIS-based melee, magic damage, and light source. Upcast to 4th for 4d6+.'},
+{id:'flaming-sphere',name:'Flaming Sphere',level:2,school:'Conj.',cast:'A',range:'60 ft',dur:'Conc. 1 min',conc:true,save:'DEX',
+ desc:'5-ft sphere of fire. DEX save or 2d6 fire on adjacent creatures. Bonus action each turn: move sphere up to 30 ft. Scales: +2d6 per slot above 2nd.',
+ tip:'Bonus action to attack = use your action for something else. Excellent action economy. Great for area denial.'},
+{id:'hold-person',name:'Hold Person',level:2,school:'Ench.',cast:'A',range:'60 ft',dur:'Conc. 1 min',conc:true,save:'WIS',
+ desc:'WIS save or Paralyzed for duration. Repeat save each turn. Attacks against Paralyzed target within 5 ft are critical hits. Higher slots: +1 target per slot.',
+ tip:'Any melee attack within 5 ft auto-crits. Even on one enemy, auto-crits on a melee martial is devastating.'},
+{id:'lesser-restoration',name:'Lesser Restoration',level:2,school:'Abj.',cast:'B',range:'Touch',dur:'Instant',conc:false,save:'',
+ desc:'Bonus action. End one effect: disease, blinded, deafened, paralyzed, or poisoned. Works on the creature touched.',
+ tip:'Bonus action! Always have 1 lv2 slot for this. Paralyzed and Blinded conditions end fights quickly if uncountered.'},
+{id:'moonbeam',name:'Moonbeam',level:2,school:'Evoc.',cast:'A',range:'120 ft',dur:'Conc. 1 min',conc:true,save:'CON',
+ desc:'5-ft cylinder of pale moonlight (40 ft high). CON save or 2d10 radiant. Half on save. Shapechangers have Disadvantage on save. Bonus action each turn: move beam 60 ft. Scales: +2d10 per slot above 2nd.',
+ tip:'Circle always-prepared. Use vs lycanthropes (Disadvantage). Radiant vs undead. Move the beam as bonus action!'},
+{id:'pass-without-trace',name:'Pass without Trace',level:2,school:'Abj.',cast:'A',range:'Self',dur:'Conc. 1 hr',conc:true,save:'',
+ desc:'Shroud of shadow. You and chosen creatures within 30 ft gain +10 to Stealth checks and leave no tracks. Concentration 1 hour.',
+ tip:'+10 to stealth is absurd. Makes even clunky players pass. Essential for infiltration missions.'},
+{id:'spike-growth',name:'Spike Growth',level:2,school:'Trans.',cast:'A',range:'150 ft',dur:'Conc. 10 min',conc:true,save:'',
+ desc:'20-ft radius becomes difficult terrain AND deals 2d4 piercing per 5 ft traveled through it. The ground looks natural (Perception DC 15 to notice). Lasts 10 min.',
+ tip:'This is BRUTAL. Combine with Thorn Whip to drag enemies through it repeatedly. Best lv2 control spell.'},
+{id:'summon-beast',name:'Summon Beast',level:2,school:'Conj.',cast:'A',range:'90 ft',dur:'Conc. 1 hr',conc:true,save:'',
+ desc:'Summon a Beast Spirit (Air/Land/Water). Uses your spell attack/DC. Attacks deal 1d8+WIS mod + slot-level damage. Scales with slot level (more damage, more HP).',
+ tip:'Solid damage concentration. Air Spirit can fly. Land has extra attacks at higher levels. Scales well.'},
+{id:'heat-metal',name:'Heat Metal',level:2,school:'Trans.',cast:'A',range:'60 ft',dur:'Conc. 1 min',conc:true,save:'CON',
+ desc:'Metal object sears: 2d8 fire + CON save or drop the object. Repeat each turn as bonus action at no cost. If wearing metal armor: Disadvantage on attacks and ability checks.',
+ tip:'Destroys armored enemies. Force enemies to drop weapons and shields. Bonus action each turn means no action cost to sustain damage.'},
+{id:'wither-and-bloom',name:'Wither and Bloom',level:2,school:'Necro.',cast:'A',range:'60 ft',dur:'Instant',conc:false,save:'CON',
+ desc:'CON save or 2d6 necrotic in 10-ft sphere. One creature of choice in the area (ally or enemy) heals 1d6 + WIS mod instead of taking damage. Scales: +1d6 per slot.',
+ tip:'Selective AOE + healing in one action. Heal the ally in the blob while damaging the enemies around them.'},
+{id:'gust-of-wind',name:'Gust of Wind',level:2,school:'Evoc.',cast:'A',range:'Self (60-ft line)',dur:'Conc. 1 min',conc:true,save:'STR',
+ desc:'60-ft x 10-ft line of wind. STR save or pushed 15 ft. Difficult terrain vs movement into the wind. Gas/vapors dispersed. Small creatures pushed as bonus action.',
+ tip:'Dispel Cloudkill, Stinking Cloud, Fog Cloud. Pushes enemies off ledges. Combos with hazards and cliffs.'},
+{id:'healing-spirit',name:'Healing Spirit',level:2,school:'Conj.',cast:'B',range:'60 ft',dur:'Conc. 1 min',conc:true,save:'',
+ desc:'Bonus action. Invisible spirit in 5-ft cube. Creature in its space at start of turn (or enters it): heals 1d6. Max total heals = 1 + WIS mod. Move it as bonus action.',
+ tip:'Incredibly efficient healing over time. Park it on the tank. Move as bonus action. WIS mod limits total activations.'},
+{id:'find-traps',name:'Find Traps',level:2,school:'Divin.',cast:'A',range:'120 ft',dur:'Instant',conc:false,save:'',
+ desc:'Sense whether any traps exist within line of sight (mechanical or magical). You know the general nature of the trap but not its exact location or how to disable it.',
+ tip:'Useful but imprecise. Pairs with Investigation checks. Better than blindly triggering a CR-killing trap.'},
+{id:'earthbind',name:'Earthbind',level:2,school:'Trans.',cast:'A',range:'300 ft',dur:'Conc. 1 min',conc:true,save:'STR',
+ desc:'STR save or flying speed becomes 0, creature descends 60 ft/round (no fall damage). Concentration. Only works on creatures that are flying.',
+ tip:'300 ft range! Bring down flying enemies safely. Even Huge creatures fail saves against a WIS 18+ caster.'},
+{id:'protection-from-poison',name:'Protection from Poison',level:2,school:'Abj.',cast:'A',range:'Touch',dur:'1 hr',conc:false,save:'',
+ desc:'Touch creature. If poisoned: neutralize one poison. Advantage on saves vs being poisoned. Resistance to poison damage. 1 hour, no concentration.',
+ tip:'Pre-cast before fighting poisonous creatures or traps. No concentration + 1 hour = cheap insurance.'},
+{id:'dust-devil',name:'Dust Devil',level:2,school:'Conj.',cast:'A',range:'60 ft',dur:'Conc. 1 min',conc:true,save:'STR',
+ desc:'5-ft cube spinning column of air. STR save or 1d8 bludgeoning + moved 10 ft away from it. Bonus action: move it 30 ft. Creates difficult terrain. Scales: +1d8 per slot above 2nd.',
+ tip:'Cheap concentration damage + area denial. Bonus action to move. Difficult terrain slows all enemies in radius.'},
+// ── LEVEL 3 ──
+{id:'aura-of-vitality',name:'Aura of Vitality',level:3,school:'Abj.',cast:'A',range:'Self (30-ft)',dur:'Conc. 1 min',conc:true,save:'',
+ desc:'30-ft aura. Bonus action each turn: heal one creature in aura for 2d6. Concentration 1 minute. Total potential: 10 turns × 2d6 (avg 70 HP) for a lv3 slot.',
+ tip:'Ridiculous healing efficiency. 2d6/bonus action/turn for one lv3 slot. Heal up to 70 HP total in combat without using actions.'},
+{id:'call-lightning',name:'Call Lightning',level:3,school:'Conj.',cast:'A',range:'120 ft',dur:'Conc. 10 min',conc:true,save:'DEX',
+ desc:'Summon storm cloud (10-min conc). Action each turn: call bolt from cloud, DEX save or 3d10 lightning. Half on save. +1d10 in stormy conditions. Scales: +1d10 per slot above 3rd.',
+ tip:'Best sustained damage spell. Full action concentration, but 3d10/turn for 10 turns (avg 16.5/turn) beats most alternatives.'},
+{id:'conjure-animals',name:'Conjure Animals',level:3,school:'Conj.',cast:'A',range:'60 ft',dur:'Conc. 1 hr',conc:true,save:'',
+ desc:'Summon swarms or beasts that fill a 10-ft cube. They use your spell attack/DC. Circle always-prepared at lv5. Scales with higher slots.',
+ tip:'Circle always-prepared at lv5. Excellent battlefield control. The summoned beasts act on your initiative.'},
+{id:'daylight',name:'Daylight',level:3,school:'Evoc.',cast:'A',range:'60 ft',dur:'1 hr',conc:false,save:'',
+ desc:'60-ft radius sphere of bright light (centered on point or object). Dispels magical darkness spells of 3rd level or lower. Undead/light-sensitive creatures affected.',
+ tip:'Counter Darkness. Force vampires and shadow demons to flee. Object-based: attach to an arrow or stone.'},
+{id:'dispel-magic',name:'Dispel Magic',level:3,school:'Abj.',cast:'A',range:'120 ft',dur:'Instant',conc:false,save:'',
+ desc:'End any spell of 3rd level or lower on target. For higher-level spells: spellcasting ability check (DC 10 + spell level). Scales: auto-end all spells ≤ slot level used.',
+ tip:'Essential utility. Remove enemy concentration spells, disarm magical traps, end buffs. Upcast to auto-succeed.'},
+{id:'plant-growth',name:'Plant Growth',level:3,school:'Trans.',cast:'A',range:'150 ft',dur:'Instant',conc:false,save:'',
+ desc:'Overgrowth: 100-ft radius, difficult terrain (4× movement cost) for 24 hours. OR Agriculture: 8-hr casting, enrich soil for bountiful harvest in a half-mile radius.',
+ tip:'The overgrowth version is brutal zone control. 4× movement cost means most enemies spend their whole turn moving 10 ft.'},
+{id:'protection-from-energy',name:'Protection from Energy',level:3,school:'Abj.',cast:'A',range:'Touch',dur:'Conc. 1 hr',conc:true,save:'',
+ desc:'Touch creature. Resistance to one chosen damage type: acid, cold, fire, lightning, or thunder. Concentration 1 hour.',
+ tip:'Pre-cast vs fire dragons, lightning elementals, etc. Key buff before expected elemental combat.'},
+{id:'revivify',name:'Revivify',level:3,school:'Necro.',cast:'A',range:'Touch',dur:'Instant',conc:false,save:'',
+ desc:'Restore life to creature dead <1 minute. Returns with 1 HP. Requires 300 gp diamond component. No effect on undead/constructs.',
+ tip:'300 gp diamond is expensive but worth carrying. Best emergency life-save in the game at this level.'},
+{id:'sleet-storm',name:'Sleet Storm',level:3,school:'Conj.',cast:'A',range:'150 ft',dur:'Conc. 1 min',conc:true,save:'DEX',
+ desc:'20-ft radius cylinder of freezing rain. Difficult terrain. DEX save or fall prone when entering area or starting turn there. Heavy obscurement. Concentration checks when casting in it.',
+ tip:'Triple control: difficult terrain + prone + heavy obscurement. Locks down a zone completely. Great vs archers.'},
+{id:'summon-fey',name:'Summon Fey',level:3,school:'Conj.',cast:'A',range:'90 ft',dur:'Conc. 1 hr',conc:true,save:'',
+ desc:'Summon Fey Spirit (Fuming/Mirthful/Tricksy). Uses your spell attack/DC. Scales with slot level. Good mobility and teleportation abilities.',
+ tip:'Mirthful fey adds Charmed condition. Tricksy fey can become invisible. More utility than Beast Summons at same slot.'},
+{id:'tidal-wave',name:'Tidal Wave',level:3,school:'Conj.',cast:'A',range:'120 ft',dur:'Instant',conc:false,save:'DEX',
+ desc:'30-ft long, 10-ft wide, 10-ft high wave. DEX save or 4d8 bludgeoning + knocked prone. Half damage on save. Creates difficult terrain (water pools) for 1 minute.',
+ tip:'No concentration AOE. Prone + difficult terrain left behind. Excellent vs grouped enemies. Good damage.'},
+{id:'wind-wall',name:'Wind Wall',level:3,school:'Evoc.',cast:'A',range:'120 ft',dur:'Conc. 1 min',conc:true,save:'STR',
+ desc:'60-ft long, 15-ft high, 1-ft thick wall of wind. STR save or 3d8 bludgeoning. Small/smaller creatures pushed back. Ranged projectiles have Disadvantage through it.',
+ tip:'Stop ranged attackers completely. Redirect fog/gas clouds. Prevent enemy ranged armies from shooting your party.'},
+{id:'erupting-earth',name:'Erupting Earth',level:3,school:'Trans.',cast:'A',range:'120 ft',dur:'Instant',conc:false,save:'DEX',
+ desc:'DEX save or 3d12 bludgeoning in 20-ft cube. Half on save. Creates difficult terrain (rubble) in the area. Scales: +1d12 per slot above 3rd.',
+ tip:'Huge AOE damage + permanent difficult terrain. No concentration! Great for open-field fights.'},
+{id:'speak-with-plants',name:'Speak with Plants',level:3,school:'Trans.',cast:'A',range:'Self (30-ft)',dur:'10 min',conc:false,save:'',
+ desc:'Plants within 30 ft understand you and can answer questions about area, creatures, events. Can animate plants to entangle creatures (STR save or restrained 1 min).',
+ tip:'Ask the forest about nearby enemies. Entangle surprise. Great scouting + area control in one spell.'},
+{id:'water-breathing',name:'Water Breathing',level:3,school:'Trans.',cast:'A',range:'30 ft',dur:'24 hrs',conc:false,save:'',
+ desc:'Up to 10 willing creatures can breathe underwater for 24 hours. No concentration. Can be cast as ritual.',
+ tip:'Ritual cast before underwater missions. Zero slot cost. Pre-cast means the whole party can explore freely.'},
+{id:'water-walk',name:'Water Walk',level:3,school:'Trans.',cast:'A',range:'30 ft',dur:'1 hr',conc:false,save:'',
+ desc:'Up to 10 willing creatures can walk on liquid surfaces (water, mud, lava, acid) for 1 hour without sinking. Submerged creatures rise to surface. Can be cast as ritual.',
+ tip:'Walk over lava with ritual cast. No concentration, no slot cost. Essential for certain dungeons.'},
+{id:'meld-into-stone',name:'Meld into Stone',level:3,school:'Trans.',cast:'A',range:'Touch',dur:'8 hrs',conc:false,save:'',
+ desc:'Move into stone or earth surface. Can exist inside for up to 8 hours. Entirely hidden (Perception auto-fail). Emerge as bonus action. No concentration. Can be cast as ritual.',
+ tip:'Perfect hiding place for rests in dungeon areas with stone. Hide during enemy patrols. Long duration + ritual.'},
+// ── LEVEL 4 ──
+{id:'blight',name:'Blight',level:4,school:'Necro.',cast:'A',range:'30 ft',dur:'Instant',conc:false,save:'CON',
+ desc:'CON save or 8d8 necrotic. Half on save. Plants auto-fail save and take max damage. Scales: +2d8 per slot above 4th.',
+ tip:'No concentration. Single-target nuke. 8d8 avg 36 necrotic, half on save. Plants suffer max damage — good vs treants.'},
+{id:'charm-monster',name:'Charm Monster',level:4,school:'Ench.',cast:'A',range:'30 ft',dur:'1 hr',conc:false,save:'WIS',
+ desc:'WIS save or charmed for 1 hour. Works on ANY creature type (not just beasts like Animal Friendship). Regards you as friendly. No concentration.',
+ tip:'No concentration! Charm a dragon, giant, or elemental. Remove it from combat entirely. Game-changing diplomacy.'},
+{id:'confusion',name:'Confusion',level:4,school:'Ench.',cast:'A',range:'90 ft',dur:'Conc. 1 min',conc:true,save:'WIS',
+ desc:'WIS save or confused in 10-ft radius. Random behavior each turn (d10: wander, do nothing, attack nearest). Repeat save each turn. Scales: +5-ft radius per slot above 4th.',
+ tip:'Random attacks include allies = devastating. Drop on a clustered group. Even if they save, they spend action on it.'},
+{id:'control-water',name:'Control Water',level:4,school:'Trans.',cast:'A',range:'300 ft',dur:'Conc. 10 min',conc:true,save:'STR',
+ desc:'Control a 100-ft cube of water. Options: Flood (rise 20 ft), Part (wall up to 100 ft), Redirect Flow, Whirlpool (STR save or 2d8 + restrained, pulled into center).',
+ tip:'Flood a room, create a whirlpool trap, or part a river. Extremely powerful environmental control.'},
+{id:'dominate-beast',name:'Dominate Beast',level:4,school:'Ench.',cast:'A',range:'60 ft',dur:'Conc. 1 min',conc:true,save:'WIS',
+ desc:'WIS save or charmed and under your control for 1 minute. Repeat save each time it takes damage. Can issue mental commands (no action). Works on beasts only.',
+ tip:'Turn a T-Rex or Griffon into your mount/weapon. Huge creatures become devastating weapons for 1 min.'},
+{id:'fount-of-moonlight',name:'Fount of Moonlight',level:4,school:'Evoc.',cast:'A',range:'Self',dur:'Conc. 10 min',conc:true,save:'CON',
+ desc:'Emit 30-ft bright, 30-ft dim moonlight. Attacks deal +WIS mod radiant. CON save on each hit or blinded until end of your next turn. Shed light prevents hiding in darkness.',
+ tip:'Circle always-prepared at lv7. WIS mod bonus radiant on every attack + blind chance. Outstanding in melee.'},
+{id:'giant-insect',name:'Giant Insect',level:4,school:'Conj.',cast:'A',range:'60 ft',dur:'Conc. 10 min',conc:true,save:'',
+ desc:'Summon a Giant centipede, spider, wasp, or scorpion. It acts as your ally and obeys verbal commands. Uses full stat block. Concentration 10 minutes.',
+ tip:'Giant Wasp has fly speed. Giant Spider leaves webs. Scorpion grapples. Pick based on tactical need.'},
+{id:'ice-storm',name:'Ice Storm',level:4,school:'Evoc.',cast:'A',range:'300 ft',dur:'Instant',conc:false,save:'DEX',
+ desc:'20-ft radius, 40-ft high cylinder. 2d8 bludgeoning + 4d6 cold, DEX save for half. Creates difficult terrain (ice) for 1 min. Scales: +1d8 bludgeoning per slot above 4th.',
+ tip:'No concentration + difficult terrain + two damage types. Bludgeoning bypasses many cold resistances.'},
+{id:'polymorph',name:'Polymorph',level:4,school:'Trans.',cast:'A',range:'60 ft',dur:'Conc. 1 hr',conc:true,save:'WIS',
+ desc:'WIS save or transform into beast with CR ≤ target\'s CR or level. Uses beast HP pool. Reverts when HP drops to 0. Target retains personality but not class features.',
+ tip:'Turn the barbarian into a T-Rex (CR 8). Turn a boss into a harmless rabbit. Double use: buff ally OR debuff enemy.'},
+{id:'stoneskin',name:'Stoneskin',level:4,school:'Trans.',cast:'A',range:'Touch',dur:'Conc. 1 hr',conc:true,save:'',
+ desc:'Touch willing creature. Resistance to nonmagical bludgeoning, piercing, and slashing damage for 1 hour. Concentration.',
+ tip:'Put on the tank before a boss fight. Halves all nonmagical physical damage. Worth the concentration slot.'},
+{id:'stone-shape',name:'Stone Shape',level:4,school:'Trans.',cast:'A',range:'Touch',dur:'Instant',conc:false,save:'',
+ desc:'Touch Medium or smaller stone and reshape it into any shape. Create a rough door, seal a passage, create a weapon or tool. Permanent change.',
+ tip:'Seal a cave entrance, create cover, or reshape a prison cell. Permanent utility — limited only by creativity.'},
+{id:'freedom-of-movement',name:'Freedom of Movement',level:4,school:'Abj.',cast:'A',range:'Touch',dur:'1 hr',conc:false,save:'',
+ desc:'Touch creature. Ignore difficult terrain. Not slowed by magic. Cannot be grappled or restrained (magical or nonmagical). Move normally underwater. 1 hour, no concentration.',
+ tip:'No concentration + 1 hour. Give it to your frontliner. Immune to most control effects. Huge in fights vs grapplers.'},
+{id:'grasping-vine',name:'Grasping Vine',level:4,school:'Conj.',cast:'B',range:'60 ft',dur:'Conc. 1 min',conc:true,save:'DEX',
+ desc:'Bonus action. Animate a vine within 60 ft. Each turn as bonus action: DEX save or creature within 30 ft of vine pulled 20 ft toward it. Can also grapple.',
+ tip:'Bonus action cast + bonus action to pull each turn. Drag enemies into Spike Growth, Wall of Fire, or toward allies.'},
+{id:'wall-of-fire',name:'Wall of Fire',level:4,school:'Evoc.',cast:'A',range:'120 ft',dur:'Conc. 1 min',conc:true,save:'DEX',
+ desc:'60-ft long, 20-ft high, 1-ft thick wall. 5d8 fire to chosen side (DEX save for half). Passing through deals 5d8 fire. Scales: +1d8 per slot above 4th.',
+ tip:'Zone denial + massive damage. Shape it around an area to wall off enemies. Combine with forced movement.'},
+{id:'elemental-bane',name:'Elemental Bane',level:4,school:'Trans.',cast:'A',range:'90 ft',dur:'Conc. 1 min',conc:true,save:'CON',
+ desc:'CON save. Target loses resistance to one chosen damage type AND takes 2d6 of that type on each hit with that damage type (no save). Higher slots: +1 target per slot above 4th.',
+ tip:'Strip fire resistance before the fire elementalist goes. Each hit with fire deals +2d6 auto. Devastating combination.'},
+{id:'summon-elemental',name:'Summon Elemental',level:4,school:'Conj.',cast:'A',range:'90 ft',dur:'Conc. 1 hr',conc:true,save:'',
+ desc:'Summon an Elemental Spirit (Air/Earth/Fire/Water). It uses your spell attack/DC. Scales with slot level for damage and HP. Concentration 1 hour.',
+ tip:'Air elemental can fly and has whirlwind. Earth is tanky. Fire damages nearby enemies. Water can grapple.'},
+// ── LEVEL 5 ──
+{id:'antilife-shell',name:'Antilife Shell',level:5,school:'Abj.',cast:'A',range:'Self (10-ft)',dur:'Conc. 1 hr',conc:true,save:'',
+ desc:'10-ft aura of shimmering energy. Living creatures cannot willingly enter the aura (not undead/constructs). Cannot push through. You can move and the shell moves with you.',
+ tip:'Zone of absolute protection from living enemies. Force ranged combat only. Walk through a crowd safely.'},
+{id:'cone-of-cold',name:'Cone of Cold',level:5,school:'Evoc.',cast:'A',range:'Self (60-ft cone)',dur:'Instant',conc:false,save:'CON',
+ desc:'CON save or 8d8 cold. Half on save. Creatures killed by it become frozen (shatter if hit for bludgeoning damage). Scales: +2d8 per slot above 5th.',
+ tip:'No concentration single-save burst. 8d8 avg 36 cold. Frozen bodies create difficult terrain and can be shattered.'},
+{id:'conjure-elemental',name:'Conjure Elemental',level:5,school:'Conj.',cast:'A',range:'60 ft',dur:'Conc. 1 hr',conc:true,save:'',
+ desc:'Summon an Elemental of CR 5 or lower from compatible environment (air, earth, fire, water). Obeys verbal commands. Becomes hostile if concentration breaks.',
+ tip:'Air Elemental is CR 5 with fly speed and whirlwind. Fire Elemental moves through enemies. Choose based on terrain.'},
+{id:'greater-restoration',name:'Greater Restoration',level:5,school:'Abj.',cast:'A',range:'Touch',dur:'Instant',conc:false,save:'',
+ desc:'Remove one effect from target: reduce exhaustion by 1, or remove charm/petrification/curse/ability score reduction/HP max reduction. Requires 100 gp diamond dust.',
+ tip:'Cannot be replaced — only way to remove petrification and reduce exhaustion reliably. Always keep one available.'},
+{id:'insect-plague',name:'Insect Plague',level:5,school:'Conj.',cast:'A',range:'300 ft',dur:'Conc. 10 min',conc:true,save:'CON',
+ desc:'20-ft sphere of biting/stinging insects at 300 ft range. CON save or 4d10 piercing. Half on save. Difficult terrain, heavily obscured. Repeat save each turn. Scales: +1d10 per slot above 5th.',
+ tip:'300 ft range! Spam zones from extreme safety. 10-minute duration. CON save is the worst save for most enemies.'},
+{id:'mass-cure-wounds',name:'Mass Cure Wounds',level:5,school:'Abj.',cast:'A',range:'60 ft',dur:'Instant',conc:false,save:'',
+ desc:'Up to 6 creatures within 60 ft. Each regains 5d8 + WIS mod HP. No concentration. Higher slots: +1d8 per slot above 5th.',
+ tip:'Circle always-prepared at lv9. Emergency mass heal. 5d8 avg 22 + WIS mod to 6 creatures = ~150 HP total.'},
+{id:'tree-stride',name:'Tree Stride',level:5,school:'Conj.',cast:'A',range:'Self',dur:'Conc. 1 min',conc:true,save:'',
+ desc:'Enter a tree large enough to contain you. Teleport to any tree within 500 ft as part of movement (once per turn). Step inside or emerge from either tree.',
+ tip:'Incredible battlefield mobility in forested areas. 500-ft teleport per turn bypasses walls, pits, and enemies.'},
+{id:'wall-of-stone',name:'Wall of Stone',level:5,school:'Evoc.',cast:'A',range:'120 ft',dur:'Conc. 10 min',conc:true,save:'DEX',
+ desc:'Six 10x10 panels of nonmagical stone (6 inches thick). DEX save to avoid being trapped in a panel as it forms. Becomes permanent if concentration maintained for full duration.',
+ tip:'Divide the battlefield, seal doors, create fortifications. Permanent after 10 minutes. Build bridges and walls.'},
+{id:'maelstrom',name:'Maelstrom',level:5,school:'Evoc.',cast:'A',range:'120 ft',dur:'Conc. 1 min',conc:true,save:'STR',
+ desc:'30-ft radius, 5-ft deep whirlpool on water or floor. STR save or 6d6 bludgeoning + pulled 10 ft toward center. Difficult terrain. Repeat save each turn.',
+ tip:'Massive pull + damage combo. Pull enemies into your Spike Growth or Wall of Fire. Sustained area control.'},
+{id:'awaken',name:'Awaken',level:5,school:'Trans.',cast:'8hrs',range:'Touch',dur:'Permanent',conc:false,save:'',
+ desc:'8 hr casting. Touch a beast or plant. Grants INT 10 (min), one language, memory. Becomes friendly/loyal for 30 days. Requires 1,000 gp agate.',
+ tip:'Permanent animal/plant companion. Awakened trees can grapple. Awakened bears make loyal bodyguards.'},
+{id:'reincarnate',name:'Reincarnate',level:5,school:'Necro.',cast:'1hr',range:'Touch',dur:'Instant',conc:false,save:'',
+ desc:'1 hour. Restore creature dead ≤10 days. Returns in a new body (random species — roll d100 table). Retains memories, class, and abilities. Requires rare oils (1,000 gp).',
+ tip:'No material component restriction on body condition. Can restore creatures with no remains left.'},
+{id:'scrying',name:'Scrying',level:5,school:'Divin.',cast:'10min',range:'Self',dur:'Conc. 10 min',conc:true,save:'WIS',
+ desc:'See/hear a specific creature for 10 min. WIS save modified by familiarity (Disadvantage if you\'ve met them). Send sensor to creature\'s location.',
+ tip:'Track enemies and scout before entering dungeons. After meeting someone once, you can always scry on them.'},
+{id:'wrath-of-nature',name:'Wrath of Nature',level:5,school:'Evoc.',cast:'A',range:'120 ft',dur:'Conc. 1 min',conc:true,save:'',
+ desc:'Trees animate (attack for 4d6), rocks hurl (2d8, CON save or Restrained), roots trip (3d6, STR save or Prone). Multiple effects in a 60-ft area. Nature-themed area control.',
+ tip:'Combines multiple damage types and conditions in one spell. Works best in forests or rocky terrain.'},
+// ── LEVEL 6 ──
+{id:'heal',name:'Heal',level:6,school:'Abj.',cast:'A',range:'60 ft',dur:'Instant',conc:false,save:'',
+ desc:'Heal target for 70 HP. Also removes blinded, deafened, diseased, and poisoned conditions. No concentration. Scales: +10 HP per slot above 6th.',
+ tip:'70 HP + condition removal in one action is extraordinary. Use on a player who is both dying and debilitated.'},
+{id:'heroes-feast',name:'Heroes\' Feast',level:6,school:'Conj.',cast:'10min',range:'Self (10-ft cube)',dur:'Instant',conc:false,save:'',
+ desc:'10-min casting. Creates feast for 12 creatures. Effects last 24 hours: cured of poison/disease, immune to frightened/poisoned, Advantage on WIS saves, +2d10 temporary HP.',
+ tip:'Requires 1,000 gp bowl (consumed). The WIS save advantage and temp HP last all day. Pre-cast before a known boss fight.'},
+{id:'conjure-fey',name:'Conjure Fey',level:6,school:'Conj.',cast:'A',range:'90 ft',dur:'Conc. 1 hr',conc:true,save:'',
+ desc:'Summon a Fey Spirit of CR 6 or lower. Obeys verbal commands. Becomes hostile if concentration breaks. Some fey have charm/fear abilities.',
+ tip:'CR 6 creatures have significant power. Fey abilities like charm and teleportation add tactical flexibility.'},
+{id:'sunbeam',name:'Sunbeam',level:6,school:'Evoc.',cast:'A',range:'Self (60-ft line)',dur:'Conc. 1 min',conc:true,save:'CON',
+ desc:'60-ft line of brilliant light. CON save or 6d8 radiant + blinded until your next turn. Half on save. Undead/oozes Disadvantage. Action each turn to re-emit beam.',
+ tip:'Reusable beam! Each turn: action to fire 6d8 radiant. Blinded on fail. Obliterates undead and ooze enemies.'},
+{id:'wall-of-thorns',name:'Wall of Thorns',level:6,school:'Conj.',cast:'A',range:'120 ft',dur:'Conc. 10 min',conc:true,save:'DEX',
+ desc:'60-ft long, 10-ft thick, 10-ft high. DEX save or 7d8 piercing to pass through (half on save). Difficult terrain. Scales: +1d8 per slot above 6th.',
+ tip:'Impenetrable wall for 10 minutes. 7d8 avg 31 piercing to traverse. Force enemies into chokepoints or around hazards.'},
+{id:'wind-walk',name:'Wind Walk',level:6,school:'Trans.',cast:'1min',range:'30 ft',dur:'8 hrs',conc:false,save:'',
+ desc:'Up to 10 willing creatures become gaseous and gain Fly 300 ft (hover) for 8 hours. Revert to normal as bonus action (1 min). No concentration.',
+ tip:'Fastest travel spell in D&D. 300 ft fly speed, no concentration, 8 hours. Party-wide flight is incredible.'},
+{id:'move-earth',name:'Move Earth',level:6,school:'Trans.',cast:'A',range:'120 ft',dur:'Conc. 2 hrs',conc:true,save:'',
+ desc:'Reshape dirt, sand, or clay in 40-ft cube. Each action: reshape up to 10 ft in any dimension. Change slopes, fill trenches, create hills. Concentration 2 hours.',
+ tip:'Shape entire battlefields over time. Create fortifications, fill moats, reshape geography permanently.'},
+{id:'bones-of-the-earth',name:'Bones of the Earth',level:6,school:'Trans.',cast:'A',range:'120 ft',dur:'Instant',conc:false,save:'DEX',
+ desc:'Up to 6 stone pillars shoot up from ground. DEX save or 6d6 bludgeoning + knocked prone if creature is at pillar location. Each pillar is 5 ft wide, 30 ft tall.',
+ tip:'No concentration AOE + difficult terrain + prone. Six 5-ft columns creates a maze of stone pillars instantly.'},
+{id:'primordial-ward',name:'Primordial Ward',level:6,school:'Abj.',cast:'A',range:'Self',dur:'Conc. 1 min',conc:true,save:'',
+ desc:'Resistance to acid, cold, fire, lightning, and thunder. When hit by one of these types: immunity to that type for remainder of combat (absorb). Concentration.',
+ tip:'The first hit of any element grants you immunity to that element for the rest of the fight. Strong vs elementals.'},
+{id:'flesh-to-stone',name:'Flesh to Stone',level:6,school:'Trans.',cast:'A',range:'60 ft',dur:'Conc. 1 min',conc:true,save:'CON',
+ desc:'CON save at end of each of target\'s turns for 3 rounds. 3 failures = permanently Petrified. Each success reduces failure count. Greater Restoration removes petrification.',
+ tip:'Permanent petrification after 3 fails. Devastating vs single powerful enemies. Concentration for 3 turns only.'},
+{id:'transport-via-plants',name:'Transport via Plants',level:6,school:'Conj.',cast:'A',range:'10 ft',dur:'1 round',conc:false,save:'',
+ desc:'Enter a Large+ plant within 10 ft. Teleport to any other plant of the same species anywhere on the same plane. One-way trip per casting.',
+ tip:'Instant teleportation across continents if you know where a tree of the same species exists. Roleplay gold.'},
+// ── LEVEL 7 ──
+{id:'fire-storm',name:'Fire Storm',level:7,school:'Evoc.',cast:'A',range:'150 ft',dur:'Instant',conc:false,save:'DEX',
+ desc:'Ten 10-ft cubes arranged as you choose within 150 ft. DEX save or 7d10 fire. Half on save. Plants in the area auto-fail saves and take max damage. Creates difficult terrain.',
+ tip:'No concentration + flexible area shape = one of the best 7th-level AoEs. Shape around allies, burn the enemy side.'},
+{id:'regenerate',name:'Regenerate',level:7,school:'Trans.',cast:'1min',range:'Touch',dur:'1 hr',conc:false,save:'',
+ desc:'1 min casting. Touch creature. Heals 4d8+15 HP immediately, then 1 HP every 6 seconds (10 HP/minute) for 1 hour. Regrows severed limbs in 2 minutes.',
+ tip:'Sustained regen = 600 HP over an hour. Regrow limbs. Pre-cast before a dungeon for slow but free healing.'},
+{id:'reverse-gravity',name:'Reverse Gravity',level:7,school:'Trans.',cast:'A',range:'100 ft',dur:'Conc. 1 min',conc:true,save:'DEX',
+ desc:'100-ft cylinder (50-ft radius). Gravity reverses for 1 min. Unsecured creatures/objects DEX save or fall upward (until end of 100-ft range). Fall takes damage when gravity ends.',
+ tip:'Devastating. Throw the entire encounter upward. When concentration ends, everything falls back for 10d6 damage.'},
+{id:'mirage-arcane',name:'Mirage Arcane',level:7,school:'Illu.',cast:'10min',range:'Sight',dur:'10 days',conc:false,save:'',
+ desc:'10-min casting. Alter appearance of 1-mile-square terrain for 10 days. Creatures in it can physically interact with the illusion. INT check to detect (DC = spell save DC).',
+ tip:'Fortify a settlement with illusory walls. Hide an entire valley. Strategic deception on a massive scale.'},
+{id:'plane-shift',name:'Plane Shift',level:7,school:'Conj.',cast:'A',range:'Touch',dur:'Instant',conc:false,save:'CHA',
+ desc:'Travel to another plane (up to 8 willing creatures) or banish creature (CHA save or sent to random demiplane). Requires tuning fork attuned to destination plane.',
+ tip:'Banish boss monsters to demiplanes. Travel between planes. The anti-boss save-or-lose spell.'},
+{id:'symbol',name:'Symbol',level:7,school:'Abj.',cast:'1min',range:'Touch',dur:'Until triggered',conc:false,save:'',
+ desc:'Inscribe magical glyph on surface. Trigger condition you choose. Choose from 8 effects: Hopelessness (WIS), Insanity, Pain, Sleep, Stunning, Discord, Fear, Death (CON, 10d10 necrotic).',
+ tip:'Set defensive traps. Death Symbol is a TPK waiting to happen. Set them before enemy reinforcements arrive.'},
+{id:'whirlwind',name:'Whirlwind',level:7,school:'Evoc.',cast:'A',range:'300 ft',dur:'Conc. 1 min',conc:true,save:'DEX/STR',
+ desc:'10-ft radius, 30-ft tall column at 300 ft. DEX save or 10d6 bludgeoning + trapped inside (STR save to escape). Trapped: blinded, can\'t breathe. Move whirlwind 30 ft/action.',
+ tip:'Brutal single/multi-target control. Trap and blind enemies. Move the tornado over allied areas (trapped = safe inside).'},
+// ── LEVEL 8 ──
+{id:'animal-shapes',name:'Animal Shapes',level:8,school:'Trans.',cast:'A',range:'30 ft',dur:'Conc. 24 hrs',conc:true,save:'',
+ desc:'Transform up to 8 willing creatures into beast forms of CR 4 or lower. Concentration 24 hours. As action, revert all creatures. Creatures retain personality and class features.',
+ tip:'Turn the whole party into wolves for a 24-hour chase or infiltration. Giant Eagles for the whole party = instant flight.'},
+{id:'control-weather',name:'Control Weather',level:8,school:'Trans.',cast:'10min',range:'Self (5-mi)',dur:'Conc. 8 hrs',conc:true,save:'',
+ desc:'Control weather within 5 miles for 8 hours. Change precipitation (clear → blizzard), temperature (hot → freezing), wind (calm → tornado). Takes 1d4×10 min to change.',
+ tip:'Create blizzards or droughts for military campaigns. Force an enemy fleet into a storm. Massive strategic power.'},
+{id:'earthquake',name:'Earthquake',level:8,school:'Trans.',cast:'A',range:'500 ft',dur:'Conc. 1 min',conc:true,save:'CON/DEX/STR',
+ desc:'100-ft-radius disturbance. Difficult terrain. DC 15 CON save to cast spells. DEX save or prone. Structures take 50 damage/round. Concentration check DC 15 every turn.',
+ tip:'Area denial + structural damage. Collapse buildings, crack stone floors, disrupt enemy spellcasting.'},
+{id:'sunburst',name:'Sunburst',level:8,school:'Evoc.',cast:'A',range:'150 ft',dur:'Instant',conc:false,save:'CON',
+ desc:'60-ft radius burst of brilliant light. CON save or 12d6 radiant + blinded for 1 minute. Half on save (not blinded). Undead/oozes Disadvantage. Blindness: CON save each turn.',
+ tip:'12d6 radiant + 1-minute blind. No concentration! Use vs undead for Disadvantage. Blinded = massive debuff.'},
+{id:'tsunami',name:'Tsunami',level:8,school:'Conj.',cast:'1min',range:'Sight',dur:'Conc. 6 rounds',conc:true,save:'STR',
+ desc:'300-ft tall, 300-ft wide wall of water. STR save or 6d10 bludgeoning per round. Wall moves 50 ft from you each round. Gradually weakens each round (d6 reduction).',
+ tip:'Colossal AOE tide. 6d10 bludgeoning per round to everything in its path. Best used outdoors near water.'},
+{id:'befuddlement',name:'Befuddlement',level:8,school:'Ench.',cast:'A',range:'150 ft',dur:'Conc. 1 min',conc:true,save:'INT',
+ desc:'INT save or Incapacitated for 1 min. On each turn target can repeat save. If spell ends via save failure, target forgets events during spell. Target forgets who cast it.',
+ tip:'Target forgets you cast it — no hostility if you release them. Interrogation tool. Remove the boss from combat.'},
+{id:'incendiary-cloud',name:'Incendiary Cloud',level:8,school:'Conj.',cast:'A',range:'150 ft',dur:'Conc. 1 min',conc:true,save:'DEX',
+ desc:'20-ft radius sphere of choking smoke + embers. DEX save or 10d8 fire. Half on save. Moves 10 ft from you each round. Blocks vision (heavily obscured).',
+ tip:'10d8/round fire + blocks vision. Move it toward enemies each turn. Combine with enemies who failed other saves.'},
+// ── LEVEL 9 ──
+{id:'foresight',name:'Foresight',level:9,school:'Divin.',cast:'1min',range:'Touch',dur:'8 hrs',conc:false,save:'',
+ desc:'8-hour duration, no concentration. Target cannot be surprised. Advantage on attack rolls, ability checks, saving throws. Enemies have Disadvantage on attacks against target.',
+ tip:'Cast on yourself. All attacks are made with Advantage, you have Advantage on saves, enemies have Disadvantage on you. For 8 hours.'},
+{id:'shapechange',name:'Shapechange',level:9,school:'Trans.',cast:'A',range:'Self',dur:'Conc. 1 hr',conc:true,save:'',
+ desc:'Transform into any creature with CR ≤ druid level. Retain mental stats, class features, and spellcasting. When you drop to 0 HP: make DC 10 + damage CON save to remain transformed.',
+ tip:'Become a Solar (CR 21) or Ancient Dragon. Keep your druid spellcasting while using the creature\'s body and attacks.'},
+{id:'storm-of-vengeance',name:'Storm of Vengeance',level:9,school:'Conj.',cast:'A',range:'Sight (1 mi)',dur:'Conc. 1 min',conc:true,save:'',
+ desc:'1-mile radius storm. Round 1: 20d6 thunder + deafened. Round 2: 1d6 acid rain. Rounds 3-6: 10d6 lightning (halved Dex) / hail (2d6 bludgeoning) / wind (Disadvantage ranged). Each round different.',
+ tip:'Total battlefield domination. Chain lightning, acid, hail, thunder, and wind every round. Unquestionable power.'},
+{id:'true-resurrection',name:'True Resurrection',level:9,school:'Necro.',cast:'1hr',range:'Touch',dur:'Instant',conc:false,save:'',
+ desc:'Restore a creature dead up to 200 years. Creates a new body if needed. Fully restores HP. Requires 25,000 gp diamond. Also counters curses that prevent resurrection.',
+ tip:'The ultimate last resort. 200-year time limit, creates new body from nothing. Counters wish-blocked death curses.'},
 ];
 
-function wsUsesForLevel(lv){
-  if(lv>=14)return 5;
-  if(lv>=10)return 4;
-  if(lv>=6)return 3;
-  return 2;
-}
-
+// ══════════════════════════════════════════════
+//  PART 3: BEAST FORMS + SLOT TABLE
+// ══════════════════════════════════════════════
+// crVal: 0=CR0, 0.25=CR1/4, 0.5=CR1/2, 1=CR1, 2=CR2, 3=CR3, 4=CR4
+// fly:true = requires lv8+ (base Wild Shape fly unlock)
 const BEAST_FORMS=[
-  {n:'Rat',cr:'0',hp:2,ac:10,spd:'20 ft',atk:'Bite: +0, 1 Piercing'},
-  {n:'Spider',cr:'0',hp:2,ac:12,spd:'20 ft / climb 20',atk:'Bite: +2, 1 Piercing + poison'},
-  {n:'Cat',cr:'0',hp:2,ac:12,spd:'40 ft',atk:'Claws: +0, 1 Slashing'},
-  {n:'Wolf',cr:'1/4',hp:11,ac:13,spd:'40 ft',atk:'Bite: +4, 2d4+2 Piercing, Knock prone STR DC13'},
-  {n:'Panther',cr:'1/4',hp:13,ac:12,spd:'50 ft',atk:'Bite: +4, 1d6+2 / Claw: +4, 1d4+2'},
-  {n:'Black Bear',cr:'1/2',hp:19,ac:11,spd:'40 ft',atk:'Multiattack: Bite+Claws · Bite +3 2d6+1 · Claws +3 2d4+1'},
-  {n:'Crocodile',cr:'1/2',hp:19,ac:12,spd:'20 ft / swim 30',atk:'Bite: +4, 1d10+2 Piercing, grapple DC12'},
-  {n:'Brown Bear',cr:'1',hp:34,ac:11,spd:'40 ft / climb 30',atk:'Multiattack · Bite +5 2d6+4 · Claws +5 2d6+4'},
-  {n:'Dire Wolf',cr:'1',hp:37,ac:14,spd:'50 ft',atk:'Bite: +5, 2d6+3 Piercing, Knock prone STR DC13'},
-  {n:'Tiger',cr:'1',hp:37,ac:12,spd:'40 ft',atk:'Bite +5 1d10+3 · Claw +5 1d6+3, pounce DC13'},
-  {n:'Giant Eagle',cr:'1',hp:26,ac:13,spd:'10 ft / fly 80',atk:'Talons +5 2d6+3 · Beak +5 1d6+3'},
-  {n:'Polar Bear',cr:'2',hp:42,ac:12,spd:'40 ft / swim 30',atk:'Multiattack · Bite +7 1d8+5 · Claws +7 2d6+5'},
-  {n:'Rhinoceros',cr:'2',hp:45,ac:11,spd:'40 ft',atk:'Gore +7 2d8+5, Charge if 20ft: +9 4d8+5 STR DC15'},
-  {n:'Saber-Toothed Tiger',cr:'2',hp:52,ac:12,spd:'40 ft',atk:'Bite +6 1d10+4 · Claw +6 2d6+4'},
-  {n:'Giant Scorpion',cr:'3',hp:52,ac:15,spd:'40 ft',atk:'Claw×2 +4 1d8+2 Grapple · Sting +4 1d10+2 + 4d10 poison'},
-  {n:'Elephant',cr:'4',hp:76,ac:12,spd:'40 ft',atk:'Gore +8 3d6+6 · Stomp +8 3d6+6 (prone target only)'},
+ {id:'rat',n:'Rat',cr:'0',crVal:0,hp:2,ac:10,spd:'20 ft',atk:'Bite +0, 1 Piercing',fly:false},
+ {id:'spider',n:'Spider',cr:'0',crVal:0,hp:2,ac:12,spd:'20 ft / climb 20',atk:'Bite +2, 1 Piercing + poison (CON)',fly:false},
+ {id:'cat',n:'Cat',cr:'0',crVal:0,hp:2,ac:12,spd:'40 ft / climb 30',atk:'Claws +0, 1 Slashing',fly:false},
+ {id:'wolf',n:'Wolf',cr:'1/4',crVal:0.25,hp:11,ac:13,spd:'40 ft',atk:'Bite +4, 2d4+2 Piercing (Trip: STR save)',fly:false},
+ {id:'boar',n:'Boar',cr:'1/4',crVal:0.25,hp:11,ac:11,spd:'40 ft',atk:'Tusk +3, 1d6+1 Piercing',fly:false},
+ {id:'giant-spider',n:'Giant Spider',cr:'1/4',crVal:0.25,hp:26,ac:14,spd:'30 ft / climb 30',atk:'Bite +5, 1d8+3 + poison, Web (Restrained)',fly:false},
+ {id:'giant-toad',n:'Giant Toad',cr:'1/4',crVal:0.25,hp:39,ac:11,spd:'20 ft / swim 40',atk:'Bite +4, 1d10+4 + grapple (swallow Small)',fly:false},
+ {id:'panther',n:'Panther',cr:'1/2',crVal:0.5,hp:13,ac:12,spd:'50 ft / climb 40',atk:'Bite +4 1d6+2 / Claw +4 1d6+2 (Pounce)',fly:false},
+ {id:'black-bear',n:'Black Bear',cr:'1/2',crVal:0.5,hp:19,ac:11,spd:'40 ft / climb 30',atk:'Bite +3 1d6+2 / Claws +3 2×1d6+2',fly:false},
+ {id:'crocodile',n:'Crocodile',cr:'1/2',crVal:0.5,hp:19,ac:12,spd:'20 ft / swim 20',atk:'Bite +4, 1d10+2 + grapple (escape DC 12)',fly:false},
+ {id:'brown-bear',n:'Brown Bear',cr:'1',crVal:1,hp:34,ac:11,spd:'40 ft / climb 30',atk:'Bite +5 1d8+4 / Claws +5 2×2d6+4',fly:false},
+ {id:'giant-hyena',n:'Giant Hyena',cr:'1',crVal:1,hp:45,ac:12,spd:'50 ft',atk:'Bite +5, 2d6+3 Piercing (Rampage)',fly:false},
+ {id:'lion',n:'Lion',cr:'1',crVal:1,hp:26,ac:12,spd:'50 ft',atk:'Bite +5 1d8+3 / Claws +5 2×1d6+3 (Pounce)',fly:false},
+ {id:'tiger',n:'Tiger',cr:'1',crVal:1,hp:37,ac:12,spd:'40 ft',atk:'Bite +5 1d10+3 / Claws +5 2×1d6+3 (Pounce)',fly:false},
+ {id:'giant-eagle',n:'Giant Eagle',cr:'1',crVal:1,hp:26,ac:13,spd:'10 ft / fly 80',atk:'Talons +5, 2×2d6+3 (Grab)',fly:true},
+ {id:'giant-constrictor',n:'Giant Constrictor',cr:'2',crVal:2,hp:60,ac:12,spd:'30 ft / swim 30',atk:'Bite +6 3d6+4 / Constrict +6 2d8+4 (grapple)',fly:false},
+ {id:'polar-bear',n:'Polar Bear',cr:'2',crVal:2,hp:42,ac:12,spd:'40 ft / swim 30',atk:'Bite +7 1d8+5 / Claws +7 2×2d6+5',fly:false},
+ {id:'rhinoceros',n:'Rhinoceros',cr:'2',crVal:2,hp:45,ac:11,spd:'40 ft',atk:'Gore +7, 2d10+5 Piercing (Charge: +2d10)',fly:false},
+ {id:'saber-toothed-tiger',n:'Saber-Toothed Tiger',cr:'2',crVal:2,hp:52,ac:12,spd:'40 ft',atk:'Bite +5 1d10+4 / Claws +5 2×1d6+4 (Pounce)',fly:false},
+ {id:'killer-whale',n:'Killer Whale',cr:'3',crVal:3,hp:90,ac:12,spd:'swim 60',atk:'Bite +7, 5d6+5 Piercing',fly:false},
+ {id:'elephant',n:'Elephant',cr:'4',crVal:4,hp:76,ac:12,spd:'40 ft',atk:'Gore +8 2d10+7 / Stomp +8 4d10+7 (prone)',fly:false},
 ];
 
-// Always-prepared spells (Circle of Moon) by min druid level
-const ALWAYS_PREP=[
-  {n:'Cure Wounds',lv:1,minLv:3},
-  {n:'Moonbeam',lv:2,minLv:3},
-  {n:'Starry Wisp',lv:0,minLv:3},
-  {n:'Conjure Animals',lv:3,minLv:5},
-  {n:'Fount of Moonlight',lv:4,minLv:7},
-  {n:'Mass Cure Wounds',lv:5,minLv:9},
+// Slot table [lv0..lv20][slot1..slot9]
+const SLOT_TABLE=[
+ [0,0,0,0,0,0,0,0,0], // 0
+ [2,0,0,0,0,0,0,0,0], // 1
+ [3,0,0,0,0,0,0,0,0], // 2
+ [4,2,0,0,0,0,0,0,0], // 3
+ [4,3,0,0,0,0,0,0,0], // 4
+ [4,3,2,0,0,0,0,0,0], // 5
+ [4,3,3,0,0,0,0,0,0], // 6
+ [4,3,3,1,0,0,0,0,0], // 7
+ [4,3,3,2,0,0,0,0,0], // 8
+ [4,3,3,3,1,0,0,0,0], // 9
+ [4,3,3,3,2,0,0,0,0], // 10
+ [4,3,3,3,2,1,0,0,0], // 11
+ [4,3,3,3,2,1,0,0,0], // 12
+ [4,3,3,3,2,1,1,0,0], // 13
+ [4,3,3,3,2,1,1,0,0], // 14
+ [4,3,3,3,2,1,1,1,0], // 15
+ [4,3,3,3,2,1,1,1,0], // 16
+ [4,3,3,3,2,1,1,1,1], // 17
+ [4,3,3,3,3,1,1,1,1], // 18
+ [4,3,3,3,3,2,1,1,1], // 19
+ [4,3,3,3,3,2,2,1,1], // 20
 ];
+// Prepared spells table (lv1-20), always-prepared don't count
+const PREP_TABLE=[0,4,5,6,7,9,10,11,12,14,15,16,16,17,17,18,18,19,19,20,21];
+// Wild Shape uses per level
+function wsMaxUses(lv){return lv>=17?4:lv>=9?3:2;}
 
-const CANTRIPS=[
-  {n:"Can't Trip",sc:'Abj',rng:'30 ft',src:'HGtMH'},
-  {n:'Concussion',sc:'Evoc',rng:'60 ft',src:'HGtMH'},
-  {n:'Control Flames',sc:'Trans',rng:'60 ft',src:'XGE'},
-  {n:'Create Bonfire',sc:'Conj',rng:'60 ft',src:'XGE'},
-  {n:'Druidcraft',sc:'Trans',rng:'30 ft',src:'PHB\'24'},
-  {n:'Elementalism',sc:'Trans',rng:'30 ft',src:'PHB\'24'},
-  {n:'Frostbite',sc:'Evoc',rng:'60 ft',src:'XGE'},
-  {n:'Guidance',sc:'Divin',rng:'Touch',src:'PHB\'24'},
-  {n:'Gust',sc:'Trans',rng:'30 ft',src:'XGE'},
-  {n:'Infestation',sc:'Conj',rng:'30 ft',src:'XGE'},
-  {n:'Magic Stone',sc:'Trans',rng:'Touch',src:'XGE'},
-  {n:'Mending',sc:'Trans',rng:'Touch',src:'PHB\'24'},
-  {n:'Mold Earth',sc:'Trans',rng:'30 ft',src:'XGE'},
-  {n:'Poison Spray',sc:'Necro',rng:'30 ft',src:'PHB\'24'},
-  {n:'Primal Savagery',sc:'Trans',rng:'Self',src:'XGE'},
-  {n:'Produce Flame',sc:'Conj',rng:'Self',src:'PHB\'24'},
-  {n:'Resistance',sc:'Abj',rng:'Touch',src:'PHB\'24'},
-  {n:'Shape Water',sc:'Trans',rng:'30 ft',src:'XGE'},
-  {n:'Shillelagh',sc:'Trans',rng:'Self',src:'PHB\'24'},
-  {n:'Spare the Dying',sc:'Necro',rng:'15 ft',src:'PHB\'24'},
-  {n:'Starry Wisp',sc:'Evoc',rng:'60 ft',src:'PHB\'24'},
-  {n:'Thorn Whip',sc:'Trans',rng:'30 ft',src:'PHB\'24'},
-  {n:'Thunderclap',sc:'Evoc',rng:'Self',src:'PHB\'24'},
-];
+// ══════════════════════════════════════════════
+//  PART 4: APP LOGIC
+// ══════════════════════════════════════════════
+const SK='dnd_dr', SKB='dnd_dr_builds';
+function g(id){return document.getElementById(id)}
+function mod(n){return Math.floor((n-10)/2)}
+function fmod(n){return (n>=0?'+':'')+n}
+function prof(lv){return lv<5?2:lv<9?3:lv<13?4:lv<17?5:6}
+function clamp(v,mn,mx){return Math.max(mn,Math.min(mx,v))}
 
-const SPELLS_LV1=[
-  {n:'Absorb Elements',sc:'Abj',rng:'Self',src:'XGE'},
-  {n:'Animal Friendship',sc:'Ench',rng:'30 ft',src:'PHB\'24'},
-  {n:'Charm Person',sc:'Ench',rng:'30 ft',src:'PHB\'24'},
-  {n:'Create or Destroy Water',sc:'Trans',rng:'30 ft',src:'PHB\'24'},
-  {n:'Cure Wounds',sc:'Abj',rng:'Touch',src:'PHB\'24'},
-  {n:'Detect Magic',sc:'Divin',rng:'Self',src:'PHB\'24'},
-  {n:'Detect Poison and Disease',sc:'Divin',rng:'Self',src:'PHB\'24'},
-  {n:'Earth Tremor',sc:'Evoc',rng:'10 ft',src:'XGE'},
-  {n:'Entangle',sc:'Conj',rng:'90 ft',src:'PHB\'24'},
-  {n:'Faerie Fire',sc:'Evoc',rng:'60 ft',src:'PHB\'24'},
-  {n:'Fog Cloud',sc:'Conj',rng:'120 ft',src:'PHB\'24'},
-  {n:'Goodberry',sc:'Conj',rng:'Touch',src:'PHB\'24'},
-  {n:'Healing Word',sc:'Abj',rng:'60 ft',src:'PHB\'24'},
-  {n:'Ice Knife',sc:'Conj',rng:'60 ft',src:'PHB\'24'},
-  {n:'Jump',sc:'Trans',rng:'Touch',src:'PHB\'24'},
-  {n:'Longstrider',sc:'Trans',rng:'Touch',src:'PHB\'24'},
-  {n:'Protection from Evil and Good',sc:'Abj',rng:'Touch',src:'PHB\'24'},
-  {n:'Purify Food and Drink',sc:'Trans',rng:'10 ft',src:'PHB\'24'},
-  {n:'Snare',sc:'Abj',rng:'Touch',src:'XGE'},
-  {n:'Speak with Animals',sc:'Divin',rng:'Self',src:'PHB\'24'},
-  {n:'Thunderwave',sc:'Evoc',rng:'Self',src:'PHB\'24'},
-];
-
-const SPELLS_LV2=[
-  {n:'Aid',sc:'Abj',rng:'30 ft',src:'PHB\'24'},
-  {n:'Animal Messenger',sc:'Ench',rng:'30 ft',src:'PHB\'24'},
-  {n:'Augury',sc:'Divin',rng:'Self',src:'PHB\'24'},
-  {n:'Barkskin',sc:'Trans',rng:'Touch',src:'PHB\'24'},
-  {n:'Beast Sense',sc:'Divin',rng:'Touch',src:'PHB\'24'},
-  {n:'Darkvision',sc:'Trans',rng:'Touch',src:'PHB\'24'},
-  {n:'Dust Devil',sc:'Conj',rng:'60 ft',src:'XGE'},
-  {n:'Earthbind',sc:'Trans',rng:'300 ft',src:'XGE'},
-  {n:'Enhance Ability',sc:'Trans',rng:'Touch',src:'PHB\'24'},
-  {n:'Enlarge/Reduce',sc:'Trans',rng:'30 ft',src:'PHB\'24'},
-  {n:'Find Traps',sc:'Divin',rng:'120 ft',src:'PHB\'24'},
-  {n:'Flame Blade',sc:'Evoc',rng:'Self',src:'PHB\'24'},
-  {n:'Flaming Sphere',sc:'Conj',rng:'60 ft',src:'PHB\'24'},
-  {n:'Gust of Wind',sc:'Evoc',rng:'Self',src:'PHB\'24'},
-  {n:'Healing Spirit',sc:'Conj',rng:'60 ft',src:'XGE'},
-  {n:'Heat Metal',sc:'Trans',rng:'60 ft',src:'PHB\'24'},
-  {n:'Hold Person',sc:'Ench',rng:'60 ft',src:'PHB\'24'},
-  {n:'Lesser Restoration',sc:'Abj',rng:'Touch',src:'PHB\'24'},
-  {n:'Locate Animals or Plants',sc:'Divin',rng:'Self',src:'PHB\'24'},
-  {n:'Locate Object',sc:'Divin',rng:'Self',src:'PHB\'24'},
-  {n:'Moonbeam',sc:'Evoc',rng:'120 ft',src:'PHB\'24'},
-  {n:'Pass without Trace',sc:'Abj',rng:'Self',src:'PHB\'24'},
-  {n:'Protection from Poison',sc:'Abj',rng:'Touch',src:'PHB\'24'},
-  {n:'Skywrite',sc:'Trans',rng:'Sight',src:'XGE'},
-  {n:'Spike Growth',sc:'Trans',rng:'150 ft',src:'PHB\'24'},
-  {n:'Summon Beast',sc:'Conj',rng:'90 ft',src:'PHB\'24'},
-  {n:'Warding Wind',sc:'Evoc',rng:'Self',src:'XGE'},
-  {n:'Wither and Bloom',sc:'Necro',rng:'60 ft',src:'SCC'},
-];
-
-const SPELLS_LV3=[
-  {n:'Aura of Vitality',sc:'Abj',rng:'Self',src:'PHB\'24'},
-  {n:'Call Lightning',sc:'Conj',rng:'120 ft',src:'PHB\'24'},
-  {n:'Conjure Animals',sc:'Conj',rng:'60 ft',src:'PHB\'24'},
-  {n:'Daylight',sc:'Evoc',rng:'60 ft',src:'PHB\'24'},
-  {n:'Dispel Magic',sc:'Abj',rng:'120 ft',src:'PHB\'24'},
-  {n:'Elemental Weapon',sc:'Trans',rng:'Touch',src:'PHB\'24'},
-  {n:'Erupting Earth',sc:'Trans',rng:'120 ft',src:'XGE'},
-  {n:'Feign Death',sc:'Necro',rng:'Touch',src:'PHB\'24'},
-  {n:'Flame Arrows',sc:'Trans',rng:'Touch',src:'XGE'},
-  {n:'Meld into Stone',sc:'Trans',rng:'Touch',src:'PHB\'24'},
-  {n:'Plant Growth',sc:'Trans',rng:'150 ft',src:'PHB\'24'},
-  {n:'Protection from Energy',sc:'Abj',rng:'Touch',src:'PHB\'24'},
-  {n:'Revivify',sc:'Necro',rng:'Touch',src:'PHB\'24'},
-  {n:'Sleet Storm',sc:'Conj',rng:'150 ft',src:'PHB\'24'},
-  {n:'Speak with Plants',sc:'Trans',rng:'Self',src:'PHB\'24'},
-  {n:'Summon Fey',sc:'Conj',rng:'90 ft',src:'PHB\'24'},
-  {n:'Tidal Wave',sc:'Conj',rng:'120 ft',src:'XGE'},
-  {n:'Wall of Water',sc:'Evoc',rng:'60 ft',src:'XGE'},
-  {n:'Water Breathing',sc:'Trans',rng:'30 ft',src:'PHB\'24'},
-  {n:'Water Walk',sc:'Trans',rng:'30 ft',src:'PHB\'24'},
-  {n:'Wind Wall',sc:'Evoc',rng:'120 ft',src:'PHB\'24'},
-];
-
-const SPELLS_LV4=[
-  {n:'Blight',sc:'Necro',rng:'30 ft',src:'PHB\'24'},
-  {n:'Charm Monster',sc:'Ench',rng:'30 ft',src:'PHB\'24'},
-  {n:'Confusion',sc:'Ench',rng:'90 ft',src:'PHB\'24'},
-  {n:'Conjure Minor Elementals',sc:'Conj',rng:'Self',src:'PHB\'24'},
-  {n:'Conjure Woodland Beings',sc:'Conj',rng:'Self',src:'PHB\'24'},
-  {n:'Control Water',sc:'Trans',rng:'300 ft',src:'PHB\'24'},
-  {n:'Divination',sc:'Divin',rng:'Self',src:'PHB\'24'},
-  {n:'Dominate Beast',sc:'Ench',rng:'60 ft',src:'PHB\'24'},
-  {n:'Elemental Bane',sc:'Trans',rng:'90 ft',src:'XGE'},
-  {n:'Fire Shield',sc:'Evoc',rng:'Self',src:'PHB\'24'},
-  {n:'Fount of Moonlight',sc:'Evoc',rng:'Self',src:'PHB\'24'},
-  {n:'Freedom of Movement',sc:'Abj',rng:'Touch',src:'PHB\'24'},
-  {n:'Giant Insect',sc:'Conj',rng:'60 ft',src:'PHB\'24'},
-  {n:'Grasping Vine',sc:'Conj',rng:'60 ft',src:'PHB\'24'},
-  {n:'Guardian of Nature',sc:'Trans',rng:'Self',src:'XGE'},
-  {n:'Hallucinatory Terrain',sc:'Illu',rng:'300 ft',src:'PHB\'24'},
-  {n:'Ice Storm',sc:'Evoc',rng:'300 ft',src:'PHB\'24'},
-  {n:'Locate Creature',sc:'Divin',rng:'Self',src:'PHB\'24'},
-  {n:'Polymorph',sc:'Trans',rng:'60 ft',src:'PHB\'24'},
-  {n:'Stone Shape',sc:'Trans',rng:'Touch',src:'PHB\'24'},
-  {n:'Stoneskin',sc:'Trans',rng:'Touch',src:'PHB\'24'},
-  {n:'Summon Elemental',sc:'Conj',rng:'90 ft',src:'PHB\'24'},
-  {n:'Wall of Fire',sc:'Evoc',rng:'120 ft',src:'PHB\'24'},
-  {n:'Watery Sphere',sc:'Conj',rng:'90 ft',src:'XGE'},
-];
-
-const SPELLS_LV5=[
-  {n:'Antilife Shell',sc:'Abj',rng:'Self',src:'PHB\'24'},
-  {n:'Awaken',sc:'Trans',rng:'Touch',src:'PHB\'24'},
-  {n:'Commune with Nature',sc:'Divin',rng:'Self',src:'PHB\'24'},
-  {n:'Cone of Cold',sc:'Evoc',rng:'Self',src:'PHB\'24'},
-  {n:'Conjure Elemental',sc:'Conj',rng:'60 ft',src:'PHB\'24'},
-  {n:'Contagion',sc:'Necro',rng:'Touch',src:'PHB\'24'},
-  {n:'Control Winds',sc:'Trans',rng:'300 ft',src:'XGE'},
-  {n:'Geas',sc:'Ench',rng:'60 ft',src:'PHB\'24'},
-  {n:'Greater Restoration',sc:'Abj',rng:'Touch',src:'PHB\'24'},
-  {n:'Insect Plague',sc:'Conj',rng:'300 ft',src:'PHB\'24'},
-  {n:'Maelstrom',sc:'Evoc',rng:'120 ft',src:'XGE'},
-  {n:'Mass Cure Wounds',sc:'Abj',rng:'60 ft',src:'PHB\'24'},
-  {n:'Planar Binding',sc:'Abj',rng:'60 ft',src:'PHB\'24'},
-  {n:'Reincarnate',sc:'Necro',rng:'Touch',src:'PHB\'24'},
-  {n:'Scrying',sc:'Divin',rng:'Self',src:'PHB\'24'},
-  {n:'Transmute Rock',sc:'Trans',rng:'120 ft',src:'XGE'},
-  {n:'Tree Stride',sc:'Conj',rng:'Self',src:'PHB\'24'},
-  {n:'Wall of Stone',sc:'Evoc',rng:'120 ft',src:'PHB\'24'},
-  {n:'Wrath of Nature',sc:'Evoc',rng:'120 ft',src:'XGE'},
-];
-
-const SPELLS_LV6=[
-  {n:'Bones of the Earth',sc:'Trans',rng:'120 ft',src:'XGE'},
-  {n:'Conjure Fey',sc:'Conj',rng:'60 ft',src:'PHB\'24'},
-  {n:'Druid Grove',sc:'Abj',rng:'Touch',src:'XGE'},
-  {n:'Find the Path',sc:'Divin',rng:'Self',src:'PHB\'24'},
-  {n:'Flesh to Stone',sc:'Trans',rng:'60 ft',src:'PHB\'24'},
-  {n:'Heal',sc:'Abj',rng:'60 ft',src:'PHB\'24'},
-  {n:"Heroes' Feast",sc:'Conj',rng:'Self',src:'PHB\'24'},
-  {n:'Investiture of Flame',sc:'Trans',rng:'Self',src:'XGE'},
-  {n:'Investiture of Ice',sc:'Trans',rng:'Self',src:'XGE'},
-  {n:'Investiture of Stone',sc:'Trans',rng:'Self',src:'XGE'},
-  {n:'Investiture of Wind',sc:'Trans',rng:'Self',src:'XGE'},
-  {n:'Move Earth',sc:'Trans',rng:'120 ft',src:'PHB\'24'},
-  {n:'Primordial Ward',sc:'Abj',rng:'Self',src:'XGE'},
-  {n:'Sunbeam',sc:'Evoc',rng:'Self',src:'PHB\'24'},
-  {n:'Transport via Plants',sc:'Conj',rng:'10 ft',src:'PHB\'24'},
-  {n:'Wall of Thorns',sc:'Conj',rng:'120 ft',src:'PHB\'24'},
-  {n:'Wind Walk',sc:'Trans',rng:'30 ft',src:'PHB\'24'},
-];
-
-const SPELLS_LV7=[
-  {n:'Draconic Transformation',sc:'Trans',rng:'Self',src:'FTD'},
-  {n:'Fire Storm',sc:'Evoc',rng:'150 ft',src:'PHB\'24'},
-  {n:'Mirage Arcane',sc:'Illu',rng:'Sight',src:'PHB\'24'},
-  {n:'Plane Shift',sc:'Conj',rng:'Touch',src:'PHB\'24'},
-  {n:'Regenerate',sc:'Trans',rng:'Touch',src:'PHB\'24'},
-  {n:'Reverse Gravity',sc:'Trans',rng:'100 ft',src:'PHB\'24'},
-  {n:'Symbol',sc:'Abj',rng:'Touch',src:'PHB\'24'},
-  {n:'Whirlwind',sc:'Evoc',rng:'300 ft',src:'XGE'},
-];
-
-const SPELLS_LV8=[
-  {n:'Animal Shapes',sc:'Trans',rng:'30 ft',src:'PHB\'24'},
-  {n:'Antipathy/Sympathy',sc:'Ench',rng:'60 ft',src:'PHB\'24'},
-  {n:'Befuddlement',sc:'Ench',rng:'150 ft',src:'PHB\'24'},
-  {n:'Control Weather',sc:'Trans',rng:'Self',src:'PHB\'24'},
-  {n:'Earthquake',sc:'Trans',rng:'500 ft',src:'PHB\'24'},
-  {n:'Incendiary Cloud',sc:'Conj',rng:'150 ft',src:'PHB\'24'},
-  {n:'Sunburst',sc:'Evoc',rng:'150 ft',src:'PHB\'24'},
-  {n:'Tsunami',sc:'Conj',rng:'1 mile',src:'PHB\'24'},
-];
-
-const SPELLS_LV9=[
-  {n:'Foresight',sc:'Divin',rng:'Touch',src:'PHB\'24'},
-  {n:'Shapechange',sc:'Trans',rng:'Self',src:'PHB\'24'},
-  {n:'Storm of Vengeance',sc:'Conj',rng:'1 mile',src:'PHB\'24'},
-  {n:'True Resurrection',sc:'Necro',rng:'Touch',src:'PHB\'24'},
-];
-
-const ALL_SPELLS_BY_LV=[CANTRIPS,SPELLS_LV1,SPELLS_LV2,SPELLS_LV3,SPELLS_LV4,SPELLS_LV5,SPELLS_LV6,SPELLS_LV7,SPELLS_LV8,SPELLS_LV9];
-
-const CLASS_FEATURES=[
-  {lv:1,name:'Druidic',sub:false,desc:'Coneixes el llenguatge secret dels Druides. Sempre tens preparada Speak with Animals.'},
-  {lv:1,name:'Primal Order',sub:false,desc:'Magician: cantrip extra + WIS a Arcana/Nature. Warden: armes marcials + armadura mitjana.'},
-  {lv:1,name:'Spellcasting',sub:false,desc:'Saps 2 cantrips (4 a Lv4, 5 a Lv10). Prepares WIS mod + Druid level espells. DC = 8+prof+WIS. Atac = prof+WIS.'},
-  {lv:2,name:'Wild Shape',sub:false,desc:'Acció Bonus: transforma\'t en una bèstia. Durada = Druid lv ÷ 2 hores. 2 usos (Lv6→3, Lv10→4, Lv14→5). Recuperes 1 us per Descans Curt, tots per Descans Llarg.'},
-  {lv:2,name:'Wild Companion',sub:false,desc:'Pots gastar un espai d\'espell o un us de Wild Shape per llançar Find Familiar sense components. El familiar és Fey i desapareix al Descans Llarg.'},
-  {lv:3,name:'Circle of the Moon Spells',sub:true,desc:'Sempre preparades: Lv3 → Cure Wounds, Moonbeam, Starry Wisp | Lv5 → Conjure Animals | Lv7 → Fount of Moonlight | Lv9 → Mass Cure Wounds. Pots llançar-les en forma salvatge.'},
-  {lv:3,name:'Circle Forms',sub:true,desc:'CR màxim = Druida lv ÷ 3. AC = màx(bèstia AC, 13 + WIS mod). THP = Druida lv × 3.'},
-  {lv:4,name:'Ability Score Improvement',sub:false,desc:'Guanyes un feat o +2/+1/+1 a puntuacions d\'habilitat. (Repetit a Lv8, 12, 16)'},
-  {lv:5,name:'Wild Resurgence',sub:false,desc:'Un cop per torn: si no tens usos de Wild Shape, pots gastar un espai d\'espell per obtenir-ne 1. O: gasta 1 us de Wild Shape per obtenir un espai d\'espell de Lv1 (1 cop per Descans Llarg).'},
-  {lv:6,name:'Improved Circle Forms',sub:true,desc:'Lunar Radiance: els teus atacs en forma salvatge poden fer dany Radiant en lloc del seu tipus normal.\nIncreased Toughness: afegeix WIS mod a les tirades de salvació de CON.'},
-  {lv:7,name:'Elemental Fury',sub:false,desc:'Potent Spellcasting: +WIS als danys dels cantrips de Druida.\nPrimal Strike: un cop per torn, +1d8 Cold/Fire/Lightning/Thunder en un atac.'},
-  {lv:10,name:'Moonlight Step',sub:true,desc:'Acció Bonus: teleporta\'t fins a 30 peus a un espai visible + Avantatge al pròxim atac. Usos = WIS mod (mín 1). Recuperes tots al Descans Llarg. Pots recuperar usos gastant espais d\'espell de Lv2+.'},
-  {lv:14,name:'Lunar Form',sub:true,desc:'Improved Lunar Radiance: un cop per torn, +2d10 Radiant en un atac en forma salvatge.\nShared Moonlight: quan uses Moonlight Step, pots teleportar també una criatura voluntària dins de 10 ft.'},
-  {lv:15,name:'Improved Elemental Fury',sub:false,desc:'Potent Spellcasting: +300 ft de rang als cantrips amb rang ≥ 10 ft.\nPrimal Strike: el dany extra puja a 2d8.'},
-  {lv:18,name:'Beast Spells',sub:false,desc:'En forma salvatge pots llançar espells (excepte els que tenen component Material amb cost o que consumeixen el component).'},
-  {lv:19,name:'Epic Boon',sub:false,desc:'Feat épic. Recomanat: Boon of Dimensional Travel.'},
-  {lv:20,name:'Archdruid',sub:false,desc:'Evergreen Wild Shape: recuperes 1 us de Wild Shape en cada Initiative.\nNature Magician: converteix usos de Wild Shape en espais d\'espell (2 usos = 1 espai Lv2).\nLongevity: per cada 10 anys, el teu cos envelleix 1 any.'},
-];
-
-const LANGS={
-  cat:{
-    basic:'Informació bàsica',stats:'Estadístiques',saves:'Tirades de Salvació',
-    skills:'Habilitats',notes:'Notes',derived:'Valors Derivats',
-    hp:'Punts de Vida',ws:'Wild Shape · Usos',conc:'Concentració',
-    sr:'Descans Curt',lr:'Descans Llarg',pickForm:'Escull una Forma',
-    thp:'THP Circle of Moon:',exitWs:'↩ Sortir de la Forma',
-    slots:'Ranures',prep:'Preparats',browse:'Explorar',
-    saveNow:'Desa Estat Actual',order:'Primal Order',
-    fury:'Elemental Fury (Lv 7)',noSaved:'Cap desat encara.',
-    prepCount:(n,mx)=>`${n} / ${mx} espells preparats`,
-    cantrips:'Cantrips',conc2:'Concentrant-se en:',
-  },
-  esp:{
-    basic:'Información básica',stats:'Estadísticas',saves:'Tiradas de Salvación',
-    skills:'Habilidades',notes:'Notas',derived:'Valores Derivados',
-    hp:'Puntos de Vida',ws:'Wild Shape · Usos',conc:'Concentración',
-    sr:'Descanso Corto',lr:'Descanso Largo',pickForm:'Elige una Forma',
-    thp:'THP Circle of Moon:',exitWs:'↩ Salir de la Forma',
-    slots:'Ranuras',prep:'Preparados',browse:'Explorar',
-    saveNow:'Guardar Estado Actual',order:'Primal Order',
-    fury:'Elemental Fury (Nv 7)',noSaved:'Nada guardado aún.',
-    prepCount:(n,mx)=>`${n} / ${mx} hechizos preparados`,
-    cantrips:'Cantrips',conc2:'Concentrándose en:',
-  },
-  eng:{
-    basic:'Basic Info',stats:'Statistics',saves:'Saving Throws',
-    skills:'Skills',notes:'Notes',derived:'Derived Values',
-    hp:'Hit Points',ws:'Wild Shape · Uses',conc:'Concentration',
-    sr:'Short Rest',lr:'Long Rest',pickForm:'Choose a Form',
-    thp:'THP Circle of Moon:',exitWs:'↩ Exit Wild Shape',
-    slots:'Slots',prep:'Prepared',browse:'Browse',
-    saveNow:'Save Current State',order:'Primal Order',
-    fury:'Elemental Fury (Lv 7)',noSaved:'Nothing saved yet.',
-    prepCount:(n,mx)=>`${n} / ${mx} spells prepared`,
-    cantrips:'Cantrips',conc2:'Concentrating on:',
-  }
-};
-
-const SKILLS=[
-  {k:'acr',n:'Acrobatics',st:'dex'},{k:'ani',n:'Animal Handling',st:'wis'},
-  {k:'arc',n:'Arcana',st:'int'},{k:'ath',n:'Athletics',st:'str'},
-  {k:'dec',n:'Deception',st:'cha'},{k:'his',n:'History',st:'int'},
-  {k:'ins',n:'Insight',st:'wis'},{k:'int_sk',n:'Intimidation',st:'cha'},
-  {k:'inv',n:'Investigation',st:'int'},{k:'med',n:'Medicine',st:'wis'},
-  {k:'nat',n:'Nature',st:'int'},{k:'prc',n:'Perception',st:'wis'},
-  {k:'prf',n:'Performance',st:'cha'},{k:'per',n:'Persuasion',st:'cha'},
-  {k:'rel',n:'Religion',st:'int'},{k:'slh',n:'Sleight of Hand',st:'dex'},
-  {k:'ste',n:'Stealth',st:'dex'},{k:'sur',n:'Survival',st:'wis'},
-];
-const STAT_KEYS=['str','dex','con','int','wis','cha'];
-const STAT_NAMES={str:'STR',dex:'DEX',con:'CON',int:'INT',wis:'WIS',cha:'CHA'};
-
-// ============================================================
-// STATE
-// ============================================================
-let lang='cat';
-let dark=false;
+// ── STATE ──
 let lv=3;
-let statVals={str:10,dex:14,con:14,int:10,wis:18,cha:10};
-let curHp=-1;
-let manualMax=-1;
-let skillProf=new Set();
-let skillExp=new Set();
-let selSaves=new Set(['int','wis']);
-let primalOrder='magician';
-let furyChoice='potent';
-let prepSpells=new Set(); // keys: "lv:name"
-let prepCantrips=new Set(); // names
-let usedSlots=[0,0,0,0,0,0,0,0,0];
-let wsUsed=0;
-let activeForm=null; // beast form object or null
-let concSpell='';
-let notes='';
-let saves=[];
+let stats={str:8,dex:14,con:14,int:10,wis:17,cha:8};
+let curHp=22, maxHpMan=-1;
+let slots=[]; // current remaining slots [lv1..lv9]
+let wsUses=2, wsActive=null, wsCurTHP=0;
+let prepared=new Set(); // user-chosen spell ids (cantrips + leveled)
+let concSpell=null;
+let primalOrder='magician'; // 'magician'|'warden'
+let eleFury='potent'; // 'potent'|'primal'
+let spTab=0;
+let expanded=new Set();
+let dark=false;
+let builds=[];
+let inventory=[];
+let profSaves=new Set(['int','wis']);
+let profSkills=new Set(['animal-handling','nature','perception','survival']);
+let curTab=0;
 
-// ============================================================
-// HELPERS
-// ============================================================
-const g=id=>document.getElementById(id);
-const mod=v=>Math.floor((v-10)/2);
-const profBonus=()=>{
-  if(lv<=4)return 2;if(lv<=8)return 3;if(lv<=12)return 4;if(lv<=16)return 5;return 6;
-};
-const fmtMod=v=>(v>=0?'+':'')+v;
-const spellDC=()=>8+profBonus()+mod(statVals.wis);
-const spellAtk=()=>profBonus()+mod(statVals.wis);
-const maxHP=()=>{
-  if(manualMax>0)return manualMax;
-  return Math.max(1,8+mod(statVals.con))*lv;
-};
-const wsMaxCR=()=>Math.floor(lv/3);
-const wsMaxCRstr=()=>{const c=wsMaxCR();if(c===0)return'1/4';if(c<1)return'1/4';return String(c);};
-const preparedLimit=()=>lv+mod(statVals.wis);
-const alwaysPreparedNames=()=>ALWAYS_PREP.filter(a=>lv>=a.minLv).map(a=>a.n);
-
-function crToNum(cr){
-  if(cr==='0')return 0;if(cr==='1/8')return.125;if(cr==='1/4')return.25;if(cr==='1/2')return.5;
-  return parseFloat(cr)||0;
-}
-function wsAC(form){
-  return Math.max(form.ac,13+mod(statVals.wis));
+// always-prepared: Speak with Animals always (Druidic), plus Circle spells by level
+function getAP(){
+  const s=new Set();
+  s.add('speak-with-animals');
+  if(lv>=3){s.add('cure-wounds');s.add('moonbeam');s.add('starry-wisp');}
+  if(lv>=5){s.add('conjure-animals');}
+  if(lv>=7){s.add('fount-of-moonlight');}
+  if(lv>=9){s.add('mass-cure-wounds');}
+  return s;
 }
 
-function spellKey(lv,name){return lv+':'+name;}
-
-// ============================================================
-// SAVE / LOAD
-// ============================================================
-function buildState(){
-  return{
-    lv,
-    st:[statVals.str,statVals.dex,statVals.con,statVals.int,statVals.wis,statVals.cha],
-    name:g('c-name')?.value||'',
-    race:g('c-race')?.value||'',
-    age:g('c-age')?.value||'',
-    bg:g('c-bg')?.value||'',
-    hp:curHp,mhp:manualMax,
-    sp:[...skillProf],se:[...skillExp],
-    sv:[...selSaves],
-    po:primalOrder,fu:furyChoice,
-    pp:[...prepSpells],pc:[...prepCantrips],
-    us:usedSlots,wu:wsUsed,
-    af:activeForm?activeForm.n:null,
-    cs:concSpell,
-    notes,
-    avatar:g('avatar-img')?.src||'',
-    dark,lang,
-  };
+function maxHp(){
+  if(maxHpMan>0) return maxHpMan;
+  return (8+mod(stats.con)) + (lv-1)*(5+mod(stats.con));
 }
-function applyState(d){
-  lv=d.lv||3;
-  if(d.st){const[s,dx,c,i,w,ch]=d.st;statVals={str:s,dex:dx,con:c,int:i,wis:w,cha:ch};}
-  if(d.name)g('c-name').value=d.name;
-  if(d.race)g('c-race').value=d.race;
-  if(d.age)g('c-age').value=d.age;
-  if(d.bg)g('c-bg').value=d.bg;
-  curHp=d.hp??-1;manualMax=d.mhp??-1;
-  skillProf=new Set(d.sp||[]);skillExp=new Set(d.se||[]);
-  selSaves=new Set(d.sv||['int','wis']);
-  primalOrder=d.po||'magician';furyChoice=d.fu||'potent';
-  prepSpells=new Set(d.pp||[]);prepCantrips=new Set(d.pc||[]);
-  usedSlots=d.us||[0,0,0,0,0,0,0,0,0];
-  wsUsed=d.wu||0;
-  activeForm=d.af?BEAST_FORMS.find(f=>f.n===d.af)||null:null;
-  concSpell=d.cs||'';
-  notes=d.notes||'';
-  if(d.avatar&&g('avatar-img')){g('avatar-img').src=d.avatar;g('avatar-img').style.display='block';g('avatar-placeholder').style.display='none';}
-  if(d.dark!==undefined)dark=d.dark;
-  if(d.lang)lang=d.lang;
+function maxCR(){
+  if(lv<3) return 0.25;
+  return Math.floor(lv/3);
+}
+function wsTHP(){return lv*3;}
+
+// ── SAVE / LOAD ──
+function getState(){
+  return{lv,stats,curHp,maxHpMan,slots,wsUses,wsActive,wsCurTHP,
+    prepared:[...prepared],concSpell,primalOrder,eleFury,
+    expanded:[...expanded],dark,inventory,
+    profSaves:[...profSaves],profSkills:[...profSkills],
+    name:g('c-name').value,species:g('c-species').value,
+    bg:g('c-bg').value,align:g('c-align').value,age:g('c-age').value,
+    backstory:g('c-backstory').value,notes:g('c-notes').value};
+}
+function setState(s){
+  if(!s)return;
+  lv=s.lv||3; stats=s.stats||stats; curHp=s.curHp||22;
+  maxHpMan=s.maxHpMan!=null?s.maxHpMan:-1;
+  slots=s.slots||[];
+  wsUses=s.wsUses!=null?s.wsUses:2;
+  wsActive=s.wsActive||null; wsCurTHP=s.wsCurTHP||0;
+  prepared=new Set(s.prepared||[]);
+  concSpell=s.concSpell||null;
+  primalOrder=s.primalOrder||'magician';
+  eleFury=s.eleFury||'potent';
+  expanded=new Set(s.expanded||[]);
+  dark=s.dark||false;
+  inventory=s.inventory||[];
+  profSaves=new Set(s.profSaves||['int','wis']);
+  profSkills=new Set(s.profSkills||['animal-handling','nature','perception','survival']);
+  if(s.name) g('c-name').value=s.name;
+  if(s.species){const el=g('c-species');for(let o of el.options)if(o.value===s.species)o.selected=true;}
+  if(s.bg){const el=g('c-bg');for(let o of el.options)if(o.value===s.bg)o.selected=true;}
+  if(s.align){const el=g('c-align');for(let o of el.options)if(o.value===s.align)o.selected=true;}
+  if(s.age) g('c-age').value=s.age;
+  if(s.backstory) g('c-backstory').value=s.backstory;
+  if(s.notes) g('c-notes').value=s.notes;
+  g('s-str').value=stats.str; g('s-dex').value=stats.dex; g('s-con').value=stats.con;
+  g('s-int').value=stats.int; g('s-wis').value=stats.wis; g('s-cha').value=stats.cha;
+  g('c-level').value=lv;
 }
 function save(){
-  try{localStorage.setItem('dnd_dr',JSON.stringify(buildState()));}catch(e){}
+  try{localStorage.setItem(SK,JSON.stringify(getState()));}catch(e){}
 }
-function loadSaved(){
-  try{
-    const raw=localStorage.getItem('dnd_dr');
-    if(raw){applyState(JSON.parse(raw));return true;}
-  }catch(e){}
-  return false;
+function load(){
+  try{const d=localStorage.getItem(SK);if(d)setState(JSON.parse(d));}catch(e){}
+  try{builds=JSON.parse(localStorage.getItem(SKB)||'[]');}catch(e){builds=[];}
 }
 
-// ============================================================
-// RENDER
-// ============================================================
-function renderAll(){
-  applyDark();
-  applyLang();
-  renderStats();
-  renderSkills();
-  renderSaves();
-  renderLevel();
-  renderPrimalOrder();
-  renderFury();
-  renderSlots();
-  renderPrepared();
-  renderBrowse();
-  renderWSPips();
-  renderWSActive();
-  renderFormGrid();
-  renderConc();
-  renderBuild();
-  renderSavedList();
-  updateHPBar();
-  g('notes-ta').value=notes;
-  if(concSpell)g('conc-inp').value=concSpell;
-}
-
-function renderLevel(){
-  g('lv-disp').textContent=lv;
-  g('tb-lv').textContent=lv;
-  g('fury-wrap').style.display=lv>=7?'block':'none';
-}
-
-function renderStats(){
-  const sg=g('stat-grid');
-  sg.innerHTML=STAT_KEYS.map(k=>`
-    <div class="stat-box">
-      <div class="stat-abbr">${STAT_NAMES[k]}</div>
-      <input class="stat-inp" type="number" value="${statVals[k]}" oninput="statVals['${k}']=+this.value;renderDerived();renderSkills();renderSaves();save()">
-      <div class="stat-mod">${fmtMod(mod(statVals[k]))}</div>
-    </div>`).join('');
-  renderDerived();
-}
-
-function renderDerived(){
-  const pb=profBonus(),wm=mod(statVals.wis),dm=mod(statVals.dex),cm=mod(statVals.con);
-  const natAC=10+dm;
-  const data1=[
-    {l:'AC',v:natAC},{l:'Initiative',v:fmtMod(dm)},
-    {l:'Proficiency',v:fmtMod(pb)},{l:'Speed',v:'30 ft'},
-  ];
-  const data2=[
-    {l:'Spell DC',v:spellDC()},{l:'Spell Atk',v:fmtMod(spellAtk())},
-    {l:'Passive Perc',v:10+pb+wm},{l:'HP Max',v:maxHP()},
-  ];
-  g('der-grid').innerHTML=data1.map(d=>`<div class="der-box"><div class="der-lbl">${d.l}</div><div class="der-val">${d.v}</div></div>`).join('');
-  g('der-grid2').innerHTML=data2.map(d=>`<div class="der-box"><div class="der-lbl">${d.l}</div><div class="der-val">${d.v}</div></div>`).join('');
-}
-
-function renderSkills(){
-  const pb=profBonus();
-  g('skills-list').innerHTML=SKILLS.map(sk=>{
-    const base=mod(statVals[sk.st]);
-    const ep=skillExp.has(sk.k),pr=skillProf.has(sk.k);
-    const bonus=base+(ep?pb*2:pr?pb:0);
-    const magicBonus=(primalOrder==='magician'&&(sk.k==='arc'||sk.k==='nat'))?mod(statVals.wis):0;
-    const total=bonus+magicBonus;
-    return`<div class="skill-item">
-      <div class="sk-dots">
-        <div class="sk-dot${pr?' prof':''}" onclick="toggleSkProf('${sk.k}')" title="Proficiency"></div>
-        <div class="sk-dot${ep?' exp':''}" onclick="toggleSkExp('${sk.k}')" title="Expertise">E</div>
-      </div>
-      <span class="sk-name">${sk.n}${magicBonus?'<sup>✦</sup>':''}</span>
-      <span class="sk-stat">${STAT_NAMES[sk.st]}</span>
-      <span class="sk-val">${fmtMod(total)}</span>
-    </div>`;
-  }).join('');
-}
-
-function renderSaves(){
-  const pb=profBonus();
-  g('saves-list').innerHTML=STAT_KEYS.map(k=>{
-    const on=selSaves.has(k);
-    const val=mod(statVals[k])+(on?pb:0);
-    return`<div class="save-item">
-      <div class="save-dot${on?' on':''}" onclick="toggleSave('${k}')"></div>
-      <span class="save-name">${STAT_NAMES[k]}</span>
-      <span class="save-val">${fmtMod(val)}</span>
-    </div>`;
-  }).join('');
-}
-
-function renderPrimalOrder(){
-  g('po-mag').className='choice-btn'+(primalOrder==='magician'?' sel':'');
-  g('po-war').className='choice-btn'+(primalOrder==='warden'?' sel':'');
-}
-
-function renderFury(){
-  if(lv<7)return;
-  g('ef-pot').className='choice-btn'+(furyChoice==='potent'?' sel':'');
-  g('ef-pri').className='choice-btn'+(furyChoice==='primal'?' sel':'');
-}
-
-function renderWSPips(){
-  const total=wsUsesForLevel(lv);
-  let html='';
-  for(let i=0;i<total;i++){
-    html+=`<div class="pip moon${i<wsUsed?' empty':''}" onclick="toggleWSPip(${i})"></div>`;
-  }
-  g('ws-pips').innerHTML=html;
-  g('ws-pips-sub').textContent=`${wsUsed} / ${total} gastats · CR màx ${wsMaxCRstr()}`;
-}
-
-function renderWSActive(){
-  if(!activeForm){
-    g('ws-active-wrap').style.display='none';
-    g('ws-picker-wrap').style.display='block';
-  }else{
-    const f=activeForm;
-    const ac=wsAC(f);
-    const thp=lv*3;
-    g('ws-form-name').textContent=f.n;
-    g('ws-form-cr').textContent='CR '+f.cr;
-    g('ws-hp').textContent=f.hp;
-    g('ws-ac').textContent=ac;
-    g('ws-spd').textContent=f.spd.split('/')[0].trim();
-    g('ws-thp').textContent=thp;
-    g('ws-attacks').textContent=f.atk;
-    g('ws-active-wrap').style.display='block';
-    g('ws-picker-wrap').style.display='none';
-  }
-}
-
-function renderFormGrid(){
-  const maxCR=wsMaxCR();
-  const eligible=BEAST_FORMS.filter(f=>crToNum(f.cr)<=Math.max(maxCR,.25));
-  g('form-grid').innerHTML=eligible.map(f=>`
-    <div class="form-card" onclick="activateForm('${f.n}')">
-      <div class="form-name">${f.n}</div>
-      <div class="form-cr">CR ${f.cr}</div>
-      <div class="form-mini">HP ${f.hp} · AC ${f.ac} · ${f.spd}</div>
-    </div>`).join('');
-}
-
-function renderConc(){
-  const on=!!concSpell;
-  const dot=g('conc-dot');
-  if(dot)dot.className='conc-dot'+(on?' on':'');
-}
-
-function renderSlots(){
-  const slots=SLOT_TABLE[Math.min(lv,20)];
-  let html='';
-  const ord=['1st','2nd','3rd','4th','5th','6th','7th','8th','9th'];
-  for(let i=0;i<9;i++){
-    const max=slots[i];
-    if(max===0)continue;
-    const used=usedSlots[i]||0;
-    let pips='';
-    for(let j=0;j<max;j++){
-      pips+=`<div class="pip${j<used?' empty':''}" onclick="toggleSlot(${i},${j})"></div>`;
-    }
-    html+=`<div class="slot-level">
-      <div class="slot-level-hd">
-        <span class="slot-lv-badge">Lv ${i+1}</span>
-        <span class="slot-lv-name">${ord[i]}</span>
-        <span class="slot-count">${max-used} / ${max}</span>
-      </div>
-      <div class="pips-wrap">${pips}</div>
-    </div>`;
-  }
-  g('slot-levels').innerHTML=html;
-}
-
-function renderPrepared(){
-  const always=alwaysPreparedNames();
-  const limit=preparedLimit();
-  const userPrepped=[...prepSpells];
-  const total=userPrepped.length;
-  const L=LANGS[lang];
-  g('prep-count').textContent=L.prepCount(total,limit);
-
-  // Cantrips
-  g('cantrip-list').innerHTML=CANTRIPS.map(c=>{
-    const sel=prepCantrips.has(c.n);
-    return`<div class="spell-card${sel?' prep':''}" onclick="toggleCantrip('${c.n.replace(/'/g,"\\'")}')">
-      <div class="spell-hd">
-        <span class="spell-name">${c.n}</span>
-        <span class="spell-school">${c.sc}</span>
-        <div class="spell-chk">${sel?'✓':''}</div>
-      </div>
-      <div class="spell-sub">${c.rng} · ${c.src}</div>
-    </div>`;
-  }).join('');
-
-  // Level spells grouped by level
-  let html='';
-  for(let lv=1;lv<=9;lv++){
-    const spells=ALL_SPELLS_BY_LV[lv];
-    if(!spells||spells.length===0)continue;
-    const slots=SLOT_TABLE[Math.min(lv,20)];
-    if(lv>1&&slots[lv-1]===0)continue;
-    html+=`<div class="lbl mt10 mb10">NV ${lv}</div>`;
-    html+=spells.map(s=>{
-      const key=spellKey(lv,s.n);
-      const isAlways=always.includes(s.n);
-      const sel=isAlways||prepSpells.has(key);
-      const cls=isAlways?'always':sel?'prep':'';
-      return`<div class="spell-card${cls?' '+cls:''}" onclick="${isAlways?'':("togglePrep('"+lv+"','"+s.n.replace(/'/g,"\\'")+"')")}">
-        <div class="spell-hd">
-          <span class="spell-name">${s.n}${isAlways?' 🌕':''}</span>
-          <span class="spell-school">${s.sc}</span>
-          <div class="spell-chk">${sel?'✓':''}</div>
-        </div>
-        <div class="spell-sub">${s.rng} · ${s.src}${isAlways?' · Sempre preparada':''}</div>
-      </div>`;
-    }).join('');
-  }
-  g('prep-by-level').innerHTML=html;
-}
-
-function renderBrowse(){
-  const search=(g('browse-search')?.value||'').toLowerCase();
-  const lvFilter=g('browse-lv')?.value||'';
-  let html='';
-  ALL_SPELLS_BY_LV.forEach((spells,lv)=>{
-    if(lvFilter!==''&&String(lv)!==lvFilter)return;
-    spells.forEach(s=>{
-      if(search&&!s.n.toLowerCase().includes(search))return;
-      const urlName=encodeURIComponent(s.n.toLowerCase()+'_'+(s.src==="PHB'24"?'xphb':s.src.toLowerCase().replace(/[^a-z0-9]/g,'')));
-      const url=`https://5e.tools/spells.html#${urlName}`;
-      const lvBadge=lv===0?'C':''+lv;
-      html+=`<a class="browse-item" href="${url}" target="_blank" rel="noopener">
-        <span class="bi-lv${lv===0?' c0':''}">${lvBadge}</span>
-        <span class="bi-name">${s.n}</span>
-        <span class="bi-school">${s.sc}</span>
-        <span class="bi-rng">${s.rng}</span>
-        <span class="bi-src">${s.src}</span>
-      </a>`;
-    });
-  });
-  g('browse-list').innerHTML=html||'<p style="color:var(--os);text-align:center;padding:20px">Cap resultat</p>';
-}
-
-function renderBuild(){
-  g('build-features').innerHTML=CLASS_FEATURES.map(f=>{
-    const avail=lv>=f.lv;
-    const cls=f.sub?'sub':'';
-    return`<div class="feat-card${avail?'':' feat-na'}">
-      <div class="feat-hd" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
-        <span class="feat-lv ${cls||''}${avail?'':' na'}">Lv ${f.lv}</span>
-        <span class="feat-name">${f.name}</span>
-        <span class="feat-chev">▼</span>
-      </div>
-      <div class="feat-body">${f.desc.replace(/\n/g,'<br>')}</div>
-    </div>`;
-  }).join('');
-}
-
-function renderSavedList(){
-  const L=LANGS[lang];
-  try{
-    const raw=localStorage.getItem('dnd_dr_builds');
-    const builds=raw?JSON.parse(raw):[];
-    if(builds.length===0){g('saved-list').innerHTML=`<div class="saved-empty"><p>${L.noSaved}</p></div>`;return;}
-    g('saved-list').innerHTML=builds.map((b,i)=>`
-      <div class="saved-card">
-        <div class="saved-info">
-          <div class="saved-name">${b.name||'Druida'}</div>
-          <div class="saved-sub">Lv ${b.lv||'?'} · ${b.race||'—'}</div>
-          <div class="saved-date">${b.ts?new Date(b.ts*1000).toLocaleDateString():'—'}</div>
-        </div>
-        <div class="saved-btns">
-          <button class="saved-load" onclick="loadBuild(${i})">Carrega</button>
-          <button class="saved-del" onclick="deleteBuild(${i})">Elimina</button>
-        </div>
-      </div>`).join('');
-  }catch(e){g('saved-list').innerHTML='';}
-}
-
-function applyDark(){
-  document.body.classList.toggle('dark',dark);
-  const ic=g('dark-icon');
-  if(ic)ic.src=dark?'../icons/moon.png':'../icons/sun.png';
-}
-
-function applyLang(){
-  const L=LANGS[lang];
-  const ids={
-    'lbl-basic':L.basic,'lbl-stats':L.stats,'lbl-saves':L.saves,
-    'lbl-skills':L.skills,'lbl-notes':L.notes,'lbl-derived':L.derived,
-    'lbl-hp':L.hp,'lbl-ws-uses':L.ws,'lbl-conc':L.conc,
-    'lbl-sr':L.sr,'lbl-lr':L.lr,'lbl-pick-form':L.pickForm,
-    'lbl-thp':L.thp,'btn-exit-ws':L.exitWs,'lbl-order':L.order,
-    'lbl-fury':L.fury,'lbl-save-now':L.saveNow,'lbl-cantrips':L.cantrips,
-    'lbl-conc2':L.conc2,
+// ── RECALCULATE ──
+function recalc(){
+  stats={
+    str:+g('s-str').value||10, dex:+g('s-dex').value||10,
+    con:+g('s-con').value||10, int:+g('s-int').value||10,
+    wis:+g('s-wis').value||17, cha:+g('s-cha').value||10
   };
-  Object.entries(ids).forEach(([id,txt])=>{const el=g(id);if(el)el.textContent=txt;});
-  ['cat','esp','eng'].forEach(l=>{const b=g('lb-'+l);if(b)b.classList.toggle('active',l===lang);});
-}
-
-// ============================================================
-// INTERACTIONS
-// ============================================================
-function showTab(t){
-  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-  g('tab-'+t)?.classList.add('active');
-  g('tbtn-'+t)?.classList.add('active');
-}
-
-function showSubtab(t){
-  document.querySelectorAll('.subtab-panel').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.subtab-btn').forEach(b=>b.classList.remove('active'));
-  g('sub-'+t)?.classList.add('active');
-  g('stb-'+t)?.classList.add('active');
-  if(t==='browse')renderBrowse();
-  if(t==='prep')renderPrepared();
-}
-
-function toggleSec(id,hd){
-  hd.classList.toggle('open');
-  g('sec-'+id)?.classList.toggle('open');
-}
-
-function toggleDark(){dark=!dark;applyDark();save();}
-function setLang(l){lang=l;applyLang();renderSkills();renderPrepared();renderSavedList();save();}
-
-function adjLv(d){
-  lv=Math.max(1,Math.min(20,lv+d));
-  renderLevel();renderDerived();renderWSPips();renderFormGrid();renderSlots();renderPrepared();renderBuild();renderFury();save();
-}
-
-function onNameChange(){
-  const v=g('c-name').value;
-  g('tb-name').textContent=v||'Druida';
+  g('m-str').textContent=fmod(mod(stats.str));
+  g('m-dex').textContent=fmod(mod(stats.dex));
+  g('m-con').textContent=fmod(mod(stats.con));
+  g('m-int').textContent=fmod(mod(stats.int));
+  g('m-wis').textContent=fmod(mod(stats.wis));
+  g('m-cha').textContent=fmod(mod(stats.cha));
+  const p=prof(lv), mhp=maxHp();
+  g('d-prof').textContent=fmod(p);
+  g('d-prof-sub').textContent=lv<5?'Nivells 1–4':lv<9?'Nivells 5–8':lv<13?'Nivells 9–12':lv<17?'Nivells 13–16':'Nivells 17–20';
+  g('d-dc').textContent=8+p+mod(stats.wis);
+  g('d-atk').textContent=fmod(p+mod(stats.wis));
+  const ac=10+mod(stats.dex);
+  g('d-ac').textContent=ac;
+  g('d-ac-sub').textContent='10 + DEX mod ('+(primalOrder==='warden'?'Warden: medium armor':'Leather/Unarmored')+')';
+  const prepMax=PREP_TABLE[lv]||lv;
+  g('d-prep').textContent=prepMax;
+  g('d-prep-sub').textContent='= Taula Lv'+lv;
+  g('d-hp').value=mhp; g('d-hp-auto').textContent='auto: '+mhp;
+  if(maxHpMan<0){g('d-hp').value=mhp;}
+  curHp=clamp(curHp,0,maxHp());
+  initSlots();
+  renderSlotsChar();
+  renderSaves(); renderSkills(); renderTracker(); renderSpells();
+  updateHero();
   save();
 }
 
-function toggleSkProf(k){
-  if(skillProf.has(k))skillProf.delete(k);else skillProf.add(k);
-  if(!skillProf.has(k))skillExp.delete(k);
-  renderSkills();save();
-}
-function toggleSkExp(k){
-  if(!skillProf.has(k))skillProf.add(k);
-  if(skillExp.has(k))skillExp.delete(k);else skillExp.add(k);
-  renderSkills();save();
-}
-function toggleSave(k){
-  if(selSaves.has(k))selSaves.delete(k);else selSaves.add(k);
-  renderSaves();save();
-}
-
-function setPrimalOrder(v){primalOrder=v;renderPrimalOrder();renderSkills();save();}
-function setFury(v){furyChoice=v;renderFury();save();}
-
-function adjHP(dir){
-  const cur=parseInt(g('hp-cur').value)||0;
-  const mx=maxHP();
-  if(dir===0){g('hp-cur').value=mx;curHp=mx;}
-  else{
-    const delta=parseInt(prompt(dir<0?'Dany rebut:':'Curar:')||'0')||0;
-    const nv=dir<0?cur-delta:cur+delta;
-    g('hp-cur').value=Math.max(0,Math.min(mx,nv));
-    curHp=parseInt(g('hp-cur').value);
+function initSlots(){
+  const tbl=SLOT_TABLE[Math.min(lv,20)]||SLOT_TABLE[0];
+  if(!slots.length || slots.length!==9){
+    slots=[...tbl];
+  } else {
+    for(let i=0;i<9;i++) slots[i]=clamp(slots[i],0,tbl[i]);
   }
-  updateHPBar();save();
-}
-function updateHPBar(){
-  const cur=parseInt(g('hp-cur')?.value||0);
-  const mx=maxHP();
-  const pct=Math.max(0,Math.min(100,(cur/mx)*100));
-  const fill=g('hp-fill');
-  if(fill){fill.style.width=pct+'%';fill.className='hp-fill'+(pct<25?' lo':pct<60?' md':'');}
-  curHp=cur;
 }
 
-function toggleWSPip(i){
-  if(wsUsed>i)wsUsed=i;else wsUsed=i+1;
-  renderWSPips();save();
-}
-
-function activateForm(name){
-  const f=BEAST_FORMS.find(x=>x.n===name);
-  if(!f)return;
-  if(wsUsed>=wsUsesForLevel(lv)){alert('No queden usos de Wild Shape!');return;}
-  wsUsed++;
-  activeForm=f;
-  renderWSPips();renderWSActive();save();
-}
-
-function exitWildShape(){
-  activeForm=null;
-  renderWSActive();renderFormGrid();save();
-}
-
-function toggleSlot(lvIdx,j){
-  const used=usedSlots[lvIdx]||0;
-  if(j<used)usedSlots[lvIdx]=j;
-  else usedSlots[lvIdx]=j+1;
-  renderSlots();save();
-}
-
-function updateConc(){
-  concSpell=g('conc-inp').value;
-  renderConc();save();
-}
-function clearConc(){
-  concSpell='';g('conc-inp').value='';renderConc();save();
-}
-
-function toggleCantrip(name){
-  if(prepCantrips.has(name))prepCantrips.delete(name);else prepCantrips.add(name);
-  renderPrepared();save();
-}
-function togglePrep(spellLv,name){
-  const key=spellKey(spellLv,name);
-  if(prepSpells.has(key))prepSpells.delete(key);
-  else{
-    if(prepSpells.size>=preparedLimit()){alert('Has arribat al límit d\'espells preparats!');return;}
-    prepSpells.add(key);
-  }
-  renderPrepared();save();
-}
-
-function filterBrowse(){renderBrowse();}
-
-function shortRest(){
-  // Recover 1 WS use
-  const total=wsUsesForLevel(lv);
-  if(wsUsed>0){wsUsed=Math.max(0,wsUsed-1);renderWSPips();}
+// ── HERO ──
+function updateHero(){
+  const nm=g('c-name').value||'Druida';
+  g('tb-name').textContent=nm; g('h-name').textContent=nm;
+  g('h-lv').textContent=lv;
+  g('tb-sub').textContent='Circle of the Moon · Lv '+lv;
+  g('h-sub').textContent=g('c-species').value+' · '+g('c-bg').value;
+  g('drv-lbl').textContent='Estadístiques derivades — Nivell '+lv;
   save();
 }
-function longRest(){
-  if(!confirm('Descans Llarg: recuperes tots els espells, usos de Wild Shape i HP?'))return;
-  usedSlots=[0,0,0,0,0,0,0,0,0];
-  wsUsed=0;activeForm=null;concSpell='';
-  const mx=maxHP();
-  g('hp-cur').value=mx;curHp=mx;
-  if(g('conc-inp'))g('conc-inp').value='';
-  renderSlots();renderWSPips();renderWSActive();renderConc();updateHPBar();save();
+function updateLevel(v){
+  lv=clamp(v,1,20);
+  g('c-level').value=lv;
+  slots=[];
+  wsUses=Math.min(wsUses,wsMaxUses(lv));
+  recalc();
+  renderClass();
 }
-
-function pickImg(){g('img-input').click();}
-function loadImg(e){
-  const f=e.target.files[0];if(!f)return;
+function handleImg(inp){
+  const f=inp.files[0]; if(!f)return;
   const r=new FileReader();
-  r.onload=ev=>{g('avatar-img').src=ev.target.result;g('avatar-img').style.display='block';g('avatar-placeholder').style.display='none';save();};
+  r.onload=e=>{
+    g('hero-ic').style.display='none';
+    const im=g('hero-img'); im.src=e.target.result; im.style.display='block';
+  };
   r.readAsDataURL(f);
 }
 
-function saveSnapshot(){
-  try{
-    const raw=localStorage.getItem('dnd_dr_builds');
-    const builds=raw?JSON.parse(raw):[];
-    const state=buildState();
-    state.ts=Math.floor(Date.now()/1000);
-    builds.unshift(state);
-    if(builds.length>20)builds.pop();
-    localStorage.setItem('dnd_dr_builds',JSON.stringify(builds));
-    renderSavedList();
-    showTab('saved');
-  }catch(e){alert('Error desant!');}
+// ── TABS ──
+const SCREENS=['sc-char','sc-tracker','sc-spells','sc-class','sc-builds'];
+function switchTab(n){
+  curTab=n;
+  SCREENS.forEach((s,i)=>{
+    g(s).classList.toggle('active',i===n);
+    g('tab-'+i).classList.toggle('active',i===n);
+  });
+  g('share-fab').style.display=n===1?'flex':'none';
+  if(n===1) renderTracker();
+  if(n===2) renderSpells();
+  if(n===3) renderClass();
+  if(n===4) renderBuilds();
 }
-function loadBuild(i){
-  try{
-    const raw=localStorage.getItem('dnd_dr_builds');
-    const builds=raw?JSON.parse(raw):[];
-    if(!builds[i])return;
-    applyState(builds[i]);
-    save();
-    renderAll();
-    showTab('character');
-  }catch(e){}
-}
-function deleteBuild(i){
-  try{
-    const raw=localStorage.getItem('dnd_dr_builds');
-    const builds=raw?JSON.parse(raw):[];
-    builds.splice(i,1);
-    localStorage.setItem('dnd_dr_builds',JSON.stringify(builds));
-    renderSavedList();
-  }catch(e){}
+function switchSpellTab(n){
+  spTab=n;
+  g('stb-0').classList.toggle('active',n===0);
+  g('stb-1').classList.toggle('active',n===1);
+  g('spt-0').style.display=n===0?'block':'none';
+  g('spt-1').style.display=n===1?'block':'none';
+  if(n===1) renderExplore('');
 }
 
-// ============================================================
-// QR
-// ============================================================
-let _qrUrl='';
-function buildShareURL(){
-  const payload={
-    n:g('c-name')?.value||'',
-    race:g('c-race')?.value||'',
-    bg:g('c-bg')?.value||'',
-    lv,
-    st:[statVals.str,statVals.dex,statVals.con,statVals.int,statVals.wis,statVals.cha],
-    hp:curHp<0?maxHP():curHp,
-    mhp:maxHP(),
-    sp:[...skillProf],se:[...skillExp],sv:[...selSaves],
-    po:primalOrder,fu:furyChoice,
-    pp:[...prepSpells],pc:[...prepCantrips],
-    us:usedSlots,wu:wsUsed,
-    af:activeForm?.n||null,
-    cs:concSpell,
-    ts:Math.floor(Date.now()/1000),
-  };
-  const enc=btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
-  const base=location.href.replace(/[^/]*$/,'');
-  return base+'view.html?d='+encodeURIComponent(enc);
-}
-function openQRModal(){
-  const url=buildShareURL();
-  _qrUrl=url;
-  g('qr-url-text').textContent=url;
-  const wrap=g('qr-canvas-wrap');
-  wrap.innerHTML='';
-  if(typeof QRCode!=='undefined'){
-    new QRCode(wrap,{text:url,width:200,height:200,colorDark:'#000',colorLight:'#fff'});
-  }else{wrap.textContent='QR no disponible sense connexió.';}
-  g('qr-overlay').classList.add('open');
-}
-function closeQRModal(){g('qr-overlay').classList.remove('open');}
-function copyQRUrl(){
-  navigator.clipboard?.writeText(_qrUrl).then(()=>{
-    const b=g('btn-copy-url');const t=b.textContent;b.textContent='✓ Copiat!';setTimeout(()=>b.textContent=t,2000);
-  }).catch(()=>{});
+// ── ACCORDION ──
+function toggleAcc(id){
+  const bd=g('bd-'+id), ch=g('ch-'+id);
+  const op=bd.classList.toggle('open');
+  ch.classList.toggle('open',op);
 }
 
-// ============================================================
-// SERVICE WORKER
-// ============================================================
-if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('./sw.js').then(reg=>{
-    navigator.serviceWorker.addEventListener('message',e=>{
-      if(e.data?.type==='SW_UPDATED')console.log('SW updated');
-    });
+// ── DARK MODE ──
+function toggleDark(){
+  dark=!dark;
+  document.body.classList.toggle('dark',dark);
+  g('dark-ic').src='../icons/'+(dark?'sun':'moon')+'.png';
+  save();
+}
+
+// ── LANGUAGE ──
+function setLang(l){
+  ['cat','eng','esp'].forEach(x=>g('lb-'+x).classList.toggle('active',x===l));
+  save();
+}
+
+// ── SAVES & SKILLS ──
+const SAVES=[
+  {k:'str',n:'Força'},  {k:'dex',n:'Destresa'}, {k:'con',n:'Constitució'},
+  {k:'int',n:'Intel·ligència'},{k:'wis',n:'Saviesa'},{k:'cha',n:'Carisma'}
+];
+const SKILLS=[
+  {k:'acrobatics',ab:'dex',n:'Acrobàtics'},{k:'animal-handling',ab:'wis',n:'Tracte amb Animals'},
+  {k:'arcana',ab:'int',n:'Arcana'},{k:'athletics',ab:'str',n:'Atletisme'},
+  {k:'deception',ab:'cha',n:'Engany'},{k:'history',ab:'int',n:'Història'},
+  {k:'insight',ab:'wis',n:'Intuïció'},{k:'intimidation',ab:'cha',n:'Intimidació'},
+  {k:'investigation',ab:'int',n:'Investigació'},{k:'medicine',ab:'wis',n:'Medicina'},
+  {k:'nature',ab:'int',n:'Natura'},{k:'perception',ab:'wis',n:'Percepció'},
+  {k:'performance',ab:'cha',n:'Actuació'},{k:'persuasion',ab:'cha',n:'Persuasió'},
+  {k:'religion',ab:'int',n:'Religió'},{k:'sleight-of-hand',ab:'dex',n:'Joc de Mans'},
+  {k:'stealth',ab:'dex',n:'Sigil'},{k:'survival',ab:'wis',n:'Supervivència'}
+];
+function renderSaves(){
+  const el=g('saves-list'); el.innerHTML='';
+  const p=prof(lv);
+  SAVES.forEach(sv=>{
+    const pro=profSaves.has(sv.k), v=mod(stats[sv.k])+(pro?p:0);
+    el.innerHTML+=`<div class="sv-row">
+      <button class="sv-chk${pro?' act':''}" onclick="toggleSave('${sv.k}')">${pro?'●':''}</button>
+      <span class="sv-ab">${sv.k.toUpperCase().slice(0,3)}</span>
+      <span class="sv-nm">${sv.n}</span>
+      <span class="sv-val${pro?' pro':''}">${fmod(v)}</span>
+    </div>`;
   });
 }
+function toggleSave(k){
+  if(profSaves.has(k)) profSaves.delete(k); else profSaves.add(k);
+  renderSaves(); save();
+}
+function renderSkills(){
+  const el=g('skills-list'); el.innerHTML='';
+  const p=prof(lv);
+  SKILLS.forEach(sk=>{
+    const pro=profSkills.has(sk.k), v=mod(stats[sk.ab])+(pro?p:0);
+    el.innerHTML+=`<div class="sv-row">
+      <button class="sv-chk${pro?' act':''}" onclick="toggleSkill('${sk.k}')">${pro?'●':''}</button>
+      <span class="sv-ab">${sk.ab.toUpperCase().slice(0,3)}</span>
+      <span class="sv-nm">${sk.n}</span>
+      <span class="sv-val${pro?' pro':''}">${fmod(v)}</span>
+    </div>`;
+  });
+}
+function toggleSkill(k){
+  if(profSkills.has(k)) profSkills.delete(k); else profSkills.add(k);
+  renderSkills(); save();
+}
 
-// ============================================================
-// INIT
-// ============================================================
-loadSaved();
-renderAll();
-g('c-name').addEventListener('input',()=>{g('tb-name').textContent=g('c-name').value||'Druida';save();});
+// ── INVENTORY ──
+function renderInventory(){
+  const el=g('inv-list'); el.innerHTML='';
+  inventory.forEach((it,i)=>{
+    el.innerHTML+=`<div class="inv-row">
+      <input class="inv-name" value="${it.n}" oninput="inventory[${i}].n=this.value;save()">
+      <input class="inv-qty" type="number" value="${it.q}" min="0" oninput="inventory[${i}].q=+this.value;save()">
+      <button class="inv-del" onclick="delInv(${i})">✕</button>
+    </div>`;
+  });
+}
+function addInvItem(){inventory.push({n:'',q:1});renderInventory();save();}
+function delInv(i){inventory.splice(i,1);renderInventory();save();}
+
+// ── SLOTS ──
+function renderSlotsChar(){
+  const el=g('slots-row-char'); el.innerHTML='';
+  const tbl=SLOT_TABLE[Math.min(lv,20)]||[];
+  for(let i=0;i<9;i++){
+    if(tbl[i]>0) el.innerHTML+=`<span class="slot-chip" style="background:var(--tl);color:var(--td)">Nv${i+1}: ${tbl[i]}</span>`;
+  }
+}
+function slotLabel(i){return['1r','2n','3r','4t','5è','6è','7è','8è','9è'][i]||`${i+1}è`;}
+
+// ── TRACKER ──
+function renderTracker(){
+  const mhp=maxHp(), pct=Math.max(0,curHp/mhp*100);
+  const hpColor=pct>50?'var(--p)':pct>25?'var(--a)':'var(--r)';
+  const ap=getAP();
+  const concHtml=concSpell?`<div class="conc-bar">
+    <div class="conc-dot"></div>
+    <div class="conc-inf">
+      <div class="conc-sp">🌀 Concentrant-se: ${concSpell}</div>
+      <div class="conc-rn">Perd concentració si prens dany i falles CON DC ${Math.max(10,Math.floor(lastDmg/2)||10)}</div>
+    </div>
+    <button style="background:none;border:none;cursor:pointer;font-size:15px" onclick="concSpell=null;renderTracker();save()">✕</button>
+  </div>`:'';
+
+  // Wild Shape section
+  let wsHtml='';
+  const usesMax=wsMaxUses(lv);
+  const pips=Array.from({length:usesMax},(_,i)=>`<div class="ws-pip ${i<wsUses?'f':'e'}" onclick="toggleWsUse(${i})"></div>`).join('');
+  if(wsActive){
+    const f=BEAST_FORMS.find(x=>x.id===wsActive)||{n:'Forma',cr:'?',hp:10,ac:10,spd:'30 ft',atk:'—'};
+    wsHtml=`<div class="ws-active">
+      <div style="display:flex;align-items:baseline;gap:8px">
+        <span class="ws-form-name">🐻 ${f.n}</span>
+        <span style="font-size:11px;color:var(--td)">CR ${f.cr}</span>
+      </div>
+      <div class="ws-stats">❤️ ${f.hp} HP · 🛡️ ${f.ac} AC · ⚡ ${f.spd}<br>⚔️ ${f.atk}</div>
+      <div class="ws-thp-row">
+        <span class="ws-thp-lbl">HP Temporals:</span>
+        <span class="ws-thp-val" id="ws-thp-disp">${wsCurTHP}</span>
+        <span style="font-size:11px;color:var(--td)">&nbsp;/&nbsp;${wsTHP()}</span>
+        <button class="hbtn m" onclick="changeWsTHP(-1)" style="padding:4px 8px;font-size:12px">−</button>
+        <button class="hbtn p" onclick="changeWsTHP(+1)" style="padding:4px 8px;font-size:12px">+</button>
+      </div>
+      <div style="font-size:10px;color:var(--td);margin-top:4px">AC = max(${f.ac}, ${13+mod(stats.wis)}) = ${Math.max(f.ac,13+mod(stats.wis))} · WIS mod: ${fmod(mod(stats.wis))}</div>
+    </div>`;
+  }
+  const slotHtml=renderSlotPips();
+  g('tracker-content').innerHTML=`
+    ${concHtml}
+    <div class="tr-sec">
+      <div class="tr-lbl">❤️ Punts de Vida</div>
+      <div class="hp-wrap"><div class="hp-fill" style="width:${pct}%;background:${hpColor}"></div></div>
+      <div class="hp-row">
+        <div class="hp-btns">
+          <button class="hbtn m" onclick="changeHp(-1)">−</button>
+          <button class="hbtn m" onclick="damagePrompt()">💥</button>
+        </div>
+        <div class="hp-disp">${curHp}<span class="hpmax"> / ${mhp}</span></div>
+        <div class="hp-btns">
+          <button class="hbtn p" onclick="healPrompt()">💊</button>
+          <button class="hbtn p" onclick="changeHp(+1)">+</button>
+        </div>
+      </div>
+    </div>
+    <div class="tr-sec">
+      <div class="tr-lbl">
+        🐺 Forma Salvatge
+        <span style="font-size:10px;color:var(--pd)">Max CR ${Math.floor(lv/3)||'¼'} · THP ${wsTHP()}</span>
+      </div>
+      <div class="ws-uses-row">
+        <span class="ws-lbl">Usos:</span>
+        ${pips}
+        <span style="font-size:11px;color:var(--os)">${wsUses}/${usesMax}</span>
+      </div>
+      ${wsHtml}
+      <div class="ws-btns">
+        <button class="btn-ws" onclick="openWSModal()" ${wsUses===0&&!wsActive?'disabled style="opacity:.4"':''}>🐻 ${wsActive?'Canviar Forma':'Entrar Forma Salvatge'}</button>
+        ${wsActive?`<button class="btn-ws btn-ws-leave" onclick="leaveWS()">🧑 Sortir de Forma</button>`:''}
+      </div>
+      ${lv>=6?`<div style="margin-top:8px;font-size:11px;color:var(--td);background:var(--tl);border-radius:6px;padding:6px 8px">✨ Improved Circle Forms: atacs poden ser Radiant</div>`:''}
+    </div>
+    <div class="tr-sec">
+      <div class="tr-lbl">📖 Slots d'Encanteri</div>
+      ${slotHtml}
+    </div>
+    <div class="rest-row">
+      <button class="btn-rest btn-sr" onclick="shortRest()">☀️ Short Rest</button>
+      <button class="btn-rest btn-lr" onclick="longRest()">🌙 Long Rest</button>
+    </div>`;
+}
+
+let lastDmg=0;
+function changeHp(d){
+  curHp=clamp(curHp+d,0,maxHp());
+  renderTracker(); save();
+}
+function damagePrompt(){
+  const v=prompt('Dany rebut:');
+  if(!v||isNaN(+v))return;
+  lastDmg=+v; curHp=clamp(curHp-lastDmg,0,maxHp());
+  renderTracker(); save();
+}
+function healPrompt(){
+  const v=prompt('Curar (HP):');
+  if(!v||isNaN(+v))return;
+  curHp=clamp(curHp+(+v),0,maxHp());
+  renderTracker(); save();
+}
+function changeWsTHP(d){
+  wsCurTHP=clamp(wsCurTHP+d,0,wsTHP());
+  renderTracker(); save();
+}
+function toggleWsUse(i){
+  wsUses=i<wsUses?i:i+1;
+  wsUses=clamp(wsUses,0,wsMaxUses(lv));
+  renderTracker(); save();
+}
+
+function renderSlotPips(){
+  const tbl=SLOT_TABLE[Math.min(lv,20)]||[];
+  let html='<div class="spip-row">';
+  for(let i=0;i<9;i++){
+    const max=tbl[i]; if(!max) continue;
+    const cur=slots[i]||0;
+    const hs=cur>0;
+    const pips=Array.from({length:max},(_,j)=>`<span class="pip ${j<cur?'f':'e'}"></span>`).join('');
+    html+=`<div class="spip-grp ${hs?'hs':'ns'}" onclick="useSlot(${i})" title="Click: gastar slot | Right: recuperar">
+      <span class="spip-lv">Nv${i+1}</span>${pips}
+    </div>`;
+  }
+  return html+'</div>';
+}
+function useSlot(i){
+  if(slots[i]>0){slots[i]--;} else {
+    const max=(SLOT_TABLE[Math.min(lv,20)]||[])[i]||0;
+    if(slots[i]<max) slots[i]++;
+  }
+  renderTracker(); save();
+}
+
+// ── WILD SHAPE ──
+function openWSModal(){
+  const mc=maxCR();
+  const el=g('beast-list'); el.innerHTML='';
+  BEAST_FORMS.forEach(f=>{
+    const flyOk=!f.fly||lv>=8;
+    const crOk=f.crVal<=mc;
+    const avail=flyOk&&crOk;
+    const thp=wsTHP(), ac=Math.max(f.ac,13+mod(stats.wis));
+    el.innerHTML+=`<div class="beast-card ${avail?'avail':'locked'}" onclick="${avail?`enterWS('${f.id}')`:''}" title="${!avail?(!crOk?'CR massa alt (max '+mc+')':'Necessites Lv 8+ per volar'):''}">
+      <span class="beast-cr">CR ${f.cr}</span>
+      <div style="flex:1">
+        <div class="beast-nm">${f.fly?'🦅 ':''} ${f.n}</div>
+        <div class="beast-stats">❤️ ${f.hp} HP · 🛡️ ${ac} AC · ⚡ ${f.spd}</div>
+        <div class="beast-stats">⚔️ ${f.atk}</div>
+      </div>
+      <span class="beast-thp">+${thp} THP</span>
+    </div>`;
+  });
+  g('ws-modal').style.display='flex';
+}
+function closeWSModal(){g('ws-modal').style.display='none';}
+function enterWS(id){
+  closeWSModal();
+  if(wsUses<=0&&!wsActive) return;
+  if(!wsActive) wsUses--;
+  wsActive=id; wsCurTHP=wsTHP();
+  renderTracker(); save();
+}
+function leaveWS(){wsActive=null; wsCurTHP=0; renderTracker(); save();}
+
+// ── SHORT / LONG REST ──
+function shortRest(){
+  wsUses=Math.min(wsUses+1,wsMaxUses(lv));
+  renderTracker(); save();
+}
+function longRest(){
+  curHp=maxHp();
+  const tbl=SLOT_TABLE[Math.min(lv,20)]||[];
+  slots=[...tbl];
+  wsUses=wsMaxUses(lv);
+  wsActive=null; wsCurTHP=0; concSpell=null;
+  renderTracker(); save();
+}
+
+// ── SPELLS ──
+function allPrepared(){
+  const ap=getAP();
+  return new Set([...ap,...prepared]);
+}
+function cantrips(){return DRUID_SPELLS.filter(s=>s.level===0);}
+
+function renderSpells(){
+  const ap=getAP();
+  const all=allPrepared();
+  const userLv=DRUID_SPELLS.filter(s=>s.level>0&&prepared.has(s.id));
+  const cant=DRUID_SPELLS.filter(s=>s.level===0&&prepared.has(s.id));
+  const circleSpells=DRUID_SPELLS.filter(s=>s.level>0&&ap.has(s.id));
+  const prepMax=PREP_TABLE[lv]||lv;
+  g('chip-c').textContent=cant.length;
+  g('chip-p').innerHTML=`${userLv.length}/<span id="chip-max">${prepMax}</span>`;
+  g('chip-circ').textContent=circleSpells.length;
+  // My spells tab
+  const el=g('my-spells-list'); el.innerHTML='';
+  if(!all.size){
+    el.innerHTML='<div class="empty-st"><div class="ei">📜</div>Cap encanteri preparat.<br>Ves a "Explorar & Afegir".</div>';
+  } else {
+    // Cantrips
+    const myC=DRUID_SPELLS.filter(s=>s.level===0&&(prepared.has(s.id)||(primalOrder==='magician'&&prepared.has(s.id))));
+    if(myC.length){
+      el.innerHTML+='<div class="gh"><span class="badge bg">Cantrips</span></div>';
+      myC.forEach(s=>el.innerHTML+=spellCard(s,false,false));
+    }
+    // Circle always-prepared
+    if(circleSpells.length){
+      el.innerHTML+='<div class="gh"><span class="badge bt">🌙 Cercle de la Lluna</span><span class="gh-sub">Sempre preparats</span></div>';
+      circleSpells.forEach(s=>el.innerHTML+=spellCard(s,true,false));
+    }
+    // User-prepared
+    if(userLv.length){
+      el.innerHTML+='<div class="gh"><span class="badge bp">Preparats per tu</span></div>';
+      userLv.sort((a,b)=>a.level-b.level||a.name.localeCompare(b.name))
+             .forEach(s=>el.innerHTML+=spellCard(s,false,false));
+    }
+    // Speak with Animals (always from Druidic)
+    if(!circleSpells.find(s=>s.id==='speak-with-animals')&&!prepared.has('speak-with-animals')){
+      const sw=DRUID_SPELLS.find(s=>s.id==='speak-with-animals');
+      if(sw){
+        el.innerHTML+='<div class="gh"><span class="badge bg">Drudic</span><span class="gh-sub">Sempre preparat</span></div>';
+        el.innerHTML+=spellCard(sw,true,false);
+      }
+    }
+  }
+}
+
+function spellCard(s,locked,explore){
+  const isConc=s.conc;
+  const isActive=concSpell===s.name;
+  const isExp=expanded.has(s.id);
+  const ap=getAP();
+  const isCircle=ap.has(s.id);
+  let cardClass=isActive?'conca':isCircle?'circle':locked||isCircle?'circle':'';
+  if(!locked&&!isCircle&&prepared.has(s.id)&&s.level>0) cardClass='sel-p';
+  if(prepared.has(s.id)&&s.level===0) cardClass='sel-p';
+
+  const cbHtml=explore
+    ? `<div class="sp-cb ${locked?'locked':(prepared.has(s.id)?'ckp':'')}" onclick="${locked?'':(`togglePrep('${s.id}')`)}">${locked?'🌙':(prepared.has(s.id)?'<span class="ck">✓</span>':'')}</div>`
+    : `<div class="sp-cb locked">${isCircle?'🌙':'✓'}</div>`;
+
+  const lvLabel=s.level===0?'Cantrip':`Lv ${s.level}`;
+  const concBadge=isConc?'<span class="badge br" style="font-size:9px">CONC</span>':'';
+  const saveBadge=s.save?`<span class="badge bg" style="font-size:9px">${s.save}</span>`:'';
+  const castBadge=s.cast==='B'?'<span class="badge ba" style="font-size:9px">BONUS</span>':s.cast==='R'?'<span class="badge br" style="font-size:9px">REACT</span>':s.cast==='rit'?'<span class="badge bg" style="font-size:9px">RITUAL</span>':'';
+  const meta=`${s.school} · ${s.range} · ${s.dur}`;
+
+  let castPanel='';
+  if(!explore&&s.level>0){
+    const tbl=SLOT_TABLE[Math.min(lv,20)]||[];
+    let btns='';
+    for(let i=s.level-1;i<9;i++){
+      if(!tbl[i]) continue;
+      const cur=slots[i]||0;
+      const up=i>s.level-1;
+      btns+=`<button class="cbt${up?' cbt-up':''}" onclick="castSpell('${s.id}',${i})" ${cur===0?'disabled':''}>Lv${i+1} (${cur})</button>`;
+    }
+    const concRow=isConc?`<div class="cast-div"></div><div class="cast-sp-row">
+      ${isActive?`<span class="cast-sp-lbl">🌀 Actiu</span><button class="cast-spb" style="background:var(--r)" onclick="concSpell=null;renderTracker();renderSpells();save()">Trencar</button>`
+      :`<button class="cast-spb" onclick="castConc('${s.name}')">Concentrar-se</button><span class="cast-hint">Requereix concentració</span>`}
+    </div>`:'';
+    castPanel=`<div class="cast-pan"><div class="cast-lbl">Lançar amb slot:</div><div class="cast-btns">${btns||'<span style="font-size:11px;color:var(--os)">Sense slots disponibles</span>'}</div>${concRow}</div>`;
+  }
+  if(!explore&&s.level===0){
+    castPanel=`<div class="cast-pan" style="padding:6px 9px"><span style="font-size:11px;color:var(--td)">✦ Cantrip — sense límit d'usos</span></div>`;
+  }
+
+  const descHtml=isExp?`<div class="sp-desc">${s.desc}</div>${s.tip?`<div class="tip-note"><span style="font-size:13px">💡</span><span class="tip-tx">${s.tip}</span></div>`:''}${castPanel}`:'';
+
+  return `<div class="card ${cardClass}" id="card-${s.id}">
+    <div class="sp-row-c">
+      ${cbHtml}
+      <div class="sp-inf">
+        <div class="sp-nr">
+          <span class="sp-nm">${s.name}</span>
+          <span class="badge bg" style="font-size:9px">${lvLabel}</span>
+          ${concBadge}${saveBadge}${castBadge}
+        </div>
+        <div class="sp-mt">${meta}</div>
+      </div>
+      <button class="exp-btn" onclick="toggleExp('${s.id}')">${isExp?'▲':'▼'}</button>
+    </div>
+    ${descHtml}
+  </div>`;
+}
+
+function toggleExp(id){
+  if(expanded.has(id)) expanded.delete(id); else expanded.add(id);
+  if(spTab===0) renderSpells(); else renderExplore(g('spell-search').value);
+  save();
+}
+function togglePrep(id){
+  const s=DRUID_SPELLS.find(x=>x.id===id); if(!s) return;
+  const prepMax=PREP_TABLE[lv]||lv;
+  const ap=getAP();
+  if(ap.has(id)) return; // can't toggle circle spells
+  if(prepared.has(id)){
+    prepared.delete(id);
+  } else {
+    const userLv=DRUID_SPELLS.filter(x=>x.level>0&&prepared.has(x.id)&&!ap.has(x.id));
+    if(s.level>0&&userLv.length>=prepMax){
+      alert(`Ja tens ${prepMax} encanteris preparats (màxim al Lv ${lv}).`); return;
+    }
+    prepared.add(id);
+  }
+  renderSpells(); renderExplore(g('spell-search').value); save();
+}
+function castSpell(id,slotIdx){
+  if((slots[slotIdx]||0)===0) return;
+  slots[slotIdx]--;
+  renderTracker(); renderSpells(); save();
+}
+function castConc(name){
+  if(concSpell&&concSpell!==name){
+    if(!confirm(`Ja et concentres a "${concSpell}". Substituir?`)) return;
+  }
+  concSpell=name;
+  renderTracker(); renderSpells(); save();
+}
+
+function renderExplore(q){
+  const el=g('explore-list'); el.innerHTML='';
+  q=(q||'').toLowerCase();
+  const ap=getAP();
+  const groups=[-1,0,1,2,3,4,5,6,7,8,9];
+  const levelNames=['','Cantrip','Nivell 1','Nivell 2','Nivell 3','Nivell 4','Nivell 5','Nivell 6','Nivell 7','Nivell 8','Nivell 9'];
+  const groupLabels=['Cantrips','Cantrips','Nv 1','Nv 2','Nv 3','Nv 4','Nv 5','Nv 6','Nv 7','Nv 8','Nv 9'];
+  [0,1,2,3,4,5,6,7,8,9].forEach(lev=>{
+    let spells=DRUID_SPELLS.filter(s=>s.level===lev);
+    if(q) spells=spells.filter(s=>s.name.toLowerCase().includes(q)||s.desc.toLowerCase().includes(q)||s.school.toLowerCase().includes(q));
+    if(!spells.length) return;
+    const label=lev===0?'Cantrips':`Nivell ${lev}`;
+    const apCount=spells.filter(s=>ap.has(s.id)).length;
+    el.innerHTML+=`<div class="gh"><span class="badge ${lev===0?'bg':'bt'}">${label}</span>${lev===0?'':(`<span class="gh-sub">Slots: ${(SLOT_TABLE[Math.min(lv,20)]||[])[lev-1]||0} disponibles</span>`)}</div><hr class="hr">`;
+    spells.forEach(s=>{
+      const locked=ap.has(s.id);
+      el.innerHTML+=spellCard(s,locked,true);
+    });
+  });
+  if(!el.innerHTML) el.innerHTML='<div class="empty-st"><div class="ei">🔍</div>Cap encanteri trobat.</div>';
+}
+function filterSpells(q){renderExplore(q);}
+
+// ── SLOTS CHAR VIEW ──
+function slotLabel(i){return['1r','2n','3r','4t','5è','6è','7è','8è','9è'][i]||`${i+1}è`;}
+
+// ── CLASS TAB ──
+function renderClass(){
+  const el=g('class-content'); el.innerHTML='';
+  // Primal Order
+  el.innerHTML+=`<div class="tr-sec">
+    <div class="tr-lbl">⚔️ Primal Order <span style="font-size:10px">(Lv 1)</span></div>
+    <div class="po-row">
+      <button class="po-chip${primalOrder==='magician'?' on':''}" onclick="setPO('magician')">🔮 Magician<br><span style="font-size:10px;font-weight:400">+cantrip · WIS→Arcana/Natura</span></button>
+      <button class="po-chip${primalOrder==='warden'?' on':''}" onclick="setPO('warden')">🛡️ Warden<br><span style="font-size:10px;font-weight:400">Armes marcials · Armadura mitja</span></button>
+    </div>
+    <div style="font-size:12px;color:var(--os);line-height:1.5">${primalOrder==='magician'?`Arcana/Natura = ${fmod(mod(stats.wis)+prof(lv))} (WIS mod + Prof)`:'Proficiència amb armes marcials i armadura mitja (AC max 11+DEX mod en cuirass)'}</div>
+  </div>`;
+  // Circle Forms
+  el.innerHTML+=`<div class="tr-sec">
+    <div class="tr-lbl">🐺 Circle Forms <span style="font-size:10px">(Lv 3)</span></div>
+    <div class="info-bn">Max CR = <strong>${Math.floor(lv/3)||'¼'}</strong> · AC = max(bestia, <strong>${13+mod(stats.wis)}</strong>) · THP = <strong>${wsTHP()}</strong></div>
+    ${lv>=6?`<div style="background:var(--tl);border-radius:8px;padding:10px 12px;margin-bottom:8px;font-size:12px;color:var(--td)">
+      <strong>Improved Circle Forms (Lv 6):</strong><br>
+      · Lunar Radiance: atacs fan Radiant o dany normal (tu tries per cop)<br>
+      · Increased Toughness: afegeix WIS mod a tirades de salvació CON
+    </div>`:''}
+    ${lv>=10?`<div style="background:var(--tl);border-radius:8px;padding:10px 12px;margin-bottom:8px;font-size:12px;color:var(--td)">
+      <strong>Moonlight Step (Lv 10):</strong><br>
+      Bonus action: teleporta fins 30 ft. Avantatge en el proper atac. Usos = WIS mod (${mod(stats.wis)}).
+    </div>`:''}
+    ${lv>=14?`<div style="background:var(--tl);border-radius:8px;padding:10px 12px;margin-bottom:8px;font-size:12px;color:var(--td)">
+      <strong>Lunar Form (Lv 14):</strong><br>
+      · 1/torn: +2d10 Radiant a atac de Wild Shape<br>
+      · Moonlight Step: teleporta una criatura aliada addicional (10 ft)
+    </div>`:''}
+  </div>`;
+  // Elemental Fury (lv7+)
+  if(lv>=7){
+    el.innerHTML+=`<div class="tr-sec">
+      <div class="tr-lbl">⚡ Elemental Fury <span style="font-size:10px">(Lv 7)</span></div>
+      <div class="po-row">
+        <button class="po-chip${eleFury==='potent'?' on':''}" onclick="setEF('potent')">✨ Potent Spellcasting<br><span style="font-size:10px;font-weight:400">+${fmod(mod(stats.wis))} dany als cantrips</span></button>
+        <button class="po-chip${eleFury==='primal'?' on':''}" onclick="setEF('primal')">🗡️ Primal Strike<br><span style="font-size:10px;font-weight:400">+1d8 element/torn en Wild Shape</span></button>
+      </div>
+      ${lv>=15?`<div style="font-size:12px;color:var(--pd);margin-top:6px;background:var(--pl);padding:7px 9px;border-radius:6px">
+        <strong>Improved (Lv 15):</strong> ${eleFury==='potent'?'Rang dels cantrips Druid +300 ft (si rang ≥ 10 ft)':'Primal Strike fa +2d8 (millora des de 1d8)'}
+      </div>`:''}
+    </div>`;
+  }
+  // Wild Resurgence (lv5+)
+  if(lv>=5){
+    el.innerHTML+=`<div class="tr-sec">
+      <div class="tr-lbl">♻️ Wild Resurgence <span style="font-size:10px">(Lv 5)</span></div>
+      <div style="font-size:12px;color:var(--tx);line-height:1.6">
+        · Si no tens usos de Wild Shape: gasta un slot per recuperar-ne 1 (sense acció).<br>
+        · Gasta 1 ús de Wild Shape: recuperes un slot de Lv 1 (1/descans llarg).
+      </div>
+    </div>`;
+  }
+  // Beast Spells (lv18+)
+  if(lv>=18){
+    el.innerHTML+=`<div class="tr-sec">
+      <div class="tr-lbl">🌟 Beast Spells <span style="font-size:10px">(Lv 18)</span></div>
+      <div style="font-size:12px;color:var(--tx)">Pots llançar encanteris mentre ets en forma de bestia (excepte els que consumeixen components de material cars).</div>
+    </div>`;
+  }
+  // Wild Shape uses info
+  el.innerHTML+=`<div class="tr-sec">
+    <div class="tr-lbl">📋 Característiques de classe</div>
+    <div style="font-size:12px;color:var(--tx);line-height:1.8">
+      <b>Wild Companion (Lv 2):</b> Gasta Wild Shape o slot per llançar Find Familiar (Fey, sense comp. material).<br>
+      ${lv>=20?`<b>Archdruid (Lv 20):</b> Evergreen Wild Shape · Nature Magician · Longevity<br>`:''}
+    </div>
+  </div>`;
+}
+function setPO(v){primalOrder=v;recalc();renderClass();}
+function setEF(v){eleFury=v;renderClass();save();}
+
+// ── BUILDS ──
+function renderBuilds(){
+  const el=g('builds-list'); el.innerHTML='';
+  if(!builds.length){
+    el.innerHTML='<div class="empty-st"><div class="ei">💾</div>Cap personatge desat.</div>';
+    return;
+  }
+  builds.forEach((b,i)=>{
+    const act=b.id===currentBuildId;
+    el.innerHTML+=`<div class="bc ${act?'isact':''}">
+      <div class="bc-top">
+        <div class="bc-av">🌿</div>
+        <div class="bc-inf">
+          <div class="bc-nm">${b.name||'Druida'}${act?'<span style="font-size:10px;background:var(--p);color:#fff;padding:2px 7px;border-radius:5px;font-weight:600">ACTIU</span>':''}</div>
+          <div class="bc-mt">Circle of the Moon · Lv ${b.lv||1} · ${new Date(b.ts).toLocaleDateString()}</div>
+        </div>
+      </div>
+      <div class="bc-act">
+        <button class="btn-sm btn-pr" onclick="loadBuild(${i})">Carregar</button>
+        <button class="btn-sm btn-ou" onclick="overwriteBuild(${i})">Sobreescriure</button>
+        <button class="btn-sm btn-dn" onclick="deleteBuild(${i})">Eliminar</button>
+      </div>
+    </div>`;
+  });
+}
+let currentBuildId=null;
+function saveBuild(){
+  const st=getState();
+  const b={...st,id:Date.now(),ts:Date.now(),name:st.name||'Druida'};
+  currentBuildId=b.id;
+  builds.unshift(b);
+  if(builds.length>20) builds.pop();
+  try{localStorage.setItem(SKB,JSON.stringify(builds));}catch(e){}
+  const ok=g('save-ok'); ok.style.display='inline'; setTimeout(()=>ok.style.display='none',1500);
+  renderBuilds();
+}
+function loadBuild(i){
+  const b=builds[i];
+  currentBuildId=b.id;
+  setState(b); recalc();
+  switchTab(0);
+}
+function overwriteBuild(i){
+  builds[i]={...getState(),id:builds[i].id,ts:Date.now(),name:g('c-name').value||'Druida'};
+  try{localStorage.setItem(SKB,JSON.stringify(builds));}catch(e){}
+  renderBuilds();
+}
+function deleteBuild(i){
+  if(!confirm('Eliminar aquest personatge?')) return;
+  builds.splice(i,1);
+  try{localStorage.setItem(SKB,JSON.stringify(builds));}catch(e){}
+  renderBuilds();
+}
+function newBuild(){
+  if(!confirm('Crear un personatge en blanc? (El progrés actual es perd si no el deses.)')) return;
+  localStorage.removeItem(SK);
+  location.reload();
+}
+
+// ── QR / SHARE ──
+function shareState(){
+  const name=g('c-name').value||'Druida';
+  g('qr-nm').textContent=name;
+  const st=getState();
+  const json=JSON.stringify(st);
+  // unicode-safe base64
+  const b64=btoa(unescape(encodeURIComponent(json)));
+  const url=location.href.replace('preview.html','view.html')+'?d='+encodeURIComponent(b64);
+  g('qr-url').textContent=url;
+  g('qr-cvs').innerHTML='';
+  if(window.QRCode){
+    new QRCode(g('qr-cvs'),{text:url,width:160,height:160,colorDark:'#2E4A10',colorLight:'#EBF2E0'});
+  } else {
+    g('qr-cvs').innerHTML='<a href="'+url+'" style="color:var(--p);font-size:11px;word-break:break-all">'+url+'</a>';
+  }
+  g('qr-ov').style.display='flex';
+}
+function closeQR(){g('qr-ov').style.display='none';}
+function copyQR(){
+  const url=g('qr-url').textContent;
+  navigator.clipboard?.writeText(url).then(()=>alert('URL copiada!'));
+}
+
+// ── INIT ──
+window.onload=function(){
+  load();
+  if(dark) document.body.classList.add('dark');
+  recalc();
+  renderInventory();
+  renderSlotsChar();
+  switchTab(0);
+};
 </script>
 </body>
 </html>

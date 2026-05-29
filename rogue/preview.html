@@ -251,6 +251,24 @@ html,body{height:100%;background:var(--bg);color:var(--tx);font-family:-apple-sy
 .chip{display:inline-flex;align-items:center;gap:4px;background:var(--pl);color:var(--pd);border:1px solid var(--p);border-radius:20px;padding:5px 11px;font-size:12px;font-weight:600}
 .chip.amber{background:var(--al);color:var(--ad);border-color:var(--a)}
 .chip.purple{background:var(--tl);color:var(--td);border-color:var(--t)}
+/* Cunning Strike panel */
+.cs-panel{background:var(--al);border:1.5px solid var(--a);border-radius:var(--rr);padding:10px 12px;margin-top:8px}
+.cs-panel-lbl{font-size:10px;font-weight:700;text-transform:uppercase;color:var(--ad);letter-spacing:.5px;margin-bottom:8px}
+.cs-btns{display:flex;flex-wrap:wrap;gap:6px}
+.cs-btn{flex:1;min-width:120px;background:var(--sf);border:1.5px solid var(--a);border-radius:8px;padding:8px 10px;cursor:pointer;text-align:left;transition:all .15s}
+.cs-btn:active{background:var(--ad);color:#fff}
+.cs-btn-name{font-size:13px;font-weight:700;color:var(--tx)}
+.cs-btn-cost{font-size:10px;color:var(--r);font-weight:700}
+.cs-btn-net{font-size:10px;color:var(--os)}
+.cs-btn-desc{font-size:10px;color:var(--os);margin-top:2px;line-height:1.3}
+/* Ethereal Step */
+.eth-box{background:var(--tl);border:1.5px solid var(--t);border-radius:var(--rr);padding:10px 12px;margin-bottom:10px}
+.eth-lbl{font-size:10px;font-weight:700;text-transform:uppercase;color:var(--td);letter-spacing:.5px;margin-bottom:6px}
+.eth-row{display:flex;align-items:center;gap:10px}
+.eth-used{font-size:22px;font-weight:800;color:var(--t)}
+.eth-desc{font-size:11px;color:var(--td);flex:1;line-height:1.4}
+.eth-btn{padding:6px 14px;border-radius:8px;border:1.5px solid var(--t);background:var(--sf);color:var(--td);font-size:12px;font-weight:700;cursor:pointer}
+.eth-btn.used{background:var(--t);color:#fff;opacity:.5}
 
 /* REST */
 .rest-row{display:flex;gap:10px}
@@ -805,6 +823,7 @@ let maxHpMan = -1;
 let usedWails = 0;
 let whisperProf = '';
 let whisperActive = false;
+let ethUsed = false; // Ethereal Step (Lv9): 1/torn, Short Rest
 let activeIdIdx = 0;
 let identities = [{name:'Rohk',notes:'',img:''},{name:'Kesh',notes:'',img:''},{name:'???',notes:'',img:''}];
 let statVals = {str:10,dex:10,con:10,int_:10,wis:10,cha:10};
@@ -1143,21 +1162,38 @@ function toggleWhisper(){
   renderTracker(); renderSessionActive(); save();
 }
 
+function applyCunningStrike(name,costDice){
+  const sneak=sneakDice();
+  const net=sneak-costDice;
+  const csDC=8+getMod('dex')+profBonus();
+  showToast(`⚡ ${name}: ${net>0?net+'d6 SA':'sense SA dau'} · DC ${csDC}. Efecte: consulta la targeta.`);
+}
+
+function useEtherealStep(){
+  if(ethUsed){
+    // Trying to recover manually (Short Rest button is the real recovery)
+    showToast('Ethereal Step es recupera amb Short Rest.');
+    return;
+  }
+  ethUsed=true;
+  renderSessionActive(); save();
+  showToast('👻 Ethereal Step usat! Invisible fins final de torn.');
+}
+
 function shortRest(){
-  // Whispers of the Dead recharges
-  whisperActive=false;
-  whisperProf='';
-  renderTracker(); save();
-  showToast('Descans Curt: Whispers of the Dead recuperat.');
+  whisperActive=false; whisperProf='';
+  ethUsed=false; // Ethereal Step recarrega en Short Rest
+  renderTracker(); renderSessionActive(); save();
+  showToast('☀️ Short Rest: Whispers + Ethereal Step recuperats.');
 }
 
 function longRest(){
   usedWails=0;
-  whisperActive=false;
-  whisperProf='';
+  whisperActive=false; whisperProf='';
+  ethUsed=false;
   if(curHp!==-1) curHp=getMaxHp();
-  renderTracker(); save();
-  showToast('Descans Llarg: HP i Wails recuperats!');
+  renderTracker(); renderSessionActive(); save();
+  showToast('🌙 Long Rest: HP, Wails, Whispers i Ethereal Step recuperats!');
 }
 
 function showToast(msg){
@@ -1306,13 +1342,35 @@ function renderSessionActive(){
     <div class="der-box"><div class="der-lbl">AC</div><div class="der-val">${ac}</div></div>
     <div class="der-box"><div class="der-lbl">Init</div><div class="der-val">${fmtMod(dex)}</div></div>`;
 
-  // Sneak Attack block
+  // Sneak Attack block + Cunning Strike panel
+  const availCS=lv>=5?CUNNING_STRIKES.filter(cs=>cs.level<=lv):[];
+  const csDC=8+getMod('dex')+profBonus();
+  const csHtml=availCS.length?`
+    <div class="cs-panel">
+      <div class="cs-panel-lbl">⚡ Cunning Strike — DC ${csDC} · Tria un (sacrifica els daus indicats de SA)</div>
+      <div class="cs-btns">
+        ${availCS.map(cs=>{
+          const costDice=parseInt(cs.cost);
+          const netDice=sneak-costDice;
+          return `<button class="cs-btn" onclick="applyCunningStrike('${cs.name}',${costDice})">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <span class="cs-btn-name">${cs.name}</span>
+              <span class="cs-btn-cost">−${cs.cost}</span>
+            </div>
+            <div class="cs-btn-net">${netDice>0?netDice+'d6 SA net':'sense SA'} · DC ${csDC}</div>
+            <div class="cs-btn-desc">${cs.desc}</div>
+          </button>`;
+        }).join('')}
+      </div>
+    </div>`:'';
+
   g('sess-sneak-block').innerHTML=`
     <div class="sess-sneak-dice">${sneak}d6</div>
     <div class="sess-sneak-info">
       <b>Sneak Attack</b> · 1/torn<br>
       Cal Finesse o Ranged + (Advantage <i>o</i> aliat adjacent sense Disadv.)
-    </div>`;
+    </div>
+    ${csHtml}`;
 
   // Resources
   const maxHp=getMaxHp(), curHpVal=curHp===-1?maxHp:curHp;
@@ -1343,6 +1401,24 @@ function renderSessionActive(){
       <div style="font-size:10px;color:var(--os);margin-top:2px">SR/LR reset</div>
     </div>`;
 
+  // Ethereal Step (Lv9)
+  if(lv>=9){
+    const ethHtml=`<div class="eth-box">
+      <div class="eth-lbl">👻 Ethereal Step — Lv9 · Recarrega: Short Rest</div>
+      <div class="eth-row">
+        <div>
+          <div class="eth-used">${ethUsed?'USAT':'LLIURE'}</div>
+          <div class="eth-desc">Bonus Action: et tornes invisible fins el final del torn.<br>Pots moure't a través de criatures i objectes sòlids.</div>
+        </div>
+        <button class="eth-btn ${ethUsed?'used':''}" onclick="useEtherealStep()">${ethUsed?'Recuperar (SR)':'Usar (BA)'}</button>
+      </div>
+    </div>`;
+    const ethEl=document.createElement('div');
+    ethEl.innerHTML=ethHtml;
+    g('sess-reminders').before(ethEl.firstChild);
+  }
+
+  // Stalker's Flurry reminder (Lv13)
   // Reminders
   const reminders=[
     {icon:'../icons/hacker.png',title:'Cunning Action',desc:'Bonus Action: Dash · Disengage · Hide'},
@@ -1350,6 +1426,7 @@ function renderSessionActive(){
     ...(lv>=5?[{icon:'../icons/speed.png',title:'Uncanny Dodge',desc:'Reacció: redueix a la meitat el dany d\'un atacant visible.'}]:[]),
     ...(lv>=7?[{icon:'../icons/hacker.png',title:'Evasion',desc:'DEX save: èxit = cap dany, falla = meitat.'}]:[]),
     ...(lv>=7?[{icon:'../icons/d20.png',title:'Reliable Talent',desc:'Tirades amb competència: d20 de 1-9 compta com a 10.'}]:[]),
+    ...(lv>=13?[{icon:'../icons/speed.png',title:"Stalker's Flurry",desc:'1/torn: si falles un atac, pots repetir-lo immediatament contra el mateix objectiu.'}]:[]),
   ];
   g('sess-reminders').innerHTML=reminders.map(r=>`
     <div class="sess-rem-chip">
@@ -1545,7 +1622,7 @@ function renderSaved(){
 // ── SAVE / LOAD ──────────────────────────────────────────
 function save(){
   const data={
-    lv,darkMode,lang,curHp,maxHpMan,usedWails,whisperProf,whisperActive,
+    lv,darkMode,lang,curHp,maxHpMan,usedWails,whisperProf,whisperActive,ethUsed,
     activeIdIdx,identities,statVals,
     skillProf:[...skillProf],skillExp:[...skillExp],
     selSaves:[...selSaves],selF:[...selF],expFeats:[...expFeats],
@@ -1565,6 +1642,7 @@ function load(){
     curHp=d.curHp??-1; maxHpMan=d.maxHpMan??-1;
     usedWails=d.usedWails||0;
     whisperProf=d.whisperProf||''; whisperActive=!!d.whisperActive;
+    ethUsed=!!d.ethUsed;
     activeIdIdx=d.activeIdIdx||0;
     identities=(d.identities||identities).map(id=>({name:id.name||'',notes:id.notes||'',img:id.img||''}));
     statVals=d.statVals||statVals;

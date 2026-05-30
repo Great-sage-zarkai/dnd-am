@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>DM View — The Party</title>
+<meta name="theme-color" content="#1A1A2A">
+<style>
+:root{
+  --bg:#0F0F18;--sf:#1A1A28;--sv:#232336;--ol:#333350;--os:#8080A8;--tx:#E8E8F8;
+  --p:#7B5EA7;--pl:#2A1F45;--pd:#C0AAEA;
+  --t:#1D9E75;--tl:#0A2820;--td:#6DCFB0;
+  --a:#C4A21B;--al:#2A1A00;--ad:#E8C96A;
+  --r:#D85A30;--rl:#2A0F08;
+  --druid:#5A7C2E;--rogue:#3A7CA5;--sorc:#7F77DD;--cleric:#7B5EA7;
+  --rr:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--tx)}
+body{font-family:'Segoe UI',system-ui,sans-serif;font-size:14px;display:flex;flex-direction:column}
+
+/* TOPBAR */
+.topbar{height:50px;background:var(--sf);border-bottom:1px solid var(--ol);display:flex;align-items:center;padding:0 14px;gap:10px;flex-shrink:0;z-index:20}
+.top-title{font-size:15px;font-weight:700;flex:1}
+.top-sub{font-size:11px;color:var(--os)}
+.btn-add{background:var(--p);color:#fff;border:none;border-radius:8px;padding:7px 14px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
+.btn-add:active{opacity:.8}
+
+/* CHAR TABS */
+.char-tabs{display:flex;background:var(--sf);border-bottom:1px solid var(--ol);flex-shrink:0;overflow-x:auto;padding:0 4px}
+.char-tab{display:flex;align-items:center;gap:7px;padding:10px 14px;cursor:pointer;border:none;background:none;color:var(--os);font-size:13px;font-weight:500;white-space:nowrap;border-bottom:2.5px solid transparent;transition:all .15s;flex-shrink:0}
+.char-tab.active{color:var(--tx);border-bottom-color:var(--p)}
+.char-tab .ct-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.char-tab .ct-del{font-size:14px;color:var(--os);margin-left:4px;opacity:.5}
+.char-tab .ct-del:hover{opacity:1;color:var(--r)}
+.no-chars{flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;color:var(--os);padding:40px}
+.no-chars .nc-icon{font-size:48px;opacity:.3}
+.no-chars p{font-size:14px;line-height:1.6;text-align:center;max-width:280px}
+
+/* SCROLL */
+.scroll-area{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
+.char-screen{display:none;padding:12px}
+.char-screen.active{display:block}
+
+/* CHARACTER HEADER CARD */
+.char-hero{border-radius:var(--rr);padding:14px;margin-bottom:10px;display:flex;gap:12px;align-items:flex-start}
+.ch-badge{width:48px;height:48px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;background:rgba(255,255,255,.08)}
+.ch-info{flex:1;min-width:0}
+.ch-name{font-size:18px;font-weight:700;margin-bottom:2px}
+.ch-sub{font-size:12px;opacity:.75;margin-bottom:6px}
+.ch-hp-row{display:flex;align-items:center;gap:10px}
+.ch-hp-num{font-size:22px;font-weight:800;line-height:1}
+.ch-hp-label{font-size:10px;opacity:.6}
+.ch-hp-bar{flex:1;height:7px;border-radius:4px;background:rgba(255,255,255,.15);overflow:hidden}
+.ch-hp-fill{height:100%;border-radius:4px;transition:width .3s}
+.conc-pill{display:inline-flex;align-items:center;gap:5px;background:rgba(216,90,48,.2);border:1px solid rgba(216,90,48,.4);border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600;color:#ff9070;margin-top:6px}
+
+/* RESOURCE PIPS */
+.res-section{background:var(--sv);border-radius:var(--rr);padding:10px 12px;margin-bottom:10px}
+.res-row{display:flex;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid var(--ol)}
+.res-row:last-child{border-bottom:none}
+.res-nm{font-size:12px;color:var(--os);width:160px;flex-shrink:0}
+.res-pips{display:flex;gap:4px;flex:1}
+.rpip{width:14px;height:14px;border-radius:50%;border:2px solid var(--p)}
+.rpip.f{background:var(--p)}
+.rpip.e{background:transparent}
+.res-ct{font-size:11px;color:var(--os);min-width:28px;text-align:right}
+.slot-row{display:flex;align-items:center;gap:6px;padding:4px 0;border-bottom:1px solid var(--ol)}
+.slot-row:last-child{border-bottom:none}
+.slot-lv{font-size:11px;font-weight:700;background:var(--tl);color:var(--td);border-radius:5px;padding:1px 7px;min-width:32px;text-align:center;flex-shrink:0}
+.slot-pips{display:flex;gap:3px;flex:1}
+.spip{width:12px;height:12px;border-radius:50%;border:2px solid var(--t);background:var(--t)}
+.spip.e{background:transparent}
+.slot-ct{font-size:11px;color:var(--os);min-width:28px;text-align:right}
+
+/* SECTION TITLES */
+.sec-title{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--os);padding:10px 0 6px;display:flex;align-items:center;gap:6px}
+.sec-title::after{content:'';flex:1;height:1px;background:var(--ol)}
+
+/* SPELL CARDS */
+.spell-card{background:var(--sv);border:1px solid var(--ol);border-radius:8px;margin-bottom:6px;overflow:hidden;cursor:pointer;transition:border-color .1s}
+.spell-card:hover{border-color:var(--p)}
+.spell-card.domain{background:var(--al);border-color:rgba(196,162,27,.3)}
+.spell-card.conc{border-color:rgba(216,90,48,.4)}
+.sc-header{display:flex;align-items:center;gap:8px;padding:9px 12px}
+.sc-name{font-size:13px;font-weight:700;flex:1}
+.sc-badges{display:flex;gap:4px;align-items:center;flex-shrink:0}
+.badge{display:inline-block;padding:2px 6px;border-radius:8px;font-size:10px;font-weight:600}
+.bl{background:var(--pl);color:var(--pd)}
+.bt{background:var(--tl);color:var(--td)}
+.ba{background:var(--al);color:var(--ad)}
+.br{background:var(--rl);color:#ff9070}
+.bg{background:rgba(255,255,255,.08);color:var(--os)}
+.sc-meta{font-size:11px;color:var(--os);padding:0 12px 4px}
+.sc-body{border-top:1px solid var(--ol);padding:10px 12px;display:none}
+.sc-body.open{display:block}
+.sc-desc{font-size:13px;color:var(--tx);line-height:1.6;margin-bottom:6px}
+.sc-tip{background:rgba(123,94,167,.15);border-radius:6px;padding:7px 10px;font-size:11px;color:var(--pd);line-height:1.5;border-left:3px solid var(--p)}
+
+/* TRAIT CARDS */
+.trait-card{background:var(--sv);border-left:3px solid var(--p);border-radius:0 8px 8px 0;padding:9px 12px;margin-bottom:6px}
+.trait-card.gold{border-left-color:var(--a)}
+.trait-nm{font-size:13px;font-weight:600;margin-bottom:3px;display:flex;align-items:center;gap:6px}
+.trait-src{font-size:10px;color:var(--os)}
+.trait-ds{font-size:12px;color:var(--os);line-height:1.55}
+
+/* MODAL */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:100;display:none;align-items:flex-end;justify-content:center}
+.modal-bg.open{display:flex}
+.modal{background:var(--sf);border-radius:16px 16px 0 0;width:100%;max-width:500px;padding:20px;max-height:85vh;overflow-y:auto}
+.modal-title{font-size:16px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
+.modal-close{background:none;border:none;color:var(--os);font-size:22px;cursor:pointer}
+.load-option{background:var(--sv);border:1.5px solid var(--ol);border-radius:var(--rr);padding:16px;margin-bottom:10px;cursor:pointer;transition:border-color .15s}
+.load-option:hover{border-color:var(--p)}
+.load-option h3{font-size:14px;font-weight:700;margin-bottom:4px}
+.load-option p{font-size:12px;color:var(--os)}
+.url-input{width:100%;border:1.5px solid var(--ol);border-radius:8px;padding:10px;font-size:13px;background:var(--bg);color:var(--tx);margin-bottom:10px;font-family:monospace}
+.url-input:focus{outline:none;border-color:var(--p)}
+.btn-load{width:100%;padding:12px;background:var(--p);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:8px}
+.btn-load:active{opacity:.8}
+.btn-load.disabled{background:var(--ol);color:var(--os);cursor:not-allowed}
+.cam-wrap{width:100%;aspect-ratio:1;background:#000;border-radius:8px;overflow:hidden;margin-bottom:10px;position:relative}
+.cam-wrap video{width:100%;height:100%;object-fit:cover}
+.cam-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
+.cam-frame{width:65%;aspect-ratio:1;border:3px solid rgba(123,94,167,.8);border-radius:12px;box-shadow:0 0 0 9999px rgba(0,0,0,.4)}
+.cam-hint{text-align:center;font-size:12px;color:var(--os);margin-bottom:10px}
+
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-thumb{background:var(--ol);border-radius:2px}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div>
+    <div class="top-title">🎲 DM Dashboard</div>
+    <div class="top-sub" id="party-sub">No characters loaded</div>
+  </div>
+  <button class="btn-add" onclick="openLoadModal()">+ Add Character</button>
+</div>
+
+<div class="char-tabs" id="char-tabs"></div>
+
+<div class="scroll-area" id="scroll-area">
+  <div class="no-chars" id="no-chars">
+    <div class="nc-icon">🎲</div>
+    <p>No characters loaded yet.<br>Click <strong>+ Add Character</strong> and scan a player's QR code or paste their share URL.</p>
+  </div>
+  <div id="char-screens"></div>
+</div>
+
+<!-- LOAD MODAL -->
+<div class="modal-bg" id="load-modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-title">
+      Load Character
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div id="modal-body">
+      <div class="load-option" onclick="showUrlInput()">
+        <h3>🔗 Paste Share URL</h3>
+        <p>Player copies their URL from the Share button and sends it to you</p>
+      </div>
+      <div class="load-option" onclick="showCamera()">
+        <h3>📷 Scan QR Code</h3>
+        <p>Point camera at the player's QR code</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══ SPELL DATABASE — all 4 classes ══
+const SPELLS = {
+// ── CLERIC ──
+'guidance':{n:'Guidance',lv:0,sc:'Divination',conc:true,time:'Action',range:'Touch',desc:'Touch a creature. Once before the spell ends, it can add 1d4 to one ability check of its choice.',tip:'Best support cantrip. Cast before every skill check.'},
+'sacred-flame':{n:'Sacred Flame',lv:0,sc:'Evocation',conc:false,time:'Action',range:'60 ft',desc:'A creature you can see within range must succeed on a DEX save or take 1d8 Radiant damage. Target gains no benefit from cover. Scales at 5/11/17.',tip:'Ignores cover — great vs armored enemies hiding behind walls.'},
+'thaumaturgy':{n:'Thaumaturgy',lv:0,sc:'Transmutation',conc:false,time:'Action',range:'30 ft',desc:'Minor wonder: booming voice, flickering flames, trembling ground, altered eye color, opening/closing doors. Up to 3 effects active at once.',tip:'Pure roleplay. Intimidation with booming voice and trembling ground.'},
+'toll-the-dead':{n:'Toll the Dead',lv:0,sc:'Necromancy',conc:false,time:'Action',range:'60 ft',desc:'A creature you can see must succeed on a WIS save or take 1d8 Necrotic damage (1d12 if it is missing any HP). Scales at 5/11/17.',tip:'Always use d12 version on wounded enemies. Best offensive cleric cantrip.'},
+'spare-the-dying':{n:'Spare the Dying',lv:0,sc:'Necromancy',conc:false,time:'Action',range:'15 ft',desc:'[Grave Domain] Stabilize a creature at 0 HP. For Grave Cleric: range is 30 ft and can be cast as a Bonus Action.',tip:'Domain bonus makes this actually usable in combat — Bonus Action from 30 ft.'},
+'resistance':{n:'Resistance',lv:0,sc:'Abjuration',conc:true,time:'Action',range:'Touch',desc:'Touch a creature. Once before the spell ends, it can add 1d4 to one saving throw of its choice. (Concentration, 1 min)',tip:'Pre-cast before a known big saving throw.'},
+'word-of-radiance':{n:'Word of Radiance',lv:0,sc:'Evocation',conc:false,time:'Action',range:'Self (5-ft)',desc:'Each hostile creature within 5 feet must succeed on a CON save or take 1d6 Radiant damage. Scales at 5/11/17.',tip:'Great when surrounded — hits all melee enemies at once.'},
+'light':{n:'Light',lv:0,sc:'Evocation',conc:false,time:'Action',range:'Touch',desc:'Object sheds 20-ft bright light, 20-ft dim light for 1 hour. Can be cast on a hostile creature\'s item (DEX save to avoid).',tip:'Free light source. Attach to a thrown stone or arrow.'},
+'mending':{n:'Mending',lv:0,sc:'Transmutation',conc:false,time:'1 min',range:'Touch',desc:'Repair one break or tear in an object. Leaves no trace. Cannot restore magical properties.',tip:'Fix broken weapons and equipment between encounters.'},
+'bane':{n:'Bane',lv:1,sc:'Enchantment',conc:true,time:'Action',range:'30 ft',desc:'[Domain] Up to 3 creatures must succeed on a CHA save or subtract 1d4 from all attack rolls and saving throws for 1 minute. (Concentration)',tip:'Simultaneously penalizes enemy attacks AND saves. Massive action economy flip.'},
+'false-life':{n:'False Life',lv:1,sc:'Necromancy',conc:false,time:'Action',range:'Self',desc:'[Domain] Gain 2d4+4 Temporary HP for 1 hour. Higher slots: +5 THP per slot above 1st.',tip:'No concentration! Pre-cast before combat for free buffer HP.'},
+'bless':{n:'Bless',lv:1,sc:'Enchantment',conc:true,time:'Action',range:'30 ft',desc:'Up to 3 willing creatures add 1d4 to attack rolls and saving throws for 1 minute. (Concentration) Higher slots: +1 creature per slot.',tip:'Best lv1 spell. Bonus to attacks AND saves for 3 allies simultaneously.'},
+'command':{n:'Command',lv:1,sc:'Enchantment',conc:false,time:'Action',range:'60 ft',desc:'One creature must succeed on a WIS save or follow a one-word command on its next turn: Flee, Grovel, Halt, Drop, or Approach.',tip:'Grovel = target is prone, all attacks vs them have Advantage. Halt wastes enemy turn.'},
+'cure-wounds':{n:'Cure Wounds',lv:1,sc:'Abjuration',conc:false,time:'Action',range:'Touch',desc:'Restore 2d8 + spellcasting modifier HP. +2d8 per slot above 1st.',tip:'Use Healing Word in combat (bonus action); save Cure Wounds for big heals.'},
+'detect-magic':{n:'Detect Magic',lv:1,sc:'Divination',conc:true,time:'Action',range:'Self',desc:'Sense the presence of magic within 30 ft. See magical auras and identify the school. (Concentration, 10 min; can be cast as ritual)',tip:'Ritual cast = zero slot cost. Always use before looting rooms.'},
+'guiding-bolt':{n:'Guiding Bolt',lv:1,sc:'Evocation',conc:false,time:'Action',range:'120 ft',desc:'Ranged spell attack: 4d6 Radiant. The next attack roll against the target before the end of your next turn has Advantage. +1d6 per slot.',tip:'Doubles as a buff for martial allies. Give Advantage to the fighter.'},
+'healing-word':{n:'Healing Word',lv:1,sc:'Abjuration',conc:false,time:'Bonus',range:'60 ft',desc:'Restore 2d4 + spellcasting modifier HP to a visible creature. Bonus action! +2d4 per slot.',tip:'Bonus action! Revive a downed ally AND still cast a spell or attack this turn.'},
+'inflict-wounds':{n:'Inflict Wounds',lv:1,sc:'Necromancy',conc:false,time:'Action',range:'Touch',desc:'Melee spell attack: 2d10 Necrotic damage. +2d10 per slot above 1st.',tip:'Huge burst at low levels. Upcast to 3rd (6d10) for a reliable opener.'},
+'protection-evil-good':{n:'Protection from Evil & Good',lv:1,sc:'Abjuration',conc:true,time:'Action',range:'Touch',desc:'Chosen creature type (aberration/celestial/elemental/fey/fiend/undead) has Disadvantage on attacks vs. the target and can\'t charm, frighten, or possess it. (Concentration, 10 min)',tip:'Essential vs demons, devils, undead bosses. Put it on the tank.'},
+'sanctuary':{n:'Sanctuary',lv:1,sc:'Abjuration',conc:false,time:'Bonus',range:'30 ft',desc:'Bonus action. Attackers must succeed on a WIS save to target the warded creature. Ends if the creature attacks or casts a harmful spell. (1 min)',tip:'Bonus action cast. Protect downed allies or a fragile party member.'},
+'shield-of-faith':{n:'Shield of Faith',lv:1,sc:'Abjuration',conc:true,time:'Bonus',range:'60 ft',desc:'+2 AC to a willing creature. Bonus action cast. (Concentration, 10 min)',tip:'Bonus action! +2 AC on the tank before battle, then take your full action.'},
+'gentle-repose':{n:'Gentle Repose',lv:2,sc:'Necromancy',conc:false,time:'Action',range:'Touch',desc:'[Domain] Preserve a corpse from decay and prevent undead animation for 10 days. Also extends the time limit for resurrection spells by 10 days. Can be ritual cast.',tip:'Ritual cast = extends Raise Dead window for free.'},
+'ray-of-enfeeblement':{n:'Ray of Enfeeblement',lv:2,sc:'Necromancy',conc:true,time:'Action',range:'60 ft',desc:'[Domain] Ranged spell attack. On hit: target must succeed on a CON save or deal only half damage with Strength-based attacks. Repeat save each turn. (Concentration, 1 min)',tip:'Cripples fighters and giants who rely on Strength for attacks.'},
+'aid':{n:'Aid',lv:2,sc:'Abjuration',conc:false,time:'Action',range:'30 ft',desc:'Up to 3 creatures gain +5 max HP and current HP for 8 hours. No concentration. +5 HP per slot above 2nd.',tip:'8-hour duration, no concentration. Cast before a big fight.'},
+'augury':{n:'Augury',lv:2,sc:'Divination',conc:false,time:'1 min',range:'Self',desc:'Receive an omen (Weal, Woe, both, or nothing) about an action taken in the next 30 minutes. 1 free cast per day. Can be ritual cast.',tip:'Free ritual cast daily. 100% reliable for near-future planning.'},
+'blindness-deafness':{n:'Blindness/Deafness',lv:2,sc:'Transmutation',conc:false,time:'Action',range:'120 ft',desc:'CON save or target is Blinded or Deafened for 1 minute (your choice). Repeat save each turn. No concentration. +1 creature per slot.',tip:'Blinded = Disadvantage on attacks, Advantage for attackers. No concentration is huge.'},
+'hold-person':{n:'Hold Person',lv:2,sc:'Enchantment',conc:true,time:'Action',range:'60 ft',desc:'WIS save or Paralyzed for 1 minute. Repeat save each turn. Attacks within 5 ft auto-crit. (Concentration) +1 target per slot.',tip:'Auto-crits on every melee hit within 5 ft. Devastating combo with martials.'},
+'lesser-restoration':{n:'Lesser Restoration',lv:2,sc:'Abjuration',conc:false,time:'Bonus',range:'Touch',desc:'Bonus action. End one condition on a creature: Blinded, Deafened, Paralyzed, Poisoned, or one disease.',tip:'Bonus action removal of Paralyzed can save a fight.'},
+'prayer-of-healing':{n:'Prayer of Healing',lv:2,sc:'Abjuration',conc:false,time:'10 min',range:'30 ft',desc:'Up to 5 creatures each regain 2d8 + spellcasting modifier HP. Cannot be cast during combat. +2d8 per slot.',tip:'Best out-of-combat mass heal. 10-min cast time, no concentration.'},
+'silence':{n:'Silence',lv:2,sc:'Illusion',conc:true,time:'Action',range:'120 ft',desc:'20-ft sphere of magical silence. No sound can enter or exit. Creatures inside are immune to thunder damage and cannot cast spells with Verbal components. (Concentration, 10 min)',tip:'Completely shuts down enemy spellcasters. Can be ritual cast.'},
+'spiritual-weapon':{n:'Spiritual Weapon',lv:2,sc:'Evocation',conc:false,time:'Bonus',range:'60 ft',desc:'Create a spectral weapon. Bonus action each turn: melee spell attack for 1d8 + spellcasting modifier Force damage. No concentration, 1 min. +1d8 per 2 slots.',tip:'No concentration! Free bonus action attack every single turn.'},
+'warding-bond':{n:'Warding Bond',lv:2,sc:'Abjuration',conc:false,time:'Action',range:'Touch',desc:'+1 AC and +1 saving throws to the target. Resistance to all damage. You share all damage the target takes. Lasts 1 hour.',tip:'Powerful tank buff — you take shared damage, position carefully.'},
+'zone-of-truth':{n:'Zone of Truth',lv:2,sc:'Enchantment',conc:false,time:'Action',range:'60 ft',desc:'15-ft sphere for 10 minutes. CHA save or creature cannot knowingly lie while inside. All creatures know if they failed the save.',tip:'Interrogation gold. Those who fail literally cannot lie.'},
+'revivify':{n:'Revivify',lv:3,sc:'Necromancy',conc:false,time:'Action',range:'Touch',desc:'[Domain] Return a creature that died within the last minute to life with 1 HP. Cannot restore missing body parts. (300 gp diamond consumed)',tip:'Carry at least one diamond. The most impactful emergency spell in the game.'},
+'vampiric-touch':{n:'Vampiric Touch',lv:3,sc:'Necromancy',conc:true,time:'Action',range:'Self',desc:'[Domain] Make a melee spell attack. On hit: 3d6 Necrotic damage; regain HP equal to half the damage dealt. Use Action each turn to attack again. (Concentration, 1 min)',tip:'Self-sustaining damage. Great with Spirit Shroud.'},
+'animate-dead':{n:'Animate Dead',lv:3,sc:'Necromancy',conc:false,time:'1 min',range:'10 ft',desc:'Create a skeleton or zombie from a pile of bones or a corpse. Undead servant is under your control for 24 hours. Re-cast to maintain. +2 undead per slot.',tip:'Persistent minions. Upcast to 5th for 5 undead simultaneously.'},
+'aura-of-vitality':{n:'Aura of Vitality',lv:3,sc:'Abjuration',conc:true,time:'Action',range:'Self (30-ft)',desc:'Bonus action each turn: heal one creature within 30 ft for 2d6 HP. (Concentration, 1 min)',tip:'~7 HP per bonus action × 10 turns = ~70 HP total for one 3rd-level slot.'},
+'beacon-of-hope':{n:'Beacon of Hope',lv:3,sc:'Abjuration',conc:true,time:'Action',range:'30 ft',desc:'Up to 5 creatures have Advantage on WIS saves and death saving throws and regain maximum HP from healing spells. (Concentration, 1 min)',tip:'Maximize healing + Advantage on death saves. Combine with Mass Cure Wounds.'},
+'bestow-curse':{n:'Bestow Curse',lv:3,sc:'Necromancy',conc:true,time:'Action',range:'Touch',desc:'WIS save or cursed for 1 minute (Concentration). Choose: Disadvantage on checks/saves for an ability; Disadvantage on attacks vs. you; lose action on a roll of 4 or less; +1d8 Necrotic on each of your hits. Upcast to 5th: no concentration needed.',tip:'Upcast to 5th for no concentration. Lose-action variant is devastating on solo bosses.'},
+'dispel-magic':{n:'Dispel Magic',lv:3,sc:'Abjuration',conc:false,time:'Action',range:'120 ft',desc:'End any spell of 3rd level or lower on the target automatically. For higher-level spells: make a spellcasting ability check (DC 10 + spell level).',tip:'Upcast to auto-succeed on any spell level. Remove enemy concentration.'},
+'mass-healing-word':{n:'Mass Healing Word',lv:3,sc:'Abjuration',conc:false,time:'Bonus',range:'60 ft',desc:'Bonus action. Up to 6 visible creatures each regain 2d4 + spellcasting modifier HP. +2d4 per slot.',tip:'Bonus action + 6 targets. Emergency revival of multiple downed allies.'},
+'speak-with-dead':{n:'Speak with Dead',lv:3,sc:'Necromancy',conc:false,time:'Action',range:'10 ft',desc:'Ask a corpse up to 5 questions. The corpse only knows what it knew in life, speaks only languages it knew, and gives brief, cryptic answers.',tip:'Interrogate murder victims, extract passwords, learn dungeon secrets.'},
+'spirit-guardians':{n:'Spirit Guardians',lv:3,sc:'Conjuration',conc:true,time:'Action',range:'Self (15-ft)',desc:'Spectral forms flit around you. Enemies within the aura: difficult terrain + WIS save or 3d8 Radiant or Necrotic damage when entering or starting their turn there. (Concentration, 10 min) +1d8 per slot.',tip:'Best sustained damage spell for Clerics. Move into melee and watch enemies melt.'},
+'spirit-shroud':{n:'Spirit Shroud',lv:3,sc:'Necromancy',conc:true,time:'Bonus',range:'Self',desc:'Your attacks deal an extra 1d8 Necrotic, Radiant, or Cold damage (your choice). Creatures that take this damage can\'t regain HP until the start of your next turn. Enemy speed −10 ft. (Concentration, 1 min)',tip:'Pairs perfectly with Vampiric Touch: extra damage + deny enemy healing.'},
+'remove-curse':{n:'Remove Curse',lv:3,sc:'Abjuration',conc:false,time:'Action',range:'Touch',desc:'End all curses affecting one creature or object. If the object is a cursed magic item, its curse remains, but the spell ends the creature\'s attunement to it.',tip:'Also frees the creature from attunement to a cursed magic item.'},
+'blight':{n:'Blight',lv:4,sc:'Necromancy',conc:false,time:'Action',range:'30 ft',desc:'[Domain] CON save or take 8d8 Necrotic damage (half on save). Plants automatically fail the save and take maximum damage. No concentration.',tip:'No-concentration nuke. 8d8 avg 36 Necrotic. Plants take 64 max damage.'},
+'death-ward':{n:'Death Ward',lv:4,sc:'Abjuration',conc:false,time:'Action',range:'Touch',desc:'[Domain] The first time the creature would drop to 0 HP, it drops to 1 HP instead and the spell ends. Also negates magical instant-death effects. 8 hours.',tip:'Pre-cast on the person most likely to die. 8-hour insurance policy.'},
+'aura-of-life':{n:'Aura of Life',lv:4,sc:'Abjuration',conc:true,time:'Action',range:'Self (30-ft)',desc:'Allies within 30 ft gain resistance to Necrotic damage. Each turn, allies at 0 HP regain 1 HP. (Concentration, 10 min)',tip:'Auto-stabilizes downed allies each turn. Huge vs undead encounters.'},
+'aura-of-purity':{n:'Aura of Purity',lv:4,sc:'Abjuration',conc:true,time:'Action',range:'Self (30-ft)',desc:'Allies within 30 ft can\'t be diseased and have Advantage on saves vs Blinded, Charmed, Deafened, Frightened, Paralyzed, Poisoned, and Stunned conditions. (Concentration, 10 min)',tip:'Blanket protection vs status effects. Incredible vs condition-heavy casters.'},
+'banishment':{n:'Banishment',lv:4,sc:'Abjuration',conc:true,time:'Action',range:'30 ft',desc:'CHA save or target is banished (Incapacitated, no actions). If Concentration is maintained for 1 full minute, extraplanar creatures are permanently banished. +1 creature per slot.',tip:'Remove a powerful enemy from the fight. Permanent vs extraplanar creatures!'},
+'divination':{n:'Divination',lv:4,sc:'Divination',conc:false,time:'Action',range:'Self',desc:'Your deity gives a truthful answer to one question about a goal in the next 7 days. 1 free cast per day; additional casts risk false info. Can be ritual cast.',tip:'Free ritual cast daily. Guaranteed deity information.'},
+'freedom-of-movement':{n:'Freedom of Movement',lv:4,sc:'Abjuration',conc:false,time:'Action',range:'Touch',desc:'Ignore difficult terrain, not slowed by magic, immune to paralyzed and restrained, spend only 5 ft of movement to escape a grapple. 1 hour, no concentration.',tip:'No concentration + 1 hour. Give to the frontliner.'},
+'guardian-of-faith':{n:'Guardian of Faith',lv:4,sc:'Conjuration',conc:false,time:'Action',range:'30 ft',desc:'Large spectral guardian: hostile creatures entering within 10 ft take 20 Radiant damage (DEX save for half). Disappears after dealing 60 total damage. 8 hours.',tip:'Set-and-forget area denial on a chokepoint for 8 hours.'},
+'antilife-shell':{n:'Antilife Shell',lv:5,sc:'Abjuration',conc:true,time:'Action',range:'Self (10-ft)',desc:'[Domain] A 10-ft aura: living creatures cannot willingly enter. (Not undead or constructs.) The aura moves with you. (Concentration, 1 hr)',tip:'Walk safely through hordes of living enemies. Forces range-only combat.'},
+'raise-dead':{n:'Raise Dead',lv:5,sc:'Necromancy',conc:false,time:'1 hr',range:'Touch',desc:'[Domain] Return a creature dead up to 10 days to life with 1 HP. Cannot restore missing body parts. Creature suffers Exhaustion. (500 gp diamond consumed)',tip:'Always carry a 500 gp diamond. Most critical emergency resource.'},
+'circle-of-power':{n:'Circle of Power',lv:5,sc:'Abjuration',conc:true,time:'Action',range:'Self (30-ft)',desc:'Allies within 30 ft have Advantage on saving throws against magical effects. On a successful save against an area damage spell, they take no damage instead of half. (Concentration, 10 min)',tip:'Converts "half damage on save" to zero damage for all allies. Huge vs AOE spells.'},
+'commune':{n:'Commune',lv:5,sc:'Divination',conc:false,time:'1 min',range:'Self',desc:'Contact your deity and ask up to 3 yes/no questions. Answers are truthful. 1 free cast per day. Can be ritual cast.',tip:'Free ritual cast daily. Three deity yes/no answers for planning.'},
+'contagion':{n:'Contagion',lv:5,sc:'Necromancy',conc:false,time:'Action',range:'Touch',desc:'Melee spell attack. On hit: target makes CON saves at the end of each of its turns. After 3 failed saves, it suffers a disease (Blinding Sickness, Filth Fever, Flesh Rot, Mindfire, Seizure, or Slimy Doom).',tip:'3 failures = boss has a permanent disease for the rest of the encounter.'},
+'dawn':{n:'Dawn',lv:5,sc:'Evocation',conc:true,time:'Action',range:'60 ft',desc:'30-ft radius, 40-ft tall cylinder of daylight. Undead have Disadvantage on attack rolls. Any creature that enters or starts its turn inside takes 4d10 Radiant damage. (Concentration, 1 min)',tip:'Undead bane. They can\'t attack effectively while melting inside.'},
+'flame-strike':{n:'Flame Strike',lv:5,sc:'Evocation',conc:false,time:'Action',range:'60 ft',desc:'10-ft radius, 40-ft cylinder: DEX save or 4d6 Fire + 4d6 Radiant damage (half on save). +1d6 of each type per slot above 5th.',tip:'Two damage types — very hard to fully resist. Bypasses many creature immunities.'},
+'greater-restoration':{n:'Greater Restoration',lv:5,sc:'Abjuration',conc:false,time:'Action',range:'Touch',desc:'Remove one of these: reduce Exhaustion by 1; end one charm/petrify/curse effect; restore a reduced ability score to normal; restore a reduced HP maximum. (100 gp diamond dust consumed)',tip:'Only reliable cure for petrification and exhaustion.'},
+'holy-weapon':{n:'Holy Weapon',lv:5,sc:'Evocation',conc:true,time:'Bonus',range:'Touch',desc:'Imbue a weapon with holy power: +2d8 Radiant on each hit. Bonus action to dismiss: 30-ft burst, CON save or Blinded for 1 minute. (Concentration, 1 hr)',tip:'Give to a martial. +2d8 Radiant all fight, then explosive Blinded finale on dismiss.'},
+'mass-cure-wounds':{n:'Mass Cure Wounds',lv:5,sc:'Abjuration',conc:false,time:'Action',range:'60 ft',desc:'Up to 6 creatures each regain 5d8 + spellcasting modifier HP. No concentration. +1d8 per slot above 5th.',tip:'Emergency mass heal. ~22+WIS to 6 targets. Best used to save multiple near-dead allies.'},
+'scrying':{n:'Scrying',lv:5,sc:'Divination',conc:true,time:'10 min',range:'Self',desc:'Observe a creature on the same plane (WIS save, modified by familiarity with the target). An invisible sensor appears near the target. (Concentration, 10 min)',tip:'Track enemy leaders before confronting them.'},
+'blade-barrier':{n:'Blade Barrier',lv:6,sc:'Evocation',conc:true,time:'Action',range:'90 ft',desc:'Wall of whirling blades (up to 100 ft long, 20 ft tall, 5 ft thick): DEX save or 6d10 Slashing damage (half on save). Difficult terrain. (Concentration, 10 min)',tip:'Zone denial + massive damage. Force enemies to walk through it or go around.'},
+'harm':{n:'Harm',lv:6,sc:'Necromancy',conc:false,time:'Action',range:'60 ft',desc:'CON save or take 14d6 Necrotic damage (half on save). Target\'s HP maximum is reduced by the Necrotic damage dealt for 1 hour. Cannot drop below 1 HP.',tip:'Reduces enemy max HP. Combine with other damage for sustained pressure.'},
+'heal':{n:'Heal',lv:6,sc:'Abjuration',conc:false,time:'Action',range:'60 ft',desc:'Restore 70 HP to a creature within range. Also ends Blinded, Deafened, and any diseases. No concentration. +10 HP per slot above 6th.',tip:'70 HP + condition clearing in one action. Best single-target healing spell.'},
+'heroes-feast':{n:"Heroes' Feast",lv:6,sc:'Conjuration',conc:false,time:'10 min',range:'Self (10-ft)',desc:'Feast for up to 12 creatures: cured of all diseases and poison, immune to frightened and poisoned conditions, Advantage on WIS saves, +2d10 maximum HP for 24 hours. (1,000 gp bowl consumed)',tip:'Pre-cast before a known boss fight. WIS Advantage + HP last all day.'},
+'sunbeam':{n:'Sunbeam',lv:6,sc:'Evocation',conc:true,time:'Action',range:'Self (60-ft line)',desc:'60-ft line of brilliant light: CON save or 6d8 Radiant + Blinded for 1 minute. Undead have Disadvantage on the save. Action each turn to re-emit the beam. (Concentration, 1 min)',tip:'Reusable each turn! Blinded enemies are severely penalized. Obliterates undead.'},
+'true-seeing':{n:'True Seeing',lv:6,sc:'Divination',conc:false,time:'Action',range:'Touch',desc:'Creature gains Truesight (120 ft), can see into the Ethereal Plane, and sees through illusions and magical darkness. 1 hour.',tip:'Counter invisibility and illusions for a full hour.'},
+'word-of-recall':{n:'Word of Recall',lv:6,sc:'Conjuration',conc:false,time:'Action',range:'5 ft',desc:'You and up to 5 willing creatures teleport instantly to the sanctuary you previously designated with this spell.',tip:'Emergency party extraction. Designate your home temple as sanctuary first.'},
+'divine-word':{n:'Divine Word',lv:7,sc:'Evocation',conc:false,time:'Bonus',range:'30 ft',desc:'Bonus action. Visible creatures by current HP: ≤5 die; ≤10 are Stunned; ≤30 are Blinded and Deafened; ≤50 are Deafened. Celestials, elementals, fey, fiends: CHA save or banished to their home plane.',tip:'Bonus action! Instantly kills or cripples weakened enemies.'},
+'etherealness':{n:'Etherealness',lv:7,sc:'Conjuration',conc:false,time:'Action',range:'Self',desc:'Enter the Ethereal Plane. Can move through objects and walls. Can\'t affect or be affected by the material plane. Can see 60 ft into the material plane. 8 hours.',tip:'Walk through walls. Escape any physical danger. Set up ambushes.'},
+'fire-storm':{n:'Fire Storm',lv:7,sc:'Evocation',conc:false,time:'Action',range:'150 ft',desc:'Up to 10 10-ft cubes (arrange freely within range): DEX save or 7d10 Fire damage (half on save). Magical vegetation in the area burns. No concentration.',tip:'Shape the cubes to exclude allies. Flexible area + no concentration at this level.'},
+'plane-shift':{n:'Plane Shift',lv:7,sc:'Conjuration',conc:false,time:'Action',range:'Touch',desc:'Transport yourself and up to 8 willing creatures to another plane. OR make a melee spell attack to banish a creature (CHA save). Requires a forked rod attuned to the destination.',tip:'Banish the boss to a hellish plane, or escape any situation instantly.'},
+'regenerate':{n:'Regenerate',lv:7,sc:'Transmutation',conc:false,time:'1 min',range:'Touch',desc:'Restore 4d8+15 HP immediately. Regrow severed body parts within 2 minutes. Regain 1 HP every 6 seconds for 1 hour. No concentration.',tip:'Pre-cast before a dungeon: ~600 HP of slow regeneration over an hour.'},
+'resurrection':{n:'Resurrection',lv:7,sc:'Necromancy',conc:false,time:'1 hr',range:'Touch',desc:'Return a creature dead up to 100 years to life with full HP. Restores all missing body parts. (1,000 gp diamond consumed)',tip:'Unlike Raise Dead, fully restores the body. 100-year time limit.'},
+'antimagic-field':{n:'Antimagic Field',lv:8,sc:'Abjuration',conc:true,time:'Action',range:'Self (10-ft)',desc:'10-ft sphere of antimagic. Spells can\'t be cast inside or pass through it. Magical items are inert while in the sphere. The sphere moves with you. (Concentration, 1 hr)',tip:'Completely shuts down enemy spellcasters. Note: your spells also stop.'},
+'holy-aura':{n:'Holy Aura',lv:8,sc:'Abjuration',conc:true,time:'Action',range:'Self (30-ft)',desc:'Allies within 30 ft have Advantage on all saving throws and impose Disadvantage on attacks against them. Undead and fiends that hit an ally must succeed on a CON save or be Blinded. (Concentration, 1 min)',tip:'Ultimate defensive aura. Advantage on every save + Disadvantage on every attack.'},
+'sunburst':{n:'Sunburst',lv:8,sc:'Evocation',conc:false,time:'Action',range:'150 ft',desc:'60-ft radius burst of brilliant light: CON save or 12d6 Radiant + Blinded for 1 minute (half damage, not blinded on save). Magical darkness in the area is dispelled. No concentration.',tip:'Massive AOE, no concentration. 12d6 avg 42 Radiant. Obliterates undead.'},
+'mass-heal':{n:'Mass Heal',lv:9,sc:'Abjuration',conc:false,time:'Action',range:'60 ft',desc:'Restore a total of 700 HP, divided however you choose among any number of creatures you can see within range. Also ends Blinded, Deafened, and diseases on all affected creatures.',tip:'700 HP to distribute freely. Can fully heal an entire party in one action.'},
+'true-resurrection':{n:'True Resurrection',lv:9,sc:'Necromancy',conc:false,time:'1 hr',range:'Touch',desc:'Return a creature dead up to 200 years to life with full HP. Creates a new body if needed. Counters effects that prevent resurrection. (25,000 gp diamond consumed)',tip:'Creates a body from nothing. Counters wish-blocked death effects.'},
+'gate':{n:'Gate',lv:9,sc:'Conjuration',conc:true,time:'Action',range:'60 ft',desc:'Open a portal to another plane. Creatures can pass through in both directions. You can call a specific creature by name; it must succeed on a WIS save to avoid being pulled through. (Concentration, 1 min)',tip:'Call a deity\'s servant by name and force it through.'},
+'power-word-heal':{n:'Power Word: Heal',lv:9,sc:'Enchantment',conc:false,time:'Action',range:'60 ft',desc:'Restore all of a creature\'s hit points. The creature also ends the Charmed, Frightened, Paralyzed, and Stunned conditions on itself.',tip:'Full HP restoration + 4 conditions cleared in one action.'},
+
+// ── DRUID (key spells) ──
+'druidcraft':{n:'Druidcraft',lv:0,sc:'Transmutation',conc:false,time:'Action',range:'30 ft',desc:'Minor nature effect: predict weather, make a flower bloom, create a harmless sensory effect, or light/snuff a campfire.',tip:'Predict weather before a long rest. Signal allies with animal sounds.'},
+'shillelagh':{n:'Shillelagh',lv:0,sc:'Transmutation',conc:false,time:'Bonus',range:'Self',desc:'Bonus action. Your club or quarterstaff uses your spellcasting modifier for attacks and deals 1d8 bludgeoning (magic). Lasts 1 minute.',tip:'Warden/Protector: WIS-based melee with magic damage. Essential for melee builds.'},
+'starry-wisp':{n:'Starry Wisp',lv:0,sc:'Evocation',conc:false,time:'Action',range:'60 ft',desc:'Ranged spell attack: 1d8 Radiant. Target sheds 10-ft bright light until the start of your next turn (prevents Hiding). Scales at 5/11/17.',tip:'Tag invisible enemies or prevent hiding. Radiant bypasses many resistances.'},
+'thorn-whip':{n:'Thorn Whip',lv:0,sc:'Transmutation',conc:false,time:'Action',range:'30 ft',desc:'Melee spell attack (30-ft reach): 1d6 Piercing. On hit: pull target up to 10 ft toward you. Scales at 5/11/17.',tip:'Pull enemies off ledges, into hazards, or away from allies.'},
+'produce-flame':{n:'Produce Flame',lv:0,sc:'Conjuration',conc:false,time:'Bonus',range:'Self',desc:'Bonus action. Flame in hand (20-ft bright light, 20-ft dim). As action: ranged spell attack, 1d8 Fire (60 ft range). Scales at 5/11/17.',tip:'Free light source AND damage cantrip. Bonus action activation.'},
+'entangle':{n:'Entangle',lv:1,sc:'Conjuration',conc:true,time:'Action',range:'90 ft',desc:'STR save or Restrained for 1 min (repeat save each turn). 20-ft square of grasping plants is difficult terrain even for those who save. Requires loose soil or grass. (Concentration)',tip:'Best lv1 control spell. Restrained = Disadvantage on attacks, Advantage on attacks vs target.'},
+'healing-word-d':{n:'Healing Word',lv:1,sc:'Abjuration',conc:false,time:'Bonus',range:'60 ft',desc:'Bonus action. Target regains 2d4 + WIS mod HP. +2d4 per slot.',tip:'Bonus action! Revive downed ally AND still cast a spell this turn.'},
+'thunderwave':{n:'Thunderwave',lv:1,sc:'Evocation',conc:false,time:'Action',range:'Self (15-ft cube)',desc:'CON save or 2d8 thunder + pushed 10 ft. Half damage on save. Everything in 15-ft cube. Audible 300 ft away. +2d8 per slot.',tip:'Great escape spell when grappled or surrounded.'},
+'faerie-fire':{n:'Faerie Fire',lv:1,sc:'Evocation',conc:true,time:'Action',range:'60 ft',desc:'DEX save or outlined in light. Attacks vs outlined creatures have Advantage. Outlined creatures cannot benefit from invisibility. (Concentration, 1 min)',tip:'Best lv1 concentration. Advantage for ALL allies on ALL attacks. Counters invisibility.'},
+'moonbeam':{n:'Moonbeam',lv:2,sc:'Evocation',conc:true,time:'Action',range:'120 ft',desc:'5-ft cylinder (40 ft tall) of pale silver moonlight. CON save or 2d10 Radiant (half on save). Shapechangers have Disadvantage. Bonus action: move beam 60 ft each turn. +2d10 per slot. (Concentration, 1 min)',tip:'Radiant vs undead. Disadvantage on save for shapechangers. Move beam as bonus action!'},
+'spike-growth':{n:'Spike Growth',lv:2,sc:'Transmutation',conc:true,time:'Action',range:'150 ft',desc:'20-ft radius: difficult terrain AND 2d4 Piercing per 5 ft traveled through it. Ground looks natural (Perception DC 15). Lasts 10 min. (Concentration)',tip:'Brutal area control. Combine with Thorn Whip to drag enemies through it.'},
+'pass-without-trace':{n:'Pass without Trace',lv:2,sc:'Abjuration',conc:true,time:'Action',range:'Self',desc:'You and chosen creatures within 30 ft gain +10 to Stealth checks and leave no tracks. (Concentration, 1 hr)',tip:'+10 to stealth is absurd. Essential for infiltration missions.'},
+'conjure-animals':{n:'Conjure Animals',lv:3,sc:'Conjuration',conc:true,time:'Action',range:'60 ft',desc:'Summon swarms or beasts that fill a 10-ft cube. They use your spell attack/DC and act on your initiative. (Concentration, 1 hr)',tip:'Circle always-prepared at lv5. Excellent battlefield control.'},
+'call-lightning':{n:'Call Lightning',lv:3,sc:'Conjuration',conc:true,time:'Action',range:'120 ft',desc:'Summon storm cloud. Action each turn: call bolt, DEX save or 3d10 Lightning. Half on save. +1d10 in stormy weather. +1d10 per slot. (Concentration, 10 min)',tip:'Best sustained damage. 3d10/turn for 10 turns for one lv3 slot.'},
+'polymorph':{n:'Polymorph',lv:4,sc:'Transmutation',conc:true,time:'Action',range:'60 ft',desc:'WIS save or transform into beast of CR ≤ target\'s level. Reverts when HP drops to 0. Target retains personality but not class features. (Concentration, 1 hr)',tip:'Turn the barbarian into a T-Rex (CR 8). Turn a boss into a harmless rabbit.'},
+'wall-of-fire':{n:'Wall of Fire',lv:4,sc:'Evocation',conc:true,time:'Action',range:'120 ft',desc:'60-ft wall (20 ft tall, 1 ft thick): 5d8 Fire to chosen side (DEX save for half). Passing through deals 5d8 Fire. +1d8 per slot. (Concentration, 1 min)',tip:'Zone denial + massive damage. Shape around enemies.'},
+'antilife-shell-d':{n:'Antilife Shell',lv:5,sc:'Abjuration',conc:true,time:'Action',range:'Self (10-ft)',desc:'10-ft aura: living creatures cannot willingly enter. Moves with you. (Concentration, 1 hr)',tip:'Walk through hordes safely. Force enemies to range-only combat.'},
+'mass-cure-wounds-d':{n:'Mass Cure Wounds',lv:5,sc:'Abjuration',conc:false,time:'Action',range:'60 ft',desc:'Up to 6 creatures each regain 5d8 + WIS mod HP. No concentration. +1d8 per slot.',tip:'Emergency mass heal. ~22+WIS to 6 targets at once.'},
+'conjure-elemental':{n:'Conjure Elemental',lv:5,sc:'Conjuration',conc:true,time:'Action',range:'60 ft',desc:'Summon an Elemental of CR 5 or lower from a compatible environment. Obeys verbal commands. Becomes hostile if concentration breaks. (Concentration, 1 hr)',tip:'Air Elemental (fly speed + whirlwind). Fire moves through enemies. Choose by terrain.'},
+'heal-d':{n:'Heal',lv:6,sc:'Abjuration',conc:false,time:'Action',range:'60 ft',desc:'Restore 70 HP. Also ends Blinded, Deafened, and all diseases. No concentration. +10 HP per slot.',tip:'70 HP + conditions in one action. Best single-target healing.'},
+'sunbeam-d':{n:'Sunbeam',lv:6,sc:'Evocation',conc:true,time:'Action',range:'Self (60-ft line)',desc:'CON save or 6d8 Radiant + Blinded 1 min. Undead Disadvantage. Action each turn to re-fire. (Concentration, 1 min)',tip:'Reusable each turn! Obliterates undead.'},
+'fire-storm-d':{n:'Fire Storm',lv:7,sc:'Evocation',conc:false,time:'Action',range:'150 ft',desc:'Up to 10 10-ft cubes (arrange freely): DEX save or 7d10 Fire (half on save). No concentration.',tip:'Shape to exclude allies. Flexible area, no concentration.'},
+'foresight':{n:'Foresight',lv:9,sc:'Divination',conc:false,time:'1 min',range:'Touch',desc:'8 hours, no concentration. Target cannot be surprised. Advantage on attack rolls, ability checks, and saving throws. Enemies have Disadvantage on attacks against target.',tip:'Cast on yourself before a boss fight. Best buff spell in the game.'},
+
+// ── ROGUE (Arcane Trickster spells + key abilities) ──
+'mage-hand':{n:'Mage Hand',lv:0,sc:'Conjuration',conc:false,time:'Action',range:'30 ft',desc:'Create a spectral floating hand within range. Manipulate objects, open containers, retrieve items, pour out a vial. Can\'t attack or lift more than 10 lb. (1 min)',tip:'For Arcane Trickster: invisible and can be used as part of Sleight of Hand.'},
+'minor-illusion':{n:'Minor Illusion',lv:0,sc:'Illusion',conc:false,time:'Action',range:'30 ft',desc:'Create a sound or image within range. A sound lasts 1 min. An image (5-ft cube) lasts 1 min and is stationary.',tip:'Create distractions, false voices, or visual decoys. Versatile utility.'},
+'prestidigitation':{n:'Prestidigitation',lv:0,sc:'Transmutation',conc:false,time:'Action',range:'10 ft',desc:'Minor magical trick: create small sensory effect, light/snuff fire, clean/soil 1 cu ft, chill/warm/flavor 1 cu ft, mark an object, create small non-magical item (1 hr).',tip:'Infinite creative uses. One of the most flexible cantrips.'},
+'find-familiar':{n:'Find Familiar',lv:1,sc:'Conjuration',conc:false,time:'1 hr',range:'10 ft',desc:'Summon a spirit familiar in animal form. It can deliver touch spells. Communicate telepathically within 100 ft. See through its eyes. Can vanish into pocket dimension.',tip:'Delivers touch spells like Shocking Grasp for Sneak Attack at range.'},
+'silent-image':{n:'Silent Image',lv:1,sc:'Illusion',conc:true,time:'Action',range:'60 ft',desc:'Create a visual illusion (15-ft cube) that moves and changes as you direct (no sound). INT Investigation check to detect. (Concentration, 10 min)',tip:'Create false walls, creatures, or terrain features to deceive enemies.'},
+'charm-person':{n:'Charm Person',lv:1,sc:'Enchantment',conc:false,time:'Action',range:'30 ft',desc:'WIS save or charmed for 1 hour. Treats you as friendly. Spell ends if you/allies harm target. Target knows it was charmed afterward. +1 target per slot.',tip:'Social situations: talk past guards, extract info. Remember: they know later.'},
+'disguise-self':{n:'Disguise Self',lv:1,sc:'Illusion',conc:false,time:'Action',range:'Self',desc:'Change your appearance (not physical form): height ±1 ft, weight, features, clothing, gear. Doesn\'t change tactile feel. INT Investigation (DC = spell save DC) to detect. 1 hour.',tip:'Infiltration essential. Change appearance before entering any guarded location.'},
+'color-spray':{n:'Color Spray',lv:1,sc:'Illusion',conc:false,time:'Action',range:'Self (15-ft cone)',desc:'Blinded creatures in a 15-ft cone until end of your next turn. Affects creatures in order of HP (lowest first), totaling 6d10 HP worth.',tip:'Cheap crowd control at low levels. Blind low-HP enemies or minions.'},
+'blur':{n:'Blur',lv:2,sc:'Illusion',conc:true,time:'Action',range:'Self',desc:'Your body is blurred. Attackers have Disadvantage on attacks against you (unless using abilities that ignore Disadvantage). (Concentration, 1 min)',tip:'Self-defense when in melee. Reliable if no Truesight or Blindsight nearby.'},
+'invisibility':{n:'Invisibility',lv:2,sc:'Illusion',conc:true,time:'Action',range:'Touch',desc:'Creature becomes invisible. Spell ends if it attacks or casts a spell. (Concentration, 1 hr) +1 creature per slot.',tip:'Extremely powerful. Sneak Attack on every attack while invisible.'},
+'hold-person-r':{n:'Hold Person',lv:2,sc:'Enchantment',conc:true,time:'Action',range:'60 ft',desc:'WIS save or Paralyzed. Repeat save each turn. Attacks within 5 ft auto-crit. (Concentration, 1 min) +1 humanoid per slot.',tip:'Auto-crits from within 5 ft. Combined with Sneak Attack = devastating.'},
+'hypnotic-pattern':{n:'Hypnotic Pattern',lv:3,sc:'Illusion',conc:true,time:'Action',range:'120 ft',desc:'30-ft cube: WIS save or Incapacitated and speed 0 for 1 min. Effect ends if creature takes damage or someone uses action to shake it out. (Concentration)',tip:'One of the best crowd control spells. Shut down multiple enemies at once.'},
+'greater-invisibility':{n:'Greater Invisibility',lv:4,sc:'Illusion',conc:true,time:'Action',range:'Touch',desc:'Creature becomes invisible. Spell does NOT end when it attacks or casts spells. (Concentration, 1 min)',tip:'Unlike regular invisibility, persists through attacks. Every attack has Advantage.'},
+'phantasmal-killer':{n:'Phantasmal Killer',lv:4,sc:'Illusion',conc:true,time:'Action',range:'120 ft',desc:'WIS save or frightened by a phantasm only target can see. Repeat save each turn, 4d10 Psychic on failed save. (Concentration, 1 min)',tip:'Persistent psychic damage + frightened condition if target keeps failing.'},
+'mislead':{n:'Mislead',lv:5,sc:'Illusion',conc:true,time:'Action',range:'Self',desc:'Become invisible and simultaneously create an illusory double at your location. The double can move, gesture, speak. You can see and hear through the double. (Concentration, 1 hr)',tip:'Total concealment while controlling a double. Perfect infiltration.'},
+
+// ── SORCERER (Aberrant Mind) ──
+'mind-sliver':{n:'Mind Sliver',lv:0,sc:'Enchantment',conc:false,time:'Action',range:'60 ft',desc:'INT save or 1d6 Psychic damage. On failed save: target subtracts 1d4 from its next saving throw before end of your next turn. Scales at 5/11/17.',tip:'Cast BEFORE a save-or-suck spell. Free debuff with no slot cost.'},
+'sword-burst':{n:'Sword Burst',lv:0,sc:'Conjuration',conc:false,time:'Action',range:'Self (5-ft)',desc:'Brief field of swords: DEX save or 1d6 Force to all other creatures within 5 ft. Scales at 5/11/17.',tip:'Good when surrounded. Force damage has almost no resistances.'},
+'chill-touch':{n:'Chill Touch',lv:0,sc:'Necromancy',conc:false,time:'Action',range:'Touch',desc:'Melee spell attack: 1d10 Necrotic. Target can\'t regain HP until start of your next turn. Undead also have Disadvantage on attacks vs you until then. Scales.',tip:'Deny healing on a key target. Great vs regenerating enemies.'},
+'mage-hand-s':{n:'Mage Hand',lv:0,sc:'Conjuration',conc:false,time:'Action',range:'30 ft',desc:'Spectral hand to manipulate objects, open containers, retrieve items within range. Can\'t attack. (1 min)',tip:'Psionic Sorcerer: appears invisible by default.'},
+'message':{n:'Message',lv:0,sc:'Transmutation',conc:false,time:'Action',range:'120 ft',desc:'Whisper a message to a creature within range. It can reply in a whisper only you hear. Doesn\'t need line of sight (only line of effect).',tip:'Silent communication in combat or social situations.'},
+'dissonant-whispers':{n:'Dissonant Whispers',lv:1,sc:'Enchantment',conc:false,time:'Action',range:'60 ft',desc:'WIS save or 3d6 Psychic + target uses its reaction to immediately move away (no Opportunity Attacks). On save: half damage, no movement. +1d6 per slot.',tip:'Forces enemy to waste reaction AND move away. Removes it from melee.'},
+'arms-of-hadar':{n:'Arms of Hadar',lv:1,sc:'Conjuration',conc:false,time:'Action',range:'Self (10-ft)',desc:'Tendrils erupt from you. STR save or 2d6 Necrotic; can\'t take reactions until next turn. Half on save. +2d6 per slot.',tip:'No reactions for enemies means no Shield reactions. Good opener before AoE.'},
+'tasha-mind-whip':{n:"Tasha's Mind Whip",lv:1,sc:'Enchantment',conc:false,time:'Action',range:'90 ft',desc:'INT save or 3d6 Psychic + must choose between moving, Action, or bonus action (loses one). +1d6 and +1 target per slot.',tip:'Forces enemy to sacrifice action economy. Scaling with slot is excellent.'},
+'calm-emotions':{n:'Calm Emotions',lv:2,sc:'Enchantment',conc:true,time:'Action',range:'60 ft',desc:'20-ft sphere: suppress charm/fear on humanoids OR make hostile creatures indifferent (until attacked). WIS save. (Concentration, 1 min)',tip:'De-escalate a mob or stop a berserk ally.'},
+'detect-thoughts':{n:'Detect Thoughts',lv:2,sc:'Divination',conc:true,time:'Action',range:'Self',desc:'Read surface thoughts of a visible creature (Wisdom modifier check to avoid). Deeper probing requires INT save. Detects presence of thoughts within 30 ft. (Concentration, 1 min)',tip:'Interrogation and infiltration tool. Works through walls for detection.'},
+'suggestion':{n:'Suggestion',lv:2,sc:'Enchantment',conc:true,time:'Action',range:'30 ft',desc:'WIS save or carry out a reasonable suggestion for up to 8 hours. The suggestion must be worded to sound plausible. (Concentration)',tip:'Extremely powerful social and combat control. "Drop your weapon and leave."'},
+'hunger-of-hadar':{n:'Hunger of Hadar',lv:3,sc:'Conjuration',conc:true,time:'Action',range:'150 ft',desc:'20-ft sphere of blackness. Blind inside. DEX save or 2d6 Cold at start of turn; CON save or 2d6 Acid at end of turn. Difficult terrain. (Concentration, 1 min)',tip:'Two saves per turn, difficult terrain, blinded. Devastating zone of denial.'},
+'summon-aberration':{n:'Summon Aberration',lv:4,sc:'Conjuration',conc:true,time:'Action',range:'90 ft',desc:'Summon an aberrant spirit (Beholderkin, Slaad, or Star Spawn). It uses your spell attack/DC. Scales with slot level for damage and HP. (Concentration, 1 hr)',tip:'Flexible summon. Beholderkin has a ranged eye ray. All have good HP.'},
+'raulothim-psychic-lance':{n:"Raulothim's Psychic Lance",lv:4,sc:'Enchantment',conc:false,time:'Action',range:'120 ft',desc:'Name a creature or target one you can see. INT save or 7d6 Psychic + Incapacitated until end of next turn. On save: half, not Incapacitated. +1d6 per slot.',tip:'No concentration incapacitation. Say the name through walls for a range bonus.'},
+'dominate-person':{n:'Dominate Person',lv:5,sc:'Enchantment',conc:true,time:'Action',range:'60 ft',desc:'WIS save or charmed + fully under your control for 1 min. Repeat save when taking damage. Issue mental commands (no action). (Concentration) +1 duration level per slot.',tip:'Turn an enemy into your ally. Use them to attack their own allies.'},
+'scatter':{n:'Scatter',lv:6,sc:'Conjuration',conc:false,time:'Action',range:'30 ft',desc:'Up to 5 creatures (WIS save to resist for unwilling) teleport to unoccupied spaces within 120 ft that you can see.',tip:'Reposition allies or scatter enemies. Drop an enemy into a hazard.'},
+'power-word-pain':{n:'Power Word: Pain',lv:7,sc:'Enchantment',conc:false,time:'Action',range:'60 ft',desc:'Target with 100+ HP must succeed on a CON save or be Incapacitated, halved speed, and disadvantaged on attacks/saves until it succeeds on a CON save at the end of its turn.',tip:'No concentration incapacitation on targets with 100+ HP.'},
+};
+
+// ══ CLASS FEATURES ══
+const CLASS_FEATURES = {
+cleric: (s) => {
+  const lv=s.lv||1, p=2+(lv>=5?1:0)+(lv>=9?1:0)+(lv>=13?1:0)+(lv>=17?1:0);
+  const stats=s.stats||{wis:16};
+  const ew=Math.min(30,stats.wis+(s.gcFeats||[]).includes('asi-wis')?stats.wis+2:stats.wis);
+  const wismod=Math.floor((ew-10)/2);
+  const dc=8+p+wismod, cdMax=lv>=18?4:lv>=6?3:lv>=2?2:0;
+  return [
+    {n:'Spellcasting',gold:false,ds:`Spell Save DC: ${dc} · Spell Attack: ${p+wismod>=0?'+':''}${p+wismod} · Prepared: ${Math.max(1,wismod+lv)} spells (WIS mod + level)`},
+    {n:'Circle of Mortality',gold:true,ds:'Healing spells on creatures at 0 HP use maximum die values. Spare the Dying: range 30 ft, Bonus Action.'},
+    {n:'Eyes of the Grave',gold:true,ds:`Action: detect undead within 60 ft. ${Math.max(1,wismod)} uses per Long Rest.`},
+    ...(lv>=2?[{n:`Channel Divinity (${cdMax} uses)`,gold:false,ds:`Regain 1 use on Short Rest, all on Long Rest.\n• Divine Spark: ${lv>=18?4:lv>=13?3:lv>=7?2:1}d8+WIS heal or damage (30 ft)\n• Turn Undead: WIS save or Frightened + Incapacitated 1 min${lv>=5?`\n• Sear Undead: +${Math.max(1,wismod)}d8 Radiant on Turn Undead fail`:''}\n• Path to the Grave: mark creature 30 ft, next hit = vulnerability to all damage`}]:[]),
+    ...(lv>=6?[{n:"Sentinel at Death's Door",gold:true,ds:`Reaction: turn a critical hit against you or ally within 30 ft into a normal hit. ${Math.max(1,wismod)} uses per Long Rest.`}]:[]),
+    ...(lv>=7?[{n:'Blessed Strikes',gold:false,ds:s.blessedStrikes==='divine'?`Divine Strike: +${lv>=14?'2d8':'1d8'} Necrotic or Radiant on one weapon hit per turn.`:`Potent Spellcasting: add WIS mod (+${wismod}) to Cleric cantrip damage rolls.${lv>=14?` On cantrip hit: give ${2*Math.max(0,wismod)} THP.`:''}`}]:[]),
+    ...(lv>=10?[{n:'Divine Intervention',gold:false,ds:'Cast any Cleric spell Lv5 or lower with no slot or material components. Once per Long Rest.'}]:[]),
+    ...(lv>=17?[{n:'Keeper of Souls',gold:true,ds:'When an enemy dies within 60 ft: you or one creature within 60 ft regains HP equal to the enemy\'s Hit Dice. Once per turn.'}]:[]),
+  ];
+},
+druid: (s) => {
+  const lv=s.lv||1, p=2+(lv>=5?1:0)+(lv>=9?1:0)+(lv>=13?1:0)+(lv>=17?1:0);
+  const stats=s.stats||{wis:17};
+  const ew=stats.wis+((s.druidFeats||[]).includes('asi-wis')?2:0);
+  const wismod=Math.floor((ew-10)/2);
+  const wsUses=lv>=17?4:lv>=9?3:2;
+  const maxCR=lv<3?0.25:Math.floor(lv/3);
+  return [
+    {n:'Spellcasting',gold:false,ds:`Spell Save DC: ${8+p+wismod} · Spell Attack: +${p+wismod} · Prepared: ${Math.max(1,wismod+lv)} spells`},
+    {n:`Wild Shape (${wsUses} uses)`,gold:false,ds:`Transform into beast of CR ${maxCR} or lower. Retains HP as THP (${lv*3}). ${lv>=2?'Wild Companion: spend use to cast Find Familiar (Fey).':''}${lv>=6?' Improved Circle Forms: attacks can be Radiant.':''}`},
+    {n:'Primal Order',gold:false,ds:s.primalOrder==='magician'?`Magician: +1 cantrip, WIS→Arcana/Nature (bonus: +${wismod+p})`:'Warden: proficiency with Martial weapons and Medium armor.'},
+    ...(lv>=5?[{n:'Wild Resurgence',gold:false,ds:'If no Wild Shape uses: spend a slot to regain 1. Spend 1 Wild Shape use: regain a Lv1 slot (1/LR).'}]:[]),
+    ...(lv>=7?[{n:'Elemental Fury',gold:false,ds:s.eleFury==='potent'?`Potent Spellcasting: +${wismod} to cantrip damage.`:'Primal Strike: +1d8 elemental damage/turn in Wild Shape.'}]:[]),
+    ...(lv>=9?[{n:'Beast Spells',gold:false,ds:'Can cast spells while in Wild Shape (no expensive material components).'}]:[]),
+  ];
+},
+rogue: (s) => {
+  const lv=s.lv||1, p=2+(lv>=5?1:0)+(lv>=9?1:0)+(lv>=13?1:0)+(lv>=17?1:0);
+  const sdie=Math.ceil(lv/2);
+  return [
+    {n:`Sneak Attack (${sdie}d6)`,gold:false,ds:'Once per turn, deal extra damage when you have Advantage or an ally is adjacent to target. Requires finesse or ranged weapon.'},
+    {n:'Cunning Action',gold:false,ds:'Bonus action: Dash, Disengage, or Hide. Allows full mobility without triggering Opportunity Attacks.'},
+    ...(lv>=2?[{n:'Cunning Strike',gold:false,ds:'Reduce Sneak Attack by 1d6 to apply a free effect: Disarm, Poison, Trip, or Withdraw.'}]:[]),
+    ...(lv>=5?[{n:'Uncanny Dodge',gold:false,ds:'Reaction: halve the damage of an attack you can see (once per turn).'}]:[]),
+    ...(lv>=7?[{n:'Evasion',gold:false,ds:'On DEX save for half damage: take zero on success, half on failure.'}]:[]),
+    ...(lv>=11?[{n:'Reliable Talent',gold:false,ds:'Proficient skill/tool checks: treat rolls below 10 as 10. Never fails on those checks.'}]:[]),
+    ...(lv>=14?[{n:'Blindsense',gold:false,ds:'If you can hear, you know the location of hidden/invisible creatures within 10 ft.'}]:[]),
+    ...(lv>=15?[{n:'Slippery Mind',gold:false,ds:'Proficiency in WIS saves. Also can\'t be charmed or frightened if proficient.'}]:[]),
+    {n:'Arcane Trickster',gold:true,ds:`Enchantment/Illusion spells. Mage Hand Legerdemain: Invisible hand, use Sleight of Hand through it. Magical Ambush: −d4 to target saves when attacking from hidden.`},
+    ...(lv>=3?[{n:'Fancy Footwork (Skirmisher)',gold:false,ds:'After you attack a creature in melee, it can\'t make Opportunity Attacks against you until start of your next turn.'}]:[]),
+  ];
+},
+sorcerer: (s) => {
+  const lv=s.lv||7, p=2+(lv>=5?1:0)+(lv>=9?1:0)+(lv>=13?1:0)+(lv>=17?1:0);
+  const cmod=s.cha?Math.floor((+s.cha-10)/2):3;
+  const spPoints=lv>=2?(lv<=9?lv:lv>=17?12:lv>=13?11:lv<=5?lv:10):0;
+  return [
+    {n:'Spellcasting (CHA)',gold:false,ds:`Spell Save DC: ${8+p+cmod} · Spell Attack: +${p+cmod} · Innate Sorcery: +1 DC during sessions (${p} times/LR)`},
+    {n:`Sorcery Points (${spPoints})`,gold:false,ds:'Convert to slots (2pt=lv1, 3pt=lv2, etc.) or from slots. Bend Luck: spend 2pt to add/subtract 1d4 from a roll.'},
+    {n:'Aberrant Mind: Psionic Spells',gold:true,ds:'Always prepared (don\'t count against limit): Dissonant Whispers, Mind Sliver, Arms of Hadar, Calm Emotions, Detect Thoughts, Hunger of Hadar, Sending, Summon Aberration, Evard\'s Black Tentacles, Raulothim\'s Psychic Lance, Dominate Person, Telekinesis.'},
+    {n:'Aberrant Mind: Telepathy',gold:true,ds:'30-ft telepathy (bonus action to switch target). Understand all spoken languages. Speak to creatures that know at least one language.'},
+    {n:'Aberrant Mind: Psionic Sorcery',gold:true,ds:'Cast psionic spells without V/S components for 0 extra cost. Or spend sorcery points (1 per slot level) to cast without material components.'},
+    ...(lv>=6?[{n:'Aberrant Mind: Revelation in Flesh',gold:true,ds:`Spend 1+ sorcery points (bonus action): 10 min of benefits — flight, swim 40 ft, see 60 ft invisible/ethereal, squeeze through 1-inch spaces, reach 10 ft melee.`}]:[]),
+    ...(lv>=3?[{n:'Metamagic',gold:false,ds:(s.selM||[]).join(', ')||'See equipped metamagics'}]:[]),
+  ];
+},
+};
+
+// ══ STATE ══
+const STORAGE_KEY = 'dm_party';
+let party = []; // array of {state, slot} objects
+let activeSlot = 0;
+let expandedSpells = new Set();
+let camStream = null;
+let camScanning = false;
+
+function g(id){return document.getElementById(id);}
+function prof(lv){return lv<5?2:lv<9?3:lv<13?4:lv<17?5:6;}
+function mod(n){return Math.floor((n-10)/2);}
+function fmod(n){return (n>=0?'+':'')+n;}
+
+const CLASS_COLOR = {cleric:'#7B5EA7',druid:'#5A7C2E',rogue:'#3A7CA5',sorcerer:'#7F77DD'};
+const CLASS_ICON = {cleric:'🪦',druid:'🌿',rogue:'🗡️',sorcerer:'🌀'};
+const CLASS_LABEL = {cleric:'Grave Cleric',druid:'Circle of the Moon Druid',rogue:'Arcane Trickster Rogue',sorcerer:'Aberrant Mind Sorcerer'};
+const SLOT_TABLE=[[0,0,0,0,0,0,0,0,0],[2,0,0,0,0,0,0,0,0],[3,0,0,0,0,0,0,0,0],[4,2,0,0,0,0,0,0,0],[4,3,0,0,0,0,0,0,0],[4,3,2,0,0,0,0,0,0],[4,3,3,0,0,0,0,0,0],[4,3,3,1,0,0,0,0,0],[4,3,3,2,0,0,0,0,0],[4,3,3,3,1,0,0,0,0],[4,3,3,3,2,0,0,0,0],[4,3,3,3,2,1,0,0,0],[4,3,3,3,2,1,0,0,0],[4,3,3,3,2,1,1,0,0],[4,3,3,3,2,1,1,0,0],[4,3,3,3,2,1,1,1,0],[4,3,3,3,2,1,1,1,0],[4,3,3,3,2,1,1,1,1],[4,3,3,3,3,1,1,1,1],[4,3,3,3,3,2,1,1,1],[4,3,3,3,3,2,2,1,1]];
+const SLOT_LABEL=['1st','2nd','3rd','4th','5th','6th','7th','8th','9th'];
+const DOMAIN_IDS={1:['bane','false-life'],3:['gentle-repose','ray-of-enfeeblement'],5:['revivify','vampiric-touch'],7:['blight','death-ward'],9:['antilife-shell','raise-dead']};
+
+function saveParty(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(party));}catch(e){}}
+function loadParty(){try{const d=localStorage.getItem(STORAGE_KEY);if(d)party=JSON.parse(d);}catch(e){party=[];}}
+
+function decodeSnapshot(raw){
+  // raw can be a full URL or just the base64 part
+  let b64 = raw.trim();
+  const m = b64.match(/[?&]d=([^&]+)/);
+  if(m) b64 = decodeURIComponent(m[1]);
+  const json = decodeURIComponent(escape(atob(b64)));
+  return JSON.parse(json);
+}
+
+function addCharacter(state){
+  // Replace existing slot for same class, otherwise add new
+  const existing = party.findIndex(p => p.state.charClass === state.charClass);
+  if(existing >= 0){
+    party[existing] = {state, slot: existing};
+  } else {
+    party.push({state, slot: party.length});
+  }
+  saveParty();
+  renderAll();
+  // Switch to the newly loaded character
+  const idx = party.findIndex(p => p.state.charClass === state.charClass);
+  switchChar(idx);
+}
+
+function removeChar(idx){
+  party.splice(idx, 1);
+  party.forEach((p,i) => p.slot = i);
+  saveParty();
+  activeSlot = Math.min(activeSlot, party.length - 1);
+  renderAll();
+}
+
+// ══ RENDER ══
+function renderAll(){
+  renderTabs();
+  renderScreens();
+  updatePartySub();
+}
+
+function renderTabs(){
+  const tabs = g('char-tabs');
+  const noChars = g('no-chars');
+  const screens = g('char-screens');
+  noChars.style.display = party.length ? 'none' : '';
+  screens.style.display = party.length ? '' : 'none';
+
+  if(!party.length){tabs.innerHTML='';return;}
+  tabs.innerHTML = party.map((p,i) => {
+    const cls = p.state.charClass || 'unknown';
+    const color = CLASS_COLOR[cls] || '#888';
+    const name = p.state.name || p.state.c_name || CLASS_LABEL[cls] || 'Character';
+    return `<button class="char-tab${i===activeSlot?' active':''}" onclick="switchChar(${i})">
+      <div class="ct-dot" style="background:${color}"></div>
+      ${name}
+      <span class="ct-del" onclick="event.stopPropagation();removeChar(${i})">✕</span>
+    </button>`;
+  }).join('');
+}
+
+function renderScreens(){
+  const el = g('char-screens');
+  el.innerHTML = party.map((p,i) => `<div class="char-screen${i===activeSlot?' active':''}" id="screen-${i}">${buildCharScreen(p.state, i)}</div>`).join('');
+}
+
+function switchChar(idx){
+  activeSlot = idx;
+  document.querySelectorAll('.char-tab').forEach((t,i) => t.classList.toggle('active', i===idx));
+  document.querySelectorAll('.char-screen').forEach((s,i) => s.classList.toggle('active', i===idx));
+}
+
+function updatePartySub(){
+  const sub = g('party-sub');
+  if(!party.length){sub.textContent='No characters loaded'; return;}
+  sub.textContent = party.map(p => p.state.name || p.state.c_name || '?').join(' · ');
+}
+
+function buildCharScreen(s, idx){
+  const cls = s.charClass || 'unknown';
+  const color = CLASS_COLOR[cls] || '#888';
+  const icon = CLASS_ICON[cls] || '?';
+  const name = s.name || s.c_name || CLASS_LABEL[cls] || 'Character';
+  const lv = s.lv || 1;
+  const stats = s.stats || {str:+(s.str||10),dex:+(s.dex||10),con:+(s.con||10),int:+(s.int_||10),wis:+(s.wis||10),cha:+(s.cha||10)};
+  const p = prof(lv);
+
+  // HP calc
+  const wismod = mod(stats.wis||10), conmod = mod(stats.con||12);
+  let mhp = s.maxHpMan > 0 ? s.maxHpMan : (8 + conmod + (lv-1)*(5+conmod));
+  const curHp = s.curHp ?? mhp;
+  const tmpHp = s.tmpHp || 0;
+  const pct = mhp > 0 ? Math.max(0, curHp/mhp*100) : 0;
+  const hpColor = pct>60?'#1D9E75':pct>30?'#C4A21B':'#D85A30';
+
+  // Spell slots
+  const tbl = SLOT_TABLE[Math.min(lv,20)] || [];
+  const slots = s.slots || [...tbl];
+
+  // Spells
+  const prepared = new Set(s.prepared || s.selC || []);
+  const cantrips = new Set(s.myCantrips || s.selC?.filter(id => SPELLS[id]?.lv===0) || []);
+
+  // Domain spells (cleric)
+  const domainIds = new Set();
+  if(cls === 'cleric'){
+    Object.entries(DOMAIN_IDS).forEach(([r,a]) => { if(lv>=+r) a.forEach(id => domainIds.add(id)); });
+  }
+
+  // Concentration
+  const concSpell = s.concSpell || s.concSp || null;
+
+  let h = '';
+
+  // Hero card
+  h += `<div class="char-hero" style="background:linear-gradient(135deg,${color}22,${color}11);border:1px solid ${color}44">
+    <div class="ch-badge" style="background:${color}33;font-size:26px">${icon}</div>
+    <div class="ch-info">
+      <div class="ch-name">${name}</div>
+      <div class="ch-sub">${CLASS_LABEL[cls]||cls} · Lv ${lv} · ${s.species||s.species||'?'} · ${s.bg||'?'}</div>
+      <div class="ch-hp-row">
+        <div><div class="ch-hp-num">${curHp}${tmpHp>0?`<span style="font-size:14px;color:var(--td)"> +${tmpHp}</span>`:''}</div><div class="ch-hp-label">/ ${mhp} HP</div></div>
+        <div class="ch-hp-bar"><div class="ch-hp-fill" style="width:${pct}%;background:${hpColor}"></div></div>
+      </div>
+      ${concSpell ? `<div class="conc-pill">🌀 Concentrating: ${concSpell}</div>` : ''}
+    </div>
+  </div>`;
+
+  // Resources
+  h += buildResources(s, cls, lv, slots, tbl, color);
+
+  // Class Features
+  const features = (CLASS_FEATURES[cls] ? CLASS_FEATURES[cls](s) : []);
+  if(features.length){
+    h += `<div class="sec-title">Class Abilities & Passives</div>`;
+    features.forEach(f => {
+      h += `<div class="trait-card${f.gold?' gold':''}">
+        <div class="trait-nm">${f.n}</div>
+        <div class="trait-ds">${f.ds.replace(/\n/g,'<br>')}</div>
+      </div>`;
+    });
+  }
+
+  // Spells
+  const spellIds = [...new Set([...cantrips, ...domainIds, ...prepared])];
+  const matchedSpells = spellIds.map(id => {
+    // Try exact match first
+    if(SPELLS[id]) return {id, sp: SPELLS[id]};
+    // Try without class suffix
+    const base = id.replace(/-[drs]$/, '');
+    if(SPELLS[base]) return {id, sp: SPELLS[base]};
+    return null;
+  }).filter(Boolean).sort((a,b) => a.sp.lv - b.sp.lv);
+
+  if(matchedSpells.length){
+    h += `<div class="sec-title">Spells (${matchedSpells.length})</div>`;
+    let curLv = -1;
+    matchedSpells.forEach(({id, sp}) => {
+      if(sp.lv !== curLv){
+        curLv = sp.lv;
+        h += `<div style="font-size:10px;font-weight:700;color:var(--os);text-transform:uppercase;letter-spacing:.6px;margin:8px 0 4px">${sp.lv===0?'Cantrips':SLOT_LABEL[sp.lv-1]+' Level'}</div>`;
+      }
+      const isDom = domainIds.has(id);
+      const exp = expandedSpells.has(`${idx}-${id}`);
+      const concBadge = sp.conc ? `<span class="badge bt">C</span>` : '';
+      h += `<div class="spell-card${isDom?' domain':''}${concSpell===sp.n?' conc':''}" onclick="toggleSpell(${idx},'${id}')">
+        <div class="sc-header">
+          <div class="sc-name">${sp.n}</div>
+          <div class="sc-badges">
+            ${isDom?'<span class="badge ba">☽</span>':''}
+            ${concBadge}
+            <span class="badge bg">${sp.sc}</span>
+          </div>
+        </div>
+        <div class="sc-meta">${sp.time} · ${sp.range}</div>
+        ${exp ? `<div class="sc-body open">
+          <div class="sc-desc">${sp.desc}</div>
+          ${sp.tip ? `<div class="sc-tip">💡 ${sp.tip}</div>` : ''}
+        </div>` : ''}
+      </div>`;
+    });
+  } else {
+    h += `<div style="color:var(--os);font-size:13px;text-align:center;padding:20px">No spells loaded yet — scan the character QR.</div>`;
+  }
+
+  return h;
+}
+
+function buildResources(s, cls, lv, slots, tbl, color){
+  let h = `<div class="res-section">`;
+
+  // Spell slots
+  let hasSlots = false;
+  for(let i=0;i<9;i++){if(tbl[i]>0){hasSlots=true;break;}}
+  if(hasSlots){
+    h += `<div style="font-size:10px;font-weight:700;color:var(--os);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px">Spell Slots</div>`;
+    for(let i=0;i<9;i++){
+      const tot=tbl[i]; if(!tot) continue;
+      const cur=slots[i]??tot;
+      const pips=Array.from({length:tot},(_,j)=>`<div class="spip${j<cur?'':' e'}"></div>`).join('');
+      h += `<div class="slot-row"><span class="slot-lv">${SLOT_LABEL[i]}</span><div class="slot-pips">${pips}</div><span class="slot-ct">${cur}/${tot}</span></div>`;
+    }
+    h += `<div style="height:8px"></div>`;
+  }
+
+  // Class-specific resources
+  const resRows = [];
+  if(cls==='cleric'){
+    const cdMax=lv>=18?4:lv>=6?3:lv>=2?2:0;
+    if(cdMax>0) resRows.push({n:'Channel Divinity',max:cdMax,used:s.cdUsed||0});
+    const wismod=Math.max(1,mod(s.stats?.wis||16));
+    resRows.push({n:'Eyes of the Grave',max:wismod,used:s.eyesUsed||0});
+    if(lv>=6) resRows.push({n:"Sentinel at Death's Door",max:wismod,used:s.sentinelUsed||0});
+    if(lv>=10) resRows.push({n:'Divine Intervention',max:1,used:s.divIntUsed?1:0});
+  }
+  if(cls==='druid'){
+    const wsMax=lv>=17?4:lv>=9?3:2;
+    resRows.push({n:'Wild Shape',max:wsMax,used:(s.wsUses!==undefined)?wsMax-s.wsUses:0});
+  }
+  if(cls==='sorcerer'){
+    const sp=lv<=9?lv:lv>=17?12:lv>=13?11:10;
+    resRows.push({n:'Sorcery Points',max:sp,used:s.usedSP||0});
+    if(lv>=1) resRows.push({n:'Innate Sorcery',max:prof(lv),used:s.innLeft!==undefined?prof(lv)-s.innLeft:0});
+  }
+  if((s.gcFeats||[]).includes('lucky') || (s.selF||[]).includes('lucky')){
+    resRows.push({n:'Lucky',max:3,used:s.luckyUsed||0});
+  }
+
+  if(resRows.length){
+    resRows.forEach(r => {
+      const pips=Array.from({length:Math.min(r.max,10)},(_,i)=>`<div class="rpip${i<r.used?' e':' f'}" style="border-color:${color}${i<r.used?'':'88'};${i<r.used?'':'background:'+color+'33'}"></div>`).join('');
+      h+=`<div class="res-row"><span class="res-nm">${r.n}</span><div class="res-pips">${pips}</div><span class="res-ct">${r.max-r.used}/${r.max}</span></div>`;
+    });
+  }
+
+  h += `</div>`;
+  return h;
+}
+
+function toggleSpell(charIdx, spellId){
+  const key = `${charIdx}-${spellId}`;
+  if(expandedSpells.has(key)) expandedSpells.delete(key);
+  else expandedSpells.add(key);
+  // Re-render just the active screen
+  const el = document.getElementById(`screen-${charIdx}`);
+  if(el) el.innerHTML = buildCharScreen(party[charIdx].state, charIdx);
+}
+
+// ══ LOAD MODAL ══
+function openLoadModal(){
+  g('modal-body').innerHTML = `
+    <div class="load-option" onclick="showUrlInput()">
+      <h3>🔗 Paste Share URL</h3>
+      <p>Player copies their URL from the Share button and sends it to you</p>
+    </div>
+    <div class="load-option" onclick="showCamera()">
+      <h3>📷 Scan QR Code</h3>
+      <p>Point camera at the player's QR code on their phone screen</p>
+    </div>`;
+  g('load-modal').classList.add('open');
+}
+
+function closeModal(){
+  stopCamera();
+  g('load-modal').classList.remove('open');
+}
+
+function showUrlInput(){
+  g('modal-body').innerHTML = `
+    <p style="font-size:12px;color:var(--os);margin-bottom:8px">Ask the player to tap the Share button (on the Tracker tab) and send you the URL.</p>
+    <textarea class="url-input" id="url-input" rows="4" placeholder="Paste the full URL or just the base64 data here..."></textarea>
+    <button class="btn-load" onclick="loadFromUrl()">Load Character</button>
+    <button class="btn-load" style="background:var(--sv);color:var(--os)" onclick="openLoadModal()">← Back</button>`;
+}
+
+function loadFromUrl(){
+  const raw = g('url-input')?.value?.trim();
+  if(!raw){alert('Please paste a URL first.');return;}
+  try{
+    const state = decodeSnapshot(raw);
+    if(!state.charClass) state.charClass = detectClass(state);
+    closeModal();
+    addCharacter(state);
+  }catch(e){
+    alert('Could not read this snapshot. Make sure you pasted the full URL from the Share button.');
+  }
+}
+
+function detectClass(s){
+  if(s.wsUses !== undefined) return 'druid';
+  if(s.eyesUsed !== undefined) return 'cleric';
+  if(s.sorcPoints !== undefined || s.usedSP !== undefined) return 'sorcerer';
+  if(s.identities !== undefined || s.usedWails !== undefined) return 'rogue';
+  return 'unknown';
+}
+
+// ── QR Camera scan ──
+function showCamera(){
+  g('modal-body').innerHTML = `
+    <p class="cam-hint">Point the camera at the player's QR code</p>
+    <div class="cam-wrap">
+      <video id="cam-video" autoplay playsinline muted></video>
+      <div class="cam-overlay"><div class="cam-frame"></div></div>
+    </div>
+    <div id="cam-status" style="text-align:center;font-size:12px;color:var(--os);margin-bottom:8px">Starting camera...</div>
+    <button class="btn-load" style="background:var(--sv);color:var(--os)" onclick="stopCamera();openLoadModal()">← Back</button>`;
+  startCamera();
+}
+
+async function startCamera(){
+  try{
+    camStream = await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});
+    const video = g('cam-video');
+    video.srcObject = camStream;
+    await video.play();
+    g('cam-status').textContent = 'Scanning...';
+    camScanning = true;
+    loadJsQR(()=>scanLoop());
+  }catch(e){
+    g('cam-status').innerHTML = `<span style="color:var(--r)">Camera not available. Use "Paste URL" instead.</span>`;
+  }
+}
+
+function stopCamera(){
+  camScanning = false;
+  if(camStream){camStream.getTracks().forEach(t=>t.stop());camStream=null;}
+}
+
+function loadJsQR(cb){
+  if(window.jsQR){cb();return;}
+  const s=document.createElement('script');
+  s.src='https://cdnjs.cloudflare.com/ajax/libs/jsQR/1.4.0/jsQR.min.js';
+  s.onload=cb;s.onerror=()=>{g('cam-status').innerHTML='<span style="color:var(--r)">QR library failed to load. Use Paste URL.</span>';};
+  document.head.appendChild(s);
+}
+
+function scanLoop(){
+  if(!camScanning) return;
+  const video = g('cam-video');
+  if(!video || video.readyState < 2){setTimeout(()=>scanLoop(),200);return;}
+  const canvas = document.createElement('canvas');
+  canvas.width = video.videoWidth; canvas.height = video.videoHeight;
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(video,0,0,canvas.width,canvas.height);
+  const img = ctx.getImageData(0,0,canvas.width,canvas.height);
+  const code = window.jsQR && window.jsQR(img.data, img.width, img.height);
+  if(code && code.data){
+    stopCamera();
+    try{
+      const state = decodeSnapshot(code.data);
+      if(!state.charClass) state.charClass = detectClass(state);
+      closeModal();
+      addCharacter(state);
+      return;
+    }catch(e){
+      g('cam-status').innerHTML='<span style="color:var(--r)">QR read but data not recognized. Try paste URL.</span>';
+    }
+  }
+  if(camScanning) requestAnimationFrame(scanLoop);
+}
+
+// ══ INIT ══
+window.addEventListener('load', () => {
+  loadParty();
+  renderAll();
+  if(party.length) switchChar(0);
+});
+</script>
+</body>
+</html>

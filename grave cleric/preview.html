@@ -827,7 +827,7 @@ function getSpell(id){return CLERIC_SPELLS.find(s=>s.id===id);}
 
 // ── Save/Load ──
 function getState(){
-  return{lv,stats,curHp,maxHpMan,tmpHp,slots,cdUsed,eyesUsed,sentinelUsed,divIntUsed,luckyUsed,
+  return{charClass:'cleric',lv,stats,curHp,maxHpMan,tmpHp,slots,cdUsed,eyesUsed,sentinelUsed,divIntUsed,luckyUsed,
     concSpell,prepared:[...prepared],myCantrips:[...myCantrips],divineOrder,blessedStrikes,
     gcFeats:[...gcFeats],inventory,profSaves:[...profSaves],profSkills:[...profSkills],lang,dark,
     name:g('c-name').value,species:g('c-species').value,age:g('c-age').value,

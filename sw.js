@@ -1,4 +1,4 @@
-const CACHE = 'dnd-am-v16';
+const CACHE = 'dnd-am-v17';
 const ASSETS = [
   './preview.html', './view.html', './manifest.json', './icon.png', './logo.png',
   './icons/char.png', './icons/spells.png', './icons/tracker.png', './icons/build.png',

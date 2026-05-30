@@ -318,6 +318,87 @@ const SPELLS = {
 'dominate-person':{n:'Dominate Person',lv:5,sc:'Enchantment',conc:true,time:'Action',range:'60 ft',desc:'WIS save or charmed + fully under your control for 1 min. Repeat save when taking damage. Issue mental commands (no action). (Concentration) +1 duration level per slot.',tip:'Turn an enemy into your ally. Use them to attack their own allies.'},
 'scatter':{n:'Scatter',lv:6,sc:'Conjuration',conc:false,time:'Action',range:'30 ft',desc:'Up to 5 creatures (WIS save to resist for unwilling) teleport to unoccupied spaces within 120 ft that you can see.',tip:'Reposition allies or scatter enemies. Drop an enemy into a hazard.'},
 'power-word-pain':{n:'Power Word: Pain',lv:7,sc:'Enchantment',conc:false,time:'Action',range:'60 ft',desc:'Target with 100+ HP must succeed on a CON save or be Incapacitated, halved speed, and disadvantaged on attacks/saves until it succeeds on a CON save at the end of its turn.',tip:'No concentration incapacitation on targets with 100+ HP.'},
+
+// ── DRUID extra spells (IDs from druid app) ──
+'control-flames':{n:'Control Flames',lv:0,sc:'Transmutation',conc:false,time:'Action',range:'60 ft',desc:'Expand, move, or extinguish a nonmagical flame up to 5-ft cube. Alter color, create simple shapes, or snuff entirely. Instantaneous changes are permanent.',tip:'Extinguish torches silently for stealth. Create shaped flames for signaling.'},
+'create-bonfire':{n:'Create Bonfire',lv:0,sc:'Conjuration',conc:true,time:'Action',range:'60 ft',desc:'Create a bonfire in a 5-ft cube. CON save or 1d8 fire damage on entering. Difficult terrain. Scales: +1d8 at 5/11/17. (Conc, 1 min)',tip:'Zone denial cantrip. Drop on a doorway — enemies must pass through or go around.'},
+'druidcraft':{n:'Druidcraft',lv:0,sc:'Transmutation',conc:false,time:'Action',range:'30 ft',desc:'Minor nature effects: predict weather next 24h, make a flower bloom, create a harmless sensory effect, or instantly light/snuff a campfire.',tip:'Predict weather before a long rest. Signal allies with sounds or light.'},
+'elementalism':{n:'Elementalism',lv:0,sc:'Transmutation',conc:false,time:'Action',range:'30 ft',desc:'Minor elemental effect: small earth tremor (no damage), mist or fog, fire flare/dim, or move 1 gallon of water. Cannot deal damage.',tip:'Move water out of boots, create concealing mist, or signal with fire.'},
+'frostbite':{n:'Frostbite',lv:0,sc:'Evocation',conc:false,time:'Action',range:'60 ft',desc:'CON save or 1d6 cold damage and Disadvantage on next weapon attack before end of next turn. Scales: +1d6 at 5/11/17.',tip:'Pairs with allies who use weapon attacks. Debuff on a save is great action economy.'},
+'gust':{n:'Gust',lv:0,sc:'Transmutation',conc:false,time:'Action',range:'30 ft',desc:'STR save or pushed 5 ft. Can open/close an unlocked door or window, or knock a small object from a surface.',tip:'Knock projectiles off ledges, open doors from range, minor repositioning.'},
+'infestation':{n:'Infestation',lv:0,sc:'Conjuration',conc:false,time:'Action',range:'30 ft',desc:'CON save or 1d6 poison damage and moved 5 ft in a random direction. Movement doesn\'t provoke OA. Scales: +1d6 at 5/11/17.',tip:'Random push can break concentration or push enemies off ledges. Situationally strong.'},
+'magic-stone':{n:'Magic Stone',lv:0,sc:'Transmutation',conc:false,time:'Bonus',range:'Touch',desc:'Bonus action. Imbue 1–3 pebbles: ranged spell attack (+WIS mod+Prof), 1d6+WIS mod bludgeoning. Can give to an ally to throw. Duration 1 min.',tip:'Hand stones to an ally with Extra Attack. They use your spell stat with their action economy.'},
+'mold-earth':{n:'Mold Earth',lv:0,sc:'Transmutation',conc:false,time:'Action',range:'30 ft',desc:'Move 5-ft cube of loose earth 5 ft. Create/destroy difficult terrain. Excavate writing in earth. Changes last 1 hour.',tip:'Create instant foxholes for cover, fill pit traps, or dig under walls.'},
+'poison-spray':{n:'Poison Spray',lv:0,sc:'Necromancy',conc:false,time:'Action',range:'30 ft',desc:'CON save or 1d12 poison damage. Scales: +1d12 at 5/11/17. Highest damage cantrip but common resistance.',tip:'High damage vs creatures with no poison resistance. Avoid vs undead/constructs.'},
+'primal-savagery':{n:'Primal Savagery',lv:0,sc:'Transmutation',conc:false,time:'Action',range:'Self',desc:'Melee spell attack. Your teeth or nails become natural weapons: 1d10 acid damage on hit. Scales: +1d10 at 5/11/17.',tip:'Best melee cantrip for druids. Strong with Potent Spellcasting.'},
+'shape-water':{n:'Shape Water',lv:0,sc:'Transmutation',conc:false,time:'Action',range:'30 ft',desc:'Move 5-ft cube of water 5 ft. Change flow direction. Create simple shapes (1h). Freeze water (1h). Alter color/opacity.',tip:'Freeze water to create bridges. Combine with other water-based spells.'},
+'thunderclap':{n:'Thunderclap',lv:0,sc:'Evocation',conc:false,time:'Action',range:'Self 5ft',desc:'CON save or 1d6 thunder to ALL creatures within 5-ft emanation. Sound audible 100 ft away. Scales at 5/11/17.',tip:'Good area cantrip when surrounded. Noise attracts attention — bad for stealth.'},
+'absorb-elements':{n:'Absorb Elements',lv:1,sc:'Abjuration',conc:false,time:'Reaction',range:'Self',desc:'Reaction when taking acid/cold/fire/lightning/thunder damage. Gain resistance to that type until start of next turn. Add 1d6 of that type to next melee attack.',tip:'Free reaction spell. Saves your life vs elementals and breath weapons.'},
+'animal-friendship':{n:'Animal Friendship',lv:1,sc:'Enchantment',conc:false,time:'Action',range:'30 ft',desc:'WIS save (INT 4 or lower fails auto) or beast is charmed for 24 hours. Higher slots: +1 beast per slot above 1st.',tip:'Charm predators, get mounts, gather animal allies. Roleplay gold.'},
+'earth-tremor':{n:'Earth Tremor',lv:1,sc:'Evocation',conc:false,time:'Action',range:'10 ft',desc:'DEX save or 1d12 bludgeoning + knocked prone in 10-ft radius. Creates difficult terrain from loose rock. Scales: +1d12 per slot.',tip:'Massive AOE at low levels. Combine with ranged attacks — prone + difficult terrain.'},
+'fog-cloud':{n:'Fog Cloud',lv:1,sc:'Conjuration',conc:true,time:'Action',range:'120 ft',desc:'20-ft radius sphere of thick fog (heavily obscured). Scales: +20-ft radius per slot. (Conc, 1 hr)',tip:'Blinding zone. Great escape tool or to negate enemy ranged attacks.'},
+'goodberry':{n:'Goodberry',lv:1,sc:'Transmutation',conc:false,time:'Action',range:'Touch',desc:'Create 10 magical berries. Each heals 1 HP and provides nutrition for 24 hours. Berries lose magic after 24 hours.',tip:'Pre-cast before rest. 10 HP of healing for 1 lv1 slot. Keeps party fed.'},
+'ice-knife':{n:'Ice Knife',lv:1,sc:'Conjuration',conc:false,time:'Action',range:'60 ft',desc:'Ranged spell attack: 1d10 piercing. On hit or miss: DEX save or 2d6 cold to all within 5 ft. Higher slots: +2d6 cold per slot.',tip:'Burst damage + area cold. Even on miss the explosion triggers.'},
+'longstrider':{n:'Longstrider',lv:1,sc:'Transmutation',conc:false,time:'Action',range:'Touch',desc:'Speed +10 ft for 1 hour. No concentration. Higher slots: +1 target per slot.',tip:'No concentration! Buff the whole party at lv5+. Huge mobility boost.'},
+'purify-food':{n:'Purify Food and Drink',lv:1,sc:'Transmutation',conc:false,time:'Action',range:'10 ft',desc:'Purify all nonmagical food and drink within 5-ft radius, removing poison and disease. Can be ritual cast.',tip:'Ritual cast before eating in a dungeon. Zero slot cost.'},
+'snare':{n:'Snare',lv:1,sc:'Abjuration',conc:false,time:'1 min',range:'Touch',desc:'Invisible magical trap. DEX save or restrained until dispelled. 8-hour duration.',tip:'Set before a long rest to protect camp. Invisible + 8 hours = passive sentinel.'},
+'speak-with-animals':{n:'Speak with Animals',lv:1,sc:'Divination',conc:false,time:'Action',range:'Self',desc:'Understand and be understood by beasts for 10 minutes. Beasts share knowledge of nearby locations and events. Can be ritual cast.',tip:'Always prepared via Druidic. Ritual cast free. Scouts, warning systems.'},
+'barkskin':{n:'Barkskin',lv:2,sc:'Transmutation',conc:false,time:'Bonus',range:'Touch',desc:'Bonus action. Minimum AC becomes 17 for 1 hour. No concentration.',tip:'No concentration! Minimum AC 17 works while unarmored or in Wild Shape.'},
+'darkvision':{n:'Darkvision',lv:2,sc:'Transmutation',conc:false,time:'Action',range:'Touch',desc:'Grant Darkvision 60 ft for 8 hours. No concentration.',tip:'Give to party members without darkvision before a dungeon.'},
+'dust-devil':{n:'Dust Devil',lv:2,sc:'Conjuration',conc:true,time:'Action',range:'60 ft',desc:'5-ft cube spinning column: STR save or 1d8 bludgeoning + moved 10 ft away. Difficult terrain. Bonus action: move 30 ft. Scales: +1d8 per slot. (Conc, 1 min)',tip:'Cheap damage + area denial + bonus action movement.'},
+'earthbind':{n:'Earthbind',lv:2,sc:'Transmutation',conc:true,time:'Action',range:'300 ft',desc:'STR save or flying speed becomes 0, creature descends 60 ft/round (no fall damage). (Conc, 1 min)',tip:'300 ft range. Bring down flying enemies safely.'},
+'flame-blade':{n:'Flame Blade',lv:2,sc:'Evocation',conc:true,time:'Bonus',range:'Self',desc:'Bonus action. Scimitar-like blade of fire. Melee spell attack: 3d6 fire. Sheds light. Scales: +1d6 per 2 slots. (Conc, 10 min)',tip:'Strong for melee Druids. WIS-based, magic damage, free light source.'},
+'flaming-sphere':{n:'Flaming Sphere',lv:2,sc:'Conjuration',conc:true,time:'Action',range:'60 ft',desc:'5-ft sphere: DEX save or 2d6 fire on adjacent creatures. Bonus action: move 30 ft. Scales: +2d6 per slot. (Conc, 1 min)',tip:'Bonus action to attack = use your action for something else. Great action economy.'},
+'gust-of-wind':{n:'Gust of Wind',lv:2,sc:'Evocation',conc:true,time:'Action',range:'Self 60ft',desc:'60-ft line: STR save or pushed 15 ft. Difficult terrain vs movement into wind. Gas/vapors dispersed. (Conc, 1 min)',tip:'Dispel Cloudkill, Stinking Cloud. Push enemies off ledges.'},
+'healing-spirit':{n:'Healing Spirit',lv:2,sc:'Conjuration',conc:true,time:'Bonus',range:'60 ft',desc:'Invisible spirit in 5-ft cube. Creature there at turn start (or enters): heals 1d6. Max = 1 + WIS mod total heals. Move as bonus action. (Conc, 1 min)',tip:'Incredibly efficient healing over time. Park it on the tank.'},
+'heat-metal':{n:'Heat Metal',lv:2,sc:'Transmutation',conc:true,time:'Action',range:'60 ft',desc:'Metal object sears: 2d8 fire + CON save or drop it. Bonus action each turn for free to repeat. Metal armor: Disadvantage on attacks/checks. (Conc, 1 min)',tip:'Destroys armored enemies. Force them to drop weapons. Bonus action sustained.'},
+'protection-from-poison':{n:'Protection from Poison',lv:2,sc:'Abjuration',conc:false,time:'Action',range:'Touch',desc:'If poisoned: neutralize one poison. Advantage on saves vs poison. Resistance to poison damage. 1 hour, no concentration.',tip:'Pre-cast before fighting poisonous creatures. No concentration = cheap insurance.'},
+'summon-beast':{n:'Summon Beast',lv:2,sc:'Conjuration',conc:true,time:'Action',range:'90 ft',desc:'Summon a Beast Spirit (Air/Land/Water). Uses your spell attack/DC. Scales with slot level. (Conc, 1 hr)',tip:'Solid damage concentration. Air Spirit can fly. Land has extra attacks at higher levels.'},
+'wither-and-bloom':{n:'Wither and Bloom',lv:2,sc:'Necromancy',conc:false,time:'Action',range:'60 ft',desc:'CON save or 2d6 necrotic in 10-ft sphere. One creature of choice in area heals 1d6 + WIS mod instead. Scales: +1d6 per slot.',tip:'Selective AOE + healing in one action.'},
+'erupting-earth':{n:'Erupting Earth',lv:3,sc:'Transmutation',conc:false,time:'Action',range:'120 ft',desc:'DEX save or 3d12 bludgeoning in 20-ft cube (half on save). Creates difficult terrain (rubble). Scales: +1d12 per slot.',tip:'Large AOE damage + permanent difficult terrain. No concentration!'},
+'plant-growth':{n:'Plant Growth',lv:3,sc:'Transmutation',conc:false,time:'Action',range:'150 ft',desc:'100-ft radius: difficult terrain (4× movement cost) for 24 hours. OR 8-hr casting: enrich soil for bountiful harvest.',tip:'4× movement cost means enemies spend their whole turn moving 10 ft. Brutal.'},
+'sleet-storm':{n:'Sleet Storm',lv:3,sc:'Conjuration',conc:true,time:'Action',range:'150 ft',desc:'20-ft radius cylinder: difficult terrain, DEX save or fall prone when entering/starting there. Heavy obscurement. (Conc, 1 min)',tip:'Triple control: difficult terrain + prone + heavy obscurement. Locks down a zone.'},
+'speak-with-plants':{n:'Speak with Plants',lv:3,sc:'Transmutation',conc:false,time:'Action',range:'Self 30ft',desc:'Plants understand you and can answer questions. Can animate plants to entangle (STR save or restrained 1 min). 10 min.',tip:'Scout nearby enemies through plants. Entangle surprise. Nature scouting.'},
+'summon-fey':{n:'Summon Fey',lv:3,sc:'Conjuration',conc:true,time:'Action',range:'90 ft',desc:'Summon Fey Spirit (Fuming/Mirthful/Tricksy). Uses your spell attack/DC. Scales with slot. (Conc, 1 hr)',tip:'Mirthful fey adds Charmed. Tricksy fey can go invisible. Flexible utility summon.'},
+'tidal-wave':{n:'Tidal Wave',lv:3,sc:'Conjuration',conc:false,time:'Action',range:'120 ft',desc:'30-ft long, 10-ft wide wave: DEX save or 4d8 bludgeoning + knocked prone (half on save). Creates difficult terrain. No concentration.',tip:'No concentration AOE. Prone + difficult terrain. Excellent vs grouped enemies.'},
+'water-breathing':{n:'Water Breathing',lv:3,sc:'Transmutation',conc:false,time:'Action',range:'30 ft',desc:'Up to 10 creatures can breathe underwater for 24 hours. No concentration. Can be ritual cast.',tip:'Ritual cast before underwater missions. Zero slot cost.'},
+'wind-wall':{n:'Wind Wall',lv:3,sc:'Evocation',conc:true,time:'Action',range:'120 ft',desc:'60-ft long, 15-ft high wall: STR save or 3d8 bludgeoning. Ranged projectiles have Disadvantage through it. (Conc, 1 min)',tip:'Stop ranged attackers. Redirect gas clouds. Prevent enemy archers.'},
+'charm-monster':{n:'Charm Monster',lv:4,sc:'Enchantment',conc:false,time:'Action',range:'30 ft',desc:'WIS save or charmed for 1 hour. Works on ANY creature type. No concentration. +1 target per slot.',tip:'No concentration! Charm a dragon, giant, or elemental. Remove from combat.'},
+'confusion':{n:'Confusion',lv:4,sc:'Enchantment',conc:true,time:'Action',range:'90 ft',desc:'WIS save or confused (random behavior: wander, do nothing, attack nearest). Repeat save each turn. 10-ft radius. (Conc, 1 min)',tip:'Random attacks include allies. Drop on a clustered group. Even partial success good.'},
+'grasping-vine':{n:'Grasping Vine',lv:4,sc:'Conjuration',conc:true,time:'Bonus',range:'60 ft',desc:'Bonus action. Animate a vine: DEX save or pulled 20 ft toward it. Move as bonus action. (Conc, 1 min)',tip:'Bonus action cast + bonus action to pull. Drag enemies into hazards each turn.'},
+'summon-elemental':{n:'Summon Elemental',lv:4,sc:'Conjuration',conc:true,time:'Action',range:'90 ft',desc:'Summon an Elemental Spirit (Air/Earth/Fire/Water). Uses your spell attack/DC. Scales with slot. (Conc, 1 hr)',tip:'Air elemental can fly. Earth is tanky. Fire damages nearby enemies. Water can grapple.'},
+'awaken':{n:'Awaken',lv:5,sc:'Transmutation',conc:false,time:'8hr',range:'Touch',desc:'8 hr casting. Touch a beast or plant. Grants INT 10 (min), one language, memory. Becomes friendly for 30 days. Requires 1,000 gp agate.',tip:'Permanent animal companion. Awakened trees can grapple. Loyal bodyguards.'},
+'maelstrom':{n:'Maelstrom',lv:5,sc:'Evocation',conc:true,time:'Action',range:'120 ft',desc:'30-ft radius whirlpool: STR save or 6d6 bludgeoning + pulled 10 ft toward center each turn. Difficult terrain. (Conc, 1 min)',tip:'Massive pull + damage. Pull enemies into Spike Growth or Wall of Fire.'},
+'reincarnate':{n:'Reincarnate',lv:5,sc:'Necromancy',conc:false,time:'1hr',range:'Touch',desc:'Restore creature dead ≤10 days in a new random body (species determined by d100). Retains memories and class. Requires 1,000 gp oils.',tip:'No material restriction on body condition. Can restore with no remains left.'},
+'tree-stride':{n:'Tree Stride',lv:5,sc:'Conjuration',conc:true,time:'Action',range:'Self',desc:'Enter a tree and teleport to any tree of same species within 500 ft as part of movement. Once per turn. (Conc, 1 min)',tip:'500-ft teleport per turn in forested areas. Bypasses walls and enemies.'},
+'wall-of-stone':{n:'Wall of Stone',lv:5,sc:'Evocation',conc:true,time:'Action',range:'120 ft',desc:'Six 10×10 stone panels (6 in thick). Becomes permanent if Conc maintained for full 10 min. DEX save or trapped when it forms. (Conc, 10 min)',tip:'Divide battlefield, seal doors. Build permanent fortifications after 10 min.'},
+'bones-of-the-earth':{n:'Bones of the Earth',lv:6,sc:'Transmutation',conc:false,time:'Action',range:'120 ft',desc:'Up to 6 stone pillars shoot up. DEX save or 6d6 bludgeoning + prone at pillar location. Each 5 ft wide, 30 ft tall.',tip:'No concentration AOE + difficult terrain + prone. Creates maze of pillars.'},
+'move-earth':{n:'Move Earth',lv:6,sc:'Transmutation',conc:true,time:'Action',range:'120 ft',desc:'Reshape dirt, sand, or clay in 40-ft cube. Each action: reshape up to 10 ft. Change slopes, fill trenches. (Conc, 2 hr)',tip:'Shape entire battlefields over time. Create fortifications permanently.'},
+'primordial-ward':{n:'Primordial Ward',lv:6,sc:'Abjuration',conc:true,time:'Action',range:'Self',desc:'Resistance to acid, cold, fire, lightning, thunder. When hit by one of these: immunity to that type for rest of combat. (Conc, 1 min)',tip:'First hit of any element grants immunity to it for the rest of the fight.'},
+'transport-via-plants':{n:'Transport via Plants',lv:6,sc:'Conjuration',conc:false,time:'Action',range:'10 ft',desc:'Enter a Large+ plant. Teleport to any plant of same species anywhere on same plane. One-way trip per casting.',tip:'Instant cross-continent teleportation if you know where a tree of the same species is.'},
+'wall-of-thorns':{n:'Wall of Thorns',lv:6,sc:'Conjuration',conc:true,time:'Action',range:'120 ft',desc:'60-ft wall (10 ft thick, 10 ft tall): DEX save or 7d8 piercing to pass through (half on save). Difficult terrain. +1d8 per slot. (Conc, 10 min)',tip:'Impenetrable wall for 10 min. 7d8 avg 31 piercing to traverse.'},
+'wind-walk':{n:'Wind Walk',lv:6,sc:'Transmutation',conc:false,time:'1min',range:'30 ft',desc:'Up to 10 creatures become gaseous and gain Fly 300 ft (hover) for 8 hours. Revert as bonus action (1 min). No concentration.',tip:'Fastest travel spell. 300-ft fly speed, no concentration, 8 hours, entire party.'},
+'reverse-gravity':{n:'Reverse Gravity',lv:7,sc:'Transmutation',conc:true,time:'Action',range:'100 ft',desc:'100-ft cylinder (50-ft radius): gravity reverses 1 min. Unsecured creatures DEX save or fall upward. Fall damage when gravity ends. (Conc, 1 min)',tip:'Throw the entire encounter upward. When concentration ends, everything falls for 10d6.'},
+'mirage-arcane':{n:'Mirage Arcane',lv:7,sc:'Illusion',conc:false,time:'10min',range:'Sight',desc:'10-min casting. Alter appearance of 1-mile-square terrain for 10 days. Creatures can physically interact with the illusion.',tip:'Fortify a settlement with illusory walls. Hide an entire valley.'},
+'whirlwind':{n:'Whirlwind',lv:7,sc:'Evocation',conc:true,time:'Action',range:'300 ft',desc:'10-ft radius, 30-ft column: DEX save or 10d6 bludgeoning + trapped inside (STR save to escape). Trapped: blinded, can\'t breathe. Move 30 ft/action. (Conc, 1 min)',tip:'Brutal single/multi-target control. Trap and blind enemies.'},
+'animal-shapes':{n:'Animal Shapes',lv:8,sc:'Transmutation',conc:true,time:'Action',range:'30 ft',desc:'Transform up to 8 willing creatures into beast forms of CR 4 or lower. (Conc, 24 hrs)',tip:'Turn the whole party into wolves or Giant Eagles for 24-hour travel.'},
+'tsunami':{n:'Tsunami',lv:8,sc:'Conjuration',conc:true,time:'1min',range:'Sight',desc:'300-ft tall, 300-ft wide wall of water. STR save or 6d10 bludgeoning per round. Wall moves 50 ft from you each round. Weakens each round. (Conc, 6 rounds)',tip:'Colossal AOE tide. Best used outdoors near water.'},
+'incendiary-cloud':{n:'Incendiary Cloud',lv:8,sc:'Conjuration',conc:true,time:'Action',range:'150 ft',desc:'20-ft radius sphere: DEX save or 10d8 fire (half on save). Moves 10 ft/round. Heavily obscured. (Conc, 1 min)',tip:'10d8/round + blocks vision. Move toward enemies each turn.'},
+'storm-of-vengeance':{n:'Storm of Vengeance',lv:9,sc:'Conjuration',conc:true,time:'Action',range:'Sight',desc:'1-mile radius storm. Round 1: 20d6 thunder + deafened. Rounds 2-10: acid rain (1d6), lightning/hail (10d6), wind (Disadvantage ranged). Each round different. (Conc, 1 min)',tip:'Total battlefield domination. Chain effects every round.'},
+'shapechange':{n:'Shapechange',lv:9,sc:'Transmutation',conc:true,time:'Action',range:'Self',desc:'Transform into any creature with CR ≤ druid level. Retain mental stats, class features, and spellcasting. DC10+dmg CON save to stay transformed at 0 HP. (Conc, 1 hr)',tip:'Become a Solar (CR 21) or Ancient Dragon while keeping your druid spellcasting.'},
+
+// ── ABERRANT MIND extra spells (stored by name in selC/selS) ──
+'acid-splash':{n:'Acid Splash',lv:0,sc:'Conjuration',conc:false,time:'Action',range:'60 ft',desc:'DEX save or 1d6 Acid. Can target 2 creatures within 5 ft of each other. Scales at 5/11/17.',tip:'Multi-target option at close range. Good vs creatures without acid resistance.'},
+'poison-spray-s':{n:'Poison Spray',lv:0,sc:'Necromancy',conc:false,time:'Action',range:'30 ft',desc:'CON save or 1d12 Poison. Highest damage cantrip but common resistance. Scales at 5/11/17.',tip:'High damage vs unresistant creatures. Avoid vs undead/constructs/many bosses.'},
+'sorcerous-burst':{n:'Sorcerous Burst',lv:0,sc:'Evocation',conc:false,time:'Action',range:'120 ft',desc:'Ranged spell attack: 1d8 damage (choose type on cast). On an 8, roll another d8 and add. Scales at 5/11/17.',tip:'Cascading damage on 8s. Energy type flexibility counters resistances.'},
+'expeditious-retreat':{n:'Expeditious Retreat',lv:1,sc:'Transmutation',conc:true,time:'Bonus',range:'Self',desc:'Bonus action this turn and each turn: take Dash action as bonus action. (Conc, 10 min)',tip:'Doubles your movement each turn. Essential for kiting and hit-and-run tactics.'},
+'comprehend-languages':{n:'Comprehend Languages',lv:1,sc:'Divination',conc:false,time:'Action',range:'Self',desc:'Understand the literal meaning of any spoken language and written language you can see. Ritual.',tip:'Ritual cast free. Understand any language for 1 hour — invaluable in exploration.'},
+'mirror-image':{n:'Mirror Image',lv:2,sc:'Illusion',conc:false,time:'Action',range:'Self',desc:'Create 3 duplicates. When hit: d20 roll (6+ = 1 duplicate destroyed instead). No concentration, 1 min.',tip:'No concentration! Three free "miss chances." Excellent cheap self-defense.'},
+'sleep':{n:'Sleep',lv:1,sc:'Enchantment',conc:false,time:'Action',range:'90 ft',desc:'Lowest HP creatures within 20 ft fall unconscious (total 5d8 HP worth). Immune: undead, constructs, immune to charm. Ends on damage or shaking.',tip:'Incredibly effective vs low-HP minions. Put 5 goblins to sleep instantly.'},
+'phantasmal-force':{n:'Phantasmal Force',lv:2,sc:'Illusion',conc:true,time:'Action',range:'60 ft',desc:'INT save or target believes in and is affected by a 10-ft cube illusion only they can see. 2d6 Psychic each turn from perceived threat. (Conc, 1 min)',tip:'Target can\'t dismiss it with Investigation — must know it\'s an illusion first.'},
+'sending-s':{n:'Sending',lv:3,sc:'Divination',conc:false,time:'Action',range:'Unlimited',desc:'Send a 25-word message to any creature you know. They can respond with 25 words.',tip:'Unlimited range, even cross-planar. Coordinate with separated party members.'},
+'black-tentacles':{n:"Evard's Black Tentacles",lv:4,sc:'Conjuration',conc:true,time:'Action',range:'90 ft',desc:'20-ft square: difficult terrain. STR save or Restrained + 3d6 Bludgeoning at start of each turn (STR save to escape). (Conc, 1 min)',tip:'Massive zone control. Restrained = Disadvantage on attacks and Advantage for attackers.'},
+'telekinesis':{n:'Telekinesis',lv:5,sc:'Transmutation',conc:true,time:'Action',range:'60 ft',desc:'Move objects up to 1,000 lb. or Huge creatures (STR save): grappled + moved 30 ft each turn. (Conc, 10 min)',tip:'Throw creatures off ledges or into hazards. Persistent grapple + movement control.'},
 };
 
 // ══ CLASS FEATURES ══
@@ -487,12 +568,18 @@ function updatePartySub(){
 }
 
 function buildCharScreen(s, idx){
-  const cls = s.charClass || 'unknown';
-  const color = CLASS_COLOR[cls] || '#888';
-  const icon = CLASS_ICON[cls] || '?';
+  // Robust class detection — handles old snapshots without charClass
+  const cls = s.charClass || detectClass(s) || 'unknown';
+  const color = CLASS_COLOR[cls] || '#8888AA';
+  const icon = CLASS_ICON[cls] || '🎲';
   const name = s.name || s.c_name || CLASS_LABEL[cls] || 'Character';
   const lv = s.lv || 1;
-  const stats = s.stats || {str:+(s.str||10),dex:+(s.dex||10),con:+(s.con||10),int:+(s.int_||10),wis:+(s.wis||10),cha:+(s.cha||10)};
+  // Aberrant Mind stores stats as top-level strings (s.str, s.wis...),
+  // Cleric/Druid store as s.stats object
+  const stats = s.stats || {
+    str:+(s.str||10), dex:+(s.dex||10), con:+(s.con||12),
+    int:+(s.int_||s.int||10), wis:+(s.wis||10), cha:+(s.cha||10)
+  };
   const p = prof(lv);
 
   // HP calc
@@ -507,14 +594,30 @@ function buildCharScreen(s, idx){
   const tbl = SLOT_TABLE[Math.min(lv,20)] || [];
   const slots = s.slots || [...tbl];
 
-  // Spells
-  const prepared = new Set(s.prepared || s.selC || []);
-  const cantrips = new Set(s.myCantrips || s.selC?.filter(id => SPELLS[id]?.lv===0) || []);
+  // ── Spell extraction (handles all 4 apps) ──
+  // Cleric/Druid: prepared=array of IDs, myCantrips=array of IDs
+  // Aberrant Mind: selC=array of names, selS=array of names
+  // Rogue: no spells
+  function nameToId(n){ return n.toLowerCase().replace(/['']/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''); }
+  const allSpellIds = new Set();
+  if(s.prepared)    s.prepared.forEach(id => allSpellIds.add(id));
+  if(s.myCantrips)  s.myCantrips.forEach(id => allSpellIds.add(id));
+  if(s.selC)        s.selC.forEach(name => allSpellIds.add(nameToId(name)));
+  if(s.selS)        s.selS.forEach(name => allSpellIds.add(nameToId(name)));
+  // Aberrant Mind: psionic spells are always prepared (not saved in selC/selS)
+  if(cls === 'sorcerer'){
+    ['mind-sliver','dissonant-whispers','arms-of-hadar','calm-emotions','detect-thoughts',
+     'hunger-of-hadar','sending','summon-aberration','evards-black-tentacles',
+     'raulothims-psychic-lance','dominate-person','telekinesis'
+    ].forEach(id => allSpellIds.add(id));
+  }
 
   // Domain spells (cleric)
   const domainIds = new Set();
   if(cls === 'cleric'){
     Object.entries(DOMAIN_IDS).forEach(([r,a]) => { if(lv>=+r) a.forEach(id => domainIds.add(id)); });
+    // Also add domain spells to the full list so they always appear
+    domainIds.forEach(id => allSpellIds.add(id));
   }
 
   // Concentration
@@ -552,15 +655,23 @@ function buildCharScreen(s, idx){
   }
 
   // Spells
-  const spellIds = [...new Set([...cantrips, ...domainIds, ...prepared])];
-  const matchedSpells = spellIds.map(id => {
-    // Try exact match first
-    if(SPELLS[id]) return {id, sp: SPELLS[id]};
-    // Try without class suffix
-    const base = id.replace(/-[drs]$/, '');
-    if(SPELLS[base]) return {id, sp: SPELLS[base]};
-    return null;
-  }).filter(Boolean).sort((a,b) => a.sp.lv - b.sp.lv);
+  // Lookup: try exact ID, then fuzzy, then full-scan by name, then placeholder
+  function slugify(n){ return n.toLowerCase().replace(/['']/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''); }
+  function lookupSpell(id){
+    if(SPELLS[id]) return SPELLS[id];
+    // Try without class suffix (-d, -s, -r)
+    const base = id.replace(/-[dsr]$/, '');
+    if(SPELLS[base]) return SPELLS[base];
+    // Full scan: find a spell whose name slugifies to this id (handles apostrophes like "Evard's")
+    const found = Object.values(SPELLS).find(sp => slugify(sp.n) === id);
+    if(found) return found;
+    // Placeholder — still shows the spell name so DM can see it
+    const niceName = id.split('-').map(w => w.charAt(0).toUpperCase()+w.slice(1)).join(' ');
+    return {n:niceName, lv:0, sc:'Unknown', conc:false, time:'—', range:'—', desc:'Full description not in DM database.', tip:''};
+  }
+
+  const matchedSpells = [...allSpellIds].map(id => ({id, sp: lookupSpell(id)}))
+    .sort((a,b) => a.sp.lv - b.sp.lv);
 
   if(matchedSpells.length){
     h += `<div class="sec-title">Spells (${matchedSpells.length})</div>`;

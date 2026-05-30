@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>Grave Cleric — DM View</title>
+<meta name="theme-color" content="#4A3275">
+<style>
+:root{--p:#7B5EA7;--pl:#EEE8F8;--pd:#4A3275;--a:#C4A21B;--al:#FAF0D0;--ad:#6B5000;--t:#1D9E75;--tl:#E1F5EE;--td:#085041;--r:#D85A30;--bg:#F5F3FA;--sf:#FFF;--sv:#F0EBF8;--ol:#DDD5EC;--os:#7A6A9A;--tx:#1a1520;--rr:10px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--tx);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:15px;padding:16px;max-width:500px;margin:0 auto}
+.hero{background:linear-gradient(135deg,var(--pd),var(--p));border-radius:16px;padding:20px;color:#fff;margin-bottom:16px}
+.hero-name{font-size:22px;font-weight:700;margin-bottom:3px}
+.hero-sub{font-size:13px;opacity:.8}
+.hero-deity{font-size:12px;opacity:.65;margin-top:3px}
+.hp-row{display:flex;align-items:center;gap:12px;margin-top:12px}
+.hp-big{font-size:28px;font-weight:800;line-height:1}
+.hp-label{font-size:11px;opacity:.7}
+.hp-bar{flex:1;height:8px;border-radius:4px;background:rgba(255,255,255,.25);overflow:hidden}
+.hp-fill{height:100%;border-radius:4px;background:#fff;transition:width .3s}
+.section{background:var(--sf);border-radius:var(--rr);border:1px solid var(--ol);padding:14px;margin-bottom:12px}
+.sec-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--os);margin-bottom:10px}
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
+.stat-box{background:var(--sv);border-radius:8px;padding:8px;text-align:center}
+.stat-abbr{font-size:10px;font-weight:700;text-transform:uppercase;color:var(--os)}
+.stat-val{font-size:20px;font-weight:700;color:var(--tx)}
+.stat-mod{font-size:11px;color:var(--pd);font-weight:700}
+.der-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px}
+.der-box{background:var(--sv);border-radius:8px;padding:8px;text-align:center}
+.der-lbl{font-size:9px;font-weight:700;text-transform:uppercase;color:var(--os);margin-bottom:2px}
+.der-val{font-size:16px;font-weight:700;color:var(--tx)}
+.res-row{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--sv)}
+.res-row:last-child{border-bottom:none}
+.res-pips{display:flex;gap:4px;flex:1}
+.pip{width:16px;height:16px;border-radius:50%;border:2px solid var(--p)}
+.pip.f{background:var(--p)}
+.pip.e{background:transparent}
+.res-nm{font-size:12px;font-weight:600;width:130px;flex-shrink:0}
+.res-ct{font-size:11px;color:var(--os);min-width:30px;text-align:right}
+.slot-row{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--sv)}
+.slot-row:last-child{border-bottom:none}
+.slot-lv{font-size:11px;font-weight:700;background:var(--tl);color:var(--td);border-radius:6px;padding:2px 7px;flex-shrink:0;min-width:32px;text-align:center}
+.slot-pips{display:flex;gap:3px;flex:1}
+.spip{width:12px;height:12px;border-radius:50%;border:2px solid var(--t);background:var(--t)}
+.spip.e{background:transparent}
+.slot-ct{font-size:11px;color:var(--os);min-width:28px;text-align:right}
+.spell-item{padding:5px 0;border-bottom:1px solid var(--sv);display:flex;align-items:center;gap:8px;font-size:13px}
+.spell-item:last-child{border-bottom:none}
+.sp-lv{font-size:10px;color:var(--os);width:40px;flex-shrink:0}
+.sp-dom{font-size:10px;background:var(--al);color:var(--ad);border-radius:4px;padding:1px 5px;flex-shrink:0}
+.conc-bar{background:#FAECE7;border-radius:8px;padding:8px 12px;display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.conc-dot{width:10px;height:10px;border-radius:50%;background:var(--r);flex-shrink:0}
+.conc-nm{font-size:12px;font-weight:600;color:#4A1B0C}
+.badge{display:inline-block;padding:2px 7px;border-radius:10px;font-size:10px;font-weight:600}
+.bp{background:var(--pl);color:var(--pd)}
+.ba{background:var(--al);color:var(--ad)}
+.timestamp{text-align:center;font-size:11px;color:var(--os);margin-top:16px;padding-top:10px;border-top:1px solid var(--ol)}
+.err{text-align:center;padding:40px 20px;color:var(--os);font-size:14px}
+.sv-row{display:flex;align-items:center;gap:6px;padding:4px 0;border-bottom:1px solid var(--sv);font-size:13px}
+.sv-row:last-child{border-bottom:none}
+.sv-dot{width:14px;height:14px;border-radius:50%;border:2px solid var(--ol);flex-shrink:0}
+.sv-dot.on{background:var(--p);border-color:var(--p)}
+</style>
+</head>
+<body>
+<div id="root"><div class="err">Loading...</div></div>
+<script>
+const mod=v=>Math.floor((v-10)/2);
+const fmod=v=>(v>=0?'+':'')+v;
+const prof=lv=>lv<5?2:lv<9?3:lv<13?4:lv<17?5:6;
+const SLOT_TABLE=[[0,0,0,0,0,0,0,0,0],[2,0,0,0,0,0,0,0,0],[3,0,0,0,0,0,0,0,0],[4,2,0,0,0,0,0,0,0],[4,3,0,0,0,0,0,0,0],[4,3,2,0,0,0,0,0,0],[4,3,3,0,0,0,0,0,0],[4,3,3,1,0,0,0,0,0],[4,3,3,2,0,0,0,0,0],[4,3,3,3,1,0,0,0,0],[4,3,3,3,2,0,0,0,0],[4,3,3,3,2,1,0,0,0],[4,3,3,3,2,1,0,0,0],[4,3,3,3,2,1,1,0,0],[4,3,3,3,2,1,1,0,0],[4,3,3,3,2,1,1,1,0],[4,3,3,3,2,1,1,1,0],[4,3,3,3,2,1,1,1,1],[4,3,3,3,3,1,1,1,1],[4,3,3,3,3,2,1,1,1],[4,3,3,3,3,2,2,1,1]];
+const DOMAIN_IDS={1:['bane','false-life'],3:['gentle-repose','ray-of-enfeeblement'],5:['revivify','vampiric-touch'],7:['blight','death-ward'],9:['antilife-shell','raise-dead']};
+const SLOT_LABEL=['1st','2nd','3rd','4th','5th','6th','7th','8th','9th'];
+const SAVES=['str','dex','con','int','wis','cha'];
+const SAVE_N={str:'Strength',dex:'Dexterity',con:'Constitution',int:'Intelligence',wis:'Wisdom',cha:'Charisma'};
+
+function domainIds(lv){
+  const s=new Set();
+  Object.entries(DOMAIN_IDS).forEach(([r,a])=>{if(lv>=+r)a.forEach(id=>s.add(id));});
+  return s;
+}
+function spellName(id){
+  const map={'guidance':'Guidance','sacred-flame':'Sacred Flame','thaumaturgy':'Thaumaturgy','toll-the-dead':'Toll the Dead','spare-the-dying':'Spare the Dying','resistance':'Resistance','word-of-radiance':'Word of Radiance','light':'Light','mending':'Mending','bane':'Bane','false-life':'False Life','bless':'Bless','command':'Command','cure-wounds':'Cure Wounds','detect-magic':'Detect Magic','guiding-bolt':'Guiding Bolt','healing-word':'Healing Word','inflict-wounds':'Inflict Wounds','protection-evil-good':'Prot. from Evil & Good','sanctuary':'Sanctuary','shield-of-faith':'Shield of Faith','gentle-repose':'Gentle Repose','ray-of-enfeeblement':'Ray of Enfeeblement','aid':'Aid','augury':'Augury','blindness-deafness':'Blindness/Deafness','hold-person':'Hold Person','lesser-restoration':'Lesser Restoration','prayer-of-healing':'Prayer of Healing','silence':'Silence','spiritual-weapon':'Spiritual Weapon','warding-bond':'Warding Bond','zone-of-truth':'Zone of Truth','revivify':'Revivify','vampiric-touch':'Vampiric Touch','animate-dead':'Animate Dead','aura-of-vitality':'Aura of Vitality','beacon-of-hope':'Beacon of Hope','bestow-curse':'Bestow Curse','dispel-magic':'Dispel Magic','mass-healing-word':'Mass Healing Word','speak-with-dead':'Speak with Dead','spirit-guardians':'Spirit Guardians','spirit-shroud':'Spirit Shroud','remove-curse':'Remove Curse','blight':'Blight','death-ward':'Death Ward','aura-of-life':'Aura of Life','aura-of-purity':'Aura of Purity','banishment':'Banishment','divination':'Divination','freedom-of-movement':'Freedom of Movement','guardian-of-faith':'Guardian of Faith','antilife-shell':'Antilife Shell','raise-dead':'Raise Dead','circle-of-power':'Circle of Power','commune':'Commune','contagion':'Contagion','dawn':'Dawn','flame-strike':'Flame Strike','greater-restoration':'Greater Restoration','holy-weapon':'Holy Weapon','mass-cure-wounds':'Mass Cure Wounds','scrying':'Scrying','blade-barrier':'Blade Barrier','harm':'Harm','heal':'Heal','heroes-feast':"Heroes' Feast",'sunbeam':'Sunbeam','true-seeing':'True Seeing','word-of-recall':'Word of Recall','divine-word':'Divine Word','etherealness':'Etherealness','fire-storm':'Fire Storm','plane-shift':'Plane Shift','regenerate':'Regenerate','resurrection':'Resurrection','antimagic-field':'Antimagic Field','holy-aura':'Holy Aura','sunburst':'Sunburst','mass-heal':'Mass Heal','true-resurrection':'True Resurrection','gate':'Gate','power-word-heal':'Power Word: Heal'};
+  return map[id]||id;
+}
+function spellLevel(id){
+  const lvMap={'guidance':0,'sacred-flame':0,'thaumaturgy':0,'toll-the-dead':0,'spare-the-dying':0,'resistance':0,'word-of-radiance':0,'light':0,'mending':0,'bane':1,'false-life':1,'bless':1,'command':1,'cure-wounds':1,'detect-magic':1,'guiding-bolt':1,'healing-word':1,'inflict-wounds':1,'protection-evil-good':1,'sanctuary':1,'shield-of-faith':1,'gentle-repose':2,'ray-of-enfeeblement':2,'aid':2,'augury':2,'blindness-deafness':2,'hold-person':2,'lesser-restoration':2,'prayer-of-healing':2,'silence':2,'spiritual-weapon':2,'warding-bond':2,'zone-of-truth':2,'revivify':3,'vampiric-touch':3,'animate-dead':3,'aura-of-vitality':3,'beacon-of-hope':3,'bestow-curse':3,'dispel-magic':3,'mass-healing-word':3,'speak-with-dead':3,'spirit-guardians':3,'spirit-shroud':3,'remove-curse':3,'blight':4,'death-ward':4,'aura-of-life':4,'aura-of-purity':4,'banishment':4,'divination':4,'freedom-of-movement':4,'guardian-of-faith':4,'antilife-shell':5,'raise-dead':5,'circle-of-power':5,'commune':5,'contagion':5,'dawn':5,'flame-strike':5,'greater-restoration':5,'holy-weapon':5,'mass-cure-wounds':5,'scrying':5,'blade-barrier':6,'harm':6,'heal':6,'heroes-feast':6,'sunbeam':6,'true-seeing':6,'word-of-recall':6,'divine-word':7,'etherealness':7,'fire-storm':7,'plane-shift':7,'regenerate':7,'resurrection':7,'antimagic-field':8,'holy-aura':8,'sunburst':8,'mass-heal':9,'true-resurrection':9,'gate':9,'power-word-heal':9};
+  return lvMap[id]??'?';
+}
+
+function render(s){
+  const lv=s.lv||1,p=prof(lv);
+  const stats=s.stats||{str:10,dex:10,con:12,int:10,wis:16,cha:10};
+  const feats=new Set(s.gcFeats||[]);
+  const wisBonus=feats.has('asi-wis')?2:0;
+  const conBonus=(feats.has('resilient-con')?1:0)+(feats.has('asi-con')?2:0);
+  const ew=Math.min(30,stats.wis+wisBonus);
+  const ec=Math.min(30,stats.con+conBonus);
+  const dc=8+p+mod(ew), atk=fmod(p+mod(ew));
+  const mhp=s.maxHpMan>0?s.maxHpMan:(()=>{const c=mod(ec),b=8+c+(lv-1)*(5+c);return b+(feats.has('tough')?2*lv:0);})();
+  const curHp=s.curHp??mhp, tmpHp=s.tmpHp||0;
+  const pct=Math.max(0,curHp/mhp*100);
+  const hpColor=pct>60?'#1D9E75':pct>30?'#C4A21B':'#D85A30';
+  const tbl=SLOT_TABLE[Math.min(lv,20)]||[];
+  const slots=s.slots||[...tbl];
+  const domIds=domainIds(lv);
+  const prepared=new Set(s.prepared||[]);
+  const cantrips=new Set(s.myCantrips||[]);
+  const profSaves=new Set(s.profSaves||['wis','cha']);
+
+  let h='';
+
+  // Hero
+  h+=`<div class="hero">
+    <div class="hero-name">${s.name||'Cleric'}</div>
+    <div class="hero-sub">Lv ${lv} Grave Domain Cleric · ${s.species||'Human'} · ${s.bg||'Acolyte'}</div>
+    <div class="hero-deity">☽ ${s.deity||'The Raven Queen'} · ${s.align||'Neutral Good'}</div>
+    <div class="hp-row">
+      <div><div class="hp-big">${curHp}</div><div class="hp-label">/ ${mhp} HP${tmpHp>0?` (+${tmpHp} THP)`:''}</div></div>
+      <div class="hp-bar"><div class="hp-fill" style="width:${pct}%;background:${hpColor}"></div></div>
+    </div>
+  </div>`;
+
+  // Derived
+  h+=`<div class="section"><div class="sec-title">Combat Stats</div>
+    <div class="der-grid">
+      <div class="der-box"><div class="der-lbl">Spell DC</div><div class="der-val">${dc}</div></div>
+      <div class="der-box"><div class="der-lbl">Spell Atk</div><div class="der-val">${atk}</div></div>
+      <div class="der-box"><div class="der-lbl">AC</div><div class="der-val">${10+mod(stats.dex)}</div></div>
+      <div class="der-box"><div class="der-lbl">Prof</div><div class="der-val">${fmod(p)}</div></div>
+      <div class="der-box"><div class="der-lbl">Initiative</div><div class="der-val">${fmod(mod(stats.dex)+(feats.has('alert')?2:0))}</div></div>
+      <div class="der-box"><div class="der-lbl">Prepared</div><div class="der-val">${Math.max(1,mod(ew)+lv)}</div></div>
+    </div>
+  </div>`;
+
+  // Stats
+  h+=`<div class="section"><div class="sec-title">Ability Scores</div><div class="stat-grid">`;
+  ['str','dex','con','int','wis','cha'].forEach(k=>{
+    const eff=k==='wis'?ew:k==='con'?ec:stats[k];
+    h+=`<div class="stat-box"><div class="stat-abbr">${k.toUpperCase()}</div><div class="stat-val">${stats[k]}</div><div class="stat-mod">${fmod(mod(eff))}</div></div>`;
+  });
+  h+=`</div></div>`;
+
+  // Saving throws
+  h+=`<div class="section"><div class="sec-title">Saving Throws</div>`;
+  SAVES.forEach(k=>{
+    const eff=k==='wis'?ew:k==='con'?ec:stats[k];
+    const pro=profSaves.has(k),val=mod(eff)+(pro?p:0);
+    h+=`<div class="sv-row"><div class="sv-dot${pro?' on':''}"></div><span style="flex:1">${SAVE_N[k]}</span><span style="font-weight:700;color:${pro?'var(--p)':'var(--os)'}">${fmod(val)}</span></div>`;
+  });
+  h+=`</div>`;
+
+  // Resources
+  const cdMax=lv>=18?4:lv>=6?3:lv>=2?2:0;
+  const eyesMax=Math.max(1,mod(ew));
+  const sentMax=Math.max(1,mod(ew));
+  h+=`<div class="section"><div class="sec-title">Resources</div>`;
+  if(s.concSpell){
+    h+=`<div class="conc-bar"><div class="conc-dot"></div><span class="conc-nm">🌀 Concentrating: ${s.concSpell}</span></div>`;
+  }
+  const resources=[
+    {n:'Channel Divinity',max:cdMax,used:s.cdUsed||0,show:lv>=2},
+    {n:'Eyes of the Grave',max:eyesMax,used:s.eyesUsed||0,show:true},
+    {n:"Sentinel at Death's Door",max:sentMax,used:s.sentinelUsed||0,show:lv>=6},
+    {n:'Divine Intervention',max:1,used:s.divIntUsed?1:0,show:lv>=10},
+    {n:'Lucky',max:3,used:s.luckyUsed||0,show:feats.has('lucky')},
+  ];
+  resources.filter(r=>r.show&&r.max>0).forEach(r=>{
+    const pips=Array.from({length:r.max},(_,i)=>`<div class="pip${i<r.used?' e':' f'}"></div>`).join('');
+    h+=`<div class="res-row"><span class="res-nm">${r.n}</span><div class="res-pips">${pips}</div><span class="res-ct">${r.max-r.used}/${r.max}</span></div>`;
+  });
+  h+=`</div>`;
+
+  // Spell Slots
+  h+=`<div class="section"><div class="sec-title">Spell Slots</div>`;
+  for(let i=0;i<9;i++){
+    const tot=tbl[i];if(!tot)continue;
+    const cur=slots[i]??tot;
+    const pips=Array.from({length:tot},(_,j)=>`<div class="spip${j<cur?'':' e'}"></div>`).join('');
+    h+=`<div class="slot-row"><span class="slot-lv">${SLOT_LABEL[i]}</span><div class="slot-pips">${pips}</div><span class="slot-ct">${cur}/${tot}</span></div>`;
+  }
+  h+=`</div>`;
+
+  // Spells
+  const allSpells=[...cantrips,...[...domIds].filter(id=>!cantrips.has(id)),...[...prepared].filter(id=>!domIds.has(id))];
+  if(allSpells.length){
+    h+=`<div class="section"><div class="sec-title">Spells</div>`;
+    allSpells.sort((a,b)=>spellLevel(a)-spellLevel(b)).forEach(id=>{
+      const isDom=domIds.has(id);
+      const lvl=spellLevel(id);
+      h+=`<div class="spell-item">
+        <span class="sp-lv">${lvl===0?'Cantrip':SLOT_LABEL[lvl-1]}</span>
+        <span style="flex:1">${spellName(id)}</span>
+        ${isDom?'<span class="sp-dom">☽ Domain</span>':''}
+      </div>`;
+    });
+    h+=`</div>`;
+  }
+
+  // Timestamp
+  const ts=s.ts?new Date(s.ts*1000||s.ts).toLocaleString():new Date().toLocaleString();
+  h+=`<div class="timestamp">⏱ Snapshot: ${ts}</div>`;
+
+  g('root').innerHTML=h;
+}
+
+function g(id){return document.getElementById(id);}
+window.addEventListener('load',()=>{
+  const params=new URLSearchParams(location.search);
+  const d=params.get('d');
+  if(!d){g('root').innerHTML='<div class="err">No snapshot data found.<br>Open this page via the Share button in the app.</div>';return;}
+  try{
+    const json=decodeURIComponent(escape(atob(decodeURIComponent(d))));
+    render(JSON.parse(json));
+  }catch(e){
+    g('root').innerHTML='<div class="err">Could not load snapshot.<br>Try sharing again from the app.</div>';
+    console.error(e);
+  }
+});
+</script>
+</body>
+</html>

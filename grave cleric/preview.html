@@ -239,6 +239,20 @@ body.dark .bg{background:#333;color:#aaa}
 .empty-st .ei{font-size:40px;margin-bottom:10px}
 ::-webkit-scrollbar{width:4px}
 ::-webkit-scrollbar-thumb{background:var(--ol);border-radius:2px}
+.qr-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(3px)}
+.qr-box{background:var(--sf);border-radius:16px;padding:24px 20px;width:100%;max-width:340px;box-shadow:0 8px 40px rgba(0,0,0,.3);text-align:center}
+.qr-title{font-size:16px;font-weight:700;color:var(--tx);margin-bottom:4px}
+.qr-sub{font-size:12px;color:var(--os);margin-bottom:16px}
+.qr-wrap{display:flex;justify-content:center;margin-bottom:16px;min-height:160px;align-items:center}
+.qr-url{font-size:10px;color:var(--os);word-break:break-all;background:var(--sv);border-radius:8px;padding:8px 10px;margin-bottom:14px;text-align:left;line-height:1.5}
+.qr-actions{display:flex;gap:8px}
+.qr-btn{flex:1;padding:10px;border-radius:9px;border:none;cursor:pointer;font-size:13px;font-weight:600;transition:all .1s}
+.qr-btn:active{transform:scale(.97)}
+.qr-copy{background:var(--p);color:#fff}
+.qr-close{background:var(--sv);color:var(--tx);border:1px solid var(--ol)}
+.qr-ts{font-size:10px;color:var(--os);margin-top:10px}
+.share-fab{position:fixed;bottom:calc(var(--tabh)+14px);right:14px;width:44px;height:44px;border-radius:50%;background:var(--p);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(123,94,167,.5);z-index:50;transition:transform .15s}
+.share-fab:active{transform:scale(.92)}
 </style>
 </head>
 <body>
@@ -464,6 +478,29 @@ body.dark .bg{background:#333;color:#aaa}
 </div>
 
 </div><!-- /scroll-area -->
+
+<!-- QR MODAL -->
+<div class="qr-overlay" id="qr-overlay" style="display:none" onclick="if(event.target===this)closeQRModal()">
+  <div class="qr-box">
+    <div class="qr-title" id="qr-char-name">Cleric</div>
+    <div class="qr-sub" id="qr-char-sub">Session snapshot · Grave Domain</div>
+    <div class="qr-wrap" id="qr-canvas"></div>
+    <div class="qr-url" id="qr-url-text"></div>
+    <div class="qr-actions">
+      <button class="qr-btn qr-copy" onclick="copyQRUrl()">📋 Copy URL</button>
+      <button class="qr-btn qr-close" onclick="closeQRModal()">Close</button>
+    </div>
+    <div class="qr-ts" id="qr-ts"></div>
+  </div>
+</div>
+
+<!-- SHARE FAB — only on Tracker tab -->
+<button class="share-fab" id="share-fab" style="display:none" onclick="shareState()" title="Share state">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+  </svg>
+</button>
 
 <!-- TAB BAR -->
 <div class="tab-bar">
@@ -962,6 +999,7 @@ function toggleAcc(id){
 const SCREENS=['sc-char','sc-tracker','sc-spells','sc-class','sc-traits','sc-builds'];
 function switchTab(n){
   SCREENS.forEach((s,i)=>{g(s)?.classList.toggle('active',i===n);g('tab-'+i)?.classList.toggle('active',i===n);});
+  const fab=g('share-fab');if(fab)fab.style.display=n===1?'flex':'none';
   if(n===1)renderTracker();
   if(n===2)renderSpells();
   if(n===3)renderClass();
@@ -1502,6 +1540,58 @@ function deleteBuild(i){
   builds.splice(i,1);
   try{localStorage.setItem(SKB,JSON.stringify(builds));}catch(e){}
   renderBuilds();
+}
+
+// ══ QR / SHARE ══
+let _qrURL='';
+function shareState(){
+  const st=getState();
+  const json=JSON.stringify(st);
+  const b64=btoa(unescape(encodeURIComponent(json)));
+  const base=location.origin+location.pathname.replace(/[^/]*$/,'');
+  _qrURL=base+'view.html?d='+encodeURIComponent(b64);
+  const name=g('c-name')?.value||'Cleric';
+  g('qr-char-name').textContent=name;
+  g('qr-char-sub').textContent=`Session snapshot · Grave Domain Lv ${lv}`;
+  g('qr-url-text').textContent=_qrURL;
+  const ts=g('qr-ts');
+  if(ts){const d=new Date();ts.textContent=`Generated: ${d.toLocaleDateString()} ${d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}`;}
+  g('qr-canvas').innerHTML='<div style="color:var(--os);font-size:12px">Loading QR...</div>';
+  g('qr-overlay').style.display='flex';
+  document.body.style.overflow='hidden';
+  loadQRLib(()=>renderQR(_qrURL));
+}
+function renderQR(url){
+  const wrap=g('qr-canvas');if(!wrap)return;
+  if(!window.QRCode){
+    wrap.innerHTML=`<div style="font-size:11px;color:var(--os);text-align:center">QR not available offline.<br>Copy the URL manually.</div>`;
+    return;
+  }
+  wrap.innerHTML='';
+  const isDark=document.body.classList.contains('dark');
+  new QRCode(wrap,{text:url,width:180,height:180,
+    colorDark:isDark?'#E0D8F0':'#1a1520',
+    colorLight:isDark?'#1A1426':'#ffffff',
+    correctLevel:QRCode.CorrectLevel.M});
+}
+function loadQRLib(cb){
+  if(window.QRCode){cb();return;}
+  const s=document.createElement('script');
+  s.src='https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';
+  s.onload=cb;s.onerror=cb;
+  document.head.appendChild(s);
+}
+function closeQRModal(){
+  g('qr-overlay').style.display='none';
+  document.body.style.overflow='';
+}
+function copyQRUrl(){
+  navigator.clipboard?.writeText(_qrURL).then(()=>{
+    const btn=document.querySelector('.qr-copy');
+    if(btn){const orig=btn.textContent;btn.textContent='✓ Copied!';setTimeout(()=>btn.textContent=orig,1800);}
+  }).catch(()=>{
+    prompt('Copy this URL:',_qrURL);
+  });
 }
 
 // ══ INIT ══

@@ -673,6 +673,14 @@ function buildCharScreen(s, idx){
   const matchedSpells = [...allSpellIds].map(id => ({id, sp: lookupSpell(id)}))
     .sort((a,b) => a.sp.lv - b.sp.lv);
 
+  // Debug panel — always shown so we can diagnose
+  h += `<div style="background:#1a1a2a;border:1px solid #444;border-radius:8px;padding:8px 12px;margin-bottom:10px;font-size:11px;color:#8888aa;font-family:monospace">
+    <div style="color:#aaa;margin-bottom:4px">🔍 Debug</div>
+    <div>class: <b style="color:#c0aaea">${cls}</b> · spellIds: <b style="color:#6dcfb0">${allSpellIds.size}</b></div>
+    <div style="margin-top:2px;word-break:break-all">${[...allSpellIds].slice(0,8).join(', ')}${allSpellIds.size>8?'...':''}</div>
+    <div style="margin-top:2px">prepared: ${(s.prepared||[]).length} · cantrips: ${(s.myCantrips||[]).length} · selC: ${(s.selC||[]).length} · selS: ${(s.selS||[]).length}</div>
+  </div>`;
+
   if(matchedSpells.length){
     h += `<div class="sec-title">Spells (${matchedSpells.length})</div>`;
     let curLv = -1;

@@ -291,6 +291,34 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
 .empty-st{padding:36px 20px;text-align:center;color:var(--os)}
 .empty-st .ei{font-size:40px;margin-bottom:10px}
 .info-bn{background:var(--pl);border-radius:8px;padding:10px 12px;margin-bottom:10px;font-size:12px;color:var(--pd);line-height:1.5}
+/* ── EQUIPMENT ── */
+.armor-grid{display:flex;gap:7px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.armor-grid::-webkit-scrollbar{display:none}
+.armor-card{flex-shrink:0;background:var(--sv);border:1.5px solid var(--ol);border-radius:10px;padding:9px 10px;cursor:pointer;min-width:82px;text-align:center;transition:all .15s;user-select:none}
+.armor-card.sel{background:var(--pl);border-color:var(--p)}
+.armor-card .ac-ic{font-size:20px;margin-bottom:3px}
+.armor-card .ac-nm{font-size:10px;font-weight:700;color:var(--tx);margin-bottom:2px;line-height:1.2}
+.armor-card .ac-val{font-size:14px;font-weight:800;color:var(--pd)}
+.armor-card .ac-cat{font-size:9px;color:var(--os);margin-top:1px}
+.armor-card .ac-warn{font-size:9px;color:#ff9070;margin-top:1px}
+.equip-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:4px}
+.eq-chip{display:flex;align-items:center;gap:5px;background:var(--sv);border:1.5px solid var(--ol);border-radius:20px;padding:6px 11px;cursor:pointer;font-size:12px;font-weight:600;transition:all .15s;user-select:none}
+.eq-chip.on{background:var(--pl);border-color:var(--p);color:var(--pd)}
+.eq-chip.on-green{background:var(--tl);border-color:var(--t);color:var(--td)}
+.eq-chip.barovia{border-style:dashed}
+.eq-chip.barovia.on{background:var(--al);border-color:var(--a);color:var(--ad);border-style:dashed}
+.eq-chip .ch-eff{font-size:10px;font-weight:400;color:var(--os);margin-left:2px}
+.eq-chip.on .ch-eff,.eq-chip.on-green .ch-eff,.eq-chip.barovia.on .ch-eff{color:inherit;opacity:.75}
+.eq-chip.eq-dim{opacity:.4;cursor:not-allowed}
+.eq-grp{border-bottom:1px solid var(--ol)}
+.eq-grp:last-child{border-bottom:none}
+.eq-grp-hd{display:flex;align-items:center;justify-content:space-between;padding:11px 2px;cursor:pointer;user-select:none}
+.eq-grp-lbl{font-size:13px;font-weight:700;color:var(--tx)}
+.eq-grp-sum{font-size:11px;color:var(--os);max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.eq-grp-ch{font-size:10px;color:var(--os);transition:transform .2s;display:inline-block;margin-left:6px}
+.eq-grp-ch.open{transform:rotate(180deg)}
+.eq-grp-bd{display:none;padding-bottom:10px}
+.eq-grp-bd.open{display:block}
 </style>
 </head>
 <body>
@@ -420,8 +448,17 @@ hr.hr{border:none;border-top:1px solid var(--ol);margin-bottom:5px}
   </div>
 
   <div class="acc">
+    <div class="acc-hd" onclick="toggleAcc('equip')">
+      <img class="acc-ic" src="../icons/sword.png"><span class="acc-tl">⚔️ Equipamiento</span>
+      <span class="acc-ch" id="ch-equip">▼</span>
+    </div>
+    <div class="acc-bd" id="bd-equip">
+      <div id="equip-content"></div>
+    </div>
+  </div>
+  <div class="acc">
     <div class="acc-hd" onclick="toggleAcc('inv')">
-      <img class="acc-ic" src="../icons/potion.png"><span class="acc-tl" data-i18n="equipTitle">Equipment & Inventory</span>
+      <img class="acc-ic" src="../icons/potion.png"><span class="acc-tl" data-i18n="equipTitle">📦 Inventario</span>
       <span class="acc-ch" id="ch-inv">▼</span>
     </div>
     <div class="acc-bd" id="bd-inv">
@@ -1071,6 +1108,35 @@ const FEATS_DR=[
    desc:'Choose an element (Fire, Lightning, Thunder, Acid, Cold). Ignore resistance to that element. 1s on damage dice count as 2s.'},
 ];
 
+// ══ ARMOR & EQUIPMENT ══
+// Note: Druids cannot wear metal armor (class rule) — metal:true items show a warning
+const ARMOR_TABLE={
+  none:  {n:'Sin armadura', icon:'🚫', ac:10, dex:'full', cat:'',       str:0,  stealth:false, metal:false},
+  leath: {n:'Cuero',        icon:'🥋', ac:11, dex:'full', cat:'Ligera',  str:0,  stealth:false, metal:false},
+  stud:  {n:'C.Tachonado',  icon:'⚙️', ac:12, dex:'full', cat:'Ligera',  str:0,  stealth:false, metal:false},
+  hide:  {n:'Pieles',       icon:'🦌', ac:12, dex:'max2', cat:'Media',   str:0,  stealth:false, metal:false},
+  cshirt:{n:'Camisote M.',  icon:'⛓️', ac:13, dex:'max2', cat:'Media',   str:0,  stealth:false, metal:true },
+  scale: {n:'Escamas',      icon:'🐉', ac:14, dex:'max2', cat:'Media',   str:0,  stealth:true,  metal:false},
+  breast:{n:'Peto',         icon:'🛡️', ac:14, dex:'max2', cat:'Media',   str:0,  stealth:false, metal:true },
+  hplate:{n:'Semi-Armad.',  icon:'⚔️', ac:15, dex:'max2', cat:'Media',   str:0,  stealth:true,  metal:true },
+  chain: {n:'Cota de Malla',icon:'🔗', ac:16, dex:'none', cat:'Pesada',  str:13, stealth:true,  metal:true },
+  splint:{n:'Tablillas',    icon:'🗡️', ac:17, dex:'none', cat:'Pesada',  str:15, stealth:true,  metal:true },
+  plate: {n:'Placas',       icon:'🏰', ac:18, dex:'none', cat:'Pesada',  str:15, stealth:true,  metal:true },
+};
+const EQUIP_ITEMS={
+  shield:  {n:'Escudo',               icon:'🛡️', type:'shield',  acFlat:2,            desc:'+2 CA. Requiere mano libre.',              barovia:false},
+  sgshld:  {n:'Escudo Guardaconjuro', icon:'✨', type:'shield',  acFlat:2,            desc:'+2 CA + Ventaja en TS vs conjuros. Barovia.',barovia:true },
+  cloak_p: {n:'Capa de Protección',   icon:'🌟', type:'magic',   acFlat:1,saveBonus:1, desc:'+1 CA y TS. Sintonización.',               barovia:false},
+  ring_p:  {n:'Anillo de Protección', icon:'💍', type:'magic',   acFlat:1,saveBonus:1, desc:'+1 CA y TS. Sintonización.',               barovia:false},
+  bracers: {n:'Brazales de Defensa',  icon:'🤜', type:'magic',   acFlat:2,noArmor:true,noShield:true, desc:'+2 CA sin armadura ni escudo. Sintonización.', barovia:false},
+  devout1: {n:'Amuleto Devoción +1',  icon:'🔮', type:'magic',   spellBonus:1,         desc:'+1 ataque/CD de conjuros. Sintonización.', barovia:false},
+  devout2: {n:'Amuleto Devoción +2',  icon:'🔮', type:'magic',   spellBonus:2,         desc:'+2 ataque/CD de conjuros. Sintonización.', barovia:false},
+  devout3: {n:'Amuleto Devoción +3',  icon:'🔮', type:'magic',   spellBonus:3,         desc:'+3 ataque/CD de conjuros. Sintonización.', barovia:false},
+  holyravn:{n:'Símbolo Señor Cuervo', icon:'🐦', type:'barovia', spellBonus:2,         desc:'+2 ataque/CD. Luz solar (acción). Barovia.',barovia:true },
+  iconrav: {n:'Icono de Ravenloft',   icon:'🏰', type:'barovia', saveBonus:1,          desc:'No-muertos: Desventaja en TS vs tus conjuros.',barovia:true},
+  periapt: {n:'Colgante de Salud',    icon:'🌿', type:'barovia', conOverride:19,       desc:'CON = 19. Inmune a enfermedades. Sintonización.',barovia:true},
+};
+
 // ══════════════════════════════════════════════
 //  LANG / i18n
 // ══════════════════════════════════════════════
@@ -1483,6 +1549,7 @@ let dark=false;
 let lang='en';
 let builds=[];
 let inventory=[];
+let equippedArmor='none',equippedItems=new Set(),eqOpen=new Set(['armor']);
 let profSaves=new Set(['int','wis']);
 let profSkills=new Set(['animal-handling','nature','perception','survival']);
 let curTab=0;
@@ -1535,7 +1602,7 @@ function maxSpellLevel(){
 function getState(){
   return{charClass:'druid',lv,stats,curHp,maxHpMan,slots,wsUses,wsActive,wsCurTHP,wsBeastCurHp,
     prepared:[...prepared],concSpell,primalOrder,eleFury,druidFeats:[...druidFeats],
-    expanded:[...expanded],dark,lang,inventory,
+    expanded:[...expanded],dark,lang,inventory,equippedArmor,equippedItems:[...equippedItems],
     profSaves:[...profSaves],profSkills:[...profSkills],
     name:g('c-name').value,species:g('c-species').value,
     bg:g('c-bg').value,align:g('c-align').value,age:g('c-age').value,
@@ -1558,6 +1625,7 @@ function setState(s){
   dark=s.dark||false;
   lang=s.lang||'en';
   inventory=s.inventory||[];
+  equippedArmor=s.equippedArmor||'none';equippedItems=new Set(s.equippedItems||[]);
   profSaves=new Set(s.profSaves||['int','wis']);
   profSkills=new Set(s.profSkills||['animal-handling','nature','perception','survival']);
   if(s.name) g('c-name').value=s.name;
@@ -1580,6 +1648,22 @@ function load(){
 }
 
 // ── RECALCULATE ──
+// ── Equipment calculations ──
+function calcAC(){
+  const arm=ARMOR_TABLE[equippedArmor]||ARMOR_TABLE.none;
+  const dm=mod(stats.dex);
+  let ac=arm.dex==='full'?arm.ac+dm:arm.dex==='max2'?arm.ac+Math.min(dm,2):arm.ac;
+  equippedItems.forEach(id=>{
+    const it=EQUIP_ITEMS[id];if(!it||!it.acFlat)return;
+    if(it.noArmor&&equippedArmor!=='none')return;
+    if(it.noShield&&(equippedItems.has('shield')||equippedItems.has('sgshld')))return;
+    ac+=it.acFlat;
+  });
+  return ac;
+}
+function calcSpellBonus(){let b=0;equippedItems.forEach(id=>{const it=EQUIP_ITEMS[id];if(it?.spellBonus)b+=it.spellBonus;});return b;}
+function calcSaveBonus(){let b=0;equippedItems.forEach(id=>{const it=EQUIP_ITEMS[id];if(it?.saveBonus)b+=it.saveBonus;});return b;}
+
 function recalc(){
   stats={
     str:+g('s-str').value||10, dex:+g('s-dex').value||10,
@@ -1587,7 +1671,8 @@ function recalc(){
     wis:+g('s-wis').value||17, cha:+g('s-cha').value||10
   };
   const effWIS=Math.min(20,stats.wis+featBonusWIS());
-  const effCON=Math.min(20,stats.con+featBonusCON());
+  const rawCON=Math.min(20,stats.con+featBonusCON());
+  const effCON=equippedItems.has('periapt')?Math.max(rawCON,19):rawCON;
   const wisBoost=featBonusWIS()>0?` <span class="feat-boost-tag">⚡+${featBonusWIS()}</span>`:'';
   const conBoost=featBonusCON()>0?` <span class="feat-boost-tag">⚡+${featBonusCON()}</span>`:'';
   const hpBoost=(druidFeats.has('tough')||featBonusCON()>0)?` <span class="feat-boost-tag">⚡feat</span>`:'';
@@ -1600,11 +1685,14 @@ function recalc(){
   const p=prof(lv), mhp=maxHp();
   g('d-prof').textContent=fmod(p);
   g('d-prof-sub').textContent=lv<5?T('profLv1'):lv<9?T('profLv5'):lv<13?T('profLv9'):lv<17?T('profLv13'):T('profLv17');
-  g('d-dc').innerHTML=(8+p+mod(effWIS))+wisBoost;
-  g('d-atk').innerHTML=fmod(p+mod(effWIS))+wisBoost;
-  const ac=10+mod(stats.dex);
+  const sb=calcSpellBonus();
+  g('d-dc').innerHTML=(8+p+mod(effWIS)+sb)+wisBoost;
+  g('d-atk').innerHTML=fmod(p+mod(effWIS)+sb)+wisBoost;
+  const ac=calcAC();
   g('d-ac').textContent=ac;
-  g('d-ac-sub').textContent=T('acSub')+(primalOrder==='warden'?' ('+T('acSubWarden')+')':' (Leather/Unarmored)');
+  const _arm=ARMOR_TABLE[equippedArmor]||ARMOR_TABLE.none;
+  const _hasShield=equippedItems.has('shield')||equippedItems.has('sgshld');
+  g('d-ac-sub').textContent=_arm.n+(_hasShield?' + 🛡️':'');
   const prepMax=PREP_TABLE[lv]||lv;
   g('d-prep').textContent=prepMax;
   g('d-prep-sub').textContent=T('prepSub')+lv;
@@ -1721,13 +1809,14 @@ function renderSaves(){
   const el=g('saves-list'); el.innerHTML='';
   const p=prof(lv);
   const snames=(LANG[lang]||LANG.en).saves||LANG.en.saves;
+  const svb=calcSaveBonus();
   SAVES.forEach(k=>{
-    const pro=profSaves.has(k), v=mod(stats[k])+(pro?p:0);
+    const pro=profSaves.has(k), v=mod(stats[k])+(pro?p:0)+svb;
     el.innerHTML+=`<div class="sv-row">
       <button class="sv-chk${pro?' act':''}" onclick="toggleSave('${k}')">${pro?'●':''}</button>
       <span class="sv-ab">${k.toUpperCase().slice(0,3)}</span>
       <span class="sv-nm">${snames[k]||k}</span>
-      <span class="sv-val${pro?' pro':''}">${fmod(v)}</span>
+      <span class="sv-val${pro?' pro':''}">${fmod(v)}${svb?'<span style="font-size:9px;color:var(--td)"> ✦</span>':''}</span>
     </div>`;
   });
 }
@@ -1767,6 +1856,81 @@ function renderInventory(){
 }
 function addInvItem(){inventory.push({n:'',q:1});renderInventory();save();}
 function delInv(i){inventory.splice(i,1);renderInventory();save();}
+
+// ── Equipment ──
+function _chipHtml(id,hasShield){
+  const it=EQUIP_ITEMS[id];if(!it)return'';
+  const on=equippedItems.has(id);
+  const dim=(it.noArmor&&equippedArmor!=='none')||(it.noShield&&hasShield);
+  const eff=it.acFlat?`+${it.acFlat} CA`:it.spellBonus?`+${it.spellBonus} conjuros`:it.saveBonus?`+${it.saveBonus} TS`:it.conOverride?`CON→${it.conOverride}`:'';
+  let cls='eq-chip';
+  if(on)cls+=it.barovia?' barovia on':eff.includes('conjuros')?' on-green':' on';
+  else if(it.barovia)cls+=' barovia';
+  if(dim)cls+=' eq-dim';
+  return`<div class="${cls}" onclick="toggleEquip('${id}')" title="${it.desc}">${it.icon} ${it.n}${eff?`<span class="ch-eff">${eff}</span>`:''}</div>`;
+}
+function _grpHtml(key,lbl,ids,hasShield){
+  const open=eqOpen.has(key);
+  const activeSummary=ids.filter(id=>equippedItems.has(id)).map(id=>EQUIP_ITEMS[id]?.icon+''+EQUIP_ITEMS[id]?.n).join(' · ')||'—';
+  return`<div class="eq-grp">
+    <div class="eq-grp-hd" onclick="toggleEqGroup('${key}')">
+      <span class="eq-grp-lbl">${lbl}</span>
+      <span style="display:flex;align-items:center;gap:4px">
+        <span class="eq-grp-sum">${activeSummary}</span>
+        <span class="eq-grp-ch${open?' open':''}">▼</span>
+      </span>
+    </div>
+    <div class="eq-grp-bd${open?' open':''}">
+      <div class="equip-chips">${ids.map(id=>_chipHtml(id,hasShield)).join('')}</div>
+    </div>
+  </div>`;
+}
+function renderEquipment(){
+  const el=g('equip-content');if(!el)return;
+  const dm=mod(stats.dex);
+  const hasShield=equippedItems.has('shield')||equippedItems.has('sgshld');
+  const arm=ARMOR_TABLE[equippedArmor]||ARMOR_TABLE.none;
+  const armorOpen=eqOpen.has('armor');
+  const armorAC=arm.dex==='full'?arm.ac+dm:arm.dex==='max2'?arm.ac+Math.min(dm,2):arm.ac;
+  let h=`<div class="eq-grp">
+    <div class="eq-grp-hd" onclick="toggleEqGroup('armor')">
+      <span class="eq-grp-lbl">⚔️ Armadura</span>
+      <span style="display:flex;align-items:center;gap:4px">
+        <span class="eq-grp-sum">${arm.icon} ${arm.n} · CA ${armorAC}</span>
+        <span class="eq-grp-ch${armorOpen?' open':''}">▼</span>
+      </span>
+    </div>
+    <div class="eq-grp-bd${armorOpen?' open':''}">
+      <div class="armor-grid">`;
+  for(const [id,a] of Object.entries(ARMOR_TABLE)){
+    const sel=equippedArmor===id;
+    const acVal=a.dex==='full'?a.ac+dm:a.dex==='max2'?a.ac+Math.min(dm,2):a.ac;
+    h+=`<div class="armor-card${sel?' sel':''}" onclick="setArmor('${id}')">
+      <div class="ac-ic">${a.icon}</div><div class="ac-nm">${a.n}</div>
+      <div class="ac-val">CA ${acVal}</div><div class="ac-cat">${a.cat||'—'}</div>
+      ${a.stealth?'<div class="ac-warn">⚠️ Sigilo</div>':''}
+      ${a.str?`<div class="ac-warn">FUE≥${a.str}</div>`:''}
+      ${a.metal?'<div class="ac-warn">🚫 Metal</div>':''}
+    </div>`;
+  }
+  h+='</div></div></div>';
+  h+=_grpHtml('shields','🛡️ Escudos',         ['shield','sgshld'],           hasShield);
+  h+=_grpHtml('prot',   '✨ Protección',        ['cloak_p','ring_p','bracers'],hasShield);
+  h+=_grpHtml('spell',  '🔮 Poder de conjuro',  ['devout1','devout2','devout3','holyravn'],hasShield);
+  h+=_grpHtml('barovia','🏰 Barovia',           ['iconrav','periapt'],         hasShield);
+  el.innerHTML=h;
+}
+function toggleEqGroup(key){
+  if(eqOpen.has(key))eqOpen.delete(key);else eqOpen.add(key);renderEquipment();
+}
+function setArmor(id){equippedArmor=id;renderEquipment();recalc();save();}
+function toggleEquip(id){
+  const it=EQUIP_ITEMS[id];if(!it)return;
+  if(['shield','sgshld'].includes(id))['shield','sgshld'].forEach(s=>{if(s!==id)equippedItems.delete(s);});
+  if(['devout1','devout2','devout3','holyravn'].includes(id))['devout1','devout2','devout3','holyravn'].forEach(d=>{if(d!==id)equippedItems.delete(d);});
+  if(equippedItems.has(id))equippedItems.delete(id);else equippedItems.add(id);
+  renderEquipment();recalc();renderSaves();save();
+}
 
 // ── SLOTS ──
 function renderSlotsChar(){
@@ -2498,6 +2662,7 @@ window.onload=function(){
   ['en','ca','es'].forEach(x=>g('lb-'+x).classList.toggle('active',x===lang));
   applyI18n();
   recalc();
+  renderEquipment();
   renderInventory();
   renderSlotsChar();
   renderBuilds();

@@ -239,6 +239,29 @@ body.dark .bg{background:#333;color:#aaa}
 .empty-st .ei{font-size:40px;margin-bottom:10px}
 ::-webkit-scrollbar{width:4px}
 ::-webkit-scrollbar-thumb{background:var(--ol);border-radius:2px}
+/* ── EQUIPMENT ── */
+.eq-sec-lbl{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--os);padding:10px 0 7px;display:flex;align-items:center;gap:6px}
+.eq-sec-lbl::after{content:'';flex:1;height:1px;background:var(--ol)}
+.armor-grid{display:flex;gap:7px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.armor-grid::-webkit-scrollbar{display:none}
+.armor-card{flex-shrink:0;background:var(--sv);border:1.5px solid var(--ol);border-radius:10px;padding:9px 10px;cursor:pointer;min-width:82px;text-align:center;transition:all .15s;user-select:none}
+.armor-card.sel{background:var(--pl);border-color:var(--p)}
+.armor-card .ac-ic{font-size:20px;margin-bottom:3px}
+.armor-card .ac-nm{font-size:10px;font-weight:700;color:var(--tx);margin-bottom:2px;line-height:1.2}
+.armor-card .ac-val{font-size:14px;font-weight:800;color:var(--pd)}
+.armor-card.sel .ac-val{color:var(--pd)}
+.armor-card .ac-cat{font-size:9px;color:var(--os);margin-top:1px}
+.armor-card .ac-warn{font-size:9px;color:#ff9070;margin-top:1px}
+.equip-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:4px}
+.eq-chip{display:flex;align-items:center;gap:5px;background:var(--sv);border:1.5px solid var(--ol);border-radius:20px;padding:6px 11px;cursor:pointer;font-size:12px;font-weight:600;transition:all .15s;user-select:none}
+.eq-chip.on{background:var(--pl);border-color:var(--p);color:var(--pd)}
+.eq-chip.on-green{background:var(--tl);border-color:var(--t);color:var(--td)}
+.eq-chip.barovia{border-style:dashed}
+.eq-chip.barovia.on{background:var(--al);border-color:var(--a);color:var(--ad);border-style:dashed}
+.eq-chip .ch-eff{font-size:10px;font-weight:400;color:var(--os);margin-left:2px}
+.eq-chip.on .ch-eff,.eq-chip.on-green .ch-eff,.eq-chip.barovia.on .ch-eff{color:inherit;opacity:.75}
+.eq-chip.eq-dim{opacity:.4;cursor:not-allowed}
+.eq-divider{height:1px;background:var(--ol);margin:14px 0 10px}
 .qr-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(3px)}
 .qr-box{background:var(--sf);border-radius:16px;padding:24px 20px;width:100%;max-width:340px;box-shadow:0 8px 40px rgba(0,0,0,.3);text-align:center}
 .qr-title{font-size:16px;font-weight:700;color:var(--tx);margin-bottom:4px}
@@ -403,6 +426,9 @@ body.dark .bg{background:#333;color:#aaa}
       <span class="acc-ch" id="ch-inv">▼</span>
     </div>
     <div class="acc-bd" id="bd-inv">
+      <div id="equip-content"></div>
+      <div class="eq-divider"></div>
+      <div class="eq-sec-lbl">📦 Inventario</div>
       <div id="inv-list"></div>
       <button class="inv-add" onclick="addInvItem()" data-i18n="btnAddItem">+ Add Item</button>
     </div>
@@ -653,6 +679,38 @@ const FEATS_GC=[
  {id:'observant',n:'Observant',icon:'🔍',tag:'+5 Passive Perc',eff:'obs',desc:'+1 WIS or INT. +5 passive Perception and Investigation. Can lip-read.'},
 ];
 
+// ══ ARMOR & EQUIPMENT ══
+const ARMOR_TABLE={
+  none:  {n:'Sin armadura', icon:'🚫', ac:10, dex:'full', cat:'',       str:0,  stealth:false},
+  leath: {n:'Cuero',        icon:'🥋', ac:11, dex:'full', cat:'Ligera',  str:0,  stealth:false},
+  stud:  {n:'C.Tachonado',  icon:'⚙️', ac:12, dex:'full', cat:'Ligera',  str:0,  stealth:false},
+  hide:  {n:'Pieles',       icon:'🦌', ac:12, dex:'max2', cat:'Media',   str:0,  stealth:false},
+  cshirt:{n:'Camisote M.',  icon:'⛓️', ac:13, dex:'max2', cat:'Media',   str:0,  stealth:false},
+  scale: {n:'Escamas',      icon:'🐉', ac:14, dex:'max2', cat:'Media',   str:0,  stealth:true },
+  breast:{n:'Peto',         icon:'🛡️', ac:14, dex:'max2', cat:'Media',   str:0,  stealth:false},
+  hplate:{n:'Semi-Armad.',  icon:'⚔️', ac:15, dex:'max2', cat:'Media',   str:0,  stealth:true },
+  chain: {n:'Cota de Malla',icon:'🔗', ac:16, dex:'none', cat:'Pesada',  str:13, stealth:true },
+  splint:{n:'Tablillas',    icon:'🗡️', ac:17, dex:'none', cat:'Pesada',  str:15, stealth:true },
+  plate: {n:'Placas',       icon:'🏰', ac:18, dex:'none', cat:'Pesada',  str:15, stealth:true },
+};
+const EQUIP_ITEMS={
+  // Shields
+  shield:  {n:'Escudo',               icon:'🛡️', type:'shield',  acFlat:2,            desc:'+2 CA. Requiere mano libre.',              barovia:false},
+  sgshld:  {n:'Escudo Guardaconjuro', icon:'✨', type:'shield',  acFlat:2,            desc:'+2 CA + Ventaja en TS vs conjuros. Barovia.',barovia:true },
+  // Protection
+  cloak_p: {n:'Capa de Protección',   icon:'🌟', type:'magic',   acFlat:1,saveBonus:1, desc:'+1 CA y TS. Sintonización.',               barovia:false},
+  ring_p:  {n:'Anillo de Protección', icon:'💍', type:'magic',   acFlat:1,saveBonus:1, desc:'+1 CA y TS. Sintonización.',               barovia:false},
+  bracers: {n:'Brazales de Defensa',  icon:'🤜', type:'magic',   acFlat:2,noArmor:true,noShield:true, desc:'+2 CA sin armadura ni escudo. Sintonización.', barovia:false},
+  // Spell power
+  devout1: {n:'Amuleto Devoción +1',  icon:'🔮', type:'magic',   spellBonus:1,         desc:'+1 ataque/CD de conjuros. Sintonización.', barovia:false},
+  devout2: {n:'Amuleto Devoción +2',  icon:'🔮', type:'magic',   spellBonus:2,         desc:'+2 ataque/CD de conjuros. Sintonización.', barovia:false},
+  devout3: {n:'Amuleto Devoción +3',  icon:'🔮', type:'magic',   spellBonus:3,         desc:'+3 ataque/CD de conjuros. Sintonización.', barovia:false},
+  // Barovia / Curse of Strahd
+  holyravn:{n:'Símbolo Señor Cuervo', icon:'🐦', type:'barovia', spellBonus:2,         desc:'+2 ataque/CD. Luz solar (acción). Barovia.',barovia:true },
+  iconrav: {n:'Icono de Ravenloft',   icon:'🏰', type:'barovia', saveBonus:1,          desc:'No-muertos: Desventaja en TS vs tus conjuros.',barovia:true},
+  periapt: {n:'Colgante de Salud',    icon:'🌿', type:'barovia', conOverride:19,       desc:'CON = 19. Inmune a enfermedades. Sintonización.',barovia:true},
+};
+
 // ══ LANG ══
 const LANG={
 en:{
@@ -801,12 +859,13 @@ let prepared=new Set(),myCantrips=new Set();
 let divineOrder='protector',blessedStrikes='divine';
 let gcFeats=new Set();
 let inventory=[],profSaves=new Set(['wis','cha']),profSkills=new Set(['history','insight','medicine','religion','persuasion']);
+let equippedArmor='none',equippedItems=new Set();
 let builds=[],spTab=0,expanded=new Set();
 
 function featWIS(){return gcFeats.has('asi-wis')?2:0;}
 function featCON(){return (gcFeats.has('resilient-con')?1:0)+(gcFeats.has('asi-con')?2:0);}
 function effWIS(){return Math.min(30,stats.wis+featWIS());}
-function effCON(){return Math.min(30,stats.con+featCON());}
+function effCON(){const b=Math.min(30,stats.con+featCON());return equippedItems.has('periapt')?Math.max(b,19):b;}
 function cdMax(){return lv>=18?4:lv>=6?3:lv>=2?2:0;}
 function eyesMax(){return Math.max(1,mod(effWIS()));}
 function sentinelMax(){return Math.max(1,mod(effWIS()));}
@@ -825,11 +884,28 @@ function getDomainIds(){
 function isDomain(id){return Object.values(DOMAIN_IDS).flat().includes(id);}
 function getSpell(id){return CLERIC_SPELLS.find(s=>s.id===id);}
 
+// ── Equipment calculations ──
+function calcAC(){
+  const arm=ARMOR_TABLE[equippedArmor]||ARMOR_TABLE.none;
+  const dm=mod(stats.dex);
+  let ac=arm.dex==='full'?arm.ac+dm:arm.dex==='max2'?arm.ac+Math.min(dm,2):arm.ac;
+  equippedItems.forEach(id=>{
+    const it=EQUIP_ITEMS[id];if(!it||!it.acFlat)return;
+    if(it.noArmor&&equippedArmor!=='none')return;
+    if(it.noShield&&(equippedItems.has('shield')||equippedItems.has('sgshld')))return;
+    ac+=it.acFlat;
+  });
+  return ac;
+}
+function calcSpellBonus(){let b=0;equippedItems.forEach(id=>{const it=EQUIP_ITEMS[id];if(it?.spellBonus)b+=it.spellBonus;});return b;}
+function calcSaveBonus(){let b=0;equippedItems.forEach(id=>{const it=EQUIP_ITEMS[id];if(it?.saveBonus)b+=it.saveBonus;});return b;}
+
 // ── Save/Load ──
 function getState(){
   return{charClass:'cleric',lv,stats,curHp,maxHpMan,tmpHp,slots,cdUsed,eyesUsed,sentinelUsed,divIntUsed,luckyUsed,
     concSpell,prepared:[...prepared],myCantrips:[...myCantrips],divineOrder,blessedStrikes,
-    gcFeats:[...gcFeats],inventory,profSaves:[...profSaves],profSkills:[...profSkills],lang,dark,
+    gcFeats:[...gcFeats],inventory,equippedArmor,equippedItems:[...equippedItems],
+    profSaves:[...profSaves],profSkills:[...profSkills],lang,dark,
     name:g('c-name').value,species:g('c-species').value,age:g('c-age').value,
     align:g('c-align').value,bg:g('c-bg').value,deity:g('c-deity').value,
     backstory:g('c-backstory').value,notes:g('c-notes').value};
@@ -844,6 +920,7 @@ function setState(s){
   prepared=new Set(s.prepared||[]);myCantrips=new Set(s.myCantrips||[]);
   divineOrder=s.divineOrder||'protector';blessedStrikes=s.blessedStrikes||'divine';
   gcFeats=new Set(s.gcFeats||[]);inventory=s.inventory||[];
+  equippedArmor=s.equippedArmor||'none';equippedItems=new Set(s.equippedItems||[]);
   profSaves=new Set(s.profSaves||['wis','cha']);
   profSkills=new Set(s.profSkills||['history','insight','medicine','religion','persuasion']);
   lang=s.lang||'en';dark=s.dark||false;
@@ -896,13 +973,16 @@ function recalc(){
   g('d-hp').value=maxHpMan>0?maxHpMan:mhp;
   g('d-hp-auto').textContent='auto: '+mhp;
   if(maxHpMan<0)g('d-hp').value=mhp;
-  const ac=10+mod(stats.dex);
+  const ac=calcAC();
   g('d-ac').textContent=ac;
-  g('d-ac-sub').innerHTML='10 + DEX'+(divineOrder==='protector'?' (Heavy=manual)':'');
+  const _arm=ARMOR_TABLE[equippedArmor]||ARMOR_TABLE.none;
+  const _hasShield=equippedItems.has('shield')||equippedItems.has('sgshld');
+  g('d-ac-sub').innerHTML=_arm.n+(_hasShield?' + 🛡️':'');
   g('d-prof').textContent=fmod(p);
   g('d-prof-sub').textContent=lv<5?T('profLv1'):lv<9?T('profLv5'):lv<13?T('profLv9'):lv<17?T('profLv13'):T('profLv17');
-  g('d-dc').innerHTML=(8+p+mod(ew))+wB;
-  g('d-atk').innerHTML=fmod(p+mod(ew))+wB;
+  const sb=calcSpellBonus();
+  g('d-dc').innerHTML=(8+p+mod(ew)+sb)+wB;
+  g('d-atk').innerHTML=fmod(p+mod(ew)+sb)+wB;
   g('d-prep').innerHTML=prepMax()+wB;
   g('drv-lbl').textContent='Derived Stats — Level '+lv;
   curHp=clamp(curHp,0,maxHp());
@@ -947,15 +1027,15 @@ function handleImg(inp){
 // ── Saves & Skills ──
 function renderSaves(){
   const el=g('saves-list');if(!el)return;
-  const p=prof(lv),names=(LANG[lang]||LANG.en).saves;
+  const p=prof(lv),names=(LANG[lang]||LANG.en).saves,svb=calcSaveBonus();
   el.innerHTML=SAVES_LIST.map(k=>{
     const eff=k==='wis'?effWIS():k==='con'?effCON():stats[k];
-    const pro=profSaves.has(k),val=mod(eff)+(pro?p:0);
+    const pro=profSaves.has(k),val=mod(eff)+(pro?p:0)+svb;
     return `<div class="sv-row">
       <button class="sv-chk${pro?' act':''}" onclick="toggleSave('${k}')">${pro?'●':''}</button>
       <span class="sv-ab">${k.toUpperCase().slice(0,3)}</span>
       <span class="sv-nm">${names[k]||k}</span>
-      <span class="sv-val${pro?' pro':''}">${fmod(val)}</span>
+      <span class="sv-val${pro?' pro':''}">${fmod(val)}${svb?'<span style="font-size:9px;color:var(--td)"> ✦</span>':''}</span>
     </div>`;
   }).join('');
 }
@@ -988,6 +1068,65 @@ function renderInventory(){
 }
 function addInvItem(){inventory.push({n:'',q:1});renderInventory();save();}
 function delInv(i){inventory.splice(i,1);renderInventory();save();}
+
+// ── Equipment ──
+function renderEquipment(){
+  const el=g('equip-content');if(!el)return;
+  const dm=mod(stats.dex);
+  const hasShield=equippedItems.has('shield')||equippedItems.has('sgshld');
+  let h='<div class="eq-sec-lbl">⚔️ Armadura</div><div class="armor-grid">';
+  for(const [id,a] of Object.entries(ARMOR_TABLE)){
+    const sel=equippedArmor===id;
+    const acVal=a.dex==='full'?a.ac+dm:a.dex==='max2'?a.ac+Math.min(dm,2):a.ac;
+    h+=`<div class="armor-card${sel?' sel':''}" onclick="setArmor('${id}')">
+      <div class="ac-ic">${a.icon}</div>
+      <div class="ac-nm">${a.n}</div>
+      <div class="ac-val">CA ${acVal}</div>
+      <div class="ac-cat">${a.cat||'—'}</div>
+      ${a.stealth?'<div class="ac-warn">⚠️ Sigilo</div>':''}
+      ${a.str?`<div class="ac-warn">FUE≥${a.str}</div>`:''}
+    </div>`;
+  }
+  h+='</div>';
+  const GROUPS=[
+    {lbl:'🛡️ Escudos',         ids:['shield','sgshld']},
+    {lbl:'✨ Protección',       ids:['cloak_p','ring_p','bracers']},
+    {lbl:'🔮 Poder de conjuro', ids:['devout1','devout2','devout3']},
+    {lbl:'🏰 Barovia',          ids:['holyravn','iconrav','periapt']},
+  ];
+  for(const grp of GROUPS){
+    h+=`<div class="eq-sec-lbl" style="margin-top:10px">${grp.lbl}</div><div class="equip-chips">`;
+    for(const id of grp.ids){
+      const it=EQUIP_ITEMS[id];if(!it)continue;
+      const on=equippedItems.has(id);
+      const dim=(it.noArmor&&equippedArmor!=='none')||(it.noShield&&hasShield);
+      const eff=it.acFlat?`+${it.acFlat} CA`:it.spellBonus?`+${it.spellBonus} conjuros`:it.saveBonus?`+${it.saveBonus} TS`:it.conOverride?`CON→${it.conOverride}`:'';
+      let cls='eq-chip';
+      if(on)cls+=it.barovia?' barovia on':eff.includes('conjuros')?' on-green':' on';
+      else if(it.barovia)cls+=' barovia';
+      if(dim)cls+=' eq-dim';
+      h+=`<div class="${cls}" onclick="toggleEquip('${id}')" title="${it.desc}">
+        ${it.icon} ${it.n}${eff?`<span class="ch-eff">${eff}</span>`:''}
+      </div>`;
+    }
+    h+='</div>';
+  }
+  el.innerHTML=h;
+}
+function setArmor(id){
+  equippedArmor=id;
+  renderEquipment();recalc();save();
+}
+function toggleEquip(id){
+  const it=EQUIP_ITEMS[id];if(!it)return;
+  // Mutual exclusions: only one shield, only one spell-bonus item
+  if(['shield','sgshld'].includes(id))['shield','sgshld'].forEach(s=>{if(s!==id)equippedItems.delete(s);});
+  if(['devout1','devout2','devout3'].includes(id))['devout1','devout2','devout3','holyravn'].forEach(d=>{if(d!==id)equippedItems.delete(d);});
+  if(id==='holyravn')['devout1','devout2','devout3'].forEach(d=>equippedItems.delete(d));
+  // Toggle
+  if(equippedItems.has(id))equippedItems.delete(id);else equippedItems.add(id);
+  renderEquipment();recalc();renderSaves();save();
+}
 
 // ── Accordion ──
 function toggleAcc(id){
@@ -1602,6 +1741,7 @@ window.addEventListener('load',()=>{
   ['en','ca','es'].forEach(x=>g('lb-'+x).classList.toggle('active',x===lang));
   applyI18n();
   recalc();
+  renderEquipment();
   renderInventory();
   renderTracker();
   renderMySpells();

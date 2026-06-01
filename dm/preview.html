@@ -568,8 +568,8 @@ function updatePartySub(){
 }
 
 function buildCharScreen(s, idx){
-  // Robust class detection — handles old snapshots without charClass
-  const cls = s.charClass || detectClass(s) || 'unknown';
+  // Robust class detection — handles old snapshots without charClass or with 'unknown'
+  const cls = (s.charClass && s.charClass !== 'unknown') ? s.charClass : (detectClass(s) || 'unknown');
   const color = CLASS_COLOR[cls] || '#8888AA';
   const icon = CLASS_ICON[cls] || '🎲';
   const name = s.name || s.c_name || CLASS_LABEL[cls] || 'Character';

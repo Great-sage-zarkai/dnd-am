@@ -196,6 +196,9 @@ foreach ($n in $npcs) {
   $o.pc = $false
   $npcOut[$id] = $o
 }
+$npcOut['matones-del-rojo'] = [ordered]@{ id = 'matones-del-rojo'; name = 'Matones del Rojo'; pc = $false; race = 'Humanos (varios)'
+  role = 'Matones de la Sal Negra (grupo genérico)'; location = 'Almacén Sur'; faction = 'La Sal Negra'
+  look = 'Pañuelo rojo como distintivo. Cambian de turno al anochecer.'; status = 'vivos'; known = 'sí (de oídas)' }
 $img = @{ 'gungar' = 'img/npcs/gungar.png'; 'maestro-kharzun' = 'img/npcs/kharzun.png'; 'skirx' = 'img/skrix.png'; 'solo' = 'img/solo en su taberna.png' }
 foreach ($k in $img.Keys) { if ($npcOut[$k]) { $npcOut[$k].image = $img[$k] } else { Write-Warning "Imagen sin NPC: $k" } }
 

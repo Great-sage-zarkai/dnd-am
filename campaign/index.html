@@ -209,6 +209,7 @@ textarea { width: 100%; resize: vertical; min-height: 60px; font-family: inherit
 <div class="overlay lightbox" id="lightbox"><img alt=""></div>
 
 <script src="data/seed.js"></script>
+<script src="data/images.js" onerror="window.IMAGES = {}"></script>
 <script>
 const STORE = 'othranvel.campaign.v1';
 const PREFS = 'othranvel.prefs.v1';
@@ -231,6 +232,8 @@ function savePrefs() { prefs.open = [...openNodes]; try { localStorage.setItem(P
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const src = p => p && !p.startsWith('data:') ? encodeURI(p) : p;
+// Imagen de la ficha, o la detectada en img/npcs|lugares/<id>.* (data/images.js)
+const imgOf = (o, kind) => o.image || (window.IMAGES?.[kind === 'loc' ? 'locations' : 'npcs'] || {})[o.id];
 const isTbd = v => !v || !String(v).trim() || String(v).trim() === TBD;
 const plainName = n => n.replace(/\s*«[^»]*»/g, '').trim();
 const initials = n => plainName(n).split(/\s+/).filter(w => /^\p{Lu}/u.test(w)).slice(0, 2).map(w => w[0]).join('') || n[0];
@@ -370,7 +373,7 @@ function treeHtml(id, depth) {
   if (open) h += kids.map(k => treeHtml(k.id, depth + 1)).join('');
   return h;
 }
-function avatar(n, cls = '') { return n.image ? `<img class="av ${n.pc ? 'pc' : ''} ${cls}" src="${src(n.image)}" alt="">` : `<span class="av ${n.pc ? 'pc' : ''} ${cls}">${esc(initials(n.name))}</span>`; }
+function avatar(n, cls = '') { const im = imgOf(n, 'npc'); return im ? `<img class="av ${n.pc ? 'pc' : ''} ${cls}" src="${src(im)}" alt="">` : `<span class="av ${n.pc ? 'pc' : ''} ${cls}">${esc(initials(n.name))}</span>`; }
 function isDead(n) { return /muert/i.test(n.status || ''); }
 function npcRow(n) {
   const sel = route.kind === 'npc' && route.id === n.id;
@@ -558,7 +561,7 @@ function locCard(l) {
   const chip = n => { const at = npcLocation(n); const sub = at && at !== l.id ? ` <small>· ${esc(L(at).name)}</small>` : ''; return `<span class="chip" data-npc="${n.id}">${avatar(n)}${esc(plainName(n.name))}${isDead(n) ? ' †' : ''}${sub}</span>`; };
   const enterBtn = l.map && route.map !== l.id ? `<button class="btn primary" data-act="enter">🗺 Abrir mapa de ${esc(l.name)}</button>` : '';
   const showOn = !l.map && l.pin && route.map !== mapForPin(l.id) ? `<button class="btn" data-act="show">📍 Ver en el mapa</button>` : '';
-  return `${l.image ? `<img class="hero" src="${src(l.image)}" alt="" data-zoom>` : ''}
+  return `${imgOf(l, 'loc') ? `<img class="hero" src="${src(imgOf(l, 'loc'))}" alt="" data-zoom>` : ''}
     <h2>${typeIcon(l.type)} ${esc(l.name)}</h2>
     <div class="sub">${esc(l.type || '')}${crumbs ? ' · ' + crumbs : ''}</div>
     <div class="tags">${l.visited ? '<span class="tag ok">Visitado</span>' : (l.id !== 'mundo' ? '<span class="tag">No visitado</span>' : '')}${l.secret ? '<span class="tag secret">🔒 Secreto</span>' : ''}${l.pin || l.id === 'mundo' || l.id === db.start ? '' : '<span class="tag">Sin pin</span>'}</div>
@@ -572,7 +575,7 @@ function locCard(l) {
 }
 function npcCard(n) {
   const at = npcLocation(n);
-  return `${n.image ? `<img class="hero" src="${src(n.image)}" alt="" data-zoom>` : ''}
+  return `${imgOf(n, 'npc') ? `<img class="hero" src="${src(imgOf(n, 'npc'))}" alt="" data-zoom>` : ''}
     <h2>${esc(n.name)}</h2>
     <div class="sub">${[n.race, n.role].filter(x => !isTbd(x)).map(esc).join(' · ')}</div>
     <div class="tags">${n.pc ? '<span class="tag ok">Personaje jugador</span>' : ''}${!isTbd(n.status) ? `<span class="tag ${isDead(n) ? 'dead' : ''}">${esc(n.status)}</span>` : ''}${!isTbd(n.known) && !n.pc ? `<span class="tag">Lo conocen: ${esc(n.known)}</span>` : ''}</div>

@@ -1,0 +1,17 @@
+{
+  "lamina-01": { "kind": "npc", "ids": ["travis-donovan", "brac-donovan", "corvan-athel", "dory"] },
+  "lamina-02": { "kind": "npc", "ids": ["reva-sonn", "el-pregonero", "el-viejo", "el-erudito"] },
+  "lugares-01": { "kind": "loc", "ids": ["muelle-de-ethar", "plaza-del-pregon", "almacen-sur", "casa-consistorial"] },
+  "lamina-03": { "kind": "npc", "ids": ["dess-marrow", "bonnie", "herenna", "ordell-maskan"] },
+  "lamina-04": { "kind": "npc", "ids": ["kessil-thorn", "doran", "greha", "francis"] },
+  "lugares-02": { "kind": "loc", "ids": ["capilla-de-la-espiral-incompleta", "el-reten", "el-ancla-rota", "mazmorra-bajo-el-almacen-sur"] },
+  "lamina-05": { "kind": "npc", "ids": ["brak", "nilz", "urra", "grix"] },
+  "lamina-06": { "kind": "npc", "ids": ["gundren-rockseeker", "nundro-rockseeker", "tharden-rockseeker", "mira-athel"] },
+  "lugares-03": { "kind": "loc", "ids": ["tienda-de-gungar", "la-atalaya", "camino-de-los-huertos", "el-recodo-de-las-zarzas"] },
+  "lamina-07": { "kind": "npc", "ids": ["karl-gribs", "rellan-voss", "snik", "azorak"] },
+  "lamina-08": { "kind": "npc", "ids": ["flynheim", "hamun-kost", "eris-shars", "matones-del-rojo"] },
+  "lamina-09": { "kind": "npc", "ids": ["ferrum", "musel", "bram-ferragulla", "borin"] },
+  "lamina-10": { "kind": "npc", "ids": ["vessa", "greenhorn", "mormesk", "cicatriz"] },
+  "lugares-04": { "kind": "loc", "ids": ["sol-veleth", "camino-de-sal", "greypost", "castillo-de-azorak"] },
+  "lugares-05": { "kind": "loc", "ids": ["aramark", "el-pozo-del-alma", "deeprock-neigh", "la-caverna-del-eco"] }
+}

@@ -122,8 +122,8 @@ foreach ($k in $etharExtra.Keys) {
 }
 
 # Lugares que aparecen en el mapa de Ethar pero no en el Word
-$out['la-atalaya'] = [ordered]@{ id = 'la-atalaya'; name = 'La Atalaya'; type = 'otro (torre de vigía)'; parent = 'ethar'
-  read = '[POR DEFINIR]'; dm = '[POR DEFINIR] (aparece en el mapa de Ethar, no en el documento)'; visited = $false; secret = $false }
+if (-not $out['la-atalaya']) { $out['la-atalaya'] = [ordered]@{ id = 'la-atalaya'; name = 'La Atalaya'; type = 'otro (torre de vigía)'; parent = 'ethar'
+  read = '[POR DEFINIR]'; dm = '[POR DEFINIR] (aparece en el mapa de Ethar, no en el documento)'; visited = $false; secret = $false } }
 
 # Mapas y fotos
 $out['othran-vel'].map = 'maps/mundo.png'
@@ -206,7 +206,8 @@ foreach ($k in $img.Keys) { if ($npcOut[$k]) { $npcOut[$k].image = $img[$k] } el
 $vecFile = "$root\data\vecinos.json"
 $vec = if (Test-Path $vecFile) { Get-Content $vecFile -Raw -Encoding UTF8 | ConvertFrom-Json }
 foreach ($l in $vec.lugares) {
-  $o = [ordered]@{ id = $l.id; name = $l.name; type = $l.type; parent = $l.parent; read = $l.read; dm = $l.dm; items = $l.items; visited = $false; secret = $false }
+  # si el sitio ya viene en el Word, manda el Word; de aquí solo se toma el pin
+  $o = if ($out[$l.id]) { $out[$l.id] } else { [ordered]@{ id = $l.id; name = $l.name; type = $l.type; parent = $l.parent; read = $l.read; dm = $l.dm; items = $l.items; visited = $false; secret = $false } }
   if ($l.parent -eq 'ethar') { $o.pin = @([math]::Round($l.pin[0] / 1262, 4), [math]::Round($l.pin[1] / 1246, 4)) }
   $out[$l.id] = $o
 }

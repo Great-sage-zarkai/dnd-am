@@ -1,0 +1,54 @@
+<!--plan w=1240 h=800 tx=320 ty=700 title="Casa Consistorial" sub="Sede del alcalde · Ethar"-->
+  <!-- recinto -->
+  <rect x="200" y="80" width="840" height="520" fill="url(#grass)"/>
+  <rect x="560" y="440" width="120" height="160" fill="url(#cobble)"/>
+  <rect x="280" y="440" width="680" height="60" fill="url(#cobble)"/>
+  <rect x="200" y="80" width="840" height="520" fill="url(#grid)"/>
+  <use href="#tree" x="250" y="540"/><use href="#tree" x="990" y="540"/><use href="#tree" x="250" y="150"/><use href="#tree" x="990" y="150"/>
+  <use href="#bush" x="480" y="560"/><use href="#bush" x="760" y="560"/>
+  <!-- escalinata -->
+  <g stroke="#3b2a1a" stroke-width="2"><rect x="560" y="600" width="120" height="70" fill="#9c8f7a"/><path d="M560 614H680M560 628H680M560 642H680M560 656H680"/></g>
+  <!-- edificio -->
+  <rect x="280" y="120" width="680" height="320" fill="url(#stone)"/>
+  <rect x="280" y="120" width="240" height="320" fill="url(#wood)"/>
+  <rect x="720" y="120" width="240" height="160" fill="url(#wood)"/>
+  <rect x="280" y="120" width="680" height="320" fill="url(#grid)"/>
+  <!-- sala de audiencias -->
+  <rect x="360" y="200" width="80" height="200" fill="#6e4a28" stroke="#3b2a1a" stroke-width="2"/>
+  <g><use href="#chair" x="344" y="230"/><use href="#chair" x="344" y="280"/><use href="#chair" x="344" y="330"/><use href="#chair" x="344" y="380"/><use href="#chair" x="456" y="230"/><use href="#chair" x="456" y="280"/><use href="#chair" x="456" y="330"/><use href="#chair" x="456" y="380"/></g>
+  <rect x="340" y="134" width="120" height="34" fill="#8c8170" stroke="#3b2a1a" stroke-width="2"/>
+  <rect x="384" y="138" width="32" height="26" rx="4" fill="#8a2e22" stroke="#2a1a0c" stroke-width="2"/>
+  <g fill="#9e2a1e" stroke="#2a1a0c"><path d="M296 160h14v40l-7 -6l-7 6z"/><path d="M496 160h14v40l-7 -6l-7 6z"/></g>
+  <!-- cuerpo de guardia -->
+  <use href="#bunk" x="536" y="136"/><use href="#bunk" x="584" y="136"/>
+  <rect x="630" y="200" width="60" height="40" fill="#7a5230" stroke="#3b2a1a" stroke-width="2"/>
+  <use href="#rack" x="660" y="140"/>
+  <!-- vestíbulo -->
+  <rect x="580" y="300" width="80" height="120" fill="#8a2e22" opacity=".55" stroke="#5a1a12"/>
+  <use href="#candle" x="540" y="300"/><use href="#candle" x="700" y="300"/>
+  <!-- despacho de Dory -->
+  <use href="#desk" x="840" y="180"/>
+  <rect x="790" y="140" width="100" height="70" fill="#8a2e22" opacity=".35"/>
+  <use href="#chest" x="920" y="250"/>
+  <use href="#books" x="780" y="138"/>
+  <!-- archivo -->
+  <use href="#books" x="790" y="320"/><use href="#books" x="790" y="360"/><use href="#books" x="790" y="400"/>
+  <use href="#books" transform="translate(942 330) rotate(90)"/>
+  <!-- escalera secreta (oculta tras una estantería) -->
+  <g stroke="#6b4ca5" stroke-width="2" stroke-dasharray="5 4" fill="none"><rect x="890" y="392" width="56" height="40"/><path d="M898 392V432M908 392V432M918 392V432M928 392V432M938 392V432"/></g>
+  <text x="918" y="386" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#6b4ca5" text-anchor="middle">S</text>
+
+  <!-- muros -->
+  <g stroke="#2a1a0c" stroke-width="12" stroke-linecap="square" fill="none">
+    <path d="M280 120H960V440H640M600 440H280V120"/>
+    <path d="M520 120V340M520 380V440"/>
+    <path d="M720 120V180M720 220V340M720 380V440"/>
+    <path d="M520 280H580M620 280H720"/>
+    <path d="M720 280H800M840 280H960"/>
+  </g>
+  <!-- tapia -->
+  <path d="M560 600H200V80H1040V600H680" stroke="#6d6457" stroke-width="10" fill="none"/>
+  <g stroke="#cfe3ea" stroke-width="6" stroke-opacity=".7"><path d="M340 120H400M860 120H920M960 160V220M340 440H400M820 440H880M280 260V320"/></g>
+  <g fill="none" stroke="#3b2a1a" stroke-width="2" stroke-dasharray="4 3">
+    <path d="M600 440A40 40 0 0 1 640 440"/><path d="M520 340A40 40 0 0 1 520 380"/><path d="M580 280A40 40 0 0 0 620 280"/><path d="M720 340A40 40 0 0 1 720 380"/><path d="M800 280A40 40 0 0 0 840 280"/><path d="M720 180A40 40 0 0 1 720 220"/>
+  </g>

@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 780" width="1240" height="780">
+  <defs>
+    <pattern id="wood" width="40" height="20" patternUnits="userSpaceOnUse">
+      <rect width="40" height="20" fill="#b48a5a"/>
+      <path d="M0 19.5H40M0 9.5H40M14 0V10M32 10V20" stroke="#8f6a42" stroke-width="1"/>
+    </pattern>
+    <pattern id="planks" width="40" height="40" patternUnits="userSpaceOnUse">
+      <rect width="40" height="40" fill="#9b7650"/>
+      <path d="M0.5 0V40M13.5 0V40M26.5 0V40M0 22H14M13 8H27M26 30H40" stroke="#6e5034" stroke-width="1.2"/>
+    </pattern>
+    <pattern id="stone" width="40" height="40" patternUnits="userSpaceOnUse">
+      <rect width="40" height="40" fill="#a59a88"/>
+      <path d="M0 0.5H40M0.5 0V40M0 20.5H40M20.5 20V40" stroke="#857a69" stroke-width="1"/>
+    </pattern>
+    <pattern id="cobble" width="40" height="40" patternUnits="userSpaceOnUse">
+      <rect width="40" height="40" fill="#b3a68e"/>
+      <g fill="#c3b79f" stroke="#8a7d66" stroke-width="1"><ellipse cx="10" cy="9" rx="8" ry="6"/><ellipse cx="29" cy="11" rx="9" ry="7"/><ellipse cx="9" cy="29" rx="7" ry="8"/><ellipse cx="28" cy="31" rx="9" ry="6"/></g>
+    </pattern>
+    <pattern id="grass" width="40" height="40" patternUnits="userSpaceOnUse">
+      <rect width="40" height="40" fill="#8fa266"/>
+      <path d="M6 10l2-5 2 5M24 22l2-5 2 5M12 32l2-5 2 5M32 6l2-5 2 5" stroke="#6f8549" stroke-width="1.2" fill="none"/>
+    </pattern>
+    <pattern id="dirt" width="40" height="40" patternUnits="userSpaceOnUse">
+      <rect width="40" height="40" fill="#b99a6c"/>
+      <g fill="#a3855a"><circle cx="8" cy="12" r="1.5"/><circle cx="27" cy="7" r="1.2"/><circle cx="18" cy="28" r="1.6"/><circle cx="34" cy="33" r="1.2"/></g>
+    </pattern>
+    <pattern id="field" width="40" height="20" patternUnits="userSpaceOnUse">
+      <rect width="40" height="20" fill="#8a6d45"/>
+      <path d="M0 10H40" stroke="#6f8549" stroke-width="5" stroke-dasharray="6 4"/>
+    </pattern>
+    <pattern id="water" width="80" height="40" patternUnits="userSpaceOnUse">
+      <rect width="80" height="40" fill="#5f8a94"/>
+      <path d="M0 12q10-6 20 0t20 0M40 32q10-6 20 0t20 0" stroke="#86adb5" stroke-width="2" fill="none"/>
+    </pattern>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="#2a1d10" stroke-opacity=".42" stroke-width="1.2"/>
+    </pattern>
+    <radialGradient id="fire"><stop offset="0" stop-color="#ffe08a"/><stop offset=".6" stop-color="#f08a24"/><stop offset="1" stop-color="#a8321a"/></radialGradient>
+    <radialGradient id="glow"><stop offset="0" stop-color="#ffe7a0" stop-opacity=".9"/><stop offset="1" stop-color="#ffe7a0" stop-opacity="0"/></radialGradient>
+    <g id="chair"><circle r="7" fill="#6e4a28" stroke="#3b2a1a" stroke-width="1.5"/></g>
+    <g id="table4">
+      <use href="#chair" x="0" y="-34"/><use href="#chair" x="0" y="34"/><use href="#chair" x="-34" y="0"/><use href="#chair" x="34" y="0"/>
+      <circle r="22" fill="#7a5230" stroke="#3b2a1a" stroke-width="2"/><circle r="9" fill="#e9d9a8" opacity=".5"/>
+    </g>
+    <g id="barrel"><circle r="15" fill="#7d5532" stroke="#3b2a1a" stroke-width="2"/><circle r="10" fill="none" stroke="#3b2a1a" stroke-width="1.5"/><circle r="3" fill="#3b2a1a"/></g>
+    <g id="crate"><rect x="-17" y="-17" width="34" height="34" fill="#a57d4c" stroke="#3b2a1a" stroke-width="2"/><path d="M-17 -17L17 17M17 -17L-17 17" stroke="#6e4a28" stroke-width="2"/></g>
+    <g id="sack"><ellipse rx="14" ry="10" fill="#c8b48a" stroke="#3b2a1a" stroke-width="1.5"/><path d="M-4 -9q4 -5 8 0" stroke="#3b2a1a" fill="none"/></g>
+    <g id="bed"><rect width="36" height="72" rx="3" fill="#d8c7a0" stroke="#3b2a1a" stroke-width="2"/><rect x="5" y="5" width="26" height="14" rx="3" fill="#f3ead2" stroke="#3b2a1a"/><rect y="28" width="36" height="44" fill="#8a3b2e" opacity=".75"/></g>
+    <g id="bunk"><rect width="36" height="72" rx="2" fill="#c9b892" stroke="#3b2a1a" stroke-width="2"/><rect x="5" y="5" width="26" height="12" rx="3" fill="#efe6cc" stroke="#3b2a1a"/><rect y="26" width="36" height="46" fill="#5b6a7a" opacity=".7"/><path d="M0 0L36 72M36 0L0 72" stroke="#3b2a1a" stroke-opacity=".25"/></g>
+    <g id="bench"><rect x="-40" y="-8" width="80" height="16" rx="2" fill="#7a5230" stroke="#3b2a1a" stroke-width="2"/></g>
+    <g id="candle"><circle r="9" fill="url(#glow)"/><circle r="3" fill="#f5e6b0" stroke="#3b2a1a"/></g>
+    <g id="rack"><rect x="-40" y="-8" width="80" height="16" fill="#5a3a1e" stroke="#2a1a0c" stroke-width="2"/><path d="M-30 -8V8M-15 -8V8M0 -8V8M15 -8V8M30 -8V8" stroke="#b8b8b8" stroke-width="2"/></g>
+    <g id="rackEmpty"><rect x="-40" y="-8" width="80" height="16" fill="#5a3a1e" stroke="#2a1a0c" stroke-width="2"/><path d="M-30 -8V8" stroke="#b8b8b8" stroke-width="2"/></g>
+    <g id="shelf"><rect x="-40" y="-9" width="80" height="18" fill="#6e4a28" stroke="#3b2a1a" stroke-width="2"/><g fill="#c9b07a" stroke="#3b2a1a" stroke-width=".8"><rect x="-36" y="-6" width="10" height="12"/><circle cx="-16" cy="0" r="5"/><rect x="-6" y="-6" width="14" height="12"/><circle cx="16" cy="0" r="5"/><rect x="25" y="-6" width="10" height="12"/></g></g>
+    <g id="books"><rect x="-40" y="-9" width="80" height="18" fill="#5a3a1e" stroke="#2a1a0c" stroke-width="2"/><path d="M-34 -6V6M-29 -6V6M-24 -6V6M-16 -6V6M-11 -6V6M-3 -6V6M4 -6V6M12 -6V6M19 -6V6M27 -6V6M33 -6V6" stroke="#c9a46a" stroke-width="3"/></g>
+    <g id="desk"><rect x="-30" y="-18" width="60" height="36" fill="#7a5230" stroke="#3b2a1a" stroke-width="2"/><rect x="-18" y="-10" width="18" height="14" fill="#f3ead2" stroke="#3b2a1a" stroke-width=".8"/><circle cx="14" cy="-4" r="3" fill="#222"/><use href="#chair" x="0" y="30"/></g>
+    <g id="chest"><rect x="-22" y="-13" width="44" height="26" rx="3" fill="#5a3a1e" stroke="#2a1a0c" stroke-width="2"/><path d="M-22 -2H22" stroke="#c9b07a" stroke-width="2"/><rect x="-3" y="-5" width="6" height="7" fill="#c9b07a"/></g>
+    <g id="tree"><circle r="30" fill="#5c7a3c" stroke="#3d5527" stroke-width="2"/><circle cx="-10" cy="-8" r="14" fill="#6f8e4a"/><circle cx="10" cy="6" r="12" fill="#6f8e4a"/></g>
+    <g id="bush"><circle r="14" fill="#6a8a44" stroke="#3d5527" stroke-width="1.5"/><circle cx="-4" cy="-4" r="6" fill="#7d9c55"/></g>
+    <g id="boat"><path d="M-60 0Q-60 -16 -30 -18H50Q66 0 50 18H-30Q-60 16 -60 0Z" fill="#7a5230" stroke="#3b2a1a" stroke-width="2"/><path d="M-20 -17V17M14 -17V17" stroke="#3b2a1a" stroke-width="2"/></g>
+    <g id="stall"><rect x="-40" y="-26" width="80" height="52" fill="#a57d4c" stroke="#3b2a1a" stroke-width="2"/><path d="M-40 -26H40V-6H-40Z" fill="#b5513a"/><path d="M-24 -26V-6M-8 -26V-6M8 -26V-6M24 -26V-6" stroke="#e8d6b0" stroke-width="6"/></g>
+    <g id="dummy"><circle r="12" fill="#c8b48a" stroke="#3b2a1a" stroke-width="2"/><path d="M-20 0H20M0 -20V20" stroke="#6e4a28" stroke-width="4"/></g>
+
+  </defs>
+  <rect width="1240" height="780" fill="#e8dcbf"/>
+  <rect x="8" y="8" width="1224" height="764" fill="none" stroke="#7a5f3a" stroke-width="3"/>
+<!--plan w=1240 h=780 tx=520 ty=690 title="Camino de los Huertos" sub="Afueras de Ethar"-->
+  <rect x="40" y="80" width="1160" height="560" fill="url(#grass)"/>
+  <!-- camino -->
+  <path d="M40 370C200 370 260 400 380 390S600 330 720 360S860 380 960 370" stroke="#b99a6c" stroke-width="44" fill="none"/>
+  <!-- huerto de Doran -->
+  <rect x="300" y="120" width="340" height="180" fill="url(#field)"/>
+  <!-- otros huertos -->
+  <rect x="300" y="460" width="420" height="150" fill="url(#field)" opacity=".85"/>
+  <rect x="40" y="80" width="1160" height="560" fill="url(#grid)"/>
+  <path d="M300 120H640V300H500M460 300H300Z" stroke="#6e4a28" stroke-width="4" fill="none" stroke-dasharray="12 5"/>
+  <path d="M300 460H720V610H300Z" stroke="#6e4a28" stroke-width="4" fill="none" stroke-dasharray="12 5"/>
+  <!-- cobertizo de Doran -->
+  <rect x="660" y="140" width="120" height="100" fill="url(#wood)"/>
+  <use href="#sack" x="690" y="170"/><use href="#barrel" x="750" y="210"/>
+  <g stroke="#8a8a8a" stroke-width="4" stroke-linecap="round"><path d="M700 220l30 -20M720 226l30 -20"/></g>
+  <path d="M660 140H780V240H740M700 240H660Z" stroke="#2a1a0c" stroke-width="10" fill="none" stroke-linecap="square"/>
+  <!-- casa de Kessil -->
+  <rect x="960" y="260" width="200" height="220" fill="url(#wood)"/>
+  <rect x="960" y="260" width="200" height="220" fill="url(#grid)"/>
+  <rect x="1080" y="272" width="68" height="40" fill="#6d6457" stroke="#3b2a1a" stroke-width="3"/><rect x="1094" y="282" width="40" height="24" fill="url(#fire)"/>
+  <use href="#bed" x="1112" y="396"/>
+  <circle cx="1030" cy="430" r="20" fill="#7a5230" stroke="#3b2a1a" stroke-width="2"/><use href="#chair" x="1030" y="400"/>
+  <use href="#rack" transform="translate(978 330) rotate(90)"/>
+  <use href="#chest" x="1060" y="460"/>
+  <path d="M960 350V260H1160V480H960V390" stroke="#2a1a0c" stroke-width="12" fill="none" stroke-linecap="square"/>
+  <path d="M960 350A40 40 0 0 0 960 390" fill="none" stroke="#3b2a1a" stroke-width="2" stroke-dasharray="4 3"/>
+  <g stroke="#cfe3ea" stroke-width="6" stroke-opacity=".7"><path d="M1160 340V380M1000 260H1040M1000 480H1040"/></g>
+  <!-- patio de prácticas -->
+  <use href="#dummy" x="880" y="460"/><use href="#dummy" x="880" y="280"/>
+  <!-- árboles -->
+  <use href="#tree" x="160" y="200"/><use href="#tree" x="200" y="520"/><use href="#tree" x="860" y="140"/><use href="#tree" x="1120" y="580"/><use href="#tree" x="830" y="590"/>
+  <use href="#bush" x="250" y="300"/><use href="#bush" x="900" y="560"/><use href="#bush" x="1180" y="200"/>
+  <!-- flecha a Ethar -->
+  <g stroke="#3b2a1a" stroke-width="3" fill="none"><path d="M140 330H60M72 320L60 330L72 340"/></g>
+  <text x="100" y="316" font-family="Georgia, serif" font-size="15" font-style="italic" fill="#3b2a1a" text-anchor="middle">a Ethar</text>
+
+  <g font-family="Georgia, serif" fill="#3b2a1a">
+    <text x="520" y="690" font-size="30" font-weight="bold" text-anchor="middle">Camino de los Huertos</text>
+    <text x="520" y="716" font-size="15" font-style="italic" text-anchor="middle">Afueras de Ethar</text>
+    <path d="M420 746H620" stroke="#3b2a1a" stroke-width="2"/>
+    <path d="M420 740V752M460 740V752M500 740V752M540 740V752M580 740V752M620 740V752" stroke="#3b2a1a" stroke-width="2"/>
+    <text x="520" y="772" font-size="13" text-anchor="middle">1 cuadro = 5 pies (1,5 m)</text>
+  </g>
+  <g transform="translate(1180 720)" stroke="#3b2a1a" stroke-width="1.5">
+    <path d="M0 -30L7 0L0 30L-7 0Z" fill="#e8dcbf"/><path d="M0 -30L7 0H-7Z" fill="#3b2a1a"/>
+    <text y="-36" font-family="Georgia, serif" font-size="14" text-anchor="middle" fill="#3b2a1a" stroke="none">N</text>
+  </g>
+</svg>

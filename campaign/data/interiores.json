@@ -69,5 +69,291 @@
       { "id": "el-viejo", "zone": "timon-chimenea", "pin": [152, 398], "doing": "Sentado junto al fuego con una jarra casi llena; mira las llamas sin beber." },
       { "id": "el-erudito", "zone": "timon-sala", "pin": [126, 516], "doing": "Solo en la mesa del rincón, junto a la ventana, escribe en un cuaderno y no levanta la vista." }
     ]
+  },
+
+  "tienda-de-gungar": {
+    "map": "maps/interiores/tienda-de-gungar.svg",
+    "size": [940, 680],
+    "zones": [
+      { "id": "gungar-entrada", "num": "1", "name": "Entrada", "pin": [190, 500],
+        "read": "Un escalón de piedra gastada y una puerta recia de madera claveteada. Fuera huele a especias y a madera recién cortada.",
+        "dm": "Gungar sale a recibir al grupo antes de que lleguen a la puerta: ha visto el carro de Gundren desde la ventana.", "items": "" },
+      { "id": "gungar-tienda", "num": "2", "name": "La tienda", "pin": [200, 200],
+        "read": "Estanterías de suelo a techo mezclan sin orden cuerdas con clavos, sacos de provisiones con hachas de mano. Huele a cuero curtido, aceite de herramientas y pino. Aun así, Gungar sabe dónde está cada cosa sin mirar.",
+        "dm": "Lista cerrada de equipo estándar; trabajo enano al doble de precio.", "items": "Ver la ficha de la Tienda de Gungar (lista de precios)." },
+      { "id": "gungar-mostrador", "num": "3", "name": "Mostrador", "pin": [335, 330],
+        "read": "Un mostrador largo de madera oscura con una balanza de latón y un libro de cuentas abierto.",
+        "dm": "Aquí se paga el carro (10 po por cabeza) y se compran los rumores. Si mencionan que Gundren fue capturado, Gungar cambia de tono.", "items": "Rumores: caro 6-8 po, medio 3-4 po, barato 1 po." },
+      { "id": "gungar-almacen", "num": "4", "name": "Almacén", "pin": [500, 200],
+        "read": "Un cuarto de suelo de piedra lleno de cajas, sacos y barriles, todo etiquetado con letra enana apretada.",
+        "dm": "Aquí se descargaría el carro de Gundren. Las provisiones de La Cala llevan la marca de Gungar/Travis.", "items": "" },
+      { "id": "gungar-vivienda", "num": "5", "name": "Vivienda de Gungar", "pin": [500, 420],
+        "read": "Una habitación sencilla y ordenada: cama, arcón, una mesa redonda y un pequeño fogón.",
+        "dm": "", "items": "" },
+      { "id": "gungar-fragua", "num": "6", "name": "Patio y fragua", "pin": [700, 160],
+        "read": "Un patio de tierra vallado con una fragua de piedra, un yunque ennegrecido, un abrevadero y una pila de leña.",
+        "dm": "Aquí forja Gungar las armas bautizadas que encarga Kessil Thorn.", "items": "" }
+    ],
+    "npcs": [
+      { "id": "gungar", "zone": "gungar-mostrador", "pin": [376, 250], "doing": "Tras el mostrador, repasando el libro de cuentas; levanta la vista en cuanto oye un carro." }
+    ]
+  },
+
+  "el-ancla-rota": {
+    "map": "maps/interiores/el-ancla-rota.svg",
+    "size": [700, 640],
+    "zones": [
+      { "id": "ancla-entrada", "num": "1", "name": "Entrada", "pin": [150, 470],
+        "read": "Un cartel con un ancla partida cuelga torcido sobre la puerta. Dentro huele a cerveza agria y a pescado pasado.",
+        "dm": "", "items": "" },
+      { "id": "ancla-sala", "num": "2", "name": "Sala", "pin": [210, 250],
+        "read": "Una sala oscura de tablones pegajosos, con mesas cojas y una silla rota tirada en un rincón. Los pocos parroquianos beben en silencio y miran a los recién llegados más de la cuenta.",
+        "dm": "Taberna mala: clientela de estibadores y algún Matón del Rojo fuera de servicio.", "items": "" },
+      { "id": "ancla-barra", "num": "3", "name": "Barra", "pin": [415, 200],
+        "read": "Una barra de madera ennegrecida con dos barriles detrás. La cerveza sale turbia.",
+        "dm": "", "items": "Cerveza turbia y licor fuerte: precios [POR DEFINIR]." },
+      { "id": "ancla-cocina", "num": "4", "name": "Cocina", "pin": [560, 150],
+        "read": "Una cocina pequeña y grasienta, con un fogón donde algo lleva demasiado tiempo hirviendo.",
+        "dm": "", "items": "" },
+      { "id": "ancla-trastienda", "num": "5", "name": "Trastienda de los dados", "pin": [600, 410],
+        "read": "Un cuarto sin ventanas con una mesa redonda, una vela y unos dados de hueso.",
+        "dm": "[POR DEFINIR] Quién juega aquí. Propuesta: partidas de dados con apuestas donde se oyen rumores sobre la Sal Negra.", "items": "" },
+      { "id": "ancla-callejon", "num": "6", "name": "Puerta al callejón", "pin": [64, 320],
+        "read": "Una puerta lateral da a un callejón estrecho que corre junto al Almacén Sur.",
+        "dm": "Acceso discreto hacia el Almacén Sur.", "items": "" }
+    ],
+    "npcs": [
+      { "id": "greha", "zone": "ancla-barra", "pin": [458, 210], "doing": "Apoyada en la barra con cara de pocos amigos, secando una jarra con un trapo más sucio que la jarra." }
+    ]
+  },
+
+  "la-atalaya": {
+    "map": "maps/interiores/la-atalaya.svg",
+    "size": [900, 620],
+    "zones": [
+      { "id": "atalaya-puerta", "num": "1", "name": "Puerta", "pin": [220, 490],
+        "read": "Una puerta baja de madera reforzada en la base de una torre redonda de piedra.",
+        "dm": "", "items": "" },
+      { "id": "atalaya-baja", "num": "2", "name": "Planta baja", "pin": [150, 300],
+        "read": "Un cuarto circular y frío con cajas, un barril y un armero casi vacío. Una mesa y una silla para el vigía de turno.",
+        "dm": "[POR DEFINIR] Quién la vigila (¿el Retén? ¿la gente de Dory?).", "items": "" },
+      { "id": "atalaya-escalera", "num": "3", "name": "Escalera de caracol", "pin": [300, 240],
+        "read": "Una escalera de caracol de piedra sube pegada al muro.",
+        "dm": "", "items": "" },
+      { "id": "atalaya-mirador", "num": "4", "name": "Mirador", "pin": [640, 200],
+        "read": "Una plataforma almenada con un brasero en el centro y un cuerno de aviso. Desde aquí se ve toda la bahía, el puerto y el Camino de Sal.",
+        "dm": "Buen sitio para ver llegar barcos o jinetes. Encender el brasero avisa a todo el pueblo.", "items": "" }
+    ],
+    "npcs": []
+  },
+
+  "almacen-sur": {
+    "map": "maps/interiores/almacen-sur.svg",
+    "size": [1000, 720],
+    "zones": [
+      { "id": "almacen-puertas", "num": "1", "name": "Puertas de carga", "pin": [440, 545],
+        "read": "Unas puertas dobles de madera, entornadas, dan al muelle. Dentro, el silencio es raro para un lugar de trabajo. Un olor metálico, tenue, flota en el aire.",
+        "dm": "Corvan ve al grupo primero y alza una mano para que sus hombres esperen. No hay ataque inmediato.", "items": "" },
+      { "id": "almacen-nave", "num": "2", "name": "Nave principal", "pin": [430, 240],
+        "read": "Una nave alargada de tablones con hileras de cajas apiladas, barriles y sacos. Las vigas se pierden en la penumbra.",
+        "dm": "Corvan (ficha de Iarno, CR1) + 2-3 Matones del Rojo (3 si son 5 jugadores; 2 si compraron el rumor caro a Gungar). Negocia, soborna o amenaza antes de pelear. Persuasión CD 12 (CD 10 si mencionan a Brac).", "items": "" },
+      { "id": "almacen-cajas", "num": "3", "name": "Pasillo de cajas", "pin": [240, 350],
+        "read": "Entre dos filas de cajas, algo asoma en el suelo.",
+        "dm": "Aquí está el cadáver del erudito, semioculto entre las cajas. Medicina o Investigación CD 13: sin heridas de arma, murió con los ojos abiertos, como si hubiera visto algo. Lleva un fragmento del Othalun Evren. No revelar la causa (misterio abierto). Corvan y sus hombres no lo mataron.", "items": "Fragmento del Othalun Evren." },
+      { "id": "almacen-mesa", "num": "4", "name": "Mesa de recuento", "pin": [520, 350],
+        "read": "Una mesa con un libro de registros, una vela casi consumida y un arcón cerrado.",
+        "dm": "Correspondencia de Corvan: Carta 1 de «La Araña» y Carta 2 (coacción). Medallón con el retrato de Mira Athel.", "items": "Cartas de Corvan, medallón de Mira Athel." },
+      { "id": "almacen-fondo", "num": "5", "name": "Puerta del fondo", "pin": [700, 235],
+        "read": "Una puerta recia al fondo de la nave, con una tranca de madera.",
+        "dm": "Si la pelea va mal, Corvan grita «¡Esperad, esperad!» y huye por aquí, atrancándola por dentro. Lleva a la Mazmorra bajo el Almacén Sur.", "items": "" },
+      { "id": "almacen-antesala", "num": "6", "name": "Antesala y escalera", "pin": [650, 160],
+        "read": "Un cuarto de piedra con una escalera que baja a la oscuridad. Sube un aire húmedo y salado.",
+        "dm": "Baja a la Mazmorra bajo el Almacén Sur.", "items": "" },
+      { "id": "almacen-lateral", "num": "7", "name": "Puerta lateral", "pin": [64, 320],
+        "read": "Una puerta pequeña da a un callejón que lleva a El Ancla Rota.",
+        "dm": "", "items": "" }
+    ],
+    "npcs": [
+      { "id": "corvan-athel", "zone": "almacen-mesa", "pin": [640, 340], "doing": "Junto a la mesa de recuento; alza una mano para que sus hombres esperen y mira al grupo con aire aburrido." },
+      { "id": "matones-del-rojo", "zone": "almacen-nave", "pin": [440, 470], "doing": "Dos o tres matones con pañuelo rojo, apoyados en las cajas cerca de las puertas, con la mano en la porra." }
+    ]
+  },
+
+  "el-reten": {
+    "map": "maps/interiores/el-reten.svg",
+    "size": [1000, 700],
+    "zones": [
+      { "id": "reten-entrada", "num": "1", "name": "Entrada", "pin": [170, 545],
+        "read": "Un edificio de piedra pequeño y algo descuidado, con un escudo del pueblo desconchado sobre la puerta.",
+        "dm": "", "items": "" },
+      { "id": "reten-mostrador", "num": "2", "name": "Mostrador de guardia", "pin": [250, 460],
+        "read": "Un mostrador de madera y un banco para esperar. No hay nadie de guardia; se oye a alguien en el despacho.",
+        "dm": "", "items": "" },
+      { "id": "reten-despacho", "num": "3", "name": "Despacho de Ordell", "pin": [110, 140],
+        "read": "Un despacho con un mapa de la comarca clavado en la pared, una estantería de legajos y un arcón.",
+        "dm": "Ordell ofrece «El barco que no llegó» (25 po + descuento en equipo básico) y avisa del bounty de Deeprock Neigh (100 po), aunque reconoce que no es para su nivel.", "items": "" },
+      { "id": "reten-armeria", "num": "4", "name": "Armería", "pin": [410, 180],
+        "read": "Una puerta con cerradura da a una armería casi vacía: armeros sin lanzas y una sola fila de espadas.",
+        "dm": "Les robaron un cargamento de armas (hombres de Dory, sin pruebas). Las armas están en la Mazmorra bajo el Almacén Sur (R6).", "items": "" },
+      { "id": "reten-calabozos", "num": "5", "name": "Calabozos", "pin": [410, 450],
+        "read": "Dos celdas con barrotes y un poco de paja en el suelo. Vacías.",
+        "dm": "Sitio para encerrar a Corvan o a algún matón si lo capturan vivo.", "items": "" },
+      { "id": "reten-barracon", "num": "6", "name": "Barracón", "pin": [590, 340],
+        "read": "Cuatro literas y una mesa con restos de una partida de cartas.",
+        "dm": "La guardia está mermada: [POR DEFINIR] cuántos guardias quedan.", "items": "" },
+      { "id": "reten-patio", "num": "7", "name": "Patio", "pin": [800, 280],
+        "read": "Un patio de tierra con un pozo, dos muñecos de prácticas y un barril de agua.",
+        "dm": "", "items": "" }
+    ],
+    "npcs": [
+      { "id": "ordell-maskan", "zone": "reten-despacho", "pin": [220, 190], "doing": "En su despacho, mirando el mapa de la comarca con los brazos cruzados y cara de no haber dormido." }
+    ]
+  },
+
+  "capilla-de-la-espiral-incompleta": {
+    "map": "maps/interiores/capilla-de-la-espiral-incompleta.svg",
+    "size": [900, 700],
+    "zones": [
+      { "id": "capilla-entrada", "num": "1", "name": "Entrada", "pin": [220, 545],
+        "read": "Una capilla de piedra sencilla. Sobre la puerta hay una espiral tallada que no llega a cerrarse.",
+        "dm": "", "items": "" },
+      { "id": "capilla-nave", "num": "2", "name": "Nave", "pin": [220, 330],
+        "read": "Seis bancos de madera en penumbra. Huele a cera y a papel viejo. Reina un silencio que invita a bajar la voz.",
+        "dm": "", "items": "" },
+      { "id": "capilla-altar", "num": "3", "name": "Altar de la espiral", "pin": [220, 200],
+        "read": "Un altar de piedra con una espiral grabada que no se cierra, rodeado de velas.",
+        "dm": "No hay panteón formal: el altar representa la búsqueda del equilibrio, no a un dios.", "items": "Servicios sagrados: [POR DEFINIR]." },
+      { "id": "capilla-escritorio", "num": "4", "name": "Escritorio de Herenna", "pin": [440, 120],
+        "read": "Un cuarto lleno de libros y pliegos, con un escritorio cubierto de tinteros y hojas a medio copiar.",
+        "dm": "Herenna busca noticias de un compañero que no ha llegado (el erudito muerto, sin saberlo). Si le llevan el fragmento del Othalun Evren, reacciona.", "items": "" },
+      { "id": "capilla-celda", "num": "5", "name": "Celda de Herenna", "pin": [500, 380],
+        "read": "Una celda austera con una cama estrecha, un arcón y una vela.",
+        "dm": "", "items": "" },
+      { "id": "capilla-jardin", "num": "6", "name": "Jardín", "pin": [720, 250],
+        "read": "Un jardín pequeño con un sendero, arbustos y una piedra con la espiral grabada.",
+        "dm": "", "items": "" }
+    ],
+    "npcs": [
+      { "id": "herenna", "zone": "capilla-escritorio", "pin": [540, 190], "doing": "Copia un texto antiguo con las manos manchadas de tinta; de vez en cuando mira hacia la puerta, como esperando a alguien." }
+    ]
+  },
+
+  "casa-consistorial": {
+    "map": "maps/interiores/casa-consistorial.svg",
+    "size": [1240, 800],
+    "zones": [
+      { "id": "consistorio-escalinata", "num": "1", "name": "Escalinata y portón", "pin": [620, 640],
+        "read": "Una escalinata de piedra sube desde el pueblo hasta un portón abierto en una tapia baja.",
+        "dm": "La Casa Consistorial es intocable por ahora: los PJ no deben poder asaltarla.", "items": "" },
+      { "id": "consistorio-patio", "num": "2", "name": "Patio", "pin": [700, 530],
+        "read": "Un patio empedrado con césped cuidado y árboles en las esquinas. Desde aquí se domina todo el puerto.",
+        "dm": "", "items": "" },
+      { "id": "consistorio-vestibulo", "num": "3", "name": "Vestíbulo", "pin": [620, 370],
+        "read": "Un vestíbulo con una alfombra roja y dos candelabros. Todo está más limpio de lo que cabría esperar en Ethar.",
+        "dm": "", "items": "" },
+      { "id": "consistorio-audiencias", "num": "4", "name": "Sala de audiencias", "pin": [300, 300],
+        "read": "Una sala larga con una mesa de reuniones, estandartes rojos y un sillón en un estrado.",
+        "dm": "", "items": "" },
+      { "id": "consistorio-guardia", "num": "5", "name": "Cuerpo de guardia", "pin": [620, 250],
+        "read": "Dos literas, una mesa y un armero bien surtido.",
+        "dm": "[POR DEFINIR] Quién protege a Dory aquí (¿matones de confianza?).", "items": "" },
+      { "id": "consistorio-despacho", "num": "6", "name": "Despacho de Dory", "pin": [760, 250],
+        "read": "Un despacho con alfombra, un escritorio amplio, un arcón y una ventana con vistas al puerto.",
+        "dm": "", "items": "" },
+      { "id": "consistorio-archivo", "num": "7", "name": "Archivo", "pin": [760, 400],
+        "read": "Estanterías de legajos, registros de impuestos y planos del pueblo.",
+        "dm": "De aquí cogió Brac el mapa sencillo de Ethar que da a los PJ.", "items": "" },
+      { "id": "consistorio-escalera-secreta", "num": "8", "name": "Escalera secreta", "pin": [918, 412], "secret": true,
+        "read": "",
+        "dm": "Oculta tras una estantería del archivo. Baja hasta la sala R12 de la Mazmorra bajo el Almacén Sur (aposentos de Corvan).", "items": "" }
+    ],
+    "npcs": [
+      { "id": "dory", "zone": "consistorio-despacho", "pin": [860, 160], "doing": "En su despacho, mirando el puerto por la ventana con las manos a la espalda." }
+    ]
+  },
+
+  "plaza-del-pregon": {
+    "map": "maps/interiores/plaza-del-pregon.svg",
+    "size": [1240, 800],
+    "zones": [
+      { "id": "plaza-fuente", "num": "1", "name": "Fuente", "pin": [690, 290],
+        "read": "Una fuente de piedra en el centro de la plaza; los niños se salpican y las gaviotas beben del borde.",
+        "dm": "", "items": "" },
+      { "id": "plaza-caja", "num": "2", "name": "Caja del pregonero", "pin": [580, 480],
+        "read": "Un hombre menudo, de voz sorprendentemente potente, sube a una caja de madera desgastada y lee de un pergamino arrugado. Un pescador viejo resopla apoyado en un poste cercano y una mujer con delantal de tienda se detiene al oír un nombre.",
+        "dm": "Tres avisos: tasas portuarias renovadas, precaución en los caminos del norte y destitución de Eris Shars, alcalde de Alun. Persuasión CD 10 para sacar más sobre Alun. El pescador: «Cada temporada la misma canción.»", "items": "" },
+      { "id": "plaza-mercado", "num": "3", "name": "Puestos del mercado", "pin": [360, 340],
+        "read": "Puestos de toldos rojos con pescado, verdura, cuerdas y baratijas. Regateo a voces.",
+        "dm": "Nombre del mercado: [POR DEFINIR].", "items": "" },
+      { "id": "plaza-gremio", "num": "4", "name": "Puesto del gremio", "pin": [800, 420],
+        "read": "Un puesto más cuidado que los demás, con toldo azul y la insignia del gremio mercante.",
+        "dm": "Reva Sonn ofrece «Cuentas claras» (15 po + mejores precios) y 100 po por capturar vivo al jefe del almacén con su correspondencia. Es cómplice de Dory: no revelarlo esta sesión.", "items": "" },
+      { "id": "plaza-norte", "num": "5", "name": "Calle a la Casa Consistorial", "pin": [660, 120],
+        "read": "Una calle empinada sube hacia la Casa Consistorial.", "dm": "", "items": "" },
+      { "id": "plaza-sur", "num": "6", "name": "Bajada al muelle", "pin": [580, 600],
+        "read": "Una calle baja hacia el muelle; huele a sal y a pescado.", "dm": "", "items": "" },
+      { "id": "plaza-oeste", "num": "7", "name": "Calle del Timón", "pin": [110, 340],
+        "read": "Una calle lleva hacia el Timón Escarlata y la Tienda de Gungar.", "dm": "", "items": "" },
+      { "id": "plaza-este", "num": "8", "name": "Calle del Retén", "pin": [1130, 300],
+        "read": "Una calle lleva hacia El Retén.", "dm": "", "items": "" }
+    ],
+    "npcs": [
+      { "id": "el-pregonero", "zone": "plaza-caja", "pin": [620, 440], "doing": "Subido a su caja, lee el pregón con la cadencia de quien lo ha dicho cientos de veces." },
+      { "id": "reva-sonn", "zone": "plaza-gremio", "pin": [900, 460], "doing": "En el puesto del gremio, con su cuaderno de cuentas; observa a los forasteros más que a los clientes." }
+    ]
+  },
+
+  "muelle-de-ethar": {
+    "map": "maps/interiores/muelle-de-ethar.svg",
+    "size": [1240, 800],
+    "zones": [
+      { "id": "muelle-lonja", "num": "1", "name": "Lonja", "pin": [270, 210],
+        "read": "Un cobertizo abierto con mesas de pescado, barriles de sal y gaviotas disputándose los restos.",
+        "dm": "", "items": "" },
+      { "id": "muelle-carga", "num": "2", "name": "Muelle de carga", "pin": [590, 560],
+        "read": "El muelle de carga huele a sal y a pescado. Una goleta está amarrada y sus tripulantes descargan bajo las órdenes de un hombre seco que no deja de dar voces.",
+        "dm": "Escena de Travis: «Así que vosotros sois quienes trajeron a mi hermano de vuelta. Bien. Eso cambia las cosas.» Encargo: recuperar del Almacén Sur un cajón sin marcar con un libro de tapas oscuras. «No lo abráis.» 5-10 po por cabeza, 150-200 po tras resolver.", "items": "" },
+      { "id": "muelle-goleta", "num": "3", "name": "La goleta", "pin": [720, 330],
+        "read": "Una goleta de dos palos, con el casco curtido por la sal.",
+        "dm": "Nombre de la goleta y de dónde viene: [POR DEFINIR].", "items": "" },
+      { "id": "muelle-grua", "num": "4", "name": "Grúa y cajas", "pin": [850, 160],
+        "read": "Una grúa de madera junto a pilas de cajas y barriles. Los niños corretean entre los fardos.",
+        "dm": "", "items": "" },
+      { "id": "muelle-pescadores", "num": "5", "name": "Embarcadero de pescadores", "pin": [950, 520],
+        "read": "Un embarcadero pequeño con barcas de pesca amarradas y redes tendidas a secar.",
+        "dm": "La barca de Dess Marrow está aquí. Su pajar sirve de alojamiento alternativo al Timón Escarlata.", "items": "" },
+      { "id": "muelle-oeste", "num": "6", "name": "Hacia el Almacén Sur", "pin": [70, 240],
+        "read": "El muelle sigue hacia el oeste, hacia el Almacén Sur y El Ancla Rota.", "dm": "", "items": "" },
+      { "id": "muelle-subida", "num": "7", "name": "Subida a la plaza", "pin": [560, 110],
+        "read": "Una calle sube hacia la Plaza del Pregón.", "dm": "", "items": "" }
+    ],
+    "npcs": [
+      { "id": "travis-donovan", "zone": "muelle-carga", "pin": [590, 340], "doing": "Dirige a voces la descarga de la goleta, sin quitar ojo a las cajas." },
+      { "id": "dess-marrow", "zone": "muelle-pescadores", "pin": [960, 330], "doing": "Remienda una red sentada junto a su barca." },
+      { "id": "bonnie", "zone": "muelle-grua", "pin": [770, 280], "doing": "Corretea entre las cajas y espía a los forasteros." }
+    ]
+  },
+
+  "camino-de-los-huertos": {
+    "map": "maps/interiores/camino-de-los-huertos.svg",
+    "size": [1240, 780],
+    "zones": [
+      { "id": "huertos-salida", "num": "1", "name": "Salida de Ethar", "pin": [100, 400],
+        "read": "Un camino de tierra sale del pueblo entre setos y árboles frutales.", "dm": "", "items": "" },
+      { "id": "huertos-doran", "num": "2", "name": "Huerto de Doran", "pin": [560, 160],
+        "read": "Un huerto cuidado con esmero, de surcos rectos y cercado con estacas.",
+        "dm": "Doran, elfo oscuro retirado, nota una alteración en el umbral: gancho hacia El Pozo del Alma.", "items": "" },
+      { "id": "huertos-cobertizo", "num": "3", "name": "Cobertizo de Doran", "pin": [720, 270],
+        "read": "Un cobertizo de madera con sacos de semillas, herramientas y un barril.", "dm": "", "items": "" },
+      { "id": "huertos-patio", "num": "4", "name": "Patio de prácticas", "pin": [880, 370],
+        "read": "Frente a una casa al final del camino, dos muñecos de paja muestran cortes recientes.", "dm": "", "items": "" },
+      { "id": "huertos-casa-kessil", "num": "5", "name": "Casa de Kessil", "pin": [1060, 330],
+        "read": "Una casa pequeña y ordenada con chimenea, una cama de soldado y un armero con armas cuidadas.",
+        "dm": "«Cuentas pendientes»: Kessil busca venganza contra un matón de Dory. Armas bautizadas forjadas por Gungar (un arma común por personaje, +1 al daño, no al impacto). Botas del Paso Firme como recompensa (sin cerrar).", "items": "Armas bautizadas, Botas del Paso Firme." }
+    ],
+    "npcs": [
+      { "id": "doran", "zone": "huertos-doran", "pin": [420, 250], "doing": "Arrodillado entre los surcos; se detiene de vez en cuando, como si escuchara algo que nadie más oye." },
+      { "id": "kessil-thorn", "zone": "huertos-patio", "pin": [830, 420], "doing": "Practica con una sola mano contra el muñeco de paja, golpe tras golpe." }
+    ]
   }
 }

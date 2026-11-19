@@ -1,0 +1,25 @@
+<!--plan w=1240 h=800 tx=620 ty=700 title="Plaza del Pregón" sub="Mercado y pregón · Ethar"-->
+  <rect x="40" y="80" width="1160" height="560" fill="url(#cobble)"/>
+  <rect x="40" y="80" width="1160" height="560" fill="url(#grid)"/>
+  <!-- manzanas de casas -->
+  <g fill="#6d5a46" stroke="#2a1a0c" stroke-width="4">
+    <rect x="40" y="80" width="520" height="100"/><rect x="680" y="80" width="520" height="100"/>
+    <rect x="40" y="180" width="120" height="120"/><rect x="40" y="380" width="120" height="260"/>
+    <rect x="1080" y="180" width="120" height="80"/><rect x="1080" y="340" width="120" height="300"/>
+    <rect x="160" y="560" width="280" height="80"/><rect x="640" y="560" width="440" height="80"/>
+  </g>
+  <g stroke="#4f3f30" stroke-width="2"><path d="M40 130H560M680 130H1200M100 180V300M100 380V640M1140 180V260M1140 340V640M160 600H440M640 600H1080"/></g>
+  <!-- fuente -->
+  <g transform="translate(620 330)"><circle r="56" fill="#8c8170" stroke="#3b2a1a" stroke-width="3"/><circle r="44" fill="url(#water)"/><circle r="12" fill="#a59a88" stroke="#3b2a1a" stroke-width="2"/></g>
+  <!-- caja del pregonero -->
+  <rect x="600" y="460" width="40" height="40" fill="#a57d4c" stroke="#3b2a1a" stroke-width="3"/><path d="M600 460L640 500M640 460L600 500" stroke="#6e4a28" stroke-width="2"/>
+  <!-- poste donde se apoya el pescador viejo -->
+  <circle cx="760" cy="490" r="9" fill="#5a3a1e" stroke="#2a1a0c" stroke-width="2"/>
+  <!-- puestos -->
+  <use href="#stall" x="300" y="250"/><use href="#stall" x="300" y="420"/><use href="#stall" x="420" y="250"/>
+  <use href="#stall" x="860" y="250"/><use href="#stall" x="940" y="430"/>
+  <use href="#crate" x="250" y="320"/><use href="#barrel" x="360" y="480"/><use href="#sack" x="470" y="300"/><use href="#crate" x="990" y="260"/><use href="#barrel" x="1010" y="490"/>
+  <!-- puesto del gremio (Reva Sonn) -->
+  <g transform="translate(860 420)"><rect x="-44" y="-30" width="88" height="60" fill="#a57d4c" stroke="#3b2a1a" stroke-width="2"/><path d="M-44 -30H44V-8H-44Z" fill="#3e5a7a"/><path d="M-28 -30V-8M-12 -30V-8M4 -30V-8M20 -30V-8M36 -30V-8" stroke="#d9c58a" stroke-width="5"/></g>
+  <!-- flechas de salida -->
+  <g stroke="#3b2a1a" stroke-width="3" fill="none"><path d="M620 200V100M610 112L620 100L630 112"/><path d="M540 540V630M530 618L540 630L550 618"/><path d="M180 340H60M72 330L60 340L72 350"/><path d="M1060 300H1180M1168 290L1180 300L1168 310"/></g>

@@ -1,0 +1,43 @@
+<!--plan w=1000 h=720 tx=420 ty=620 title="Almacén Sur" sub="Nave del puerto · Ethar"-->
+  <rect x="40" y="80" width="760" height="440" fill="url(#planks)"/>
+  <rect x="600" y="80" width="200" height="120" fill="url(#stone)"/>
+  <rect x="40" y="520" width="760" height="56" fill="url(#planks)" stroke="#3b2a1a" stroke-width="2"/>
+  <rect x="40" y="80" width="760" height="440" fill="url(#grid)"/>
+  <g fill="#3b2a1a"><circle cx="90" cy="560" r="8"/><circle cx="320" cy="560" r="8"/><circle cx="560" cy="560" r="8"/><circle cx="760" cy="560" r="8"/></g>
+  <!-- filas de cajas -->
+  <g>
+    <use href="#crate" x="120" y="150"/><use href="#crate" x="156" y="150"/><use href="#crate" x="192" y="150"/><use href="#crate" x="264" y="150"/><use href="#crate" x="300" y="150"/><use href="#crate" x="336" y="150"/><use href="#crate" x="372" y="150"/>
+    <use href="#crate" x="120" y="270"/><use href="#crate" x="156" y="270"/><use href="#crate" x="228" y="270"/><use href="#crate" x="264" y="270"/><use href="#crate" x="300" y="270"/><use href="#crate" x="372" y="270"/>
+    <use href="#crate" x="120" y="306"/><use href="#crate" x="264" y="306"/><use href="#crate" x="372" y="306"/>
+    <use href="#crate" x="120" y="420"/><use href="#crate" x="156" y="420"/><use href="#crate" x="192" y="420"/><use href="#crate" x="228" y="420"/><use href="#crate" x="300" y="420"/>
+    <use href="#barrel" x="470" y="140"/><use href="#barrel" x="500" y="160"/><use href="#barrel" x="470" y="172"/>
+    <use href="#sack" x="480" y="430"/><use href="#sack" x="508" y="444"/><use href="#sack" x="478" y="456"/>
+  </g>
+  <!-- cadáver semioculto entre las cajas -->
+  <g transform="translate(320 352) rotate(-20)" opacity=".85">
+    <ellipse rx="26" ry="10" fill="#d9cfb8" stroke="#3b2a1a" stroke-width="1.5"/><circle cx="-32" cy="0" r="8" fill="#c9b49a" stroke="#3b2a1a" stroke-width="1.5"/>
+    <path d="M10 -6q4 6 0 12" stroke="#8a6238" fill="none" stroke-width="2"/>
+  </g>
+  <!-- mesa de recuento de Corvan -->
+  <use href="#desk" x="590" y="300"/>
+  <use href="#chest" x="680" y="292"/>
+  <use href="#candle" x="560" y="292"/>
+  <use href="#bench" x="600" y="410"/>
+  <!-- antesala del fondo: escalera al sótano -->
+  <g stroke="#3b2a1a" stroke-width="2"><rect x="700" y="96" width="84" height="88" fill="#8c8170"/><path d="M712 96V184M724 96V184M736 96V184M748 96V184M760 96V184M772 96V184"/></g>
+  <path d="M770 140H712M722 130L712 140L722 150" stroke="#2a1a0c" stroke-width="2.5" fill="none"/>
+  <use href="#crate" x="630" y="120"/>
+  <!-- tranca de la puerta del fondo -->
+  <rect x="664" y="206" width="72" height="10" fill="#4a2f18" stroke="#2a1a0c" stroke-width="2"/>
+
+  <!-- muros -->
+  <g stroke="#2a1a0c" stroke-width="12" stroke-linecap="square" fill="none">
+    <path d="M40 80H800V520H520M360 520H40V340M40 300V80"/>
+    <path d="M600 80V200H680M720 200H800"/>
+  </g>
+  <g stroke="#cfe3ea" stroke-width="6" stroke-opacity=".6"><path d="M800 300V360M200 80H260M400 80H460"/></g>
+  <!-- puertas -->
+  <g fill="none" stroke="#3b2a1a" stroke-width="2" stroke-dasharray="4 3">
+    <path d="M360 520A80 80 0 0 1 440 520"/><path d="M520 520A80 80 0 0 0 440 520"/>
+    <path d="M40 300A40 40 0 0 1 40 340"/><path d="M680 200A40 40 0 0 1 720 200"/>
+  </g>

@@ -1,0 +1,35 @@
+<!--plan w=1240 h=780 tx=520 ty=690 title="Camino de los Huertos" sub="Afueras de Ethar"-->
+  <rect x="40" y="80" width="1160" height="560" fill="url(#grass)"/>
+  <!-- camino -->
+  <path d="M40 370C200 370 260 400 380 390S600 330 720 360S860 380 960 370" stroke="#b99a6c" stroke-width="44" fill="none"/>
+  <!-- huerto de Doran -->
+  <rect x="300" y="120" width="340" height="180" fill="url(#field)"/>
+  <!-- otros huertos -->
+  <rect x="300" y="460" width="420" height="150" fill="url(#field)" opacity=".85"/>
+  <rect x="40" y="80" width="1160" height="560" fill="url(#grid)"/>
+  <path d="M300 120H640V300H500M460 300H300Z" stroke="#6e4a28" stroke-width="4" fill="none" stroke-dasharray="12 5"/>
+  <path d="M300 460H720V610H300Z" stroke="#6e4a28" stroke-width="4" fill="none" stroke-dasharray="12 5"/>
+  <!-- cobertizo de Doran -->
+  <rect x="660" y="140" width="120" height="100" fill="url(#wood)"/>
+  <use href="#sack" x="690" y="170"/><use href="#barrel" x="750" y="210"/>
+  <g stroke="#8a8a8a" stroke-width="4" stroke-linecap="round"><path d="M700 220l30 -20M720 226l30 -20"/></g>
+  <path d="M660 140H780V240H740M700 240H660Z" stroke="#2a1a0c" stroke-width="10" fill="none" stroke-linecap="square"/>
+  <!-- casa de Kessil -->
+  <rect x="960" y="260" width="200" height="220" fill="url(#wood)"/>
+  <rect x="960" y="260" width="200" height="220" fill="url(#grid)"/>
+  <rect x="1080" y="272" width="68" height="40" fill="#6d6457" stroke="#3b2a1a" stroke-width="3"/><rect x="1094" y="282" width="40" height="24" fill="url(#fire)"/>
+  <use href="#bed" x="1112" y="396"/>
+  <circle cx="1030" cy="430" r="20" fill="#7a5230" stroke="#3b2a1a" stroke-width="2"/><use href="#chair" x="1030" y="400"/>
+  <use href="#rack" transform="translate(978 330) rotate(90)"/>
+  <use href="#chest" x="1060" y="460"/>
+  <path d="M960 350V260H1160V480H960V390" stroke="#2a1a0c" stroke-width="12" fill="none" stroke-linecap="square"/>
+  <path d="M960 350A40 40 0 0 0 960 390" fill="none" stroke="#3b2a1a" stroke-width="2" stroke-dasharray="4 3"/>
+  <g stroke="#cfe3ea" stroke-width="6" stroke-opacity=".7"><path d="M1160 340V380M1000 260H1040M1000 480H1040"/></g>
+  <!-- patio de prácticas -->
+  <use href="#dummy" x="880" y="460"/><use href="#dummy" x="880" y="280"/>
+  <!-- árboles -->
+  <use href="#tree" x="160" y="200"/><use href="#tree" x="200" y="520"/><use href="#tree" x="860" y="140"/><use href="#tree" x="1120" y="580"/><use href="#tree" x="830" y="590"/>
+  <use href="#bush" x="250" y="300"/><use href="#bush" x="900" y="560"/><use href="#bush" x="1180" y="200"/>
+  <!-- flecha a Ethar -->
+  <g stroke="#3b2a1a" stroke-width="3" fill="none"><path d="M140 330H60M72 320L60 330L72 340"/></g>
+  <text x="100" y="316" font-family="Georgia, serif" font-size="15" font-style="italic" fill="#3b2a1a" text-anchor="middle">a Ethar</text>

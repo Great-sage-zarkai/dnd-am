@@ -1,0 +1,40 @@
+<!--plan w=1240 h=800 tx=620 ty=700 title="Muelle de Ethar" sub="Puerto pesquero · Ethar"-->
+  <rect x="40" y="80" width="1160" height="560" fill="url(#water)"/>
+  <rect x="40" y="80" width="1160" height="220" fill="url(#cobble)"/>
+  <!-- piedra del muelle -->
+  <rect x="40" y="290" width="1160" height="20" fill="#8c8170" stroke="#3b2a1a" stroke-width="2"/>
+  <!-- embarcaderos -->
+  <rect x="200" y="300" width="60" height="200" fill="url(#planks)" stroke="#3b2a1a" stroke-width="2"/>
+  <rect x="540" y="300" width="100" height="320" fill="url(#planks)" stroke="#3b2a1a" stroke-width="2"/>
+  <rect x="920" y="300" width="60" height="200" fill="url(#planks)" stroke="#3b2a1a" stroke-width="2"/>
+  <g fill="#3b2a1a"><circle cx="545" cy="400" r="6"/><circle cx="635" cy="400" r="6"/><circle cx="545" cy="520" r="6"/><circle cx="635" cy="520" r="6"/><circle cx="205" cy="460" r="5"/><circle cx="975" cy="460" r="5"/></g>
+  <rect x="40" y="80" width="1160" height="560" fill="url(#grid)"/>
+  <!-- la goleta -->
+  <g transform="translate(720 470)">
+    <path d="M0 -150Q55 -110 55 0Q55 120 0 150Q-55 120 -55 0Q-55 -110 0 -150Z" fill="#6e4a28" stroke="#2a1a0c" stroke-width="3"/>
+    <path d="M0 -130Q42 -95 42 0Q42 105 0 132Q-42 105 -42 0Q-42 -95 0 -130Z" fill="#a8835a"/>
+    <path d="M-40 -60H40M-42 0H42M-40 60H40" stroke="#6e4a28" stroke-width="2"/>
+    <circle cx="0" cy="-60" r="9" fill="#3b2a1a"/><circle cx="0" cy="40" r="9" fill="#3b2a1a"/>
+    <rect x="-20" y="90" width="40" height="30" fill="#7a5230" stroke="#3b2a1a" stroke-width="2"/>
+  </g>
+  <path d="M640 420L668 430" stroke="#a8835a" stroke-width="10"/>
+  <!-- barcas -->
+  <use href="#boat" transform="translate(160 420) rotate(90) scale(.8)"/>
+  <use href="#boat" transform="translate(300 440) rotate(90) scale(.7)"/>
+  <use href="#boat" transform="translate(1020 400) rotate(90) scale(.8)"/>
+  <use href="#boat" transform="translate(880 430) rotate(90) scale(.7)"/>
+  <!-- lonja -->
+  <rect x="100" y="100" width="340" height="150" fill="url(#planks)" stroke="#2a1a0c" stroke-width="3"/>
+  <g fill="#5a3a1e"><rect x="96" y="96" width="12" height="12"/><rect x="432" y="96" width="12" height="12"/><rect x="96" y="242" width="12" height="12"/><rect x="432" y="242" width="12" height="12"/><rect x="264" y="96" width="12" height="12"/><rect x="264" y="242" width="12" height="12"/></g>
+  <rect x="140" y="140" width="110" height="34" fill="#7a5230" stroke="#3b2a1a" stroke-width="2"/><rect x="290" y="140" width="110" height="34" fill="#7a5230" stroke="#3b2a1a" stroke-width="2"/>
+  <g fill="#b9c4c6" stroke="#5a6a6e"><ellipse cx="160" cy="157" rx="10" ry="4"/><ellipse cx="190" cy="152" rx="10" ry="4"/><ellipse cx="220" cy="160" rx="10" ry="4"/><ellipse cx="320" cy="155" rx="10" ry="4"/><ellipse cx="360" cy="158" rx="10" ry="4"/></g>
+  <use href="#barrel" x="150" y="215"/><use href="#barrel" x="390" y="215"/>
+  <g stroke="#7a6a50" stroke-width="2" fill="none"><path d="M470 120q20 10 40 0t40 0M470 140q20 10 40 0t40 0"/></g>
+  <!-- grúa y cajas -->
+  <g transform="translate(680 260)"><circle r="14" fill="#5a3a1e" stroke="#2a1a0c" stroke-width="2"/><path d="M0 0L0 120" stroke="#5a3a1e" stroke-width="8"/><path d="M0 120v14" stroke="#3b2a1a" stroke-width="2"/></g>
+  <use href="#crate" x="780" y="200"/><use href="#crate" x="816" y="200"/><use href="#crate" x="852" y="200"/><use href="#crate" x="780" y="236"/><use href="#crate" x="816" y="236"/>
+  <use href="#barrel" x="900" y="230"/><use href="#barrel" x="930" y="210"/><use href="#sack" x="880" y="262"/>
+  <!-- casas al norte -->
+  <g fill="#6d5a46" stroke="#2a1a0c" stroke-width="4"><rect x="1020" y="80" width="180" height="90"/><rect x="680" y="80" width="300" height="60"/></g>
+  <!-- flechas -->
+  <g stroke="#3b2a1a" stroke-width="3" fill="none"><path d="M600 200V100M590 112L600 100L610 112"/><path d="M90 280H50M62 270L50 280L62 290"/></g>

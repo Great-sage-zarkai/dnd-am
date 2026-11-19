@@ -1,0 +1,56 @@
+<!--plan w=940 h=680 tx=470 ty=560 title="Tienda de Gungar" sub="Suministros y trabajo enano · Ethar"-->
+  <!-- suelos -->
+  <rect x="40" y="80" width="560" height="400" fill="url(#wood)"/>
+  <rect x="400" y="80" width="200" height="200" fill="url(#stone)"/>
+  <rect x="600" y="80" width="280" height="400" fill="url(#dirt)"/>
+  <rect x="40" y="80" width="840" height="400" fill="url(#grid)"/>
+  <!-- escalón de entrada -->
+  <rect x="150" y="480" width="80" height="34" fill="#9c8f7a" stroke="#3b2a1a" stroke-width="2"/>
+
+  <!-- tienda: estanterías de suelo a techo -->
+  <use href="#shelf" x="100" y="98"/><use href="#shelf" x="180" y="98"/><use href="#shelf" x="260" y="98"/>
+  <use href="#shelf" transform="translate(58 200) rotate(90)"/><use href="#shelf" transform="translate(58 290) rotate(90)"/>
+  <use href="#shelf" x="190" y="250"/><use href="#shelf" x="190" y="268"/>
+  <!-- hachas y herramientas colgadas -->
+  <use href="#rack" transform="translate(58 400) rotate(90)"/>
+  <!-- sacos, barriles y rollos de cuerda -->
+  <use href="#sack" x="110" y="440"/><use href="#sack" x="140" y="452"/><use href="#sack" x="250" y="440"/>
+  <use href="#barrel" x="110" y="370"/><use href="#barrel" x="140" y="390"/>
+  <g fill="none" stroke="#c2a36a" stroke-width="4"><circle cx="270" cy="340" r="14"/><circle cx="270" cy="340" r="7"/><circle cx="240" cy="360" r="12"/></g>
+  <!-- mostrador -->
+  <rect x="320" y="140" width="30" height="230" fill="#5a3a1e" stroke="#2a1a0c" stroke-width="3"/>
+  <path d="M326 146V364" stroke="#8a6238" stroke-width="2"/>
+  <rect x="356" y="150" width="30" height="40" fill="#6e4a28" stroke="#3b2a1a" stroke-width="2"/>
+  <circle cx="335" cy="200" r="6" fill="#c9b07a" stroke="#3b2a1a"/>
+
+  <!-- almacén -->
+  <use href="#crate" x="440" y="120"/><use href="#crate" x="476" y="120"/><use href="#crate" x="440" y="156"/>
+  <use href="#sack" x="560" y="120"/><use href="#sack" x="560" y="146"/>
+  <use href="#barrel" x="560" y="240"/><use href="#barrel" x="526" y="250"/>
+  <!-- vivienda -->
+  <use href="#bed" x="548" y="300"/>
+  <use href="#chest" x="560" y="452"/>
+  <circle cx="460" cy="400" r="20" fill="#7a5230" stroke="#3b2a1a" stroke-width="2"/><use href="#chair" x="460" y="370"/>
+  <rect x="420" y="296" width="60" height="20" fill="#6d6457" stroke="#3b2a1a" stroke-width="2"/>
+  <!-- patio y fragua -->
+  <rect x="760" y="100" width="100" height="70" fill="#6d6457" stroke="#3b2a1a" stroke-width="3"/>
+  <rect x="780" y="112" width="60" height="40" fill="url(#fire)"/>
+  <path d="M700 230h40l-6 14h-28z" fill="#3a3a3a" stroke="#111" stroke-width="2"/><rect x="712" y="244" width="16" height="22" fill="#3a3a3a"/>
+  <rect x="790" y="240" width="70" height="30" rx="4" fill="#5f8a94" stroke="#3b2a1a" stroke-width="2"/>
+  <g stroke="#6e4a28" stroke-width="8" stroke-linecap="round"><path d="M640 420h70M640 436h70M646 452h60"/></g>
+  <use href="#barrel" x="830" y="440"/>
+
+  <!-- muros -->
+  <g stroke="#2a1a0c" stroke-width="12" stroke-linecap="square" fill="none">
+    <path d="M40 80H600V180M600 220V480H220M160 480H40V80"/>
+    <path d="M400 80V160M400 200V480"/>
+    <path d="M400 280H440M480 280H600"/>
+  </g>
+  <!-- valla del patio -->
+  <path d="M600 80H880V480H860M820 480H600" stroke="#6e4a28" stroke-width="5" fill="none" stroke-dasharray="14 6"/>
+  <!-- ventanas -->
+  <g stroke="#cfe3ea" stroke-width="6"><path d="M60 480H120M270 480H330M140 80H200M440 480H500"/></g>
+  <!-- puertas -->
+  <g fill="none" stroke="#3b2a1a" stroke-width="2" stroke-dasharray="4 3">
+    <path d="M160 480A60 60 0 0 1 220 480"/><path d="M400 160A40 40 0 0 1 400 200"/><path d="M440 280A40 40 0 0 0 480 280"/><path d="M600 180A40 40 0 0 1 600 220"/><path d="M820 480A40 40 0 0 1 860 480"/>
+  </g>

@@ -1,0 +1,47 @@
+<!--plan w=1000 h=700 tx=400 ty=600 title="El Retén" sub="Cuartel de la guardia · Ethar"-->
+  <rect x="40" y="80" width="640" height="440" fill="url(#stone)"/>
+  <rect x="40" y="80" width="280" height="240" fill="url(#wood)"/>
+  <rect x="500" y="80" width="180" height="440" fill="url(#wood)"/>
+  <rect x="680" y="80" width="240" height="440" fill="url(#dirt)"/>
+  <rect x="40" y="80" width="880" height="440" fill="url(#grid)"/>
+  <rect x="140" y="520" width="60" height="30" fill="#9c8f7a" stroke="#3b2a1a" stroke-width="2"/>
+  <!-- despacho de Ordell -->
+  <use href="#desk" x="180" y="170"/>
+  <use href="#books" transform="translate(58 200) rotate(90)"/>
+  <use href="#chest" x="270" y="290"/>
+  <rect x="120" y="92" width="120" height="10" fill="#e8dcbf" stroke="#3b2a1a" stroke-width="2"/>
+  <!-- entrada y mostrador de guardia -->
+  <rect x="100" y="400" width="160" height="30" fill="#5a3a1e" stroke="#2a1a0c" stroke-width="3"/>
+  <use href="#chair" x="180" y="380"/>
+  <use href="#bench" transform="translate(60 470) rotate(90)"/>
+  <!-- armería (casi vacía) -->
+  <use href="#rackEmpty" x="410" y="100"/><use href="#rackEmpty" transform="translate(338 180) rotate(90)"/><use href="#rack" transform="translate(482 180) rotate(90)"/>
+  <use href="#crate" x="410" y="230"/>
+  <!-- calabozos -->
+  <g fill="#c8b48a" opacity=".7"><ellipse cx="360" cy="480" rx="22" ry="12"/><ellipse cx="455" cy="485" rx="22" ry="12"/></g>
+  <path d="M410 380V520" stroke="#2a1a0c" stroke-width="12"/>
+  <g stroke="#4a4a4a" stroke-width="4"><path d="M330 380V396M342 380V396M354 380V396M366 380V396M378 380V396M390 380V396M422 380V396M434 380V396M446 380V396M458 380V396M470 380V396M482 380V396"/></g>
+  <!-- barracón -->
+  <use href="#bunk" x="520" y="100"/><use href="#bunk" x="620" y="100"/><use href="#bunk" x="520" y="420"/><use href="#bunk" x="620" y="420"/>
+  <rect x="560" y="260" width="80" height="40" fill="#7a5230" stroke="#3b2a1a" stroke-width="2"/>
+  <!-- patio -->
+  <g transform="translate(800 180)"><circle r="30" fill="#6d6457" stroke="#3b2a1a" stroke-width="3"/><circle r="20" fill="#2f4f57"/></g>
+  <use href="#dummy" x="760" y="380"/><use href="#dummy" x="860" y="380"/>
+  <use href="#barrel" x="880" y="480"/>
+
+  <!-- muros -->
+  <g stroke="#2a1a0c" stroke-width="12" stroke-linecap="square" fill="none">
+    <path d="M40 80H680V200M680 240V520H200M140 520H40V80"/>
+    <path d="M40 320H240M280 320H320"/>
+    <path d="M320 80V280M320 320V330M320 370V520"/>
+    <path d="M320 280H380M420 280H500"/>
+    <path d="M500 80V360M500 400V520"/>
+    <path d="M320 380H500"/>
+  </g>
+  <path d="M680 80H920V520H680" stroke="#6d6457" stroke-width="10" fill="none"/>
+  <path d="M920 300V360" stroke="#e8dcbf" stroke-width="12"/>
+  <g stroke="#4a4a4a" stroke-width="4"><path d="M332 380H398M422 380H488"/></g>
+  <g stroke="#cfe3ea" stroke-width="6" stroke-opacity=".6"><path d="M60 520H120M100 80H160"/></g>
+  <g fill="none" stroke="#3b2a1a" stroke-width="2" stroke-dasharray="4 3">
+    <path d="M140 520A60 60 0 0 1 200 520"/><path d="M240 320A40 40 0 0 0 280 320"/><path d="M320 330A40 40 0 0 1 320 370"/><path d="M380 280A40 40 0 0 0 420 280"/><path d="M500 360A40 40 0 0 1 500 400"/><path d="M680 200A40 40 0 0 1 680 240"/>
+  </g>

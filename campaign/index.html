@@ -156,7 +156,8 @@ textarea { width: 100%; resize: vertical; min-height: 60px; font-family: inherit
 .res { display: flex; gap: 10px; align-items: center; padding: 8px 14px; cursor: pointer; }
 .res.active, .res:hover { background: var(--panel2); }
 .res .k { font-size: 11px; color: var(--dim); margin-left: auto; }
-.lightbox { display: grid; place-items: center; cursor: zoom-out; }
+.lightbox { place-items: center; cursor: zoom-out; }
+.lightbox.open { display: grid; }
 .lightbox img { max-width: 92vw; max-height: 92vh; border-radius: 8px; }
 </style>
 </head>

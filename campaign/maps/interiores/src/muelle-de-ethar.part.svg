@@ -37,4 +37,4 @@
   <!-- casas al norte -->
   <g fill="#6d5a46" stroke="#2a1a0c" stroke-width="4"><rect x="1020" y="80" width="180" height="90"/><rect x="680" y="80" width="300" height="60"/></g>
   <!-- flechas -->
-  <g stroke="#3b2a1a" stroke-width="3" fill="none"><path d="M600 200V100M590 112L600 100L610 112"/><path d="M90 280H50M62 270L50 280L62 290"/></g>
+  <g stroke="#3b2a1a" stroke-width="3" fill="none"><path d="M600 200V100M590 112L600 100L610 112"/><path d="M90 280H50M62 270L50 280L62 290"/><path d="M1100 240H1190M1178 230L1190 240L1178 250"/></g>

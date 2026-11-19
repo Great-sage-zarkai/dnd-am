@@ -264,6 +264,13 @@ function load() {
       else for (const [k, v] of Object.entries(o)) if (!(k in saved[kind][id])) saved[kind][id][k] = structuredClone(v);
     }
   }
+  // Parches del seed: campos que se sobrescriben aunque ya estuvieran guardados (cambios de diseño)
+  for (const p of window.SEED.patches || []) {
+    if (p.v <= (saved.patchLevel || 0)) continue;
+    const src = window.SEED[p.kind]?.[p.id], dst = saved[p.kind]?.[p.id];
+    if (src && dst) for (const k of p.keys) { if (k in src) dst[k] = structuredClone(src[k]); else delete dst[k]; }
+  }
+  saved.patchLevel = Math.max(saved.patchLevel || 0, ...(window.SEED.patches || []).map(p => p.v));
   return saved;
 }
 function save() { try { localStorage.setItem(STORE, JSON.stringify(db)); } catch (e) { alert('No se pudo guardar: ' + e.message); } }

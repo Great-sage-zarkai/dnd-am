@@ -286,8 +286,8 @@
         "read": "Puestos de toldos rojos con pescado, verdura, cuerdas y baratijas. Regateo a voces.",
         "dm": "Nombre del mercado: [POR DEFINIR].", "items": "" },
       { "id": "plaza-gremio", "num": "4", "name": "Puesto del gremio", "pin": [800, 420],
-        "read": "Un puesto más cuidado que los demás, con toldo azul y la insignia del gremio mercante.",
-        "dm": "Reva Sonn ofrece «Cuentas claras» (15 po + mejores precios) y 100 po por capturar vivo al jefe del almacén con su correspondencia. Es cómplice de Dory: no revelarlo esta sesión.", "items": "" },
+        "read": "Un puesto más cuidado que los demás, con toldo azul y el emblema del gremio mercante: un ancla cruzada con una moneda.",
+        "dm": "Lo atiende Lenn Brea, ayudante del gremio. Si alguien busca trabajo o pregunta por el gremio, le manda a la Casa del Gremio Mercantil, junto al muelle, a hablar con Reva Sonn.", "items": "Muestras de telas, especias y sal. Precios del gremio." },
       { "id": "plaza-norte", "num": "5", "name": "Calle a la Casa Consistorial", "pin": [660, 120],
         "read": "Una calle empinada sube hacia la Casa Consistorial.", "dm": "", "items": "" },
       { "id": "plaza-sur", "num": "6", "name": "Bajada al muelle", "pin": [580, 600],
@@ -298,8 +298,38 @@
         "read": "Una calle lleva hacia El Retén.", "dm": "", "items": "" }
     ],
     "npcs": [
-      { "id": "el-pregonero", "zone": "plaza-caja", "pin": [620, 440], "doing": "Subido a su caja, lee el pregón con la cadencia de quien lo ha dicho cientos de veces." },
-      { "id": "reva-sonn", "zone": "plaza-gremio", "pin": [900, 460], "doing": "En el puesto del gremio, con su cuaderno de cuentas; observa a los forasteros más que a los clientes." }
+      { "id": "el-pregonero", "zone": "plaza-caja", "pin": [620, 440], "doing": "Subido a su caja, lee el pregón con la cadencia de quien lo ha dicho cientos de veces." }
+    ]
+  },
+
+  "casa-del-gremio-mercantil": {
+    "map": "maps/interiores/casa-del-gremio-mercantil.svg",
+    "size": [1000, 700],
+    "zones": [
+      { "id": "gremio-entrada", "num": "1", "name": "Vestíbulo", "pin": [100, 490],
+        "read": "Un vestíbulo de piedra limpia con un banco para esperar. En el suelo, un mosaico con el emblema del gremio: un ancla cruzada con una moneda.",
+        "dm": "Delegación en Ethar del Gremio Mercantil de Sol Veleth.", "items": "" },
+      { "id": "gremio-mostrador", "num": "2", "name": "Mostrador de fletes", "pin": [560, 395],
+        "read": "Un mostrador largo de madera oscura con balanzas, sellos de lacre y libros de registro abiertos.",
+        "dm": "Aquí recibe Reva a los forasteros. «Caras nuevas. El gremio siempre tiene sitio para gente de confianza. ¿Buscáis trabajo, o solo estáis de paso?» Encargo legítimo «Cuentas claras»: verificar que un cargamento llegó completo (15 po + mejores precios del gremio). Oferta oscura si preguntan por el Almacén Sur: 100 po por capturar vivo al jefe del almacén con su correspondencia. Es cómplice de Dory: no revelarlo esta sesión.", "items": "Encargos del gremio; mejores precios para quien trabaje para él." },
+      { "id": "gremio-despacho", "num": "3", "name": "Despacho de Reva", "pin": [90, 300],
+        "read": "Un despacho ordenado con alfombra azul, un escritorio con un cuaderno de cuentas y una caja fuerte de hierro en la esquina.",
+        "dm": "La caja fuerte guarda dinero del gremio y [POR DEFINIR] si alguna prueba que la relacione con Dory.", "items": "" },
+      { "id": "gremio-reuniones", "num": "4", "name": "Sala de reuniones", "pin": [430, 330],
+        "read": "Una mesa larga con seis sillas y un mapa de rutas comerciales clavado en la pared.",
+        "dm": "", "items": "" },
+      { "id": "gremio-archivo", "num": "5", "name": "Archivo de fletes", "pin": [610, 240],
+        "read": "Estanterías llenas de registros de fletes, ordenados por barco y por fecha.",
+        "dm": "Pista opcional: los registros del gremio no cuadran con la tablilla de Rendal en la lonja. Hay cajas de la goleta que no figuran en ningún sitio (Investigación CD 13).", "items": "" },
+      { "id": "gremio-almacen", "num": "6", "name": "Almacén de muestras", "pin": [690, 420],
+        "read": "Un almacén con cajas, sacos y barriles de muestra: telas, especias, sal.",
+        "dm": "Desde aquí salen las entregas del gremio. El cajón del libro de tapas oscuras «vino con una entrega del gremio».", "items": "" },
+      { "id": "gremio-muelle", "num": "7", "name": "Salida al muelle", "pin": [860, 330],
+        "read": "Unas puertas dobles dan directamente al muelle, donde esperan cajas para cargar.",
+        "dm": "", "items": "" }
+    ],
+    "npcs": [
+      { "id": "reva-sonn", "zone": "gremio-mostrador", "pin": [470, 370], "doing": "Tras el mostrador de fletes, con su cuaderno de cuentas; evalúa a cada forastero que entra con una mirada rápida y profesional." }
     ]
   },
 
@@ -325,7 +355,10 @@
       { "id": "muelle-oeste", "num": "6", "name": "Hacia el Almacén Sur", "pin": [70, 240],
         "read": "El muelle sigue hacia el oeste, hacia el Almacén Sur y El Ancla Rota.", "dm": "", "items": "" },
       { "id": "muelle-subida", "num": "7", "name": "Subida a la plaza", "pin": [560, 110],
-        "read": "Una calle sube hacia la Plaza del Pregón.", "dm": "", "items": "" }
+        "read": "Una calle sube hacia la Plaza del Pregón.", "dm": "", "items": "" },
+      { "id": "muelle-gremio", "num": "8", "name": "Hacia la Casa del Gremio", "pin": [1150, 210],
+        "read": "Al este del muelle se alza un edificio sólido con un emblema sobre la puerta: un ancla cruzada con una moneda.",
+        "dm": "Lleva a la Casa del Gremio Mercantil.", "items": "" }
     ],
     "npcs": [
       { "id": "travis-donovan", "zone": "muelle-carga", "pin": [590, 340], "doing": "Dirige a voces la descarga de la goleta, sin quitar ojo a las cajas." },

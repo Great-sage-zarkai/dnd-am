@@ -1,5 +1,9 @@
 {
   "lugares": [
+    { "id": "casa-del-gremio-mercantil", "name": "Casa del Gremio Mercantil", "type": "otro (sede del gremio)", "parent": "ethar", "pin": [960, 660],
+      "read": "Un edificio de piedra sólido junto al muelle, más cuidado que sus vecinos. Sobre la puerta cuelga el emblema del gremio: un ancla cruzada con una moneda.",
+      "dm": "Delegación en Ethar del Gremio Mercantil de Sol Veleth. Aquí trabaja Reva Sonn. Controla los fletes del puerto: es la «cara visible» que menciona Corvan.",
+      "items": "Encargos del gremio; mejores precios para quien trabaje para él." },
     { "id": "horno-de-ruy", "name": "Horno de Ruy", "type": "tienda (horno)", "parent": "ethar", "pin": [900, 470],
       "read": "Una casa baja con la puerta siempre abierta y un horno de leña que nunca se apaga. Desde la calle huele a pan caliente.",
       "dm": "A las cinco de la mañana todo Ethar huele a pan. Ruy ve pasar a quien no debería estar despierto.",
@@ -8,6 +12,16 @@
       "read": "Una casa pequeña con manojos de hierbas secándose en la fachada y un gato gris en la ventana. Dentro huele a romero y a humo.",
       "dm": "Herbolaria y partera del pueblo. Sitio para que los PJ se curen o compren remedios.",
       "items": "Curar heridas, hierbas, remedios y quizá pociones de curación básicas. Precios [POR DEFINIR]." }
+  ],
+
+  "cambios": {
+    "reva-sonn": { "location": "Casa del Gremio Mercantil" }
+  },
+
+  "parches": [
+    { "v": 1, "kind": "npcs", "id": "reva-sonn", "keys": ["spot", "schedule", "location", "doing"] },
+    { "v": 1, "kind": "npcs", "id": "ysolde-marr", "keys": ["schedule"] },
+    { "v": 1, "kind": "locations", "id": "plaza-gremio", "keys": ["read", "dm", "items"] }
   ],
 
   "vecinos": [
@@ -158,6 +172,13 @@
       "knows": "Lleva los recados privados de Dory. No dirá nada, pero se le puede seguir.",
       "doing": "Juega a las cartas solo en el cuerpo de guardia, con la maza sobre la mesa.",
       "spot": { "zone": "consistorio-guardia", "pin": [660, 260] } },
+    { "id": "lenn-brea", "name": "Lenn Brea", "race": "Humano", "role": "Ayudante del gremio (puesto de la plaza)", "location": "Plaza del Pregón",
+      "look": "Chico de unos 20 años, bien peinado, con la insignia del gremio reluciente en la solapa y ropa un poco grande para él.",
+      "personality": "Ambicioso, educado y algo pedante; admira a Reva.",
+      "voice": "Habla como si leyera un contrato: «Según las condiciones del gremio…».",
+      "knows": "Cree que Reva es la persona más lista de Ethar y que Dory «es un héroe». Repite la versión oficial de todo.",
+      "doing": "Atiende el puesto del gremio; a quien pregunta por trabajo le manda a la Casa del Gremio, junto al muelle.",
+      "spot": { "zone": "plaza-gremio", "pin": [900, 460] } },
     { "id": "ruy", "name": "Ruy", "race": "Humano", "role": "Panadero", "location": "Horno de Ruy",
       "look": "Hombre redondo, blanco de harina hasta las cejas y siempre sudando.",
       "personality": "Alegre y madrugador.",
@@ -230,7 +251,7 @@
       "noche": { "away": true, "doing": "En casa." } },
     "reva-sonn": {
       "amanecer": { "away": true, "doing": "En casa." },
-      "manana": { "doing": "Cierra un trato de flete con la capitana Marr." },
+      "manana": { "zone": "gremio-mostrador", "pin": [430, 385], "doing": "Cierra un trato de flete con la capitana Marr en el mostrador del gremio." },
       "anochecer": { "zone": "consistorio-vestibulo", "pin": [580, 330], "doing": "Sube a la Casa Consistorial con su cuaderno de cuentas." },
       "noche": { "away": true, "doing": "En casa." } },
     "travis-donovan": {
@@ -296,7 +317,7 @@
       "noche": { "zone": "ancla-sala", "pin": [300, 220], "doing": "Bebe en el Ancla Rota con algún matón." } },
     "ysolde-marr": {
       "amanecer": { "doing": "Revisa los cabos de su goleta." },
-      "manana": { "zone": "plaza-gremio", "pin": [820, 480], "doing": "Discute el flete con Reva Sonn." },
+      "manana": { "zone": "gremio-mostrador", "pin": [430, 470], "doing": "Discute el flete con Reva Sonn en el mostrador del gremio." },
       "anochecer": { "zone": "timon-sala", "pin": [420, 170], "doing": "Cena sola en el Timón Escarlata." },
       "noche": { "doing": "Duerme a bordo de su goleta." } },
     "rendal-sal": {
@@ -364,6 +385,11 @@
       "manana": { "zone": "consistorio-escalinata", "pin": [700, 600], "doing": "Vigila la escalinata con los brazos cruzados." },
       "anochecer": { "zone": "almacen-puertas", "pin": [520, 480], "doing": "Baja al Almacén Sur a dar órdenes en el cambio de turno." },
       "noche": { "zone": "consistorio-vestibulo", "pin": [690, 360], "doing": "Hace guardia en el vestíbulo, ante el despacho de Dory." } },
+    "lenn-brea": {
+      "amanecer": { "zone": "gremio-almacen", "pin": [640, 450], "doing": "Carga muestras en una carretilla para llevarlas a la plaza." },
+      "manana": { "doing": "Monta el puesto y cuelga el emblema del gremio." },
+      "anochecer": { "zone": "gremio-archivo", "pin": [700, 240], "doing": "Pasa a limpio los registros del día en el archivo." },
+      "noche": { "away": true, "doing": "En casa." } },
     "ruy": {
       "amanecer": { "doing": "Saca el pan del horno; todo Ethar huele a pan." },
       "manana": { "zone": "plaza-mercado", "pin": [940, 480], "doing": "Vende pan en un puesto de la plaza." },

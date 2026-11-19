@@ -202,6 +202,15 @@ $npcOut['matones-del-rojo'] = [ordered]@{ id = 'matones-del-rojo'; name = 'Maton
 $img = @{ 'gungar' = 'img/npcs/gungar.png'; 'maestro-kharzun' = 'img/npcs/kharzun.png'; 'skirx' = 'img/PJs/skrix.png'; 'solo' = 'img/solo en su taberna.png' }
 foreach ($k in $img.Keys) { if ($npcOut[$k]) { $npcOut[$k].image = $img[$k] } else { Write-Warning "Imagen sin NPC: $k" } }
 
+# --- Sitios nuevos (data/vecinos.json): van antes que los interiores porque algunos tienen plano ---
+$vecFile = "$root\data\vecinos.json"
+$vec = if (Test-Path $vecFile) { Get-Content $vecFile -Raw -Encoding UTF8 | ConvertFrom-Json }
+foreach ($l in $vec.lugares) {
+  $o = [ordered]@{ id = $l.id; name = $l.name; type = $l.type; parent = $l.parent; read = $l.read; dm = $l.dm; items = $l.items; visited = $false; secret = $false }
+  if ($l.parent -eq 'ethar') { $o.pin = @([math]::Round($l.pin[0] / 1262, 4), [math]::Round($l.pin[1] / 1246, 4)) }
+  $out[$l.id] = $o
+}
+
 # --- Interiores (data/interiores.json): plano, estancias y NPCs situados ---
 $intFile = "$root\data\interiores.json"
 $zoneSize = @{}
@@ -232,13 +241,11 @@ function ZonePin($zone, $pin) {
   if (-not $s) { Write-Warning "Estancia desconocida: $zone"; return $null }
   @([math]::Round($pin[0] / $s[0], 4), [math]::Round($pin[1] / $s[1], 4))
 }
-$vecFile = "$root\data\vecinos.json"
-if (Test-Path $vecFile) {
-  $vec = Get-Content $vecFile -Raw -Encoding UTF8 | ConvertFrom-Json
-  foreach ($l in $vec.lugares) {
-    $o = [ordered]@{ id = $l.id; name = $l.name; type = $l.type; parent = $l.parent; read = $l.read; dm = $l.dm; items = $l.items; visited = $false; secret = $false }
-    if ($l.parent -eq 'ethar') { $o.pin = @([math]::Round($l.pin[0] / 1262, 4), [math]::Round($l.pin[1] / 1246, 4)) }
-    $out[$l.id] = $o
+if ($vec) {
+  # cambios sobre fichas que vienen del Word
+  foreach ($p in $vec.cambios.PSObject.Properties) {
+    if (-not $npcOut[$p.Name]) { Write-Warning "Cambio de NPC que no existe: $($p.Name)"; continue }
+    foreach ($c in $p.Value.PSObject.Properties) { $npcOut[$p.Name][$c.Name] = $c.Value }
   }
   foreach ($v in $vec.vecinos) {
     $o = [ordered]@{ id = $v.id; tier = 'vecino'; pc = $false; status = 'vivo'; known = 'no' }
@@ -265,6 +272,8 @@ $qOut = [ordered]@{}; foreach ($q in $quests) { $id = Slug $q.name; $o = [ordere
 $seed = [ordered]@{
   version = 1; title = 'Othran Vel'; group = "Ecos d'Othalun"; logo = 'img/othran vel logo.png'; start = 'othran-vel'
   locations = $out; npcs = $npcOut; factions = $facOut; quests = $qOut
+  # campos que la app debe sobrescribir en datos ya guardados (cambios de diseño, no de partida)
+  patches = @($vec.parches)
 }
 $json = $seed | ConvertTo-Json -Depth 8 -Compress
 [IO.File]::WriteAllText("$root\data\seed.js", "window.SEED = $json;`n", (New-Object Text.UTF8Encoding($false)))

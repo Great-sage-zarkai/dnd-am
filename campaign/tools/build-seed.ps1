@@ -177,7 +177,7 @@ foreach ($k in $etharPins.Keys) { if ($out[$k]) { $out[$k].pin = @([math]::Round
 $npcOut = [ordered]@{}
 $pcs = @(
   @{ name = 'Ferrum'; race = 'Goliath'; role = 'Paladín (Juramento de Gloria)'; origin = 'Forjaeterna (Clan Durhammer)' },
-  @{ name = 'Thal'; race = 'Gnomo'; role = 'Pícaro Mastermind, con un pseudodragón'; origin = 'Rocapistón (Othran Sol)'; image = 'img/thal.png'; aka = 'Lord Thales Cronosfera' },
+  @{ name = 'Thal'; race = 'Gnomo'; role = 'Pícaro Mastermind, con un pseudodragón'; origin = 'Rocapistón (Othran Sol)'; image = 'img/PJs/thal.png'; aka = 'Lord Thales Cronosfera' },
   @{ name = 'Musel'; race = 'Humano'; role = 'Guerrero. Amnesia, ex-Custodio del Pulso (nombre puesto por Bram)' },
   @{ name = 'Bram Ferragulla'; race = 'Mediano'; role = 'Artificiero Artillerista'; origin = 'Aldea de Tessval' },
   @{ name = 'Borin'; race = 'Enano'; role = 'Bárbaro. Desaparecido desde la mañana tras el campamento'; origin = 'Kharngrim' }
@@ -199,7 +199,7 @@ foreach ($n in $npcs) {
 $npcOut['matones-del-rojo'] = [ordered]@{ id = 'matones-del-rojo'; name = 'Matones del Rojo'; pc = $false; race = 'Humanos (varios)'
   role = 'Matones de la Sal Negra (grupo genérico)'; location = 'Almacén Sur'; faction = 'La Sal Negra'
   look = 'Pañuelo rojo como distintivo. Cambian de turno al anochecer.'; status = 'vivos'; known = 'sí (de oídas)' }
-$img = @{ 'gungar' = 'img/npcs/gungar.png'; 'maestro-kharzun' = 'img/npcs/kharzun.png'; 'skirx' = 'img/skrix.png'; 'solo' = 'img/solo en su taberna.png' }
+$img = @{ 'gungar' = 'img/npcs/gungar.png'; 'maestro-kharzun' = 'img/npcs/kharzun.png'; 'skirx' = 'img/PJs/skrix.png'; 'solo' = 'img/solo en su taberna.png' }
 foreach ($k in $img.Keys) { if ($npcOut[$k]) { $npcOut[$k].image = $img[$k] } else { Write-Warning "Imagen sin NPC: $k" } }
 
 $facOut = [ordered]@{}; foreach ($f in $facs) { $id = Slug $f.name; $o = [ordered]@{ id = $id }; foreach ($k in $f.Keys) { $o[$k] = $f[$k] }; $facOut[$id] = $o }

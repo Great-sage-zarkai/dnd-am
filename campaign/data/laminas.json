@@ -13,5 +13,13 @@
   "lamina-09": { "kind": "npc", "ids": ["ferrum", "musel", "bram-ferragulla", "borin"] },
   "lamina-10": { "kind": "npc", "ids": ["vessa", "greenhorn", "mormesk", "cicatriz"] },
   "lugares-04": { "kind": "loc", "ids": ["sol-veleth", "camino-de-sal", "greypost", "castillo-de-azorak"] },
-  "lugares-05": { "kind": "loc", "ids": ["aramark", "el-pozo-del-alma", "deeprock-neigh", "la-caverna-del-eco"] }
+  "lugares-05": { "kind": "loc", "ids": ["aramark", "el-pozo-del-alma", "deeprock-neigh", "la-caverna-del-eco"] },
+
+  "vecinos-01": { "kind": "npc", "ids": ["marga-escamilla", "hilda-brenn", "nana-ferra", "quillon"] },
+  "vecinos-02": { "kind": "npc", "ids": ["liss-corbel", "abuelo-wender", "joss", "ysolde-marr"] },
+  "vecinos-03": { "kind": "npc", "ids": ["rendal-sal", "haskel", "pandilla-del-muelle", "ruy"] },
+  "vecinos-04": { "kind": "npc", "ids": ["berta-cucharon", "pip", "mordo-el-tuerto", "sly-fenn"] },
+  "vecinos-05": { "kind": "npc", "ids": ["nim", "tilda-rook", "bertil", "madre-orla"] },
+  "vecinos-06": { "kind": "npc", "ids": ["aurel", "ulric-penn", "bruno-mazas", null] },
+  "lugares-06": { "kind": "loc", "ids": ["horno-de-ruy", "casa-de-madre-orla", "la-cala-del-ahorcado", "alun"] }
 }

@@ -64,8 +64,9 @@ foreach ($f in Get-ChildItem $In -File -ErrorAction SilentlyContinue | Where-Obj
   $entry = $manifest.($f.BaseName)
   if (-not $entry) { Write-Warning "$($f.Name): no está en data/laminas.json, la salto"; continue }
   $dir = if ($entry.kind -eq 'loc') { "$Out\lugares" } else { "$Out\npcs" }
-  $targets = $entry.ids | ForEach-Object { "$dir\$_.jpg" }
-  if (-not $Force -and -not ($targets | Where-Object { -not (Test-Path $_) })) { "$($f.Name): ya recortada"; continue }
+  # un id null es una casilla de relleno que no se guarda
+  $targets = $entry.ids | ForEach-Object { if ($_) { "$dir\$_.jpg" } else { $null } }
+  if (-not $Force -and -not ($targets | Where-Object { $_ -and -not (Test-Path $_) })) { "$($f.Name): ya recortada"; continue }
   $bmp = New-Object Drawing.Bitmap($f.FullName)
   $gx = FindGutter $bmp $true; $gy = FindGutter $bmp $false
   $W = $bmp.Width; $H = $bmp.Height
@@ -74,9 +75,9 @@ foreach ($f in Get-ChildItem $In -File -ErrorAction SilentlyContinue | Where-Obj
     (New-Object Drawing.Rectangle(($gx[1] + 1), 0, ($W - $gx[1] - 1), $gy[0])),
     (New-Object Drawing.Rectangle(0, ($gy[1] + 1), $gx[0], ($H - $gy[1] - 1))),
     (New-Object Drawing.Rectangle(($gx[1] + 1), ($gy[1] + 1), ($W - $gx[1] - 1), ($H - $gy[1] - 1))))
-  for ($i = 0; $i -lt 4; $i++) { SaveCrop $bmp $rects[$i] $targets[$i] }
+  for ($i = 0; $i -lt 4; $i++) { if ($targets[$i]) { SaveCrop $bmp $rects[$i] $targets[$i] } }
   $bmp.Dispose()
-  "$($f.Name): recortada en $($entry.ids -join ', ')  (bordes x=$($gx -join '-') y=$($gy -join '-'))"
+  "$($f.Name): recortada en $(($entry.ids | Where-Object { $_ }) -join ', ')  (bordes x=$($gx -join '-') y=$($gy -join '-'))"
 }
 
 # Índice de imágenes por id (también recoge las que se guarden sueltas con el nombre del id)

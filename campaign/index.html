@@ -1,0 +1,714 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Othran Vel · Campaña</title>
+<link rel="icon" href="img/othran vel logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #15120e; --panel: #1e1a15; --panel2: #27221b; --line: #3a3228; --text: #e9e0cf; --dim: #a39782;
+  --accent: #d9a54a; --accent2: #8fbf9f; --danger: #d0675a; --secret: #a98ad8; --read: #2a2419; --readline: #8a6a2e;
+  --pin-town: #d9a54a; --pin-danger: #d0675a; --pin-secret: #a98ad8; --pin-other: #5fb3a8; --pin-room: #c9c1b0;
+  --shadow: 0 4px 18px rgba(0,0,0,.45);
+}
+:root[data-theme="light"] {
+  --bg: #efe6d2; --panel: #f8f2e4; --panel2: #efe5cf; --line: #d8c9a8; --text: #2d2418; --dim: #77684f;
+  --accent: #9a6514; --accent2: #3f7a57; --danger: #a8402f; --secret: #6b4ca5; --read: #f3e7c8; --readline: #b8893a;
+  --pin-town: #b77a17; --pin-danger: #b0442f; --pin-secret: #7650b8; --pin-other: #2f8378; --pin-room: #6c6252;
+  --shadow: 0 4px 14px rgba(60,40,10,.18);
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body { background: var(--bg); color: var(--text); font: 14px/1.45 Inter, system-ui, sans-serif; overflow: hidden; }
+button { font: inherit; color: inherit; cursor: pointer; }
+a { color: inherit; }
+.app { display: grid; grid-template-rows: 54px 1fr; height: 100vh; }
+
+/* Cabecera */
+header { display: flex; align-items: center; gap: 12px; padding: 0 14px; background: var(--panel); border-bottom: 1px solid var(--line); }
+header img { height: 36px; width: 36px; object-fit: cover; border-radius: 50%; }
+.brand h1 { font: 700 18px Cinzel, serif; margin: 0; letter-spacing: .04em; color: var(--accent); }
+.brand small { color: var(--dim); font-size: 11px; }
+.search-btn { margin-left: 24px; flex: 0 1 360px; display: flex; align-items: center; gap: 8px; padding: 7px 12px; background: var(--panel2); border: 1px solid var(--line); border-radius: 8px; color: var(--dim); text-align: left; }
+.search-btn kbd { margin-left: auto; font-size: 11px; border: 1px solid var(--line); border-radius: 4px; padding: 0 5px; }
+.spacer { flex: 1; }
+.hbtn { background: var(--panel2); border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; }
+.hbtn.on { background: var(--accent); color: #1b1307; border-color: var(--accent); font-weight: 600; }
+.menu { position: relative; }
+.menu-list { position: absolute; right: 0; top: 40px; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; box-shadow: var(--shadow); min-width: 220px; z-index: 50; display: none; padding: 4px; }
+.menu-list.open { display: block; }
+.menu-list button { display: block; width: 100%; text-align: left; background: none; border: 0; padding: 8px 10px; border-radius: 6px; }
+.menu-list button:hover { background: var(--panel2); }
+
+/* Columnas */
+main { display: grid; grid-template-columns: 290px 1fr 420px; min-height: 0; }
+aside, .detail { background: var(--panel); min-height: 0; display: flex; flex-direction: column; }
+aside { border-right: 1px solid var(--line); }
+.detail { border-left: 1px solid var(--line); overflow-y: auto; }
+.tabs { display: flex; border-bottom: 1px solid var(--line); }
+.tabs button { flex: 1; background: none; border: 0; padding: 10px 4px; color: var(--dim); border-bottom: 2px solid transparent; font-size: 13px; }
+.tabs button.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
+.list { overflow-y: auto; flex: 1; padding: 6px 0 20px; }
+.list-tools { padding: 8px 10px; display: flex; gap: 6px; border-bottom: 1px solid var(--line); }
+.list-tools input { flex: 1; }
+input, textarea, select { background: var(--bg); color: var(--text); border: 1px solid var(--line); border-radius: 6px; padding: 6px 8px; font: inherit; }
+textarea { width: 100%; resize: vertical; min-height: 60px; font-family: inherit; }
+.group-title { font: 600 11px Inter; text-transform: uppercase; letter-spacing: .08em; color: var(--dim); padding: 12px 14px 4px; }
+
+/* Árbol */
+.node { display: flex; align-items: center; gap: 6px; padding: 4px 10px 4px 0; cursor: pointer; border-left: 3px solid transparent; white-space: nowrap; }
+.node:hover { background: var(--panel2); }
+.node.sel { background: var(--panel2); border-left-color: var(--accent); color: var(--accent); }
+.node .tw { width: 16px; text-align: center; color: var(--dim); font-size: 10px; flex: none; }
+.node .nm { overflow: hidden; text-overflow: ellipsis; }
+.node .badge { font-size: 10px; color: var(--dim); }
+.node.secret .nm { color: var(--secret); }
+
+/* Filas de personajes */
+.row { display: flex; align-items: center; gap: 10px; padding: 6px 14px; cursor: pointer; border-left: 3px solid transparent; }
+.row:hover { background: var(--panel2); }
+.row.sel { background: var(--panel2); border-left-color: var(--accent); }
+.row .meta { min-width: 0; }
+.row .meta b { display: block; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.row .meta span { display: block; font-size: 12px; color: var(--dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.row.dead b { text-decoration: line-through; color: var(--dim); }
+.av { width: 34px; height: 34px; border-radius: 50%; flex: none; background: var(--panel2); border: 1px solid var(--line); display: grid; place-items: center; font: 600 12px Inter; color: var(--accent); object-fit: cover; object-position: top; }
+.av.pc { border-color: var(--accent2); color: var(--accent2); }
+
+/* Mapa */
+.center { display: flex; flex-direction: column; min-width: 0; min-height: 0; background: #0b0a08; }
+:root[data-theme="light"] .center { background: #d9ccb0; }
+.mapbar { display: flex; align-items: center; gap: 6px; padding: 6px 10px; background: var(--panel); border-bottom: 1px solid var(--line); }
+.crumbs { flex: 1; font-size: 13px; color: var(--dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.crumbs a { text-decoration: none; color: var(--dim); }
+.crumbs a:hover { color: var(--accent); }
+.crumbs b { color: var(--text); }
+.mbtn { background: var(--panel2); border: 1px solid var(--line); border-radius: 6px; min-width: 30px; height: 28px; padding: 0 8px; }
+.mbtn.on { border-color: var(--accent); color: var(--accent); }
+.viewport { position: relative; flex: 1; overflow: hidden; cursor: grab; touch-action: none; }
+.viewport.dragging { cursor: grabbing; }
+.viewport.placing { cursor: crosshair; }
+.stage { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
+.stage.anim { transition: transform .35s ease; }
+.stage img.mapimg { display: block; user-select: none; -webkit-user-drag: none; box-shadow: 0 0 40px rgba(0,0,0,.6); }
+.nomap { position: absolute; inset: 0; display: grid; place-items: center; color: var(--dim); text-align: center; padding: 30px; }
+.pin { position: absolute; transform: translate(-50%, -50%) scale(var(--inv, 1)); display: flex; align-items: center; gap: 4px; }
+.pin .dot { width: 20px; height: 20px; border-radius: 50%; background: var(--c, var(--pin-other)); border: 2px solid #fff8e6; box-shadow: 0 2px 6px rgba(0,0,0,.6); display: grid; place-items: center; font-size: 10px; color: #1b1307; font-weight: 700; cursor: pointer; transition: transform .12s; }
+.pin.secret .dot { border-style: dashed; border-color: #f0e6ff; }
+.pin:hover .dot { transform: scale(1.25); }
+.pin.sel .dot { transform: scale(1.45); box-shadow: 0 0 0 4px rgba(217,165,74,.55), 0 2px 8px rgba(0,0,0,.7); }
+.pin .lbl { position: absolute; left: 26px; top: 50%; transform: translateY(-50%); background: rgba(20,16,10,.88); color: #f3e9d4; padding: 2px 7px; border-radius: 5px; font-size: 12px; white-space: nowrap; pointer-events: none; display: none; }
+.pin:hover .lbl, .pin.sel .lbl, .labels .pin .lbl { display: block; }
+.pin.hasmap .dot::after { content: "⤵"; position: absolute; right: -9px; top: -9px; font-size: 11px; background: var(--panel); color: var(--accent); border-radius: 50%; width: 15px; height: 15px; display: grid; place-items: center; border: 1px solid var(--accent); }
+.edit .pin .dot { cursor: move; }
+.toast { position: absolute; left: 50%; bottom: 18px; transform: translateX(-50%); background: var(--panel); border: 1px solid var(--accent); border-radius: 8px; padding: 8px 14px; box-shadow: var(--shadow); font-size: 13px; z-index: 5; }
+
+/* Ficha */
+.card { padding: 18px 20px 40px; }
+.hero { width: 100%; max-height: 240px; object-fit: cover; object-position: top; border-radius: 10px; border: 1px solid var(--line); margin-bottom: 14px; display: block; cursor: zoom-in; }
+.card h2 { font: 700 22px/1.2 Cinzel, serif; margin: 0 0 4px; color: var(--accent); }
+.sub { color: var(--dim); font-size: 13px; margin-bottom: 10px; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+.tag { font-size: 11px; padding: 2px 8px; border-radius: 99px; border: 1px solid var(--line); color: var(--dim); }
+.tag.secret { color: var(--secret); border-color: var(--secret); }
+.tag.dead { color: var(--danger); border-color: var(--danger); }
+.tag.ok { color: var(--accent2); border-color: var(--accent2); }
+.actions { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 14px; }
+.btn { background: var(--panel2); border: 1px solid var(--line); border-radius: 7px; padding: 6px 11px; font-size: 13px; }
+.btn.primary { background: var(--accent); color: #1b1307; border-color: var(--accent); font-weight: 600; }
+.btn.danger { color: var(--danger); }
+.read { background: var(--read); border-left: 3px solid var(--readline); border-radius: 0 8px 8px 0; padding: 12px 14px; font: italic 17px/1.5 "Crimson Pro", Georgia, serif; margin: 6px 0 14px; }
+.read .h { font: 600 11px Inter; font-style: normal; letter-spacing: .08em; text-transform: uppercase; color: var(--readline); display: block; margin-bottom: 4px; }
+.quote { font: italic 17px/1.4 "Crimson Pro", Georgia, serif; color: var(--accent); margin: 0 0 14px; }
+.f { margin: 0 0 12px; }
+.f h4 { margin: 0 0 3px; font: 600 11px Inter; text-transform: uppercase; letter-spacing: .08em; color: var(--dim); }
+.f div { white-space: normal; }
+.f.voice div { background: var(--panel2); border-radius: 8px; padding: 8px 10px; }
+.dmbox { border: 1px dashed var(--secret); border-radius: 10px; padding: 10px 12px 2px; margin: 14px 0; }
+.dmbox > .h { font: 600 11px Inter; letter-spacing: .08em; text-transform: uppercase; color: var(--secret); margin-bottom: 8px; display: flex; justify-content: space-between; cursor: pointer; }
+.dmbox.closed > :not(.h) { display: none; }
+.tbd { color: var(--dim); opacity: .7; font-style: italic; }
+.lk { color: var(--accent); text-decoration: none; border-bottom: 1px dotted var(--accent); cursor: pointer; }
+.lk.npc { color: var(--accent2); border-bottom-color: var(--accent2); }
+.lk.fac { color: var(--secret); border-bottom-color: var(--secret); }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { display: inline-flex; align-items: center; gap: 6px; background: var(--panel2); border: 1px solid var(--line); border-radius: 99px; padding: 3px 10px 3px 3px; cursor: pointer; font-size: 13px; }
+.chip:hover { border-color: var(--accent); }
+.chip .av { width: 24px; height: 24px; font-size: 10px; }
+.chip small { color: var(--dim); }
+.chip.plain { padding: 3px 10px; }
+.missing { font-size: 12px; color: var(--dim); margin-top: 20px; border-top: 1px solid var(--line); padding-top: 10px; }
+.form label { display: block; font: 600 11px Inter; text-transform: uppercase; letter-spacing: .06em; color: var(--dim); margin: 10px 0 3px; }
+.form input[type=text], .form select { width: 100%; }
+.form .chk { display: flex; gap: 16px; margin-top: 10px; }
+.form .chk label { display: flex; gap: 6px; align-items: center; text-transform: none; font: 13px Inter; color: var(--text); margin: 0; }
+.empty { color: var(--dim); padding: 40px 20px; text-align: center; }
+
+/* Buscador y visor de imagen */
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,.55); display: none; z-index: 100; }
+.overlay.open { display: block; }
+.palette { width: min(620px, 92vw); margin: 10vh auto 0; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); overflow: hidden; }
+.palette input { width: 100%; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; padding: 14px 16px; font-size: 16px; background: var(--panel); outline: none; }
+.results { max-height: 55vh; overflow-y: auto; }
+.res { display: flex; gap: 10px; align-items: center; padding: 8px 14px; cursor: pointer; }
+.res.active, .res:hover { background: var(--panel2); }
+.res .k { font-size: 11px; color: var(--dim); margin-left: auto; }
+.lightbox { display: grid; place-items: center; cursor: zoom-out; }
+.lightbox img { max-width: 92vw; max-height: 92vh; border-radius: 8px; }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <img id="logo" alt="">
+    <div class="brand"><h1 id="title">Othran Vel</h1><small id="group"></small></div>
+    <button class="search-btn" id="openSearch">🔍 Buscar NPC, lugar, misión… <kbd>Ctrl K</kbd></button>
+    <div class="spacer"></div>
+    <button class="hbtn" id="editToggle" title="Activa el modo edición para mover pins y editar fichas">✏️ Editar</button>
+    <button class="hbtn" id="themeToggle" title="Tema claro / oscuro">☾</button>
+    <div class="menu">
+      <button class="hbtn" id="menuBtn">⋯</button>
+      <div class="menu-list" id="menuList">
+        <button data-act="export">💾 Exportar campaña (copia de seguridad)</button>
+        <button data-act="import">📂 Importar campaña…</button>
+        <button data-act="reset">↺ Restaurar datos del Word</button>
+      </div>
+    </div>
+    <input type="file" id="importFile" accept=".json,application/json" hidden>
+  </header>
+  <main>
+    <aside>
+      <div class="tabs" id="tabs">
+        <button data-tab="loc" class="active">Lugares</button>
+        <button data-tab="npc">Personajes</button>
+        <button data-tab="fac">Facciones</button>
+        <button data-tab="quest">Misiones</button>
+      </div>
+      <div class="list-tools"><input id="filter" placeholder="Filtrar…"><button class="btn" id="addBtn" title="Añadir" hidden>＋</button></div>
+      <div class="list" id="list"></div>
+    </aside>
+    <section class="center">
+      <div class="mapbar">
+        <div class="crumbs" id="crumbs"></div>
+        <button class="mbtn" id="upBtn" title="Subir al mapa superior">⬆</button>
+        <button class="mbtn" id="labelsBtn" title="Mostrar todas las etiquetas">Aa</button>
+        <button class="mbtn" id="zoomOut" title="Alejar">−</button>
+        <button class="mbtn" id="zoomIn" title="Acercar">+</button>
+        <button class="mbtn" id="fitBtn" title="Encajar mapa">⤢</button>
+      </div>
+      <div class="viewport" id="viewport"><div class="stage" id="stage"></div></div>
+    </section>
+    <div class="detail" id="detail"></div>
+  </main>
+</div>
+<div class="overlay" id="searchOv"><div class="palette"><input id="searchIn" placeholder="Escribe un nombre…" autocomplete="off"><div class="results" id="results"></div></div></div>
+<div class="overlay lightbox" id="lightbox"><img alt=""></div>
+
+<script src="data/seed.js"></script>
+<script>
+const STORE = 'othranvel.campaign.v1';
+const PREFS = 'othranvel.prefs.v1';
+const TBD = '[POR DEFINIR]';
+
+let db = load();
+let prefs = Object.assign({ theme: 'dark', tab: 'loc', labels: false, open: ['mundo', 'othran-vel', 'ethar'] }, safeGet(PREFS));
+let route = { kind: 'loc', id: db.start, map: db.start };
+let editMode = false, editing = false, placing = null;
+const openNodes = new Set(prefs.open);
+
+function safeGet(k) { try { return JSON.parse(localStorage.getItem(k)) || {}; } catch { return {}; } }
+function load() {
+  const saved = safeGet(STORE);
+  return saved.locations ? saved : structuredClone(window.SEED);
+}
+function save() { try { localStorage.setItem(STORE, JSON.stringify(db)); } catch (e) { alert('No se pudo guardar: ' + e.message); } }
+function savePrefs() { prefs.open = [...openNodes]; try { localStorage.setItem(PREFS, JSON.stringify(prefs)); } catch {} }
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const src = p => p && !p.startsWith('data:') ? encodeURI(p) : p;
+const isTbd = v => !v || !String(v).trim() || String(v).trim() === TBD;
+const plainName = n => n.replace(/\s*«[^»]*»/g, '').trim();
+const initials = n => plainName(n).split(/\s+/).filter(w => /^\p{Lu}/u.test(w)).slice(0, 2).map(w => w[0]).join('') || n[0];
+
+/* ---------- Modelo ---------- */
+const L = id => db.locations[id];
+const children = id => Object.values(db.locations).filter(l => l.parent === id);
+function ancestors(id) { const a = []; let l = L(id); while (l && l.parent) { l = L(l.parent); if (l) a.unshift(l); } return a; }
+function mapHost(id) { let l = L(id); while (l) { if (l.map) return l.id; l = L(l.parent); } return null; }
+// Mapa en el que aparece el pin de un lugar (o, sin pin, el mapa más cercano)
+function mapForPin(id) { const l = L(id); if (!l) return null; return l.pin && l.parent ? mapHost(l.parent) : mapHost(id); }
+function subtree(id) { const out = [id]; for (const c of children(id)) out.push(...subtree(c.id)); return out; }
+
+function typeIcon(t = '') {
+  t = t.toLowerCase();
+  const m = [['mundo', '🌍'], ['región', '🗺️'], ['ciudad', '🏰'], ['pueblo', '🏘️'], ['mazmorra', '⛓️'], ['ruina', '🏚️'], ['bosque', '🌲'],
+    ['taberna', '🍺'], ['tienda', '🛒'], ['templo', '🕯️'], ['plaza', '⛲'], ['sala', '▫️'], ['zona', '⚓'], ['camino', '🛤️'], ['volcán', '🌋'], ['minas', '⛏️']];
+  for (const [k, i] of m) if (t.includes(k)) return i;
+  return '📍';
+}
+function pinColor(l) {
+  const t = (l.type || '').toLowerCase();
+  if (l.secret) return 'var(--pin-secret)';
+  if (t === 'sala') return 'var(--pin-room)';
+  if (/mazmorra|ruina/.test(t)) return 'var(--pin-danger)';
+  if (/ciudad|pueblo|taberna|tienda|plaza|templo/.test(t)) return 'var(--pin-town)';
+  return 'var(--pin-other)';
+}
+
+// Resolver nombres escritos a mano (NPCs/lugares) a fichas
+let aliasIndex = null;
+function buildAliases() {
+  const map = new Map();
+  const add = (alias, kind, id, min = 4) => { alias = alias.trim(); if (alias.length >= min && !map.has(alias)) map.set(alias, { kind, id }); };
+  for (const n of Object.values(db.npcs)) add(n.name, 'npc', n.id), add(plainName(n.name), 'npc', n.id);
+  // nombre de pila si es único
+  const first = {};
+  for (const n of Object.values(db.npcs)) { const w = plainName(n.name).split(' '); if (w.length > 1 && !/^(El|La|Maestro)$/.test(w[0])) (first[w[0]] ??= []).push(n.id); }
+  for (const [w, ids] of Object.entries(first)) if (ids.length === 1) add(w, 'npc', ids[0]);
+  if (db.npcs.maestro_kharzun || db.npcs['maestro-kharzun']) add('Kharzun', 'npc', 'maestro-kharzun');
+  for (const f of Object.values(db.factions)) add(f.name, 'fac', f.id, 6);
+  for (const l of Object.values(db.locations)) if (l.id !== 'mundo' && l.type !== 'sala') map.set(l.name, { kind: 'loc', id: l.id });
+  map.delete('Solo'); // "solo" es palabra común; se enlaza desde las listas, no del texto
+  const keys = [...map.keys()].sort((a, b) => b.length - a.length).map(k => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+  aliasIndex = { map, re: keys.length ? new RegExp(`(?<![\\p{L}])(${keys.map(k => esc(k)).join('|')})(?![\\p{L}])`, 'gu') : null };
+}
+function resolveName(text) {
+  if (!aliasIndex) buildAliases();
+  const t = (text || '').trim();
+  if (aliasIndex.map.has(t)) return aliasIndex.map.get(t);
+  const p = plainName(t); if (aliasIndex.map.has(p)) return aliasIndex.map.get(p);
+  return null;
+}
+function npcLocation(n) {
+  const t = n.location || '';
+  if (!t || /^Paradero/.test(t)) return null;
+  let best = null;
+  for (const l of Object.values(db.locations)) {
+    if (l.id === 'mundo') continue;
+    const i = t.indexOf(l.name);
+    if (i >= 0 && (!best || i < best.i || (i === best.i && l.name.length > best.len))) best = { id: l.id, i, len: l.name.length };
+  }
+  return best && best.id;
+}
+function fmt(text, selfId) {
+  if (isTbd(text)) return `<span class="tbd">${esc(text || TBD)}</span>`;
+  if (!aliasIndex) buildAliases();
+  let h = esc(text).replaceAll(esc(TBD), `<span class="tbd">${TBD}</span>`);
+  if (aliasIndex.re) h = h.replace(aliasIndex.re, m => {
+    const r = aliasIndex.map.get(m.replace(/&quot;/g, '"').replace(/&amp;/g, '&'));
+    if (!r || r.id === selfId) return m;
+    return `<a class="lk ${r.kind}" href="#/${r.kind}/${r.id}">${m}</a>`;
+  });
+  return h.replace(/\n/g, '<br>');
+}
+
+/* ---------- Rutas ---------- */
+// Mapa por defecto al abrir un lugar: el suyo propio si lo tiene
+const defaultMap = id => L(id).map ? id : mapForPin(id);
+function go(kind, id, map) {
+  if (!map) map = kind === 'loc' ? defaultMap(id) : kind === 'npc' ? (npcLocation(db.npcs[id]) ? mapForPin(npcLocation(db.npcs[id])) : route.map) : route.map;
+  location.hash = `#/${kind}/${id}` + (map ? `?m=${map}` : '');
+}
+function enter(id) { go('loc', id, defaultMap(id)); }
+function parseHash() {
+  const m = location.hash.match(/^#\/(loc|npc|fac|quest)\/([^?]+)(?:\?m=(.+))?$/);
+  if (!m) return { kind: 'loc', id: db.start, map: db.start };
+  const [, kind, id, map] = m;
+  const coll = { loc: db.locations, npc: db.npcs, fac: db.factions, quest: db.quests }[kind];
+  if (!coll[id]) return { kind: 'loc', id: db.start, map: db.start };
+  let mp = map && L(map) && L(map).map ? map : null;
+  if (!mp) mp = kind === 'loc' ? defaultMap(id) : kind === 'npc' && npcLocation(coll[id]) ? mapForPin(npcLocation(coll[id])) : route.map;
+  return { kind, id, map: mp };
+}
+window.addEventListener('hashchange', () => { const prevMap = route.map; route = parseHash(); editing = false; renderAll(prevMap !== route.map); });
+
+/* ---------- Lista lateral ---------- */
+function renderList() {
+  document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('active', b.dataset.tab === prefs.tab));
+  const q = $('#filter').value.trim().toLowerCase();
+  const el = $('#list');
+  $('#addBtn').hidden = !editMode || prefs.tab === 'loc';
+  if (prefs.tab === 'loc') {
+    if (q) {
+      const hits = Object.values(db.locations).filter(l => l.name.toLowerCase().includes(q));
+      el.innerHTML = hits.map(l => `<div class="node ${route.kind === 'loc' && route.id === l.id ? 'sel' : ''} ${l.secret ? 'secret' : ''}" data-loc="${l.id}" style="padding-left:12px"><span>${typeIcon(l.type)}</span><span class="nm">${esc(l.name)}</span></div>`).join('') || '<div class="empty">Nada</div>';
+    } else {
+      const path = route.kind === 'loc' ? ancestors(route.id).map(a => a.id) : [];
+      path.forEach(p => openNodes.add(p));
+      el.innerHTML = treeHtml('mundo', 0);
+    }
+  } else if (prefs.tab === 'npc') {
+    const all = Object.values(db.npcs).filter(n => !q || (n.name + ' ' + (n.role || '')).toLowerCase().includes(q));
+    const etharIds = new Set(subtree('ethar'));
+    const groups = [['El grupo', n => n.pc], ['En Ethar', n => etharIds.has(npcLocation(n))], ['Resto del mundo', n => npcLocation(n)], ['Sin ubicación fija', () => true]];
+    const used = new Set(); let html = '';
+    for (const [title, test] of groups) {
+      const items = all.filter(n => !used.has(n.id) && test(n));
+      items.forEach(n => used.add(n.id));
+      if (items.length) html += `<div class="group-title">${title} · ${items.length}</div>` + items.map(npcRow).join('');
+    }
+    el.innerHTML = html || '<div class="empty">Nada</div>';
+  } else {
+    const coll = prefs.tab === 'fac' ? db.factions : db.quests;
+    const items = Object.values(coll).filter(x => !q || x.name.toLowerCase().includes(q));
+    el.innerHTML = items.map(x => `<div class="row ${route.kind === prefs.tab && route.id === x.id ? 'sel' : ''}" data-${prefs.tab}="${x.id}"><div class="meta"><b>${esc(x.name)}</b><span>${esc(prefs.tab === 'quest' ? (x.status || '') : (x.leader || ''))}</span></div></div>`).join('') || '<div class="empty">Nada</div>';
+  }
+}
+function treeHtml(id, depth) {
+  const l = L(id); if (!l) return '';
+  const kids = children(id);
+  const open = openNodes.has(id);
+  const sel = route.kind === 'loc' && route.id === id;
+  let h = `<div class="node ${sel ? 'sel' : ''} ${l.secret ? 'secret' : ''}" data-loc="${id}" style="padding-left:${depth * 14 + 4}px">
+    <span class="tw" data-toggle="${kids.length ? id : ''}">${kids.length ? (open ? '▾' : '▸') : ''}</span>
+    <span>${typeIcon(l.type)}</span><span class="nm">${esc(l.name)}</span>${l.map ? '<span class="badge">🗺</span>' : ''}${l.secret ? '<span class="badge">🔒</span>' : ''}</div>`;
+  if (open) h += kids.map(k => treeHtml(k.id, depth + 1)).join('');
+  return h;
+}
+function avatar(n, cls = '') { return n.image ? `<img class="av ${n.pc ? 'pc' : ''} ${cls}" src="${src(n.image)}" alt="">` : `<span class="av ${n.pc ? 'pc' : ''} ${cls}">${esc(initials(n.name))}</span>`; }
+function isDead(n) { return /muert/i.test(n.status || ''); }
+function npcRow(n) {
+  const sel = route.kind === 'npc' && route.id === n.id;
+  return `<div class="row ${sel ? 'sel' : ''} ${isDead(n) ? 'dead' : ''}" data-npc="${n.id}">${avatar(n)}<div class="meta"><b>${esc(n.name)}${isDead(n) ? ' †' : ''}</b><span>${esc(n.role || '')}</span></div></div>`;
+}
+$('#list').addEventListener('click', e => {
+  const t = e.target.closest('[data-toggle]');
+  if (t && t.dataset.toggle) { const id = t.dataset.toggle; openNodes.has(id) ? openNodes.delete(id) : openNodes.add(id); savePrefs(); renderList(); return; }
+  const n = e.target.closest('[data-loc],[data-npc],[data-fac],[data-quest]'); if (!n) return;
+  if (n.dataset.loc) { openNodes.add(n.dataset.loc); savePrefs(); enter(n.dataset.loc); }
+  else if (n.dataset.npc) go('npc', n.dataset.npc);
+  else if (n.dataset.fac) go('fac', n.dataset.fac);
+  else go('quest', n.dataset.quest);
+});
+$('#tabs').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; prefs.tab = b.dataset.tab; $('#filter').value = ''; savePrefs(); renderList(); });
+$('#filter').addEventListener('input', renderList);
+$('#addBtn').addEventListener('click', () => {
+  const kind = prefs.tab, coll = { npc: db.npcs, fac: db.factions, quest: db.quests }[kind];
+  const id = uniqueId(coll, 'nuevo');
+  coll[id] = { id, name: kind === 'npc' ? 'Nuevo NPC' : kind === 'fac' ? 'Nueva facción' : 'Nueva misión' };
+  if (kind === 'npc' && route.kind === 'loc') coll[id].location = L(route.id).name;
+  save(); aliasIndex = null; editing = true; go(kind, id);
+});
+function uniqueId(coll, base) { let i = 1, id = base; while (coll[id]) id = `${base}-${++i}`; return id; }
+
+/* ---------- Mapa ---------- */
+const vp = $('#viewport'), stage = $('#stage');
+let view = { s: 1, x: 0, y: 0, w: 0, h: 0, fit: 1 }, shownMap = null;
+
+function renderMap(force) {
+  const mapId = route.map;
+  if (mapId !== shownMap || force) {
+    shownMap = mapId;
+    stage.innerHTML = ''; vp.querySelector('.nomap')?.remove();
+    if (!mapId) { vp.insertAdjacentHTML('beforeend', '<div class="nomap">Este lugar todavía no tiene mapa.<br>Puedes añadir uno en modo edición (campo «Mapa»).</div>'); renderCrumbs(); return; }
+    const img = new Image(); img.className = 'mapimg'; img.draggable = false;
+    img.onload = () => { view.w = img.naturalWidth; view.h = img.naturalHeight; fitView(false); focusSelected(false); };
+    img.src = src(L(mapId).map);
+    stage.appendChild(img);
+    const layer = document.createElement('div'); layer.id = 'pins'; layer.style.cssText = 'position:absolute;inset:0';
+    stage.appendChild(layer);
+  }
+  renderPins(); renderCrumbs();
+}
+function pinsOn(mapId) { return Object.values(db.locations).filter(l => l.pin && l.parent && mapHost(l.parent) === mapId); }
+function selectedPinId() {
+  let id = route.kind === 'loc' ? route.id : route.kind === 'npc' ? npcLocation(db.npcs[route.id]) : null;
+  const on = new Set(pinsOn(route.map).map(l => l.id));
+  while (id && !on.has(id)) id = L(id)?.parent;
+  return id;
+}
+function renderPins() {
+  const layer = $('#pins'); if (!layer) return;
+  stage.parentElement.classList.toggle('labels', prefs.labels);
+  const sel = selectedPinId();
+  layer.innerHTML = pinsOn(route.map).map(l => `<div class="pin ${l.secret ? 'secret' : ''} ${l.map ? 'hasmap' : ''} ${sel === l.id ? 'sel' : ''}" data-pin="${l.id}" style="left:${l.pin[0] * 100}%;top:${l.pin[1] * 100}%;--c:${pinColor(l)}">
+     <div class="dot">${l.type === 'sala' ? esc(l.name.replace('Sala R', '')) : ''}</div><div class="lbl">${esc(l.name)}${l.map ? ' · doble clic para entrar' : ''}</div></div>`).join('');
+  applyView();
+}
+function renderCrumbs() {
+  const m = route.map;
+  if (!m) { $('#crumbs').innerHTML = ''; return; }
+  const chain = [...ancestors(m), L(m)].filter(l => l.map || l.id === m);
+  $('#crumbs').innerHTML = '🗺 ' + chain.map(l => l.id === m ? `<b>${esc(l.name)}</b>` : `<a href="#/loc/${l.id}?m=${l.id}">${esc(l.name)}</a>`).join(' › ');
+  $('#upBtn').disabled = !mapHost(L(m).parent);
+}
+function applyView() {
+  stage.style.transform = `translate(${view.x}px,${view.y}px) scale(${view.s})`;
+  stage.style.setProperty('--inv', 1 / view.s);
+  const img = stage.querySelector('img'); if (img && view.w) { img.style.width = view.w + 'px'; img.style.height = view.h + 'px'; }
+  const layer = $('#pins'); if (layer && view.w) { layer.style.width = view.w + 'px'; layer.style.height = view.h + 'px'; }
+}
+function fitView(anim = true) {
+  if (!view.w) return;
+  const r = vp.getBoundingClientRect();
+  view.fit = Math.min(r.width / view.w, r.height / view.h) * 0.96;
+  view.s = view.fit; view.x = (r.width - view.w * view.s) / 2; view.y = (r.height - view.h * view.s) / 2;
+  animate(anim); applyView();
+}
+function focusSelected(anim = true) {
+  const id = selectedPinId(); if (!id || !view.w) return;
+  // si el mapa es el propio lugar seleccionado, no hacemos zoom
+  if (route.kind === 'loc' && route.id === route.map) return;
+  const l = L(id), r = vp.getBoundingClientRect();
+  const s = Math.max(view.s, view.fit * 1.8);
+  const px = l.pin[0] * view.w * s, py = l.pin[1] * view.h * s;
+  const visible = px + view.x > 60 && px + view.x < r.width - 60 && py + view.y > 60 && py + view.y < r.height - 60;
+  if (visible && view.s >= view.fit * 1.2) return;
+  view.s = s; view.x = r.width / 2 - px; view.y = r.height / 2 - py;
+  animate(anim); applyView();
+}
+function animate(on) { stage.classList.toggle('anim', on); if (on) setTimeout(() => stage.classList.remove('anim'), 380); }
+function zoomAt(f, cx, cy) {
+  const ns = Math.min(Math.max(view.s * f, view.fit * 0.5), 6);
+  view.x = cx - (cx - view.x) * (ns / view.s); view.y = cy - (cy - view.y) * (ns / view.s); view.s = ns; applyView();
+}
+vp.addEventListener('wheel', e => { e.preventDefault(); const r = vp.getBoundingClientRect(); zoomAt(e.deltaY < 0 ? 1.15 : 1 / 1.15, e.clientX - r.left, e.clientY - r.top); }, { passive: false });
+$('#zoomIn').onclick = () => { const r = vp.getBoundingClientRect(); animate(true); zoomAt(1.4, r.width / 2, r.height / 2); };
+$('#zoomOut').onclick = () => { const r = vp.getBoundingClientRect(); animate(true); zoomAt(1 / 1.4, r.width / 2, r.height / 2); };
+$('#fitBtn').onclick = () => fitView(true);
+$('#labelsBtn').onclick = () => { prefs.labels = !prefs.labels; $('#labelsBtn').classList.toggle('on', prefs.labels); savePrefs(); renderPins(); };
+$('#upBtn').onclick = () => { const up = mapHost(L(route.map).parent); if (up) go('loc', route.map, up); };
+
+let drag = null;
+vp.addEventListener('pointerdown', e => {
+  if (e.button !== 0) return;
+  const pin = e.target.closest('[data-pin]');
+  drag = { sx: e.clientX, sy: e.clientY, x: view.x, y: view.y, moved: false, pin: editMode && pin ? pin.dataset.pin : null, pinEl: pin };
+  vp.setPointerCapture(e.pointerId);
+});
+vp.addEventListener('pointermove', e => {
+  if (!drag) return;
+  const dx = e.clientX - drag.sx, dy = e.clientY - drag.sy;
+  if (!drag.moved && Math.hypot(dx, dy) < 4) return;
+  drag.moved = true;
+  if (drag.pin) {
+    const p = toImage(e); drag.pinEl.style.left = p[0] * 100 + '%'; drag.pinEl.style.top = p[1] * 100 + '%'; drag.pos = p;
+  } else { vp.classList.add('dragging'); view.x = drag.x + dx; view.y = drag.y + dy; applyView(); }
+});
+vp.addEventListener('pointerup', e => {
+  if (!drag) return;
+  vp.classList.remove('dragging');
+  const d = drag; drag = null;
+  if (d.pin && d.moved && d.pos) { L(d.pin).pin = d.pos; save(); return; }
+  if (d.moved) return;
+  if (placing && view.w) { const id = placing; placing = null; vp.classList.remove('placing'); hideToast(); L(id).pin = toImage(e); save(); go('loc', id, route.map); renderPins(); return; }
+  if (d.pinEl) go('loc', d.pinEl.dataset.pin, route.map);
+});
+vp.addEventListener('dblclick', e => { const pin = e.target.closest('[data-pin]'); if (pin && L(pin.dataset.pin).map) enter(pin.dataset.pin); });
+function toImage(e) {
+  const r = vp.getBoundingClientRect();
+  const x = (e.clientX - r.left - view.x) / view.s / view.w, y = (e.clientY - r.top - view.y) / view.s / view.h;
+  return [+Math.min(Math.max(x, 0), 1).toFixed(4), +Math.min(Math.max(y, 0), 1).toFixed(4)];
+}
+function toast(msg) { hideToast(); vp.insertAdjacentHTML('beforeend', `<div class="toast" id="toast">${msg}</div>`); }
+function hideToast() { $('#toast')?.remove(); }
+window.addEventListener('resize', () => fitView(false));
+
+/* ---------- Fichas ---------- */
+const LOC_FIELDS = [['read', 'Descripción para leer'], ['ambience', 'Ambiente'], ['where', 'Ubicación aproximada'], ['faction', 'Facción o gobierno'],
+  ['dm', 'Notas del máster'], ['npcs', 'NPCs (texto del Word)'], ['items', 'Objetos, precios, servicios'], ['hooks', 'Ganchos / pistas'], ['tone', 'Tono'], ['situation', 'Situación actual']];
+const NPC_FIELDS = [['race', 'Raza'], ['role', 'Rol / ocupación'], ['location', 'Dónde se encuentra'], ['faction', 'Facción'], ['status', 'Estado'], ['known', '¿Lo conocen los jugadores?'],
+  ['quote', 'Frase típica'], ['look', 'Aspecto físico'], ['personality', 'Personalidad'], ['voice', 'Voz y gestos'], ['wants', 'Qué quiere'], ['knows', 'Qué sabe'],
+  ['secrets', 'Secretos'], ['pcRel', 'Relación con los jugadores'], ['npcRel', 'Relación con otros NPCs']];
+const FAC_FIELDS = [['desc', 'Descripción'], ['goals', 'Objetivos'], ['leader', 'Líder'], ['members', 'Miembros conocidos'], ['pcRel', 'Relación con los jugadores']];
+const QUEST_FIELDS = [['giver', 'Quién la da'], ['where', 'Dónde'], ['status', 'Estado'], ['summary', 'Resumen'], ['dm', 'Notas del máster']];
+const FIELDS = { loc: LOC_FIELDS, npc: NPC_FIELDS, fac: FAC_FIELDS, quest: QUEST_FIELDS };
+const label = (kind, k) => FIELDS[kind].find(f => f[0] === k)?.[1] || k;
+
+function current() { return { loc: db.locations, npc: db.npcs, fac: db.factions, quest: db.quests }[route.kind][route.id]; }
+function field(kind, obj, k, cls = '') { return isTbd(obj[k]) ? '' : `<div class="f ${cls}"><h4>${label(kind, k)}</h4><div>${fmt(obj[k], obj.id)}</div></div>`; }
+function missing(kind, obj, keys) {
+  const m = keys.filter(k => isTbd(obj[k]) && (obj[k] !== undefined || kind !== 'loc')).map(k => label(kind, k));
+  return m.length ? `<div class="missing">Por definir: ${m.join(', ')}</div>` : '';
+}
+function dmBox(inner, title = 'Solo máster') {
+  if (!inner.trim()) return '';
+  return `<div class="dmbox ${prefs.dmClosed ? 'closed' : ''}"><div class="h" data-dmtoggle>🔒 ${title}<span>${prefs.dmClosed ? 'mostrar' : 'ocultar'}</span></div>${inner}</div>`;
+}
+
+function renderDetail() {
+  const el = $('#detail'), o = current();
+  if (!o) { el.innerHTML = '<div class="empty">Elige algo en la lista o en el mapa</div>'; return; }
+  if (editing) { el.innerHTML = editForm(route.kind, o); return; }
+  el.innerHTML = `<div class="card">${({ loc: locCard, npc: npcCard, fac: facCard, quest: questCard })[route.kind](o)}</div>`;
+}
+function editActions(kind, o) {
+  if (!editMode) return '';
+  let h = `<button class="btn primary" data-act="edit">✏️ Editar ficha</button>`;
+  if (kind === 'loc') {
+    h += `<button class="btn" data-act="addChild">＋ Sublugar</button><button class="btn" data-act="addNpcHere">＋ NPC aquí</button>`;
+    if (o.parent && mapHost(o.parent)) h += `<button class="btn" data-act="place">📍 ${o.pin ? 'Recolocar' : 'Colocar'} en el mapa</button>`;
+  }
+  if (o.id !== 'mundo' && o.id !== db.start) h += `<button class="btn danger" data-act="delete">🗑 Borrar</button>`;
+  return `<div class="actions">${h}</div>`;
+}
+function locCard(l) {
+  const crumbs = ancestors(l.id).filter(a => a.id !== 'mundo').map(a => `<a class="lk" href="#/loc/${a.id}">${esc(a.name)}</a>`).join(' › ');
+  const ids = new Set(subtree(l.id));
+  const npcs = Object.values(db.npcs).filter(n => ids.has(npcLocation(n)));
+  // NPCs mencionados en el texto del lugar que no tengan ubicación aquí
+  const named = (l.npcs || '').split(/,(?![^(]*\))/).map(s => resolveName(s.replace(/\(.*?\)/g, '')))
+    .filter(r => r && r.kind === 'npc' && !npcs.some(n => n.id === r.id)).map(r => db.npcs[r.id]);
+  const kids = children(l.id);
+  const chip = n => { const at = npcLocation(n); const sub = at && at !== l.id ? ` <small>· ${esc(L(at).name)}</small>` : ''; return `<span class="chip" data-npc="${n.id}">${avatar(n)}${esc(plainName(n.name))}${isDead(n) ? ' †' : ''}${sub}</span>`; };
+  const enterBtn = l.map && route.map !== l.id ? `<button class="btn primary" data-act="enter">🗺 Abrir mapa de ${esc(l.name)}</button>` : '';
+  const showOn = !l.map && l.pin && route.map !== mapForPin(l.id) ? `<button class="btn" data-act="show">📍 Ver en el mapa</button>` : '';
+  return `${l.image ? `<img class="hero" src="${src(l.image)}" alt="" data-zoom>` : ''}
+    <h2>${typeIcon(l.type)} ${esc(l.name)}</h2>
+    <div class="sub">${esc(l.type || '')}${crumbs ? ' · ' + crumbs : ''}</div>
+    <div class="tags">${l.visited ? '<span class="tag ok">Visitado</span>' : (l.id !== 'mundo' ? '<span class="tag">No visitado</span>' : '')}${l.secret ? '<span class="tag secret">🔒 Secreto</span>' : ''}${l.pin || l.id === 'mundo' || l.id === db.start ? '' : '<span class="tag">Sin pin</span>'}</div>
+    <div class="actions">${enterBtn}${showOn}</div>${editActions('loc', l)}
+    ${!isTbd(l.read) ? `<div class="read"><span class="h">📖 Leer en voz alta</span>${fmt(l.read, l.id)}</div>` : ''}
+    ${field('loc', l, 'situation')}${field('loc', l, 'tone')}${field('loc', l, 'ambience')}
+    ${npcs.length || named.length ? `<div class="f"><h4>Personajes aquí (${npcs.length + named.length})</h4><div class="chips">${npcs.concat(named).map(chip).join('')}</div></div>` : ''}
+    ${kids.length ? `<div class="f"><h4>Lugares dentro</h4><div class="chips">${kids.map(k => `<span class="chip plain" data-loc="${k.id}">${typeIcon(k.type)} ${esc(k.name)}</span>`).join('')}</div></div>` : ''}
+    ${dmBox(field('loc', l, 'dm') + field('loc', l, 'hooks') + field('loc', l, 'items') + field('loc', l, 'faction') + field('loc', l, 'where'))}
+    ${missing('loc', l, ['read', 'dm', 'hooks', 'items', 'faction'])}`;
+}
+function npcCard(n) {
+  const at = npcLocation(n);
+  return `${n.image ? `<img class="hero" src="${src(n.image)}" alt="" data-zoom>` : ''}
+    <h2>${esc(n.name)}</h2>
+    <div class="sub">${[n.race, n.role].filter(x => !isTbd(x)).map(esc).join(' · ')}</div>
+    <div class="tags">${n.pc ? '<span class="tag ok">Personaje jugador</span>' : ''}${!isTbd(n.status) ? `<span class="tag ${isDead(n) ? 'dead' : ''}">${esc(n.status)}</span>` : ''}${!isTbd(n.known) && !n.pc ? `<span class="tag">Lo conocen: ${esc(n.known)}</span>` : ''}</div>
+    <div class="actions">${at ? `<button class="btn" data-act="goLoc" data-id="${at}">📍 ${esc(L(at).name)}</button>` : ''}</div>${editActions('npc', n)}
+    ${!isTbd(n.quote) ? `<p class="quote">${fmt(n.quote, n.id)}</p>` : ''}
+    ${field('npc', n, 'location')}${field('npc', n, 'look')}${field('npc', n, 'personality')}${field('npc', n, 'voice', 'voice')}
+    ${field('npc', n, 'knows')}${field('npc', n, 'pcRel')}${field('npc', n, 'faction')}
+    ${dmBox(field('npc', n, 'wants') + field('npc', n, 'secrets') + field('npc', n, 'npcRel'))}
+    ${n.pc ? '' : missing('npc', n, ['look', 'personality', 'voice', 'wants', 'knows', 'secrets', 'quote'])}`;
+}
+function facCard(f) {
+  return `<h2>⚑ ${esc(f.name)}</h2><div class="sub">Facción</div>${editActions('fac', f)}
+    ${FAC_FIELDS.map(([k]) => field('fac', f, k)).join('')}${missing('fac', f, FAC_FIELDS.map(x => x[0]))}`;
+}
+function questCard(q) {
+  return `<h2>📜 ${esc(q.name)}</h2><div class="tags">${!isTbd(q.status) ? `<span class="tag ${/complet/.test(q.status) ? 'ok' : ''}">${esc(q.status)}</span>` : ''}</div>${editActions('quest', q)}
+    ${field('quest', q, 'giver')}${field('quest', q, 'where')}${field('quest', q, 'summary')}${dmBox(field('quest', q, 'dm'))}`;
+}
+
+function editForm(kind, o) {
+  const fields = FIELDS[kind].filter(([k]) => kind !== 'loc' || o[k] !== undefined || !['tone', 'situation'].includes(k));
+  let extra = '';
+  if (kind === 'loc') {
+    const opts = Object.values(db.locations).filter(l => !subtree(o.id).includes(l.id)).map(l => `<option value="${l.id}" ${l.id === o.parent ? 'selected' : ''}>${esc(l.name)}</option>`).join('');
+    extra = `<label>Tipo</label><input type="text" name="type" value="${esc(o.type)}">
+      ${o.id !== 'mundo' ? `<label>Dentro de</label><select name="parent">${opts}</select>` : ''}
+      <label>Mapa (ruta de imagen, p. ej. maps/ethar.png)</label><input type="text" name="map" value="${esc(o.map)}">
+      <label>Imagen (p. ej. img/lugares/taberna.png)</label><input type="text" name="image" value="${esc(o.image)}">
+      <div class="chk"><label><input type="checkbox" name="visited" ${o.visited ? 'checked' : ''}> Visitado</label><label><input type="checkbox" name="secret" ${o.secret ? 'checked' : ''}> Secreto</label></div>`;
+  } else if (kind === 'npc') {
+    extra = `<label>Retrato (p. ej. img/npcs/dory.png)</label><input type="text" name="image" value="${esc(o.image)}">
+      <div class="chk"><label><input type="checkbox" name="pc" ${o.pc ? 'checked' : ''}> Personaje jugador</label></div>`;
+  }
+  return `<form class="card form" id="editForm"><h2>Editar</h2>
+    <label>Nombre</label><input type="text" name="name" value="${esc(o.name)}" required>${extra}
+    ${fields.map(([k, lb]) => `<label>${lb}</label><textarea name="${k}" rows="${['read', 'dm', 'secrets', 'knows'].includes(k) ? 5 : 2}">${esc(o[k] || '')}</textarea>`).join('')}
+    <div class="actions" style="margin-top:14px"><button class="btn primary" type="submit">Guardar</button><button class="btn" type="button" data-act="cancel">Cancelar</button></div></form>`;
+}
+$('#detail').addEventListener('submit', e => {
+  e.preventDefault();
+  const o = current(), fd = new FormData(e.target);
+  for (const [k, v] of fd.entries()) o[k] = v.trim();
+  for (const k of ['visited', 'secret', 'pc']) if (e.target.elements[k]) o[k] = e.target.elements[k].checked;
+  for (const k of ['map', 'image']) if (o[k] === '') delete o[k];
+  save(); aliasIndex = null; editing = false; renderAll(true);
+});
+$('#detail').addEventListener('click', e => {
+  const t = e.target;
+  if (t.closest('[data-dmtoggle]')) { prefs.dmClosed = !prefs.dmClosed; savePrefs(); renderDetail(); return; }
+  if (t.matches('[data-zoom]')) { $('#lightbox img').src = t.src; $('#lightbox').classList.add('open'); return; }
+  const c = t.closest('[data-npc],[data-loc]');
+  if (c && !t.closest('[data-act]')) { c.dataset.npc ? go('npc', c.dataset.npc) : go('loc', c.dataset.loc); return; }
+  const a = t.closest('[data-act]'); if (!a) return;
+  const o = current();
+  switch (a.dataset.act) {
+    case 'enter': enter(o.id); break;
+    case 'show': go('loc', o.id, mapForPin(o.id)); break;
+    case 'goLoc': go('loc', a.dataset.id); break;
+    case 'edit': editing = true; renderDetail(); break;
+    case 'cancel': editing = false; renderDetail(); break;
+    case 'place': placing = o.id; if (route.map !== mapHost(o.parent)) go('loc', o.id, mapHost(o.parent)); vp.classList.add('placing'); toast(`Haz clic en el mapa para colocar <b>${esc(o.name)}</b> · Esc para cancelar`); break;
+    case 'addChild': { const id = uniqueId(db.locations, 'nuevo-lugar'); db.locations[id] = { id, name: 'Nuevo lugar', type: 'zona', parent: o.id, visited: false, secret: false }; openNodes.add(o.id); save(); aliasIndex = null; editing = true; go('loc', id); break; }
+    case 'addNpcHere': { const id = uniqueId(db.npcs, 'nuevo'); db.npcs[id] = { id, name: 'Nuevo NPC', location: o.name }; save(); aliasIndex = null; editing = true; go('npc', id); break; }
+    case 'delete': {
+      if (!confirm(`¿Borrar «${o.name}»? Se puede recuperar con «Restaurar datos del Word» o desde una copia exportada.`)) return;
+      if (route.kind === 'loc') { children(o.id).forEach(k => k.parent = o.parent); const p = o.parent; delete db.locations[o.id]; save(); aliasIndex = null; go('loc', p); }
+      else { delete ({ npc: db.npcs, fac: db.factions, quest: db.quests })[route.kind][o.id]; save(); aliasIndex = null; go('loc', route.map || db.start); }
+    }
+  }
+});
+$('#lightbox').onclick = () => $('#lightbox').classList.remove('open');
+
+/* ---------- Buscador (Ctrl+K) ---------- */
+let results = [], active = 0;
+function openSearch() { $('#searchOv').classList.add('open'); $('#searchIn').value = ''; runSearch(); $('#searchIn').focus(); }
+function closeSearch() { $('#searchOv').classList.remove('open'); }
+function runSearch() {
+  const q = $('#searchIn').value.trim().toLowerCase().normalize('NFD').replace(/\p{M}/gu, '');
+  const norm = s => (s || '').toLowerCase().normalize('NFD').replace(/\p{M}/gu, '');
+  const all = [
+    ...Object.values(db.npcs).map(o => ({ kind: 'npc', o, k: o.pc ? 'PJ' : 'NPC', sub: o.role })),
+    ...Object.values(db.locations).map(o => ({ kind: 'loc', o, k: 'Lugar', sub: o.type })),
+    ...Object.values(db.factions).map(o => ({ kind: 'fac', o, k: 'Facción', sub: '' })),
+    ...Object.values(db.quests).map(o => ({ kind: 'quest', o, k: 'Misión', sub: o.status }))];
+  results = (q ? all.filter(r => norm(r.o.name).includes(q) || norm(r.sub).includes(q)).sort((a, b) => norm(a.o.name).indexOf(q) - norm(b.o.name).indexOf(q)) : all.filter(r => r.kind === 'npc')).slice(0, 40);
+  active = 0; drawResults();
+}
+function drawResults() {
+  $('#results').innerHTML = results.map((r, i) => `<div class="res ${i === active ? 'active' : ''}" data-i="${i}">${r.kind === 'npc' ? avatar(r.o) : `<span class="av">${r.kind === 'loc' ? typeIcon(r.o.type) : r.kind === 'fac' ? '⚑' : '📜'}</span>`}<div><b>${esc(r.o.name)}</b><div style="font-size:12px;color:var(--dim)">${esc(r.sub || '')}</div></div><span class="k">${r.k}</span></div>`).join('') || '<div class="empty">Sin resultados</div>';
+  $('#results .active')?.scrollIntoView({ block: 'nearest' });
+}
+function pick(i) { const r = results[i]; if (!r) return; closeSearch(); go(r.kind, r.o.id); }
+$('#openSearch').onclick = openSearch;
+$('#searchIn').addEventListener('input', runSearch);
+$('#searchIn').addEventListener('keydown', e => {
+  if (e.key === 'ArrowDown') { active = Math.min(active + 1, results.length - 1); drawResults(); e.preventDefault(); }
+  else if (e.key === 'ArrowUp') { active = Math.max(active - 1, 0); drawResults(); e.preventDefault(); }
+  else if (e.key === 'Enter') pick(active);
+});
+$('#results').addEventListener('click', e => { const r = e.target.closest('[data-i]'); if (r) pick(+r.dataset.i); });
+$('#searchOv').addEventListener('click', e => { if (e.target.id === 'searchOv') closeSearch(); });
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); openSearch(); }
+  else if (e.key === 'Escape') { closeSearch(); $('#lightbox').classList.remove('open'); if (placing) { placing = null; vp.classList.remove('placing'); hideToast(); } }
+});
+
+/* ---------- Cabecera ---------- */
+function applyTheme() { document.documentElement.dataset.theme = prefs.theme; $('#themeToggle').textContent = prefs.theme === 'dark' ? '☀' : '☾'; }
+$('#themeToggle').onclick = () => { prefs.theme = prefs.theme === 'dark' ? 'light' : 'dark'; savePrefs(); applyTheme(); };
+$('#editToggle').onclick = () => { editMode = !editMode; editing = false; $('#editToggle').classList.toggle('on', editMode); document.body.classList.toggle('edit', editMode); if (editMode) toast('Modo edición: arrastra los pins para moverlos y edita las fichas'); else hideToast(); renderList(); renderDetail(); };
+$('#menuBtn').onclick = e => { e.stopPropagation(); $('#menuList').classList.toggle('open'); };
+document.addEventListener('click', () => $('#menuList').classList.remove('open'));
+$('#menuList').addEventListener('click', e => {
+  const act = e.target.closest('[data-act]')?.dataset.act;
+  if (act === 'export') {
+    const blob = new Blob([JSON.stringify(db, null, 1)], { type: 'application/json' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+    a.download = `othran-vel-${new Date().toISOString().slice(0, 10)}.json`; a.click(); URL.revokeObjectURL(a.href);
+  } else if (act === 'import') $('#importFile').click();
+  else if (act === 'reset' && confirm('Esto borra todos los cambios hechos en la app y vuelve a los datos del Word. ¿Seguro? (Exporta antes si quieres guardarlos)')) {
+    localStorage.removeItem(STORE); db = structuredClone(window.SEED); aliasIndex = null; go('loc', db.start); renderAll(true);
+  }
+});
+$('#importFile').addEventListener('change', async e => {
+  const f = e.target.files[0]; if (!f) return;
+  try { const d = JSON.parse(await f.text()); if (!d.locations || !d.npcs) throw new Error('No parece una campaña'); db = d; save(); aliasIndex = null; go('loc', db.start); renderAll(true); }
+  catch (err) { alert('No se pudo importar: ' + err.message); }
+  e.target.value = '';
+});
+
+function renderAll(mapChanged) { renderList(); renderMap(mapChanged); renderDetail(); if (!mapChanged) focusSelected(true); }
+
+$('#title').textContent = db.title; $('#group').textContent = db.group || ''; $('#logo').src = src(db.logo);
+$('#labelsBtn').classList.toggle('on', prefs.labels);
+applyTheme();
+route = parseHash();
+renderAll(true);
+</script>
+</body>
+</html>

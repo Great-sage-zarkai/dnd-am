@@ -1,0 +1,73 @@
+{
+  "timon-escarlata": {
+    "map": "maps/interiores/timon-escarlata.svg",
+    "size": [1240, 660],
+    "zones": [
+      {
+        "id": "timon-entrada", "num": "1", "name": "Porche y entrada", "pin": [250, 585],
+        "read": "Tres escalones de madera gastada suben a un porche bajo. Sobre la puerta cuelga un timón de barco pintado de rojo, desconchado por la sal. Al abrir, os envuelve una bocanada de calor, humo de leña y olor a guiso.",
+        "dm": "Desde el porche se ve el ir y venir de la plaza. Buen sitio para que alguien espere a los PJ al salir.",
+        "items": ""
+      },
+      {
+        "id": "timon-sala", "num": "2", "name": "Sala común", "pin": [300, 225],
+        "read": "Una sala amplia de vigas bajas y suelo de tablones, con media docena de mesas redondas y las ventanas empañadas por el vapor del guiso. Pescadores, algún mercader y un par de forasteros comen y beben; el murmullo se mezcla con el crepitar de la chimenea.",
+        "dm": "Al fondo, en el rincón junto a la ventana, se sienta el erudito: un cruce breve e intrascendente. Percepción CD 15 para notar la espiral incompleta bordada en su manga. Debe sentirse anticlimático: aparecerá muerto en el Almacén Sur.",
+        "items": "Comida y bebida: precios [POR DEFINIR]."
+      },
+      {
+        "id": "timon-chimenea", "num": "3", "name": "Rincón de la chimenea", "pin": [70, 280],
+        "read": "Una chimenea de piedra ennegrecida ocupa media pared. Junto al fuego, una mesa pequeña con dos sillas, la más cálida de la sala.",
+        "dm": "Aquí se sienta el viejo, padre de Eris Shars. Se abre con Persuasión CD 12 o gratis con roleo amable, pero se calla en cuanto sale el tema de su hijo.",
+        "items": ""
+      },
+      {
+        "id": "timon-barra", "num": "4", "name": "La barra", "pin": [445, 410],
+        "read": "Una barra en forma de L, de madera oscura pulida por mil codos. Detrás, cuatro barriles alineados contra la pared y un estante con jarras de peltre.",
+        "dm": "Solo atiende desde aquí cuando no está recorriendo las mesas. «¡Aquí no se paga por adelantado, que luego ya veo quién es de fiar!» Alojamiento: se pide en la barra.",
+        "items": "Cerveza, vino aguado, licor de algas de la casa. Precios [POR DEFINIR]."
+      },
+      {
+        "id": "timon-cocina", "num": "5", "name": "Cocina", "pin": [560, 240],
+        "read": "Una cocina de suelo de piedra y paredes tiznadas. En el fogón hierve un caldero enorme de guiso de pescado; sobre la mesa de trabajo, hogazas, cebollas y un cuchillo clavado en la tabla.",
+        "dm": "Puerta trasera al callejón (pared este): salida discreta si hay problemas en la sala.",
+        "items": ""
+      },
+      {
+        "id": "timon-despensa", "num": "6", "name": "Despensa", "pin": [662, 318],
+        "read": "Un cuartucho fresco que huele a harina y salazón. Sacos apilados y, en el suelo, una trampilla con argolla de hierro.",
+        "dm": "La trampilla baja a una pequeña bodega. [POR DEFINIR] si conecta con algo más (¿túneles hacia el puerto?).",
+        "items": ""
+      },
+      {
+        "id": "timon-escalera", "num": "7", "name": "Escalera", "pin": [128, 128],
+        "read": "Una escalera estrecha de madera cruje al subir hacia las habitaciones.",
+        "dm": "",
+        "items": ""
+      },
+      {
+        "id": "timon-habitaciones", "num": "8", "name": "Habitaciones de alquiler", "pin": [1020, 200],
+        "read": "Tres cuartos pequeños con cama, mesilla y una ventana al puerto. Sábanas limpias, aunque todo huele un poco a guiso.",
+        "dm": "Lo normal es que los PJ duerman aquí o en el dormitorio común. Alternativa más barata: el pajar de Dess Marrow.",
+        "items": "Habitación privada: precio [POR DEFINIR]."
+      },
+      {
+        "id": "timon-cuarto-solo", "num": "9", "name": "Cuarto de Solo", "pin": [830, 360],
+        "read": "Un cuarto ordenado con una cama grande, un escritorio con libros de cuentas y un arcón cerrado con llave.",
+        "dm": "El arcón guarda la caja de la taberna. Solo no deja entrar a nadie.",
+        "items": ""
+      },
+      {
+        "id": "timon-dormitorio", "num": "10", "name": "Dormitorio común", "pin": [1088, 355],
+        "read": "Cuatro camas en fila bajo el tejado inclinado. Barato y ruidoso: siempre hay alguien roncando.",
+        "dm": "",
+        "items": "Cama en dormitorio común: precio [POR DEFINIR]."
+      }
+    ],
+    "npcs": [
+      { "id": "solo", "zone": "timon-sala", "pin": [372, 236], "doing": "Recorre las mesas con una jarra en cada mano, saludando a todos como si los conociera de toda la vida." },
+      { "id": "el-viejo", "zone": "timon-chimenea", "pin": [152, 398], "doing": "Sentado junto al fuego con una jarra casi llena; mira las llamas sin beber." },
+      { "id": "el-erudito", "zone": "timon-sala", "pin": [126, 516], "doing": "Solo en la mesa del rincón, junto a la ventana, escribe en un cuaderno y no levanta la vista." }
+    ]
+  }
+}

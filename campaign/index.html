@@ -104,6 +104,20 @@ textarea { width: 100%; resize: vertical; min-height: 60px; font-family: inherit
 .pin:hover .lbl, .pin.sel .lbl, .labels .pin .lbl { display: block; }
 .pin.hasmap .dot::after { content: "⤵"; position: absolute; right: -9px; top: -9px; font-size: 11px; background: var(--panel); color: var(--accent); border-radius: 50%; width: 15px; height: 15px; display: grid; place-items: center; border: 1px solid var(--accent); }
 .edit .pin .dot { cursor: move; }
+.token { position: absolute; transform: translate(-50%, -50%) scale(var(--inv, 1)); cursor: pointer; z-index: 2; }
+.token .av { width: 38px; height: 38px; border: 3px solid var(--accent2); box-shadow: 0 2px 8px rgba(0,0,0,.7); transition: transform .12s; }
+.token:hover .av { transform: scale(1.15); }
+.token.sel .av { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(217,165,74,.55), 0 2px 8px rgba(0,0,0,.7); }
+.token .lbl { position: absolute; left: 46px; top: 50%; transform: translateY(-50%); background: rgba(20,16,10,.92); color: #f3e9d4; padding: 4px 8px; border-radius: 6px; font-size: 12px; width: max-content; max-width: 240px; pointer-events: none; display: none; }
+.token:hover .lbl, .token.sel .lbl { display: block; }
+.edit .token { cursor: move; }
+.scene { display: flex; gap: 10px; align-items: flex-start; padding: 8px; border-radius: 8px; background: var(--panel2); margin-bottom: 6px; cursor: pointer; }
+.scene:hover { outline: 1px solid var(--accent); }
+.scene .av { width: 40px; height: 40px; }
+.scene b { display: block; }
+.scene span { font-size: 13px; color: var(--dim); }
+.doing { background: var(--panel2); border-left: 3px solid var(--accent2); border-radius: 0 8px 8px 0; padding: 8px 12px; margin: 0 0 14px; }
+.doing h4 { margin: 0 0 3px; font: 600 11px Inter; text-transform: uppercase; letter-spacing: .08em; color: var(--accent2); }
 .toast { position: absolute; left: 50%; bottom: 18px; transform: translateX(-50%); background: var(--panel); border: 1px solid var(--accent); border-radius: 8px; padding: 8px 14px; box-shadow: var(--shadow); font-size: 13px; z-index: 5; }
 
 /* Ficha */
@@ -196,6 +210,7 @@ textarea { width: 100%; resize: vertical; min-height: 60px; font-family: inherit
         <div class="crumbs" id="crumbs"></div>
         <button class="mbtn" id="upBtn" title="Subir al mapa superior">⬆</button>
         <button class="mbtn" id="labelsBtn" title="Mostrar todas las etiquetas">Aa</button>
+        <button class="mbtn" id="tokensBtn" title="Mostrar / ocultar personajes en el plano">👥</button>
         <button class="mbtn" id="zoomOut" title="Alejar">−</button>
         <button class="mbtn" id="zoomIn" title="Acercar">+</button>
         <button class="mbtn" id="fitBtn" title="Encajar mapa">⤢</button>
@@ -224,7 +239,18 @@ const openNodes = new Set(prefs.open);
 function safeGet(k) { try { return JSON.parse(localStorage.getItem(k)) || {}; } catch { return {}; } }
 function load() {
   const saved = safeGet(STORE);
-  return saved.locations ? saved : structuredClone(window.SEED);
+  if (!saved.locations) return structuredClone(window.SEED);
+  // Suma lo nuevo del seed (fichas y campos) sin pisar lo editado ni resucitar lo borrado
+  const gone = new Set(saved.deleted || []);
+  for (const kind of ['locations', 'npcs', 'factions', 'quests']) {
+    saved[kind] ??= {};
+    for (const [id, o] of Object.entries(window.SEED[kind])) {
+      if (gone.has(id)) continue;
+      if (!saved[kind][id]) saved[kind][id] = structuredClone(o);
+      else for (const [k, v] of Object.entries(o)) if (!(k in saved[kind][id])) saved[kind][id][k] = structuredClone(v);
+    }
+  }
+  return saved;
 }
 function save() { try { localStorage.setItem(STORE, JSON.stringify(db)); } catch (e) { alert('No se pudo guardar: ' + e.message); } }
 function savePrefs() { prefs.open = [...openNodes]; try { localStorage.setItem(PREFS, JSON.stringify(prefs)); } catch {} }
@@ -249,7 +275,7 @@ function subtree(id) { const out = [id]; for (const c of children(id)) out.push(
 
 function typeIcon(t = '') {
   t = t.toLowerCase();
-  const m = [['mundo', '🌍'], ['región', '🗺️'], ['ciudad', '🏰'], ['pueblo', '🏘️'], ['mazmorra', '⛓️'], ['ruina', '🏚️'], ['bosque', '🌲'],
+  const m = [['estancia', '🚪'], ['mundo', '🌍'], ['región', '🗺️'], ['ciudad', '🏰'], ['pueblo', '🏘️'], ['mazmorra', '⛓️'], ['ruina', '🏚️'], ['bosque', '🌲'],
     ['taberna', '🍺'], ['tienda', '🛒'], ['templo', '🕯️'], ['plaza', '⛲'], ['sala', '▫️'], ['zona', '⚓'], ['camino', '🛤️'], ['volcán', '🌋'], ['minas', '⛏️']];
   for (const [k, i] of m) if (t.includes(k)) return i;
   return '📍';
@@ -257,7 +283,7 @@ function typeIcon(t = '') {
 function pinColor(l) {
   const t = (l.type || '').toLowerCase();
   if (l.secret) return 'var(--pin-secret)';
-  if (t === 'sala') return 'var(--pin-room)';
+  if (t === 'sala' || t === 'estancia') return 'var(--pin-room)';
   if (/mazmorra|ruina/.test(t)) return 'var(--pin-danger)';
   if (/ciudad|pueblo|taberna|tienda|plaza|templo/.test(t)) return 'var(--pin-town)';
   return 'var(--pin-other)';
@@ -288,6 +314,7 @@ function resolveName(text) {
   return null;
 }
 function npcLocation(n) {
+  if (n.spot?.at && L(n.spot.at)) return n.spot.at;
   const t = n.location || '';
   if (!t || /^Paradero/.test(t)) return null;
   let best = null;
@@ -313,8 +340,14 @@ function fmt(text, selfId) {
 /* ---------- Rutas ---------- */
 // Mapa por defecto al abrir un lugar: el suyo propio si lo tiene
 const defaultMap = id => L(id).map ? id : mapForPin(id);
+// Mapa en el que se ve a un NPC: su ficha en el plano o el pin de su lugar
+function npcMap(n) {
+  if (n.spot?.pin && n.spot.at && L(n.spot.at)) return mapHost(n.spot.at);
+  const at = npcLocation(n);
+  return at ? mapForPin(at) : null;
+}
 function go(kind, id, map) {
-  if (!map) map = kind === 'loc' ? defaultMap(id) : kind === 'npc' ? (npcLocation(db.npcs[id]) ? mapForPin(npcLocation(db.npcs[id])) : route.map) : route.map;
+  if (!map) map = kind === 'loc' ? defaultMap(id) : kind === 'npc' ? (npcMap(db.npcs[id]) || route.map) : route.map;
   location.hash = `#/${kind}/${id}` + (map ? `?m=${map}` : '');
 }
 function enter(id) { go('loc', id, defaultMap(id)); }
@@ -325,7 +358,7 @@ function parseHash() {
   const coll = { loc: db.locations, npc: db.npcs, fac: db.factions, quest: db.quests }[kind];
   if (!coll[id]) return { kind: 'loc', id: db.start, map: db.start };
   let mp = map && L(map) && L(map).map ? map : null;
-  if (!mp) mp = kind === 'loc' ? defaultMap(id) : kind === 'npc' && npcLocation(coll[id]) ? mapForPin(npcLocation(coll[id])) : route.map;
+  if (!mp) mp = kind === 'loc' ? defaultMap(id) : kind === 'npc' && npcMap(coll[id]) ? npcMap(coll[id]) : route.map;
   return { kind, id, map: mp };
 }
 window.addEventListener('hashchange', () => { const prevMap = route.map; route = parseHash(); editing = false; renderAll(prevMap !== route.map); });
@@ -419,6 +452,7 @@ function renderMap(force) {
   renderPins(); renderCrumbs();
 }
 function pinsOn(mapId) { return Object.values(db.locations).filter(l => l.pin && l.parent && mapHost(l.parent) === mapId); }
+function tokensOn(mapId) { return Object.values(db.npcs).filter(n => n.spot?.pin && n.spot.at && L(n.spot.at) && mapHost(n.spot.at) === mapId); }
 function selectedPinId() {
   let id = route.kind === 'loc' ? route.id : route.kind === 'npc' ? npcLocation(db.npcs[route.id]) : null;
   const on = new Set(pinsOn(route.map).map(l => l.id));
@@ -430,7 +464,9 @@ function renderPins() {
   stage.parentElement.classList.toggle('labels', prefs.labels);
   const sel = selectedPinId();
   layer.innerHTML = pinsOn(route.map).map(l => `<div class="pin ${l.secret ? 'secret' : ''} ${l.map ? 'hasmap' : ''} ${sel === l.id ? 'sel' : ''}" data-pin="${l.id}" style="left:${l.pin[0] * 100}%;top:${l.pin[1] * 100}%;--c:${pinColor(l)}">
-     <div class="dot">${l.type === 'sala' ? esc(l.name.replace('Sala R', '')) : ''}</div><div class="lbl">${esc(l.name)}${l.map ? ' · doble clic para entrar' : ''}</div></div>`).join('');
+     <div class="dot">${esc(l.num || (l.type === 'sala' ? l.name.replace('Sala R', '') : ''))}</div><div class="lbl">${esc(l.name)}${l.map ? ' · doble clic para entrar' : ''}</div></div>`).join('')
+    + (prefs.tokens === false ? '' : tokensOn(route.map).map(n => `<div class="token ${route.kind === 'npc' && route.id === n.id ? 'sel' : ''}" data-token="${n.id}" style="left:${n.spot.pin[0] * 100}%;top:${n.spot.pin[1] * 100}%">
+     ${avatar(n)}<div class="lbl"><b>${esc(plainName(n.name))}</b>${n.doing ? `<br>${esc(n.doing)}` : ''}</div></div>`).join(''));
   applyView();
 }
 function renderCrumbs() {
@@ -474,14 +510,15 @@ vp.addEventListener('wheel', e => { e.preventDefault(); const r = vp.getBounding
 $('#zoomIn').onclick = () => { const r = vp.getBoundingClientRect(); animate(true); zoomAt(1.4, r.width / 2, r.height / 2); };
 $('#zoomOut').onclick = () => { const r = vp.getBoundingClientRect(); animate(true); zoomAt(1 / 1.4, r.width / 2, r.height / 2); };
 $('#fitBtn').onclick = () => fitView(true);
-$('#labelsBtn').onclick = () => { prefs.labels = !prefs.labels; $('#labelsBtn').classList.toggle('on', prefs.labels); savePrefs(); renderPins(); };
+$('#tokensBtn').onclick = () => { prefs.tokens = prefs.tokens === false; $('#tokensBtn').classList.toggle('on', prefs.tokens !== false); savePrefs(); renderPins(); };
+$('#labelsBtn').onclick =() => { prefs.labels = !prefs.labels; $('#labelsBtn').classList.toggle('on', prefs.labels); savePrefs(); renderPins(); };
 $('#upBtn').onclick = () => { const up = mapHost(L(route.map).parent); if (up) go('loc', route.map, up); };
 
 let drag = null;
 vp.addEventListener('pointerdown', e => {
   if (e.button !== 0) return;
-  const pin = e.target.closest('[data-pin]');
-  drag = { sx: e.clientX, sy: e.clientY, x: view.x, y: view.y, moved: false, pin: editMode && pin ? pin.dataset.pin : null, pinEl: pin };
+  const pin = e.target.closest('[data-pin],[data-token]');
+  drag = { sx: e.clientX, sy: e.clientY, x: view.x, y: view.y, moved: false, pin: editMode && pin ? true : null, pinEl: pin };
   vp.setPointerCapture(e.pointerId);
 });
 vp.addEventListener('pointermove', e => {
@@ -497,10 +534,23 @@ vp.addEventListener('pointerup', e => {
   if (!drag) return;
   vp.classList.remove('dragging');
   const d = drag; drag = null;
-  if (d.pin && d.moved && d.pos) { L(d.pin).pin = d.pos; save(); return; }
+  if (d.pin && d.moved && d.pos) {
+    if (d.pinEl.dataset.pin) L(d.pinEl.dataset.pin).pin = d.pos; else db.npcs[d.pinEl.dataset.token].spot.pin = d.pos;
+    save(); return;
+  }
   if (d.moved) return;
-  if (placing && view.w) { const id = placing; placing = null; vp.classList.remove('placing'); hideToast(); L(id).pin = toImage(e); save(); go('loc', id, route.map); renderPins(); return; }
-  if (d.pinEl) go('loc', d.pinEl.dataset.pin, route.map);
+  if (placing && view.w) {
+    const p = placing; placing = null; vp.classList.remove('placing'); hideToast();
+    if (p.npc) {
+      const n = db.npcs[p.npc];
+      // si ya estaba en una estancia de este plano la conserva; si no, queda en el lugar del plano
+      const at = n.spot?.at && L(n.spot.at) && mapHost(n.spot.at) === route.map ? n.spot.at : route.map;
+      n.spot = { at, pin: toImage(e) }; save(); go('npc', p.npc, route.map);
+    } else { L(p.loc).pin = toImage(e); save(); go('loc', p.loc, route.map); }
+    renderPins(); return;
+  }
+  if (d.pinEl?.dataset.pin) go('loc', d.pinEl.dataset.pin, route.map);
+  else if (d.pinEl?.dataset.token) go('npc', d.pinEl.dataset.token, route.map);
 });
 vp.addEventListener('dblclick', e => { const pin = e.target.closest('[data-pin]'); if (pin && L(pin.dataset.pin).map) enter(pin.dataset.pin); });
 function toImage(e) {
@@ -515,7 +565,7 @@ window.addEventListener('resize', () => fitView(false));
 /* ---------- Fichas ---------- */
 const LOC_FIELDS = [['read', 'Descripción para leer'], ['ambience', 'Ambiente'], ['where', 'Ubicación aproximada'], ['faction', 'Facción o gobierno'],
   ['dm', 'Notas del máster'], ['npcs', 'NPCs (texto del Word)'], ['items', 'Objetos, precios, servicios'], ['hooks', 'Ganchos / pistas'], ['tone', 'Tono'], ['situation', 'Situación actual']];
-const NPC_FIELDS = [['race', 'Raza'], ['role', 'Rol / ocupación'], ['location', 'Dónde se encuentra'], ['faction', 'Facción'], ['status', 'Estado'], ['known', '¿Lo conocen los jugadores?'],
+const NPC_FIELDS = [['doing', 'Qué está haciendo ahora'], ['race', 'Raza'], ['role', 'Rol / ocupación'], ['location', 'Dónde se encuentra'], ['faction', 'Facción'], ['status', 'Estado'], ['known', '¿Lo conocen los jugadores?'],
   ['quote', 'Frase típica'], ['look', 'Aspecto físico'], ['personality', 'Personalidad'], ['voice', 'Voz y gestos'], ['wants', 'Qué quiere'], ['knows', 'Qué sabe'],
   ['secrets', 'Secretos'], ['pcRel', 'Relación con los jugadores'], ['npcRel', 'Relación con otros NPCs']];
 const FAC_FIELDS = [['desc', 'Descripción'], ['goals', 'Objetivos'], ['leader', 'Líder'], ['members', 'Miembros conocidos'], ['pcRel', 'Relación con los jugadores']];
@@ -547,6 +597,10 @@ function editActions(kind, o) {
     h += `<button class="btn" data-act="addChild">＋ Sublugar</button><button class="btn" data-act="addNpcHere">＋ NPC aquí</button>`;
     if (o.parent && mapHost(o.parent)) h += `<button class="btn" data-act="place">📍 ${o.pin ? 'Recolocar' : 'Colocar'} en el mapa</button>`;
   }
+  if (kind === 'npc' && route.map) {
+    h += `<button class="btn" data-act="placeNpc">📍 Situar en «${esc(L(route.map).name)}»</button>`;
+    if (o.spot) h += `<button class="btn" data-act="unplaceNpc">✕ Quitar del plano</button>`;
+  }
   if (o.id !== 'mundo' && o.id !== db.start) h += `<button class="btn danger" data-act="delete">🗑 Borrar</button>`;
   return `<div class="actions">${h}</div>`;
 }
@@ -558,6 +612,7 @@ function locCard(l) {
   const named = (l.npcs || '').split(/,(?![^(]*\))/).map(s => resolveName(s.replace(/\(.*?\)/g, '')))
     .filter(r => r && r.kind === 'npc' && !npcs.some(n => n.id === r.id)).map(r => db.npcs[r.id]);
   const kids = children(l.id);
+  const scene = npcs.filter(n => !isTbd(n.doing)), rest = npcs.filter(n => isTbd(n.doing)).concat(named);
   const chip = n => { const at = npcLocation(n); const sub = at && at !== l.id ? ` <small>· ${esc(L(at).name)}</small>` : ''; return `<span class="chip" data-npc="${n.id}">${avatar(n)}${esc(plainName(n.name))}${isDead(n) ? ' †' : ''}${sub}</span>`; };
   const enterBtn = l.map && route.map !== l.id ? `<button class="btn primary" data-act="enter">🗺 Abrir mapa de ${esc(l.name)}</button>` : '';
   const showOn = !l.map && l.pin && route.map !== mapForPin(l.id) ? `<button class="btn" data-act="show">📍 Ver en el mapa</button>` : '';
@@ -568,7 +623,8 @@ function locCard(l) {
     <div class="actions">${enterBtn}${showOn}</div>${editActions('loc', l)}
     ${!isTbd(l.read) ? `<div class="read"><span class="h">📖 Leer en voz alta</span>${fmt(l.read, l.id)}</div>` : ''}
     ${field('loc', l, 'situation')}${field('loc', l, 'tone')}${field('loc', l, 'ambience')}
-    ${npcs.length || named.length ? `<div class="f"><h4>Personajes aquí (${npcs.length + named.length})</h4><div class="chips">${npcs.concat(named).map(chip).join('')}</div></div>` : ''}
+    ${scene.length ? `<div class="f"><h4>🎭 Qué está pasando aquí</h4>${scene.map(n => { const at = npcLocation(n); return `<div class="scene" data-npc="${n.id}">${avatar(n)}<div><b>${esc(plainName(n.name))}${at !== l.id ? ` <small style="color:var(--dim);font-weight:400">· ${esc(L(at).name)}</small>` : ''}</b><span>${esc(n.doing)}</span></div></div>`; }).join('')}</div>` : ''}
+    ${rest.length ? `<div class="f"><h4>${scene.length ? 'También aquí' : 'Personajes aquí'} (${rest.length})</h4><div class="chips">${rest.map(chip).join('')}</div></div>` : ''}
     ${kids.length ? `<div class="f"><h4>Lugares dentro</h4><div class="chips">${kids.map(k => `<span class="chip plain" data-loc="${k.id}">${typeIcon(k.type)} ${esc(k.name)}</span>`).join('')}</div></div>` : ''}
     ${dmBox(field('loc', l, 'dm') + field('loc', l, 'hooks') + field('loc', l, 'items') + field('loc', l, 'faction') + field('loc', l, 'where'))}
     ${missing('loc', l, ['read', 'dm', 'hooks', 'items', 'faction'])}`;
@@ -579,7 +635,9 @@ function npcCard(n) {
     <h2>${esc(n.name)}</h2>
     <div class="sub">${[n.race, n.role].filter(x => !isTbd(x)).map(esc).join(' · ')}</div>
     <div class="tags">${n.pc ? '<span class="tag ok">Personaje jugador</span>' : ''}${!isTbd(n.status) ? `<span class="tag ${isDead(n) ? 'dead' : ''}">${esc(n.status)}</span>` : ''}${!isTbd(n.known) && !n.pc ? `<span class="tag">Lo conocen: ${esc(n.known)}</span>` : ''}</div>
-    <div class="actions">${at ? `<button class="btn" data-act="goLoc" data-id="${at}">📍 ${esc(L(at).name)}</button>` : ''}</div>${editActions('npc', n)}
+    <div class="actions">${at ? `<button class="btn" data-act="goLoc" data-id="${at}">📍 ${esc(L(at).name)}${L(at).type === 'estancia' ? ` · ${esc(L(L(at).parent).name)}` : ''}</button>` : ''}
+      ${n.spot?.pin && route.map !== npcMap(n) ? `<button class="btn" data-act="showNpc">🗺 Ver en el plano</button>` : ''}</div>${editActions('npc', n)}
+    ${!isTbd(n.doing) ? `<div class="doing"><h4>🎭 Ahora mismo</h4>${fmt(n.doing, n.id)}</div>` : ''}
     ${!isTbd(n.quote) ? `<p class="quote">${fmt(n.quote, n.id)}</p>` : ''}
     ${field('npc', n, 'location')}${field('npc', n, 'look')}${field('npc', n, 'personality')}${field('npc', n, 'voice', 'voice')}
     ${field('npc', n, 'knows')}${field('npc', n, 'pcRel')}${field('npc', n, 'faction')}
@@ -634,13 +692,17 @@ $('#detail').addEventListener('click', e => {
     case 'enter': enter(o.id); break;
     case 'show': go('loc', o.id, mapForPin(o.id)); break;
     case 'goLoc': go('loc', a.dataset.id); break;
+    case 'showNpc': go('npc', o.id, npcMap(o)); break;
     case 'edit': editing = true; renderDetail(); break;
     case 'cancel': editing = false; renderDetail(); break;
-    case 'place': placing = o.id; if (route.map !== mapHost(o.parent)) go('loc', o.id, mapHost(o.parent)); vp.classList.add('placing'); toast(`Haz clic en el mapa para colocar <b>${esc(o.name)}</b> · Esc para cancelar`); break;
+    case 'placeNpc': placing = { npc: o.id }; vp.classList.add('placing'); toast(`Haz clic en el plano para situar a <b>${esc(plainName(o.name))}</b> · Esc para cancelar`); break;
+    case 'unplaceNpc': delete o.spot; save(); renderAll(false); break;
+    case 'place': placing = { loc: o.id }; if (route.map !== mapHost(o.parent)) go('loc', o.id, mapHost(o.parent)); vp.classList.add('placing'); toast(`Haz clic en el mapa para colocar <b>${esc(o.name)}</b> · Esc para cancelar`); break;
     case 'addChild': { const id = uniqueId(db.locations, 'nuevo-lugar'); db.locations[id] = { id, name: 'Nuevo lugar', type: 'zona', parent: o.id, visited: false, secret: false }; openNodes.add(o.id); save(); aliasIndex = null; editing = true; go('loc', id); break; }
     case 'addNpcHere': { const id = uniqueId(db.npcs, 'nuevo'); db.npcs[id] = { id, name: 'Nuevo NPC', location: o.name }; save(); aliasIndex = null; editing = true; go('npc', id); break; }
     case 'delete': {
       if (!confirm(`¿Borrar «${o.name}»? Se puede recuperar con «Restaurar datos del Word» o desde una copia exportada.`)) return;
+      (db.deleted ??= []).push(o.id);
       if (route.kind === 'loc') { children(o.id).forEach(k => k.parent = o.parent); const p = o.parent; delete db.locations[o.id]; save(); aliasIndex = null; go('loc', p); }
       else { delete ({ npc: db.npcs, fac: db.factions, quest: db.quests })[route.kind][o.id]; save(); aliasIndex = null; go('loc', route.map || db.start); }
     }
@@ -710,6 +772,7 @@ function renderAll(mapChanged) { renderList(); renderMap(mapChanged); renderDeta
 
 $('#title').textContent = db.title; $('#group').textContent = db.group || ''; $('#logo').src = src(db.logo);
 $('#labelsBtn').classList.toggle('on', prefs.labels);
+$('#tokensBtn').classList.toggle('on', prefs.tokens !== false);
 applyTheme();
 route = parseHash();
 renderAll(true);

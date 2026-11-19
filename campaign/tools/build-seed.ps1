@@ -202,6 +202,28 @@ $npcOut['matones-del-rojo'] = [ordered]@{ id = 'matones-del-rojo'; name = 'Maton
 $img = @{ 'gungar' = 'img/npcs/gungar.png'; 'maestro-kharzun' = 'img/npcs/kharzun.png'; 'skirx' = 'img/PJs/skrix.png'; 'solo' = 'img/solo en su taberna.png' }
 foreach ($k in $img.Keys) { if ($npcOut[$k]) { $npcOut[$k].image = $img[$k] } else { Write-Warning "Imagen sin NPC: $k" } }
 
+# --- Interiores (data/interiores.json): plano, estancias y NPCs situados ---
+$intFile = "$root\data\interiores.json"
+if (Test-Path $intFile) {
+  $int = Get-Content $intFile -Raw -Encoding UTF8 | ConvertFrom-Json
+  foreach ($p in $int.PSObject.Properties) {
+    $b = $p.Value; $bid = $p.Name
+    if (-not $out[$bid]) { Write-Warning "Interior sin lugar: $bid"; continue }
+    $out[$bid].map = $b.map
+    $w = $b.size[0]; $h = $b.size[1]
+    foreach ($z in $b.zones) {
+      $out[$z.id] = [ordered]@{ id = $z.id; name = $z.name; type = 'estancia'; parent = $bid; num = $z.num
+        read = $z.read; dm = $z.dm; items = $z.items; visited = $false; secret = [bool]$z.secret
+        pin = @([math]::Round($z.pin[0] / $w, 4), [math]::Round($z.pin[1] / $h, 4)) }
+    }
+    foreach ($n in $b.npcs) {
+      if (-not $npcOut[$n.id]) { Write-Warning "NPC situado que no existe: $($n.id)"; continue }
+      $npcOut[$n.id].spot = [ordered]@{ at = $n.zone; pin = @([math]::Round($n.pin[0] / $w, 4), [math]::Round($n.pin[1] / $h, 4)) }
+      $npcOut[$n.id].doing = $n.doing
+    }
+  }
+}
+
 $facOut = [ordered]@{}; foreach ($f in $facs) { $id = Slug $f.name; $o = [ordered]@{ id = $id }; foreach ($k in $f.Keys) { $o[$k] = $f[$k] }; $facOut[$id] = $o }
 $qOut = [ordered]@{}; foreach ($q in $quests) { $id = Slug $q.name; $o = [ordered]@{ id = $id }; foreach ($k in $q.Keys) { $o[$k] = $q[$k] }; $qOut[$id] = $o }
 

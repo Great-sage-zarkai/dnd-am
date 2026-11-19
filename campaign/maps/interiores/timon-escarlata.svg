@@ -1,0 +1,149 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 660" width="1240" height="660">
+  <defs>
+    <pattern id="wood" width="40" height="20" patternUnits="userSpaceOnUse">
+      <rect width="40" height="20" fill="#b48a5a"/>
+      <path d="M0 19.5H40M0 9.5H40" stroke="#8f6a42" stroke-width="1"/>
+      <path d="M14 0V10M32 10V20" stroke="#8f6a42" stroke-width="1"/>
+    </pattern>
+    <pattern id="stone" width="40" height="40" patternUnits="userSpaceOnUse">
+      <rect width="40" height="40" fill="#a59a88"/>
+      <path d="M0 0.5H40M0.5 0V40M0 20.5H40M20.5 20V40" stroke="#857a69" stroke-width="1"/>
+    </pattern>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="#2a1d10" stroke-opacity=".18" stroke-width="1"/>
+    </pattern>
+    <radialGradient id="fire"><stop offset="0" stop-color="#ffe08a"/><stop offset=".6" stop-color="#f08a24"/><stop offset="1" stop-color="#a8321a"/></radialGradient>
+    <g id="chair"><circle r="7" fill="#6e4a28" stroke="#3b2a1a" stroke-width="1.5"/></g>
+    <g id="table4">
+      <use href="#chair" x="0" y="-34"/><use href="#chair" x="0" y="34"/><use href="#chair" x="-34" y="0"/><use href="#chair" x="34" y="0"/>
+      <circle r="22" fill="#7a5230" stroke="#3b2a1a" stroke-width="2"/>
+      <circle r="9" fill="#e9d9a8" opacity=".5"/>
+    </g>
+    <g id="barrel"><circle r="15" fill="#7d5532" stroke="#3b2a1a" stroke-width="2"/><circle r="10" fill="none" stroke="#3b2a1a" stroke-width="1.5"/><circle r="3" fill="#3b2a1a"/></g>
+    <g id="bed"><rect width="36" height="72" rx="3" fill="#d8c7a0" stroke="#3b2a1a" stroke-width="2"/><rect x="5" y="5" width="26" height="14" rx="3" fill="#f3ead2" stroke="#3b2a1a"/><rect y="28" width="36" height="44" fill="#8a3b2e" opacity=".75"/></g>
+  </defs>
+
+  <!-- Fondo pergamino -->
+  <rect width="1240" height="660" fill="#e8dcbf"/>
+  <rect x="8" y="8" width="1224" height="644" fill="none" stroke="#7a5f3a" stroke-width="3"/>
+  <text x="360" y="52" font-family="Georgia, serif" font-size="24" font-weight="bold" fill="#3b2a1a" text-anchor="middle" letter-spacing="3">PLANTA BAJA</text>
+  <text x="980" y="52" font-family="Georgia, serif" font-size="24" font-weight="bold" fill="#3b2a1a" text-anchor="middle" letter-spacing="3">PLANTA ALTA</text>
+
+  <!-- ============ PLANTA BAJA ============ -->
+  <!-- suelos -->
+  <rect x="40" y="80" width="640" height="480" fill="url(#wood)"/>
+  <rect x="480" y="80" width="200" height="200" fill="url(#stone)"/>
+  <rect x="600" y="280" width="80" height="120" fill="url(#stone)"/>
+  <rect x="40" y="80" width="120" height="120" fill="#9c7a52"/>
+  <rect x="40" y="80" width="640" height="480" fill="url(#grid)"/>
+  <!-- porche -->
+  <rect x="196" y="560" width="108" height="44" fill="url(#wood)" stroke="#3b2a1a" stroke-width="2"/>
+  <path d="M196 574H304M196 588H304" stroke="#6e4a28" stroke-width="2"/>
+  <!-- escalera -->
+  <g stroke="#3b2a1a" stroke-width="2">
+    <rect x="52" y="92" width="96" height="96" fill="#b8926a"/>
+    <path d="M52 104H148M52 116H148M52 128H148M52 140H148M52 152H148M52 164H148M52 176H148"/>
+  </g>
+  <path d="M100 180V100M92 110L100 100L108 110" stroke="#3b2a1a" stroke-width="2.5" fill="none"/>
+  <!-- chimenea -->
+  <rect x="18" y="306" width="54" height="108" fill="#6d6457" stroke="#3b2a1a" stroke-width="3"/>
+  <rect x="44" y="326" width="26" height="68" fill="url(#fire)"/>
+  <!-- mesas sala común -->
+  <use href="#table4" x="260" y="150"/>
+  <use href="#table4" x="380" y="170"/>
+  <use href="#table4" x="220" y="300"/>
+  <use href="#table4" x="330" y="300"/>
+  <use href="#table4" x="180" y="440"/>
+  <use href="#table4" x="330" y="440"/>
+  <!-- mesa del viejo junto al fuego -->
+  <use href="#chair" x="140" y="330"/><use href="#chair" x="140" y="392"/>
+  <circle cx="122" cy="361" r="16" fill="#7a5230" stroke="#3b2a1a" stroke-width="2"/>
+  <!-- mesa del rincón (ventana) -->
+  <rect x="64" y="496" width="40" height="40" fill="#7a5230" stroke="#3b2a1a" stroke-width="2"/>
+  <use href="#chair" x="122" y="516"/>
+  <!-- barra en L -->
+  <path d="M400 290H480V320H430V500H400Z" fill="#5a3a1e" stroke="#2a1a0c" stroke-width="3"/>
+  <path d="M406 296H474M406 314V494" stroke="#8a6238" stroke-width="2"/>
+  <g fill="#c9b07a" stroke="#3b2a1a"><circle cx="415" cy="340" r="5"/><circle cx="415" cy="380" r="5"/><circle cx="415" cy="430" r="5"/><circle cx="450" cy="305" r="5"/></g>
+  <!-- barriles y estante tras la barra -->
+  <use href="#barrel" x="650" y="430"/><use href="#barrel" x="650" y="466"/><use href="#barrel" x="650" y="502"/><use href="#barrel" x="650" y="538"/>
+  <rect x="452" y="520" width="120" height="22" fill="#6e4a28" stroke="#3b2a1a" stroke-width="2"/>
+  <!-- cocina -->
+  <rect x="560" y="92" width="110" height="44" fill="#6d6457" stroke="#3b2a1a" stroke-width="3"/>
+  <circle cx="615" cy="114" r="16" fill="#2b2b2b" stroke="#111" stroke-width="2"/>
+  <circle cx="615" cy="114" r="10" fill="#7c8a3a"/>
+  <rect x="510" y="170" width="110" height="40" fill="#7a5230" stroke="#3b2a1a" stroke-width="2"/>
+  <use href="#barrel" x="510" y="110"/>
+  <!-- despensa: sacos y trampilla -->
+  <g fill="#c8b48a" stroke="#3b2a1a" stroke-width="1.5"><ellipse cx="625" cy="300" rx="14" ry="10"/><ellipse cx="655" cy="302" rx="14" ry="10"/></g>
+  <rect x="622" y="340" width="40" height="40" fill="none" stroke="#2a1a0c" stroke-width="2.5" stroke-dasharray="6 4"/>
+  <path d="M622 340L662 380M662 340L622 380" stroke="#2a1a0c" stroke-width="1.5" stroke-dasharray="4 4"/>
+
+  <!-- ventanas planta baja -->
+  <g stroke="#cfe3ea" stroke-width="6"><path d="M90 560H150M320 560H380M40 460V520M260 80H320"/></g>
+  <!-- muros planta baja -->
+  <g stroke="#2a1a0c" stroke-width="12" stroke-linecap="square" fill="none">
+    <path d="M40 80H680V200M680 240V560H280M220 560H40V80"/>
+    <path d="M160 80V200M40 200H120"/>
+    <path d="M480 80V280H520M560 280H680"/>
+    <path d="M600 280V330M600 370V400H680"/>
+  </g>
+  <g stroke="#cfe3ea" stroke-width="6"><path d="M90 560H150M320 560H380M40 460V520M260 80H320"/></g>
+  <!-- puertas -->
+  <g fill="none" stroke="#3b2a1a" stroke-width="2">
+    <path d="M220 560A60 60 0 0 1 280 560" stroke-dasharray="4 3"/>
+    <path d="M680 200A40 40 0 0 0 680 240" stroke-dasharray="4 3"/>
+    <path d="M520 280A40 40 0 0 0 560 280" stroke-dasharray="4 3"/>
+    <path d="M600 330A40 40 0 0 1 600 370" stroke-dasharray="4 3"/>
+  </g>
+
+  <!-- ============ PLANTA ALTA ============ -->
+  <rect x="760" y="80" width="440" height="400" fill="url(#wood)"/>
+  <rect x="760" y="240" width="440" height="80" fill="#9c7a52"/>
+  <rect x="760" y="80" width="440" height="400" fill="url(#grid)"/>
+  <!-- escalera que llega -->
+  <g stroke="#3b2a1a" stroke-width="2"><rect x="768" y="248" width="64" height="64" fill="#b8926a"/><path d="M780 248V312M792 248V312M804 248V312M816 248V312"/></g>
+  <!-- armario de ropa blanca -->
+  <rect x="772" y="96" width="56" height="30" fill="#6e4a28" stroke="#3b2a1a" stroke-width="2"/>
+  <!-- habitaciones de alquiler -->
+  <use href="#bed" x="852" y="96"/><rect x="912" y="96" width="30" height="24" fill="#7a5230" stroke="#3b2a1a" stroke-width="2"/>
+  <use href="#bed" x="972" y="96"/><rect x="1032" y="96" width="30" height="24" fill="#7a5230" stroke="#3b2a1a" stroke-width="2"/>
+  <use href="#bed" x="1092" y="96"/><rect x="1152" y="96" width="30" height="24" fill="#7a5230" stroke="#3b2a1a" stroke-width="2"/>
+  <!-- cuarto de Solo -->
+  <rect x="776" y="392" width="72" height="76" rx="4" fill="#d8c7a0" stroke="#3b2a1a" stroke-width="2"/>
+  <rect x="780" y="396" width="64" height="14" rx="3" fill="#f3ead2" stroke="#3b2a1a"/>
+  <rect x="776" y="420" width="72" height="48" fill="#8a3b2e" opacity=".75"/>
+  <rect x="880" y="440" width="56" height="26" fill="#5a3a1e" stroke="#2a1a0c" stroke-width="2"/>
+  <path d="M884 446H932" stroke="#c9b07a" stroke-width="2"/>
+  <rect x="884" y="340" width="60" height="30" fill="#7a5230" stroke="#3b2a1a" stroke-width="2"/>
+  <!-- dormitorio común -->
+  <use href="#bed" x="976" y="392"/><use href="#bed" x="1026" y="392"/><use href="#bed" x="1076" y="392"/><use href="#bed" x="1126" y="392"/>
+  <!-- ventanas planta alta -->
+  <g stroke="#cfe3ea" stroke-width="6"><path d="M880 80H920M1000 80H1040M1120 80H1160M1200 380H1200M800 480H840M1060 480H1120M1200 400V440"/></g>
+  <!-- muros planta alta -->
+  <g stroke="#2a1a0c" stroke-width="12" stroke-linecap="square" fill="none">
+    <path d="M760 80H1200V480H760Z"/>
+    <path d="M840 80V240M960 80V240M1080 80V240"/>
+    <path d="M760 240H780M820 240H880M920 240H1000M1040 240H1120M1160 240H1200"/>
+    <path d="M760 320H900M940 320H1000M1040 320H1200M960 320V480"/>
+  </g>
+  <g stroke="#cfe3ea" stroke-width="6"><path d="M880 80H920M1000 80H1040M1120 80H1160M800 480H840M1060 480H1120M1200 400V440"/></g>
+  <g fill="none" stroke="#3b2a1a" stroke-width="2" stroke-dasharray="4 3">
+    <path d="M780 240A40 40 0 0 1 820 240"/><path d="M880 240A40 40 0 0 1 920 240"/><path d="M1000 240A40 40 0 0 1 1040 240"/><path d="M1120 240A40 40 0 0 1 1160 240"/>
+    <path d="M900 320A40 40 0 0 0 940 320"/><path d="M1000 320A40 40 0 0 0 1040 320"/>
+  </g>
+
+  <!-- cartela -->
+  <g font-family="Georgia, serif" fill="#3b2a1a">
+    <text x="980" y="548" font-size="30" font-weight="bold" text-anchor="middle">El Timón Escarlata</text>
+    <text x="980" y="574" font-size="15" font-style="italic" text-anchor="middle">Taberna y posada · Ethar</text>
+    <path d="M880 604H1080" stroke="#3b2a1a" stroke-width="2"/>
+    <path d="M880 598V610M920 598V610M960 598V610M1000 598V610M1040 598V610M1080 598V610" stroke="#3b2a1a" stroke-width="2"/>
+    <text x="980" y="630" font-size="13" text-anchor="middle">1 cuadro = 5 pies (1,5 m)</text>
+  </g>
+  <!-- rosa de los vientos -->
+  <g transform="translate(1160 590)" stroke="#3b2a1a" stroke-width="1.5">
+    <path d="M0 -30L7 0L0 30L-7 0Z" fill="#e8dcbf"/><path d="M0 -30L7 0H-7Z" fill="#3b2a1a"/>
+    <text y="-36" font-family="Georgia, serif" font-size="14" text-anchor="middle" fill="#3b2a1a" stroke="none">N</text>
+  </g>
+</svg>

@@ -204,6 +204,7 @@ foreach ($k in $img.Keys) { if ($npcOut[$k]) { $npcOut[$k].image = $img[$k] } el
 
 # --- Interiores (data/interiores.json): plano, estancias y NPCs situados ---
 $intFile = "$root\data\interiores.json"
+$zoneSize = @{}
 if (Test-Path $intFile) {
   $int = Get-Content $intFile -Raw -Encoding UTF8 | ConvertFrom-Json
   foreach ($p in $int.PSObject.Properties) {
@@ -212,7 +213,8 @@ if (Test-Path $intFile) {
     $out[$bid].map = $b.map
     $w = $b.size[0]; $h = $b.size[1]
     foreach ($z in $b.zones) {
-      $out[$z.id] = [ordered]@{ id = $z.id; name = $z.name; type = 'estancia'; parent = $bid; num = $z.num
+      $zoneSize[$z.id] = @($w, $h)
+      $out[$z.id] =[ordered]@{ id = $z.id; name = $z.name; type = 'estancia'; parent = $bid; num = $z.num
         read = $z.read; dm = $z.dm; items = $z.items; visited = $false; secret = [bool]$z.secret
         pin = @([math]::Round($z.pin[0] / $w, 4), [math]::Round($z.pin[1] / $h, 4)) }
     }
@@ -221,6 +223,39 @@ if (Test-Path $intFile) {
       $npcOut[$n.id].spot = [ordered]@{ at = $n.zone; pin = @([math]::Round($n.pin[0] / $w, 4), [math]::Round($n.pin[1] / $h, 4)) }
       $npcOut[$n.id].doing = $n.doing
     }
+  }
+}
+
+# --- Vecinos (data/vecinos.json): NPCs de relleno, sitios nuevos y rutinas por momento del día ---
+function ZonePin($zone, $pin) {
+  $s = $zoneSize[$zone]
+  if (-not $s) { Write-Warning "Estancia desconocida: $zone"; return $null }
+  @([math]::Round($pin[0] / $s[0], 4), [math]::Round($pin[1] / $s[1], 4))
+}
+$vecFile = "$root\data\vecinos.json"
+if (Test-Path $vecFile) {
+  $vec = Get-Content $vecFile -Raw -Encoding UTF8 | ConvertFrom-Json
+  foreach ($l in $vec.lugares) {
+    $o = [ordered]@{ id = $l.id; name = $l.name; type = $l.type; parent = $l.parent; read = $l.read; dm = $l.dm; items = $l.items; visited = $false; secret = $false }
+    if ($l.parent -eq 'ethar') { $o.pin = @([math]::Round($l.pin[0] / 1262, 4), [math]::Round($l.pin[1] / 1246, 4)) }
+    $out[$l.id] = $o
+  }
+  foreach ($v in $vec.vecinos) {
+    $o = [ordered]@{ id = $v.id; tier = 'vecino'; pc = $false; status = 'vivo'; known = 'no' }
+    foreach ($k in 'name', 'race', 'role', 'location', 'look', 'personality', 'voice', 'knows', 'doing') { $o[$k] = $v.$k }
+    if ($v.spot) { $o.spot = [ordered]@{ at = $v.spot.zone; pin = (ZonePin $v.spot.zone $v.spot.pin) } }
+    $npcOut[$v.id] = $o
+  }
+  foreach ($p in $vec.rutinas.PSObject.Properties) {
+    if (-not $npcOut[$p.Name]) { Write-Warning "Rutina de NPC que no existe: $($p.Name)"; continue }
+    $sch = [ordered]@{}
+    foreach ($t in $p.Value.PSObject.Properties) {
+      $e = $t.Value; $s = [ordered]@{ doing = $e.doing }
+      if ($e.away) { $s.away = $true }
+      if ($e.zone) { $s.at = $e.zone; $s.pin = ZonePin $e.zone $e.pin }
+      $sch[$t.Name] = $s
+    }
+    $npcOut[$p.Name].schedule = $sch
   }
 }
 

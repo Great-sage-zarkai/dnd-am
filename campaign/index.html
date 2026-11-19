@@ -111,6 +111,18 @@ textarea { width: 100%; resize: vertical; min-height: 60px; font-family: inherit
 .token .lbl { position: absolute; left: 46px; top: 50%; transform: translateY(-50%); background: rgba(20,16,10,.92); color: #f3e9d4; padding: 4px 8px; border-radius: 6px; font-size: 12px; width: max-content; max-width: 240px; pointer-events: none; display: none; }
 .token:hover .lbl, .token.sel .lbl { display: block; }
 .edit .token { cursor: move; }
+.token.vecino .av { width: 28px; height: 28px; border: 2px dashed #9a9080; opacity: .92; }
+.token.vecino .lbl i { color: #b9ad97; }
+.av.vecino { border: 2px dashed #9a9080; }
+.row.vecino .meta b { font-weight: 500; }
+.tag.vecino { border-style: dashed; }
+.group-title.toggle { cursor: pointer; }
+.group-title.toggle:hover { color: var(--accent); }
+.times { display: flex; border: 1px solid var(--line); border-radius: 7px; overflow: hidden; }
+.times button { background: var(--panel2); border: 0; border-right: 1px solid var(--line); height: 28px; padding: 0 8px; font-size: 14px; }
+.times button:last-child { border-right: 0; }
+.times button.on { background: var(--accent); }
+.away { color: var(--dim); font-style: italic; }
 .scene { display: flex; gap: 10px; align-items: flex-start; padding: 8px; border-radius: 8px; background: var(--panel2); margin-bottom: 6px; cursor: pointer; }
 .scene:hover { outline: 1px solid var(--accent); }
 .scene .av { width: 40px; height: 40px; }
@@ -208,6 +220,8 @@ textarea { width: 100%; resize: vertical; min-height: 60px; font-family: inherit
     <section class="center">
       <div class="mapbar">
         <div class="crumbs" id="crumbs"></div>
+        <div class="times" id="times" title="Momento del día"></div>
+        <button class="mbtn" id="vecinosBtn" title="Mostrar / ocultar vecinos (relleno)">🏘</button>
         <button class="mbtn" id="upBtn" title="Subir al mapa superior">⬆</button>
         <button class="mbtn" id="labelsBtn" title="Mostrar todas las etiquetas">Aa</button>
         <button class="mbtn" id="tokensBtn" title="Mostrar / ocultar personajes en el plano">👥</button>
@@ -231,7 +245,7 @@ const PREFS = 'othranvel.prefs.v1';
 const TBD = '[POR DEFINIR]';
 
 let db = load();
-let prefs = Object.assign({ theme: 'dark', tab: 'loc', labels: false, open: ['mundo', 'othran-vel', 'ethar'] }, safeGet(PREFS));
+let prefs = Object.assign({ theme: 'dark', tab: 'loc', labels: false, time: 'tarde', open: ['mundo', 'othran-vel', 'ethar'] }, safeGet(PREFS));
 let route = { kind: 'loc', id: db.start, map: db.start };
 let editMode = false, editing = false, placing = null;
 const openNodes = new Set(prefs.open);
@@ -313,8 +327,28 @@ function resolveName(text) {
   const p = plainName(t); if (aliasIndex.map.has(p)) return aliasIndex.map.get(p);
   return null;
 }
+// Momento del día: la tarde es la escena por defecto (spot/doing); el resto viene de n.schedule
+const TIMES = [['amanecer', '🌅', 'Amanecer'], ['manana', '☀️', 'Mañana'], ['tarde', '🌤️', 'Tarde'], ['anochecer', '🌇', 'Anochecer'], ['noche', '🌙', 'Noche']];
+const timeLabel = t => TIMES.find(x => x[0] === t)?.[2] || t;
+function now(n) {
+  const s = prefs.time !== 'tarde' && n.schedule?.[prefs.time];
+  if (!s) return { spot: n.spot, doing: n.doing };
+  if (s.away) return { spot: null, doing: s.doing, away: true };
+  return { spot: s.at ? { at: s.at, pin: s.pin } : n.spot, doing: s.doing ?? n.doing };
+}
+// Mueve a un NPC en el plano para el momento del día actual
+function setNpcPos(n, at, pin) {
+  if (prefs.time === 'tarde' || !n.schedule?.[prefs.time]) {
+    if (prefs.time === 'tarde') { n.spot = { at, pin }; return; }
+    n.schedule ??= {};
+    n.schedule[prefs.time] = { doing: now(n).doing };
+  }
+  Object.assign(n.schedule[prefs.time], { at, pin }); delete n.schedule[prefs.time].away;
+}
+const isVecino = n => n.tier === 'vecino';
 function npcLocation(n) {
-  if (n.spot?.at && L(n.spot.at)) return n.spot.at;
+  const sp = now(n).spot;
+  if (sp?.at && L(sp.at)) return sp.at;
   const t = n.location || '';
   if (!t || /^Paradero/.test(t)) return null;
   let best = null;
@@ -342,7 +376,8 @@ function fmt(text, selfId) {
 const defaultMap = id => L(id).map ? id : mapForPin(id);
 // Mapa en el que se ve a un NPC: su ficha en el plano o el pin de su lugar
 function npcMap(n) {
-  if (n.spot?.pin && n.spot.at && L(n.spot.at)) return mapHost(n.spot.at);
+  const sp = now(n).spot;
+  if (sp?.pin && sp.at && L(sp.at)) return mapHost(sp.at);
   const at = npcLocation(n);
   return at ? mapForPin(at) : null;
 }
@@ -381,12 +416,17 @@ function renderList() {
   } else if (prefs.tab === 'npc') {
     const all = Object.values(db.npcs).filter(n => !q || (n.name + ' ' + (n.role || '')).toLowerCase().includes(q));
     const etharIds = new Set(subtree('ethar'));
-    const groups = [['El grupo', n => n.pc], ['En Ethar', n => etharIds.has(npcLocation(n))], ['Resto del mundo', n => npcLocation(n)], ['Sin ubicación fija', () => true]];
+    const groups = [['El grupo', n => n.pc], ['En Ethar', n => !isVecino(n) && etharIds.has(npcLocation(n))], ['Resto del mundo', n => !isVecino(n) && npcLocation(n)],
+      ['Sin ubicación fija', n => !isVecino(n)], ['Vecinos de Ethar (relleno)', isVecino, 'vecinos']];
     const used = new Set(); let html = '';
-    for (const [title, test] of groups) {
+    for (const [title, test, fold] of groups) {
       const items = all.filter(n => !used.has(n.id) && test(n));
       items.forEach(n => used.add(n.id));
-      if (items.length) html += `<div class="group-title">${title} · ${items.length}</div>` + items.map(npcRow).join('');
+      if (!items.length) continue;
+      // el grupo de vecinos va plegado salvo que se despliegue o se esté filtrando
+      const open = !fold || q || prefs.openVecinos;
+      html += fold ? `<div class="group-title toggle" data-fold="${fold}">${open ? '▾' : '▸'} ${title} · ${items.length}</div>` : `<div class="group-title">${title} · ${items.length}</div>`;
+      if (open) html += items.map(npcRow).join('');
     }
     el.innerHTML = html || '<div class="empty">Nada</div>';
   } else {
@@ -406,13 +446,17 @@ function treeHtml(id, depth) {
   if (open) h += kids.map(k => treeHtml(k.id, depth + 1)).join('');
   return h;
 }
-function avatar(n, cls = '') { const im = imgOf(n, 'npc'); return im ? `<img class="av ${n.pc ? 'pc' : ''} ${cls}" src="${src(im)}" alt="">` : `<span class="av ${n.pc ? 'pc' : ''} ${cls}">${esc(initials(n.name))}</span>`; }
+function avatar(n, cls = '') {
+  const im = imgOf(n, 'npc'); cls += n.pc ? ' pc' : isVecino(n) ? ' vecino' : '';
+  return im ? `<img class="av ${cls}" src="${src(im)}" alt="">` : `<span class="av ${cls}">${esc(initials(n.name))}</span>`;
+}
 function isDead(n) { return /muert/i.test(n.status || ''); }
 function npcRow(n) {
   const sel = route.kind === 'npc' && route.id === n.id;
-  return `<div class="row ${sel ? 'sel' : ''} ${isDead(n) ? 'dead' : ''}" data-npc="${n.id}">${avatar(n)}<div class="meta"><b>${esc(n.name)}${isDead(n) ? ' †' : ''}</b><span>${esc(n.role || '')}</span></div></div>`;
+  return `<div class="row ${sel ? 'sel' : ''} ${isDead(n) ? 'dead' : ''} ${isVecino(n) ? 'vecino' : ''}" data-npc="${n.id}">${avatar(n)}<div class="meta"><b>${esc(n.name)}${isDead(n) ? ' †' : ''}</b><span>${esc(n.role || '')}</span></div></div>`;
 }
 $('#list').addEventListener('click', e => {
+  if (e.target.closest('[data-fold]')) { prefs.openVecinos = !prefs.openVecinos; savePrefs(); renderList(); return; }
   const t = e.target.closest('[data-toggle]');
   if (t && t.dataset.toggle) { const id = t.dataset.toggle; openNodes.has(id) ? openNodes.delete(id) : openNodes.add(id); savePrefs(); renderList(); return; }
   const n = e.target.closest('[data-loc],[data-npc],[data-fac],[data-quest]'); if (!n) return;
@@ -452,7 +496,13 @@ function renderMap(force) {
   renderPins(); renderCrumbs();
 }
 function pinsOn(mapId) { return Object.values(db.locations).filter(l => l.pin && l.parent && mapHost(l.parent) === mapId); }
-function tokensOn(mapId) { return Object.values(db.npcs).filter(n => n.spot?.pin && n.spot.at && L(n.spot.at) && mapHost(n.spot.at) === mapId); }
+function tokensOn(mapId) {
+  return Object.values(db.npcs).filter(n => {
+    if (isVecino(n) && prefs.vecinos === false) return false;
+    const sp = now(n).spot;
+    return sp?.pin && sp.at && L(sp.at) && mapHost(sp.at) === mapId;
+  });
+}
 function selectedPinId() {
   let id = route.kind === 'loc' ? route.id : route.kind === 'npc' ? npcLocation(db.npcs[route.id]) : null;
   const on = new Set(pinsOn(route.map).map(l => l.id));
@@ -465,8 +515,8 @@ function renderPins() {
   const sel = selectedPinId();
   layer.innerHTML = pinsOn(route.map).map(l => `<div class="pin ${l.secret ? 'secret' : ''} ${l.map ? 'hasmap' : ''} ${sel === l.id ? 'sel' : ''}" data-pin="${l.id}" style="left:${l.pin[0] * 100}%;top:${l.pin[1] * 100}%;--c:${pinColor(l)}">
      <div class="dot">${esc(l.num || (l.type === 'sala' ? l.name.replace('Sala R', '') : ''))}</div><div class="lbl">${esc(l.name)}${l.map ? ' · doble clic para entrar' : ''}</div></div>`).join('')
-    + (prefs.tokens === false ? '' : tokensOn(route.map).map(n => `<div class="token ${route.kind === 'npc' && route.id === n.id ? 'sel' : ''}" data-token="${n.id}" style="left:${n.spot.pin[0] * 100}%;top:${n.spot.pin[1] * 100}%">
-     ${avatar(n)}<div class="lbl"><b>${esc(plainName(n.name))}</b>${n.doing ? `<br>${esc(n.doing)}` : ''}</div></div>`).join(''));
+    + (prefs.tokens === false ? '' : tokensOn(route.map).map(n => { const t = now(n); return `<div class="token ${isVecino(n) ? 'vecino' : ''} ${route.kind === 'npc' && route.id === n.id ? 'sel' : ''}" data-token="${n.id}" style="left:${t.spot.pin[0] * 100}%;top:${t.spot.pin[1] * 100}%">
+     ${avatar(n)}<div class="lbl"><b>${esc(plainName(n.name))}</b>${isVecino(n) ? ' <i>· vecino</i>' : ''}${t.doing ? `<br>${esc(t.doing)}` : ''}</div></div>`; }).join(''));
   applyView();
 }
 function renderCrumbs() {
@@ -510,7 +560,17 @@ vp.addEventListener('wheel', e => { e.preventDefault(); const r = vp.getBounding
 $('#zoomIn').onclick = () => { const r = vp.getBoundingClientRect(); animate(true); zoomAt(1.4, r.width / 2, r.height / 2); };
 $('#zoomOut').onclick = () => { const r = vp.getBoundingClientRect(); animate(true); zoomAt(1 / 1.4, r.width / 2, r.height / 2); };
 $('#fitBtn').onclick = () => fitView(true);
-$('#tokensBtn').onclick = () => { prefs.tokens = prefs.tokens === false; $('#tokensBtn').classList.toggle('on', prefs.tokens !== false); savePrefs(); renderPins(); };
+function renderTimes() {
+  $('#times').innerHTML = TIMES.map(([k, ico, lb]) => `<button data-time="${k}" class="${prefs.time === k ? 'on' : ''}" title="${lb}">${ico}</button>`).join('');
+}
+$('#times').onclick = e => {
+  const b = e.target.closest('[data-time]'); if (!b) return;
+  prefs.time = b.dataset.time; savePrefs(); renderTimes();
+  toast(`${TIMES.find(t => t[0] === prefs.time)[1]} ${timeLabel(prefs.time)}`); setTimeout(hideToast, 1200);
+  renderList(); renderPins(); renderDetail();
+};
+$('#vecinosBtn').onclick = () => { prefs.vecinos = prefs.vecinos === false; $('#vecinosBtn').classList.toggle('on', prefs.vecinos !== false); savePrefs(); renderPins(); };
+$('#tokensBtn').onclick =() => { prefs.tokens = prefs.tokens === false; $('#tokensBtn').classList.toggle('on', prefs.tokens !== false); savePrefs(); renderPins(); };
 $('#labelsBtn').onclick =() => { prefs.labels = !prefs.labels; $('#labelsBtn').classList.toggle('on', prefs.labels); savePrefs(); renderPins(); };
 $('#upBtn').onclick = () => { const up = mapHost(L(route.map).parent); if (up) go('loc', route.map, up); };
 
@@ -535,7 +595,8 @@ vp.addEventListener('pointerup', e => {
   vp.classList.remove('dragging');
   const d = drag; drag = null;
   if (d.pin && d.moved && d.pos) {
-    if (d.pinEl.dataset.pin) L(d.pinEl.dataset.pin).pin = d.pos; else db.npcs[d.pinEl.dataset.token].spot.pin = d.pos;
+    if (d.pinEl.dataset.pin) L(d.pinEl.dataset.pin).pin = d.pos;
+    else { const n = db.npcs[d.pinEl.dataset.token]; setNpcPos(n, now(n).spot.at, d.pos); }
     save(); return;
   }
   if (d.moved) return;
@@ -544,8 +605,9 @@ vp.addEventListener('pointerup', e => {
     if (p.npc) {
       const n = db.npcs[p.npc];
       // si ya estaba en una estancia de este plano la conserva; si no, queda en el lugar del plano
-      const at = n.spot?.at && L(n.spot.at) && mapHost(n.spot.at) === route.map ? n.spot.at : route.map;
-      n.spot = { at, pin: toImage(e) }; save(); go('npc', p.npc, route.map);
+      const cur = now(n).spot;
+      const at = cur?.at && L(cur.at) && mapHost(cur.at) === route.map ? cur.at : route.map;
+      setNpcPos(n, at, toImage(e)); save(); go('npc', p.npc, route.map);
     } else { L(p.loc).pin = toImage(e); save(); go('loc', p.loc, route.map); }
     renderPins(); return;
   }
@@ -599,7 +661,7 @@ function editActions(kind, o) {
   }
   if (kind === 'npc' && route.map) {
     h += `<button class="btn" data-act="placeNpc">📍 Situar en «${esc(L(route.map).name)}»</button>`;
-    if (o.spot) h += `<button class="btn" data-act="unplaceNpc">✕ Quitar del plano</button>`;
+    if (now(o).spot) h += `<button class="btn" data-act="unplaceNpc">✕ Quitar del plano (${timeLabel(prefs.time).toLowerCase()})</button>`;
   }
   if (o.id !== 'mundo' && o.id !== db.start) h += `<button class="btn danger" data-act="delete">🗑 Borrar</button>`;
   return `<div class="actions">${h}</div>`;
@@ -612,7 +674,10 @@ function locCard(l) {
   const named = (l.npcs || '').split(/,(?![^(]*\))/).map(s => resolveName(s.replace(/\(.*?\)/g, '')))
     .filter(r => r && r.kind === 'npc' && !npcs.some(n => n.id === r.id)).map(r => db.npcs[r.id]);
   const kids = children(l.id);
-  const scene = npcs.filter(n => !isTbd(n.doing)), rest = npcs.filter(n => isTbd(n.doing)).concat(named);
+  // escena según el momento del día: primero los principales, luego los vecinos
+  const byTier = (a, b) => isVecino(a) - isVecino(b);
+  const scene = npcs.filter(n => !isTbd(now(n).doing) && !now(n).away).sort(byTier);
+  const rest = npcs.filter(n => isTbd(now(n).doing) || now(n).away).concat(named).sort(byTier);
   const chip = n => { const at = npcLocation(n); const sub = at && at !== l.id ? ` <small>· ${esc(L(at).name)}</small>` : ''; return `<span class="chip" data-npc="${n.id}">${avatar(n)}${esc(plainName(n.name))}${isDead(n) ? ' †' : ''}${sub}</span>`; };
   const enterBtn = l.map && route.map !== l.id ? `<button class="btn primary" data-act="enter">🗺 Abrir mapa de ${esc(l.name)}</button>` : '';
   const showOn = !l.map && l.pin && route.map !== mapForPin(l.id) ? `<button class="btn" data-act="show">📍 Ver en el mapa</button>` : '';
@@ -623,7 +688,7 @@ function locCard(l) {
     <div class="actions">${enterBtn}${showOn}</div>${editActions('loc', l)}
     ${!isTbd(l.read) ? `<div class="read"><span class="h">📖 Leer en voz alta</span>${fmt(l.read, l.id)}</div>` : ''}
     ${field('loc', l, 'situation')}${field('loc', l, 'tone')}${field('loc', l, 'ambience')}
-    ${scene.length ? `<div class="f"><h4>🎭 Qué está pasando aquí</h4>${scene.map(n => { const at = npcLocation(n); return `<div class="scene" data-npc="${n.id}">${avatar(n)}<div><b>${esc(plainName(n.name))}${at !== l.id ? ` <small style="color:var(--dim);font-weight:400">· ${esc(L(at).name)}</small>` : ''}</b><span>${esc(n.doing)}</span></div></div>`; }).join('')}</div>` : ''}
+    ${scene.length ? `<div class="f"><h4>🎭 Qué está pasando aquí · ${TIMES.find(t => t[0] === prefs.time)[1]} ${timeLabel(prefs.time).toLowerCase()}</h4>${scene.map(n => { const at = npcLocation(n); return `<div class="scene" data-npc="${n.id}">${avatar(n)}<div><b>${esc(plainName(n.name))}${isVecino(n) ? ' <small style="color:var(--dim);font-weight:400;font-style:italic">vecino</small>' : ''}${at !== l.id ? ` <small style="color:var(--dim);font-weight:400">· ${esc(L(at).name)}</small>` : ''}</b><span>${esc(now(n).doing)}</span></div></div>`; }).join('')}</div>` : ''}
     ${rest.length ? `<div class="f"><h4>${scene.length ? 'También aquí' : 'Personajes aquí'} (${rest.length})</h4><div class="chips">${rest.map(chip).join('')}</div></div>` : ''}
     ${kids.length ? `<div class="f"><h4>Lugares dentro</h4><div class="chips">${kids.map(k => `<span class="chip plain" data-loc="${k.id}">${typeIcon(k.type)} ${esc(k.name)}</span>`).join('')}</div></div>` : ''}
     ${dmBox(field('loc', l, 'dm') + field('loc', l, 'hooks') + field('loc', l, 'items') + field('loc', l, 'faction') + field('loc', l, 'where'))}
@@ -634,10 +699,11 @@ function npcCard(n) {
   return `${imgOf(n, 'npc') ? `<img class="hero" src="${src(imgOf(n, 'npc'))}" alt="" data-zoom>` : ''}
     <h2>${esc(n.name)}</h2>
     <div class="sub">${[n.race, n.role].filter(x => !isTbd(x)).map(esc).join(' · ')}</div>
-    <div class="tags">${n.pc ? '<span class="tag ok">Personaje jugador</span>' : ''}${!isTbd(n.status) ? `<span class="tag ${isDead(n) ? 'dead' : ''}">${esc(n.status)}</span>` : ''}${!isTbd(n.known) && !n.pc ? `<span class="tag">Lo conocen: ${esc(n.known)}</span>` : ''}</div>
+    <div class="tags">${n.pc ? '<span class="tag ok">Personaje jugador</span>' : ''}${isVecino(n) ? '<span class="tag vecino">🏘 Vecino (relleno)</span>' : ''}${!isTbd(n.status) ? `<span class="tag ${isDead(n) ? 'dead' : ''}">${esc(n.status)}</span>` : ''}${!isTbd(n.known) && !n.pc ? `<span class="tag">Lo conocen: ${esc(n.known)}</span>` : ''}</div>
     <div class="actions">${at ? `<button class="btn" data-act="goLoc" data-id="${at}">📍 ${esc(L(at).name)}${L(at).type === 'estancia' ? ` · ${esc(L(L(at).parent).name)}` : ''}</button>` : ''}
-      ${n.spot?.pin && route.map !== npcMap(n) ? `<button class="btn" data-act="showNpc">🗺 Ver en el plano</button>` : ''}</div>${editActions('npc', n)}
-    ${!isTbd(n.doing) ? `<div class="doing"><h4>🎭 Ahora mismo</h4>${fmt(n.doing, n.id)}</div>` : ''}
+      ${now(n).spot?.pin && route.map !== npcMap(n) ? `<button class="btn" data-act="showNpc">🗺 Ver en el plano</button>` : ''}</div>${editActions('npc', n)}
+    ${!isTbd(now(n).doing) ? `<div class="doing"><h4>🎭 ${TIMES.find(t => t[0] === prefs.time)[1]} ${timeLabel(prefs.time)}${now(n).away ? ' · fuera del plano' : ''}</h4><span class="${now(n).away ? 'away' : ''}">${fmt(now(n).doing, n.id)}</span></div>` : ''}
+    ${n.schedule ? `<div class="f"><h4>Rutina del día</h4><div style="font-size:13px">${TIMES.map(([k, ico, lb]) => { const s = k === 'tarde' ? { doing: n.doing } : n.schedule[k]; return s?.doing ? `<div style="margin-bottom:3px;${k === prefs.time ? 'color:var(--accent)' : ''}">${ico} <b>${lb}:</b> ${esc(s.doing)}</div>` : ''; }).join('')}</div></div>` : ''}
     ${!isTbd(n.quote) ? `<p class="quote">${fmt(n.quote, n.id)}</p>` : ''}
     ${field('npc', n, 'location')}${field('npc', n, 'look')}${field('npc', n, 'personality')}${field('npc', n, 'voice', 'voice')}
     ${field('npc', n, 'knows')}${field('npc', n, 'pcRel')}${field('npc', n, 'faction')}
@@ -665,18 +731,26 @@ function editForm(kind, o) {
       <div class="chk"><label><input type="checkbox" name="visited" ${o.visited ? 'checked' : ''}> Visitado</label><label><input type="checkbox" name="secret" ${o.secret ? 'checked' : ''}> Secreto</label></div>`;
   } else if (kind === 'npc') {
     extra = `<label>Retrato (p. ej. img/npcs/dory.png)</label><input type="text" name="image" value="${esc(o.image)}">
-      <div class="chk"><label><input type="checkbox" name="pc" ${o.pc ? 'checked' : ''}> Personaje jugador</label></div>`;
+      <div class="chk"><label><input type="checkbox" name="pc" ${o.pc ? 'checked' : ''}> Personaje jugador</label><label><input type="checkbox" name="vecino" ${isVecino(o) ? 'checked' : ''}> Vecino (relleno)</label></div>`;
   }
+  const val = k => kind === 'npc' && k === 'doing' ? now(o).doing : o[k];
+  const lbl = (k, lb) => kind === 'npc' && k === 'doing' ? `${lb} (${timeLabel(prefs.time).toLowerCase()})` : lb;
   return `<form class="card form" id="editForm"><h2>Editar</h2>
     <label>Nombre</label><input type="text" name="name" value="${esc(o.name)}" required>${extra}
-    ${fields.map(([k, lb]) => `<label>${lb}</label><textarea name="${k}" rows="${['read', 'dm', 'secrets', 'knows'].includes(k) ? 5 : 2}">${esc(o[k] || '')}</textarea>`).join('')}
+    ${fields.map(([k, lb]) => `<label>${lbl(k, lb)}</label><textarea name="${k}" rows="${['read', 'dm', 'secrets', 'knows'].includes(k) ? 5 : 2}">${esc(val(k) || '')}</textarea>`).join('')}
     <div class="actions" style="margin-top:14px"><button class="btn primary" type="submit">Guardar</button><button class="btn" type="button" data-act="cancel">Cancelar</button></div></form>`;
 }
 $('#detail').addEventListener('submit', e => {
   e.preventDefault();
   const o = current(), fd = new FormData(e.target);
-  for (const [k, v] of fd.entries()) o[k] = v.trim();
+  for (const [k, v] of fd.entries()) {
+    if (k === 'vecino') continue;
+    // lo que hace un NPC se guarda en la franja del día que se está viendo
+    if (route.kind === 'npc' && k === 'doing' && prefs.time !== 'tarde') { ((o.schedule ??= {})[prefs.time] ??= {}).doing = v.trim(); continue; }
+    o[k] = v.trim();
+  }
   for (const k of ['visited', 'secret', 'pc']) if (e.target.elements[k]) o[k] = e.target.elements[k].checked;
+  if (e.target.elements.vecino) { if (e.target.elements.vecino.checked) o.tier = 'vecino'; else delete o.tier; }
   for (const k of ['map', 'image']) if (o[k] === '') delete o[k];
   save(); aliasIndex = null; editing = false; renderAll(true);
 });
@@ -696,7 +770,9 @@ $('#detail').addEventListener('click', e => {
     case 'edit': editing = true; renderDetail(); break;
     case 'cancel': editing = false; renderDetail(); break;
     case 'placeNpc': placing = { npc: o.id }; vp.classList.add('placing'); toast(`Haz clic en el plano para situar a <b>${esc(plainName(o.name))}</b> · Esc para cancelar`); break;
-    case 'unplaceNpc': delete o.spot; save(); renderAll(false); break;
+    case 'unplaceNpc':
+      if (prefs.time === 'tarde') delete o.spot; else (o.schedule ??= {})[prefs.time] = { away: true, doing: now(o).doing };
+      save(); renderAll(false); break;
     case 'place': placing = { loc: o.id }; if (route.map !== mapHost(o.parent)) go('loc', o.id, mapHost(o.parent)); vp.classList.add('placing'); toast(`Haz clic en el mapa para colocar <b>${esc(o.name)}</b> · Esc para cancelar`); break;
     case 'addChild': { const id = uniqueId(db.locations, 'nuevo-lugar'); db.locations[id] = { id, name: 'Nuevo lugar', type: 'zona', parent: o.id, visited: false, secret: false }; openNodes.add(o.id); save(); aliasIndex = null; editing = true; go('loc', id); break; }
     case 'addNpcHere': { const id = uniqueId(db.npcs, 'nuevo'); db.npcs[id] = { id, name: 'Nuevo NPC', location: o.name }; save(); aliasIndex = null; editing = true; go('npc', id); break; }
@@ -718,7 +794,7 @@ function runSearch() {
   const q = $('#searchIn').value.trim().toLowerCase().normalize('NFD').replace(/\p{M}/gu, '');
   const norm = s => (s || '').toLowerCase().normalize('NFD').replace(/\p{M}/gu, '');
   const all = [
-    ...Object.values(db.npcs).map(o => ({ kind: 'npc', o, k: o.pc ? 'PJ' : 'NPC', sub: o.role })),
+    ...Object.values(db.npcs).map(o => ({ kind: 'npc', o, k: o.pc ? 'PJ' : isVecino(o) ? 'Vecino' : 'NPC', sub: o.role })),
     ...Object.values(db.locations).map(o => ({ kind: 'loc', o, k: 'Lugar', sub: o.type })),
     ...Object.values(db.factions).map(o => ({ kind: 'fac', o, k: 'Facción', sub: '' })),
     ...Object.values(db.quests).map(o => ({ kind: 'quest', o, k: 'Misión', sub: o.status }))];
@@ -773,6 +849,8 @@ function renderAll(mapChanged) { renderList(); renderMap(mapChanged); renderDeta
 $('#title').textContent = db.title; $('#group').textContent = db.group || ''; $('#logo').src = src(db.logo);
 $('#labelsBtn').classList.toggle('on', prefs.labels);
 $('#tokensBtn').classList.toggle('on', prefs.tokens !== false);
+$('#vecinosBtn').classList.toggle('on', prefs.vecinos !== false);
+renderTimes();
 applyTheme();
 route = parseHash();
 renderAll(true);

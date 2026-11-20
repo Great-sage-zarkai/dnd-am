@@ -132,23 +132,7 @@ $out['ethar'].image = 'img/ethar visual.png'
 $out['timon-escarlata'].image = 'img/solo en su taberna.png'
 $out['mazmorra-bajo-el-almacen-sur'].map = 'maps/almacen sur sotano.jpg'
 
-# Salas de la mazmorra (R1-R12) como sublugares con su pin
-$dm = $out['mazmorra-bajo-el-almacen-sur'].dm
-$roomNotes = @{
-  R2 = '4 Matones del Rojo.'; R4 = '3-4 goblins «prestados» por Rellan Voss (ya fallecido).'
-  R6 = 'Armería con las armas robadas del Retén (misión de Ordell Maskan).'
-  R8 = 'Aquí desemboca el túnel secreto de Bonnie.'
-  R9 = '2 bugbears fijos + 2 de ronda como refuerzo solo si hay ruido.'; R10 = '4 Matones del Rojo.'
-  R12 = 'Aposentos de Corvan (vacíos si escapó), con escritorio y correspondencia (lo que pide Reva Sonn). Escalera secreta hacia la Casa Consistorial.'
-}
-$roomPos = @{ R1 = 1490, 1010; R2 = 1060, 885; R3 = 1615, 700; R4 = 1120, 580; R5 = 1300, 390; R6 = 1090, 270
-  R7 = 750, 270; R8 = 570, 765; R9 = 265, 1070; R10 = 265, 640; R11 = 260, 335; R12 = 445, 270 }
-foreach ($n in 1..12) {
-  $r = "R$n"; $id = "mazmorra-r$n"
-  $out[$id] = [ordered]@{ id = $id; name = "Sala $r"; type = 'sala'; parent = 'mazmorra-bajo-el-almacen-sur'
-    read = '[POR DEFINIR]'; dm = $(if ($roomNotes[$r]) { $roomNotes[$r] } else { '[POR DEFINIR]' }); visited = $false; secret = $false
-    pin = @([math]::Round($roomPos[$r][0] / 1800, 4), [math]::Round($roomPos[$r][1] / 1282, 4)) }
-}
+# Las salas de la mazmorra (R1-R12) vienen de data/interiores.json
 
 # --- Pins (píxeles sobre cada mapa) ---
 $worldPins = @{
@@ -251,6 +235,15 @@ if ($vec) {
   foreach ($v in $vec.vecinos) {
     $o = [ordered]@{ id = $v.id; tier = 'vecino'; pc = $false; status = 'vivo'; known = 'no' }
     foreach ($k in 'name', 'race', 'role', 'location', 'look', 'personality', 'voice', 'knows', 'doing') { $o[$k] = $v.$k }
+    if ($v.spot) { $o.spot = [ordered]@{ at = $v.spot.zone; pin = (ZonePin $v.spot.zone $v.spot.pin) } }
+    $npcOut[$v.id] = $o
+  }
+  # enemigos (y presos) de las mazmorras: por defecto tier 'enemigo'; "tier": "" los deja como NPC normal
+  foreach ($v in $vec.enemigos) {
+    $o = [ordered]@{ id = $v.id; pc = $false; status = 'vivo'; known = 'no' }
+    $tier = if ($null -ne $v.tier) { $v.tier } else { 'enemigo' }
+    if ($tier) { $o.tier = $tier }
+    foreach ($k in 'name', 'race', 'role', 'sheet', 'location', 'look', 'personality', 'voice', 'knows', 'doing') { $o[$k] = $v.$k }
     if ($v.spot) { $o.spot = [ordered]@{ at = $v.spot.zone; pin = (ZonePin $v.spot.zone $v.spot.pin) } }
     $npcOut[$v.id] = $o
   }

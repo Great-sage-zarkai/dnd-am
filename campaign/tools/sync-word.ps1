@@ -112,6 +112,14 @@ foreach ($p in $vec.rutinas.PSObject.Properties) {
     $tail += F $times[$k] "$($e.doing)$place"
   }
 }
+
+$tail += (H1 '11. ENEMIGOS Y PRESOS DE LAS MAZMORRAS') + (T 'Enemigos con nombre de las mazmorras, con la ficha de juego que usan. Los presos aparecen también aquí para tenerlos juntos.')
+foreach ($v in $vec.enemigos) {
+  $tail += (H2 $v.name) + (F 'Raza' $v.race) + (F 'Rol / ocupación' $v.role) + (F 'Ficha de juego' $v.sheet)
+  $tail += F 'Dónde se encuentra' $(if ($v.spot) { PlaceOf $v.spot.zone } else { $v.location })
+  $tail += (F 'Aspecto físico' $v.look) + (F 'Personalidad' $v.personality) + (F 'Voz y gestos (cómo interpretarlo en mesa)' $v.voice)
+  $tail += (F 'Qué sabe' $v.knows) + (F 'Qué está haciendo' $v.doing)
+}
 $x = $x.Substring(0, $s) + $tail + $x.Substring($s)
 
 # --- Guardar ---

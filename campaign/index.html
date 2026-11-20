@@ -114,6 +114,9 @@ textarea { width: 100%; resize: vertical; min-height: 60px; font-family: inherit
 .token.vecino .av { width: 28px; height: 28px; border: 2px dashed #9a9080; opacity: .92; }
 .token.vecino .lbl i { color: #b9ad97; }
 .av.vecino { border: 2px dashed #9a9080; }
+.token.enemigo .av, .av.enemigo { border-color: var(--danger); }
+.token.enemigo .lbl i { color: #e7a093; }
+.tag.enemy { color: var(--danger); border-color: var(--danger); }
 .row.vecino .meta b { font-weight: 500; }
 .tag.vecino { border-style: dashed; }
 .group-title.toggle { cursor: pointer; }
@@ -353,6 +356,7 @@ function setNpcPos(n, at, pin) {
   Object.assign(n.schedule[prefs.time], { at, pin }); delete n.schedule[prefs.time].away;
 }
 const isVecino = n => n.tier === 'vecino';
+const isEnemy = n => n.tier === 'enemigo';
 function npcLocation(n) {
   const sp = now(n).spot;
   if (sp?.at && L(sp.at)) return sp.at;
@@ -423,15 +427,16 @@ function renderList() {
   } else if (prefs.tab === 'npc') {
     const all = Object.values(db.npcs).filter(n => !q || (n.name + ' ' + (n.role || '')).toLowerCase().includes(q));
     const etharIds = new Set(subtree('ethar'));
-    const groups = [['El grupo', n => n.pc], ['En Ethar', n => !isVecino(n) && etharIds.has(npcLocation(n))], ['Resto del mundo', n => !isVecino(n) && npcLocation(n)],
-      ['Sin ubicación fija', n => !isVecino(n)], ['Vecinos de Ethar (relleno)', isVecino, 'vecinos']];
+    const main = n => !isVecino(n) && !isEnemy(n);
+    const groups = [['El grupo', n => n.pc], ['En Ethar', n => main(n) && etharIds.has(npcLocation(n))], ['Resto del mundo', n => main(n) && npcLocation(n)],
+      ['Sin ubicación fija', main], ['Enemigos (mazmorras)', isEnemy, 'enemigos'], ['Vecinos de Ethar (relleno)', isVecino, 'vecinos']];
     const used = new Set(); let html = '';
     for (const [title, test, fold] of groups) {
       const items = all.filter(n => !used.has(n.id) && test(n));
       items.forEach(n => used.add(n.id));
       if (!items.length) continue;
       // el grupo de vecinos va plegado salvo que se despliegue o se esté filtrando
-      const open = !fold || q || prefs.openVecinos;
+      const open = !fold || q || (prefs.folds || {})[fold];
       html += fold ? `<div class="group-title toggle" data-fold="${fold}">${open ? '▾' : '▸'} ${title} · ${items.length}</div>` : `<div class="group-title">${title} · ${items.length}</div>`;
       if (open) html += items.map(npcRow).join('');
     }
@@ -454,7 +459,7 @@ function treeHtml(id, depth) {
   return h;
 }
 function avatar(n, cls = '') {
-  const im = imgOf(n, 'npc'); cls += n.pc ? ' pc' : isVecino(n) ? ' vecino' : '';
+  const im = imgOf(n, 'npc'); cls += n.pc ? ' pc' : isVecino(n) ? ' vecino' : isEnemy(n) ? ' enemigo' : '';
   return im ? `<img class="av ${cls}" src="${src(im)}" alt="">` : `<span class="av ${cls}">${esc(initials(n.name))}</span>`;
 }
 function isDead(n) { return /muert/i.test(n.status || ''); }
@@ -463,7 +468,8 @@ function npcRow(n) {
   return `<div class="row ${sel ? 'sel' : ''} ${isDead(n) ? 'dead' : ''} ${isVecino(n) ? 'vecino' : ''}" data-npc="${n.id}">${avatar(n)}<div class="meta"><b>${esc(n.name)}${isDead(n) ? ' †' : ''}</b><span>${esc(n.role || '')}</span></div></div>`;
 }
 $('#list').addEventListener('click', e => {
-  if (e.target.closest('[data-fold]')) { prefs.openVecinos = !prefs.openVecinos; savePrefs(); renderList(); return; }
+  const fold = e.target.closest('[data-fold]')?.dataset.fold;
+  if (fold) { prefs.folds ??= {}; prefs.folds[fold] = !prefs.folds[fold]; savePrefs(); renderList(); return; }
   const t = e.target.closest('[data-toggle]');
   if (t && t.dataset.toggle) { const id = t.dataset.toggle; openNodes.has(id) ? openNodes.delete(id) : openNodes.add(id); savePrefs(); renderList(); return; }
   const n = e.target.closest('[data-loc],[data-npc],[data-fac],[data-quest]'); if (!n) return;
@@ -522,8 +528,8 @@ function renderPins() {
   const sel = selectedPinId();
   layer.innerHTML = pinsOn(route.map).map(l => `<div class="pin ${l.secret ? 'secret' : ''} ${l.map ? 'hasmap' : ''} ${sel === l.id ? 'sel' : ''}" data-pin="${l.id}" style="left:${l.pin[0] * 100}%;top:${l.pin[1] * 100}%;--c:${pinColor(l)}">
      <div class="dot">${esc(l.num || (l.type === 'sala' ? l.name.replace('Sala R', '') : ''))}</div><div class="lbl">${esc(l.name)}${l.map ? ' · doble clic para entrar' : ''}</div></div>`).join('')
-    + (prefs.tokens === false ? '' : tokensOn(route.map).map(n => { const t = now(n); return `<div class="token ${isVecino(n) ? 'vecino' : ''} ${route.kind === 'npc' && route.id === n.id ? 'sel' : ''}" data-token="${n.id}" style="left:${t.spot.pin[0] * 100}%;top:${t.spot.pin[1] * 100}%">
-     ${avatar(n)}<div class="lbl"><b>${esc(plainName(n.name))}</b>${isVecino(n) ? ' <i>· vecino</i>' : ''}${t.doing ? `<br>${esc(t.doing)}` : ''}</div></div>`; }).join(''));
+    + (prefs.tokens === false ? '' : tokensOn(route.map).map(n => { const t = now(n); return `<div class="token ${isVecino(n) ? 'vecino' : ''} ${isEnemy(n) ? 'enemigo' : ''} ${route.kind === 'npc' && route.id === n.id ? 'sel' : ''}" data-token="${n.id}" style="left:${t.spot.pin[0] * 100}%;top:${t.spot.pin[1] * 100}%">
+     ${avatar(n)}<div class="lbl"><b>${esc(plainName(n.name))}</b>${isVecino(n) ? ' <i>· vecino</i>' : ''}${isEnemy(n) ? ` <i>· ${esc(n.sheet || 'enemigo')}</i>` : ''}${t.doing ? `<br>${esc(t.doing)}` : ''}</div></div>`; }).join(''));
   applyView();
 }
 function renderCrumbs() {
@@ -634,7 +640,7 @@ window.addEventListener('resize', () => fitView(false));
 /* ---------- Fichas ---------- */
 const LOC_FIELDS = [['read', 'Descripción para leer'], ['ambience', 'Ambiente'], ['where', 'Ubicación aproximada'], ['faction', 'Facción o gobierno'],
   ['dm', 'Notas del máster'], ['npcs', 'NPCs (texto del Word)'], ['items', 'Objetos, precios, servicios'], ['hooks', 'Ganchos / pistas'], ['tone', 'Tono'], ['situation', 'Situación actual']];
-const NPC_FIELDS = [['doing', 'Qué está haciendo ahora'], ['race', 'Raza'], ['role', 'Rol / ocupación'], ['location', 'Dónde se encuentra'], ['faction', 'Facción'], ['status', 'Estado'], ['known', '¿Lo conocen los jugadores?'],
+const NPC_FIELDS = [['doing', 'Qué está haciendo ahora'], ['sheet', 'Ficha de juego'], ['race', 'Raza'], ['role', 'Rol / ocupación'], ['location', 'Dónde se encuentra'], ['faction', 'Facción'], ['status', 'Estado'], ['known', '¿Lo conocen los jugadores?'],
   ['quote', 'Frase típica'], ['look', 'Aspecto físico'], ['personality', 'Personalidad'], ['voice', 'Voz y gestos'], ['wants', 'Qué quiere'], ['knows', 'Qué sabe'],
   ['secrets', 'Secretos'], ['pcRel', 'Relación con los jugadores'], ['npcRel', 'Relación con otros NPCs']];
 const FAC_FIELDS = [['desc', 'Descripción'], ['goals', 'Objetivos'], ['leader', 'Líder'], ['members', 'Miembros conocidos'], ['pcRel', 'Relación con los jugadores']];
@@ -706,7 +712,7 @@ function npcCard(n) {
   return `${imgOf(n, 'npc') ? `<img class="hero" src="${src(imgOf(n, 'npc'))}" alt="" data-zoom>` : ''}
     <h2>${esc(n.name)}</h2>
     <div class="sub">${[n.race, n.role].filter(x => !isTbd(x)).map(esc).join(' · ')}</div>
-    <div class="tags">${n.pc ? '<span class="tag ok">Personaje jugador</span>' : ''}${isVecino(n) ? '<span class="tag vecino">🏘 Vecino (relleno)</span>' : ''}${!isTbd(n.status) ? `<span class="tag ${isDead(n) ? 'dead' : ''}">${esc(n.status)}</span>` : ''}${!isTbd(n.known) && !n.pc ? `<span class="tag">Lo conocen: ${esc(n.known)}</span>` : ''}</div>
+    <div class="tags">${n.pc ? '<span class="tag ok">Personaje jugador</span>' : ''}${isVecino(n) ? '<span class="tag vecino">🏘 Vecino (relleno)</span>' : ''}${isEnemy(n) ? '<span class="tag enemy">⚔ Enemigo</span>' : ''}${!isTbd(n.sheet) ? `<span class="tag">📋 Ficha: ${esc(n.sheet)}</span>` : ''}${!isTbd(n.status) ? `<span class="tag ${isDead(n) ? 'dead' : ''}">${esc(n.status)}</span>` : ''}${!isTbd(n.known) && !n.pc ? `<span class="tag">Lo conocen: ${esc(n.known)}</span>` : ''}</div>
     <div class="actions">${at ? `<button class="btn" data-act="goLoc" data-id="${at}">📍 ${esc(L(at).name)}${L(at).type === 'estancia' ? ` · ${esc(L(L(at).parent).name)}` : ''}</button>` : ''}
       ${now(n).spot?.pin && route.map !== npcMap(n) ? `<button class="btn" data-act="showNpc">🗺 Ver en el plano</button>` : ''}</div>${editActions('npc', n)}
     ${!isTbd(now(n).doing) ? `<div class="doing"><h4>🎭 ${TIMES.find(t => t[0] === prefs.time)[1]} ${timeLabel(prefs.time)}${now(n).away ? ' · fuera del plano' : ''}</h4><span class="${now(n).away ? 'away' : ''}">${fmt(now(n).doing, n.id)}</span></div>` : ''}
@@ -801,7 +807,7 @@ function runSearch() {
   const q = $('#searchIn').value.trim().toLowerCase().normalize('NFD').replace(/\p{M}/gu, '');
   const norm = s => (s || '').toLowerCase().normalize('NFD').replace(/\p{M}/gu, '');
   const all = [
-    ...Object.values(db.npcs).map(o => ({ kind: 'npc', o, k: o.pc ? 'PJ' : isVecino(o) ? 'Vecino' : 'NPC', sub: o.role })),
+    ...Object.values(db.npcs).map(o => ({ kind: 'npc', o, k: o.pc ? 'PJ' : isVecino(o) ? 'Vecino' : isEnemy(o) ? 'Enemigo' : 'NPC', sub: o.role })),
     ...Object.values(db.locations).map(o => ({ kind: 'loc', o, k: 'Lugar', sub: o.type })),
     ...Object.values(db.factions).map(o => ({ kind: 'fac', o, k: 'Facción', sub: '' })),
     ...Object.values(db.quests).map(o => ({ kind: 'quest', o, k: 'Misión', sub: o.status }))];

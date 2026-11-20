@@ -20,3 +20,5 @@ Thumbs.db
 # Libro del módulo (material con derechos, solo uso personal)
 campaign/docs/Libro/
 campaign/Bestiary/
+# Láminas originales (ya recortadas en img/npcs e img/lugares; pesan ~150 MB)
+campaign/img/laminas/

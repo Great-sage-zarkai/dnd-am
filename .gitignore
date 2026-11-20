@@ -16,3 +16,6 @@ captures/
 # OS
 .DS_Store
 Thumbs.db
+
+# Libro del módulo (material con derechos, solo uso personal)
+campaign/docs/Libro/

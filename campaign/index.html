@@ -357,6 +357,13 @@ function setNpcPos(n, at, pin) {
 }
 const isVecino = n => n.tier === 'vecino';
 const isEnemy = n => n.tier === 'enemigo';
+// Vínculos familiares (seed.families: «de» es «rel» de «a»; visto desde «a» es «inv»)
+function familyOf(n) {
+  return (window.SEED.families || []).flatMap(f => f.de === n.id ? [{ id: f.a, rel: f.rel, nota: f.nota }] : f.a === n.id ? [{ id: f.de, rel: f.inv, nota: f.nota }] : [])
+    .filter(x => db.npcs[x.id]);
+}
+// Imagen de la ficha de juego en Bestiary/ («Bugbear Warrior (x2)» -> «Bugbear Warrior»)
+const sheetImg = n => n.sheet && (window.SEED.bestiary || {})[n.sheet.replace(/\s*\(.*\)\s*$/, '').trim()];
 function npcLocation(n) {
   const sp = now(n).spot;
   if (sp?.at && L(sp.at)) return sp.at;
@@ -714,10 +721,12 @@ function npcCard(n) {
     <div class="sub">${[n.race, n.role].filter(x => !isTbd(x)).map(esc).join(' · ')}</div>
     <div class="tags">${n.pc ? '<span class="tag ok">Personaje jugador</span>' : ''}${isVecino(n) ? '<span class="tag vecino">🏘 Vecino (relleno)</span>' : ''}${isEnemy(n) ? '<span class="tag enemy">⚔ Enemigo</span>' : ''}${!isTbd(n.sheet) ? `<span class="tag">📋 Ficha: ${esc(n.sheet)}</span>` : ''}${!isTbd(n.status) ? `<span class="tag ${isDead(n) ? 'dead' : ''}">${esc(n.status)}</span>` : ''}${!isTbd(n.known) && !n.pc ? `<span class="tag">Lo conocen: ${esc(n.known)}</span>` : ''}</div>
     <div class="actions">${at ? `<button class="btn" data-act="goLoc" data-id="${at}">📍 ${esc(L(at).name)}${L(at).type === 'estancia' ? ` · ${esc(L(L(at).parent).name)}` : ''}</button>` : ''}
-      ${now(n).spot?.pin && route.map !== npcMap(n) ? `<button class="btn" data-act="showNpc">🗺 Ver en el plano</button>` : ''}</div>${editActions('npc', n)}
+      ${now(n).spot?.pin && route.map !== npcMap(n) ? `<button class="btn" data-act="showNpc">🗺 Ver en el plano</button>` : ''}
+      ${sheetImg(n) ? `<button class="btn primary" data-act="sheet">📋 Ver ficha (${esc(n.sheet)})</button>` : ''}</div>${editActions('npc', n)}
     ${!isTbd(now(n).doing) ? `<div class="doing"><h4>🎭 ${TIMES.find(t => t[0] === prefs.time)[1]} ${timeLabel(prefs.time)}${now(n).away ? ' · fuera del plano' : ''}</h4><span class="${now(n).away ? 'away' : ''}">${fmt(now(n).doing, n.id)}</span></div>` : ''}
     ${n.schedule ? `<div class="f"><h4>Rutina del día</h4><div style="font-size:13px">${TIMES.map(([k, ico, lb]) => { const s = k === 'tarde' ? { doing: n.doing } : n.schedule[k]; return s?.doing ? `<div style="margin-bottom:3px;${k === prefs.time ? 'color:var(--accent)' : ''}">${ico} <b>${lb}:</b> ${esc(s.doing)}</div>` : ''; }).join('')}</div></div>` : ''}
     ${!isTbd(n.quote) ? `<p class="quote">${fmt(n.quote, n.id)}</p>` : ''}
+    ${familyOf(n).length ? `<div class="f"><h4>👪 Familia</h4>${familyOf(n).map(r => { const o = db.npcs[r.id]; return `<div class="scene" data-npc="${o.id}">${avatar(o)}<div><b>${esc(r.rel.charAt(0).toUpperCase() + r.rel.slice(1))} ${esc(plainName(o.name))}</b>${r.nota ? `<span>${fmt(r.nota, n.id)}</span>` : ''}</div></div>`; }).join('')}</div>` : ''}
     ${field('npc', n, 'location')}${field('npc', n, 'look')}${field('npc', n, 'personality')}${field('npc', n, 'voice', 'voice')}
     ${field('npc', n, 'knows')}${field('npc', n, 'pcRel')}${field('npc', n, 'faction')}
     ${dmBox(field('npc', n, 'wants') + field('npc', n, 'secrets') + field('npc', n, 'npcRel'))}
@@ -780,6 +789,7 @@ $('#detail').addEventListener('click', e => {
     case 'show': go('loc', o.id, mapForPin(o.id)); break;
     case 'goLoc': go('loc', a.dataset.id); break;
     case 'showNpc': go('npc', o.id, npcMap(o)); break;
+    case 'sheet': $('#lightbox img').src = src(sheetImg(o)); $('#lightbox').classList.add('open'); break;
     case 'edit': editing = true; renderDetail(); break;
     case 'cancel': editing = false; renderDetail(); break;
     case 'placeNpc': placing = { npc: o.id }; vp.classList.add('placing'); toast(`Haz clic en el plano para situar a <b>${esc(plainName(o.name))}</b> · Esc para cancelar`); break;

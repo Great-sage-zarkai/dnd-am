@@ -260,6 +260,13 @@ if ($vec) {
   }
 }
 
+# Familias: avisar de vínculos con fichas que no existen
+foreach ($f in $vec.familias) { foreach ($id in $f.de, $f.a) { if (-not $npcOut[$id]) { Write-Warning "Familia con NPC que no existe: $id" } } }
+
+# Fichas de juego (imágenes en Bestiary/, se buscan por el nombre de la ficha)
+$bestiary = [ordered]@{}
+Get-ChildItem "$root\Bestiary" -File -ErrorAction SilentlyContinue | Where-Object Extension -match '^\.(png|jpe?g|webp)$' | ForEach-Object { $bestiary[$_.BaseName] = "Bestiary/$($_.Name)" }
+
 $facOut = [ordered]@{}; foreach ($f in $facs) { $id = Slug $f.name; $o = [ordered]@{ id = $id }; foreach ($k in $f.Keys) { $o[$k] = $f[$k] }; $facOut[$id] = $o }
 $qOut = [ordered]@{}; foreach ($q in $quests) { $id = Slug $q.name; $o = [ordered]@{ id = $id }; foreach ($k in $q.Keys) { $o[$k] = $q[$k] }; $qOut[$id] = $o }
 
@@ -268,6 +275,8 @@ $seed = [ordered]@{
   locations = $out; npcs = $npcOut; factions = $facOut; quests = $qOut
   # campos que la app debe sobrescribir en datos ya guardados (cambios de diseño, no de partida)
   patches = @($vec.parches)
+  families = @($vec.familias)
+  bestiary = $bestiary
 }
 $json = $seed | ConvertTo-Json -Depth 8 -Compress
 [IO.File]::WriteAllText("$root\data\seed.js", "window.SEED = $json;`n", (New-Object Text.UTF8Encoding($false)))

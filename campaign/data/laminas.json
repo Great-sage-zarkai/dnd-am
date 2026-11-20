@@ -21,5 +21,13 @@
   "vecinos-04": { "kind": "npc", "ids": ["berta-cucharon", "pip", "mordo-el-tuerto", "sly-fenn"] },
   "vecinos-05": { "kind": "npc", "ids": ["nim", "tilda-rook", "bertil", "madre-orla"] },
   "vecinos-06": { "kind": "npc", "ids": ["aurel", "ulric-penn", "bruno-mazas", null] },
-  "lugares-06": { "kind": "loc", "ids": ["horno-de-ruy", "casa-de-madre-orla", "la-cala-del-ahorcado", "alun"] }
+  "lugares-06": { "kind": "loc", "ids": ["horno-de-ruy", "casa-de-madre-orla", "la-cala-del-ahorcado", "alun"] },
+
+  "enemigos-01": { "kind": "npc", "ids": ["garro-pell", "mella", "brun-toss", "isk-el-callado"] },
+  "enemigos-02": { "kind": "npc", "ids": ["varga-tenn", "lise-corva", "tomo-cuba", "dalen-krell"] },
+  "enemigos-03": { "kind": "npc", "ids": ["orvo-tasco", "penna-grise", "kel-duro", "lenn-brea"] },
+  "enemigos-04": { "kind": "npc", "ids": ["grumak", "uska", "hurl-y-gonda", "tullo"] },
+  "enemigos-05": { "kind": "npc", "ids": ["el-que-mira", "susurro", "goblins-prestados", null] },
+  "presos-01": { "kind": "npc", "ids": ["marne-vello", "nilda-vello", "teo-vello", null] },
+  "lugares-07": { "kind": "loc", "ids": ["casa-del-gremio-mercantil", "guarida-de-vessa", "torre-huesodragon", "bosque-de-vharn"] }
 }

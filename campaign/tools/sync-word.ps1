@@ -120,6 +120,12 @@ foreach ($v in $vec.enemigos) {
   $tail += (F 'Aspecto físico' $v.look) + (F 'Personalidad' $v.personality) + (F 'Voz y gestos (cómo interpretarlo en mesa)' $v.voice)
   $tail += (F 'Qué sabe' $v.knows) + (F 'Qué está haciendo' $v.doing)
 }
+
+$tail += (H1 '12. FAMILIAS Y VÍNCULOS') + (T 'Quién es familia de quién en Ethar, buenos y malos. Lo marcado con [PROPUESTA] está pendiente de tu visto bueno.')
+foreach ($f in $vec.familias) {
+  $de = $seed.npcs.($f.de); $a = $seed.npcs.($f.a); if (-not $de -or -not $a) { continue }
+  $tail += F "$($de.name), $($f.rel) $($a.name)" $(if ($f.nota) { $f.nota } else { '—' })
+}
 $x = $x.Substring(0, $s) + $tail + $x.Substring($s)
 
 # --- Guardar ---
